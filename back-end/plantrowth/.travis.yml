@@ -4,12 +4,15 @@ jdk:
 
 branches:
   only:
-    - master
+    - main
 
 cache:
   directories:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
+before_install:
+  - cd back-end/plantrowth
+  - chmod +x gradlew
 
 script: "./gradlew clean build"
 
