@@ -38,7 +38,7 @@ jobs:
         shell: bash
         
       - name: Make zip file
-        run: cd back-end/plantrowth && zip -r ./$GITHUB_SHA.zip .
+        run: zip -r ./$GITHUB_SHA.zip .
         shell: bash
       
       - name: Configure AWS credentials
