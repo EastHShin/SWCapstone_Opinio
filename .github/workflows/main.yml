@@ -24,12 +24,9 @@ jobs:
         with:
           java-version: '11'
       
-      - name: move to spring dir
-        run: cd back-end/plantrowth
-        shell: bash
           
       - name: Grant execute permmision for gradlew
-        run: chmod +x gradlew
+        run: cd back-end/plantrowth && chmod +x gradlew
         shell: bash
         
       - name: Build with Gradle
