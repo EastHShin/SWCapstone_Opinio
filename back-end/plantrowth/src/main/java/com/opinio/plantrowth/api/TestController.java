@@ -11,4 +11,9 @@ public class TestController {
     public String test() {
         return "test api";
     }
+
+    @GetMapping("/health-check")
+    public String healthCheck() {
+        return "healthy";
+    }
 }
