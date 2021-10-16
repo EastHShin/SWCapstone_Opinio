@@ -7,7 +7,7 @@ branches:
     - main
 
 before_install:
-  - chmod +x gradlew
+  - cd back-end/plantrowth
 
 cache:
   directories:
