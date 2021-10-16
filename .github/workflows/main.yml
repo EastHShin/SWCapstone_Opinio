@@ -53,7 +53,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           
       - name: Upload to S3
-        run: aws deploy push --application-name EC2-S3-Deploy --description "This is a revision for the application airbnb_App" --s3-location s3://plantrowth-deploy/plantrowth/build.zip --source .
+        run: aws deploy push --application-name plantrowth --description "upload to S3" --s3-location s3://plantrowth-deploy/plantrowth/build.zip --source .
 
       - name: Code Deploy
         run: aws deploy create-deployment --application-name plantrowth --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip, key=plantrowth/build.zip
