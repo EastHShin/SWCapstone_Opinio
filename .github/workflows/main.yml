@@ -56,5 +56,5 @@ jobs:
         run: aws deploy push --application-name plantrowth --description "upload to S3" --s3-location s3://plantrowth-deploy/plantrowth/build.zip --source .
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name plantrowth --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip, key=plantrowth/build.zip
+        run: aws deploy create-deployment --application-name plantrowth --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=plantrowth-deploy,bundleType=zip,key=plantrowth/build.zip
 
