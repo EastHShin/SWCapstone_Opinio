@@ -8,6 +8,7 @@ branches:
 
 before_script:
   - cd back-end/plantrowth
+  - chmod +x gradlew
 
 cache:
   directories:
