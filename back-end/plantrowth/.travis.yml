@@ -6,14 +6,15 @@ branches:
   only:
     - main
 
-
+before_install:
+  - cd back-end/plantrowth && chmod +x gradlew
 
 cache:
   directories:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-script: "cd back-end/plantrowth && ./gradlew clean build"
+script: "./gradlew clean build"
 
 notifications:
   email:
