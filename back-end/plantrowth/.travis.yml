@@ -4,11 +4,7 @@ jdk:
 
 branches:
   only:
-    - main
-
-before_install:
-  - cd back-end/plantrowth
-  - chmod +x gradlew
+    - master
 
 cache:
   directories:
@@ -19,5 +15,5 @@ script: "./gradlew clean build"
 
 notifications:
   email:
-    recipitents:
+    recipients:
       - xldk78@gmail.com
