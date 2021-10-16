@@ -6,7 +6,7 @@ branches:
   only:
     - main
 
-before_script:
+before_install:
   - cd back-end/plantrowth
   - chmod +x gradlew
 
