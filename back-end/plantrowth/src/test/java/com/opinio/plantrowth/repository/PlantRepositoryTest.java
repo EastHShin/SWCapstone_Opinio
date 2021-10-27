@@ -37,6 +37,7 @@ class PlantRepositoryTest {
         Assertions.assertThat(plant.getPlantName()).isEqualTo(savedPlant.getPlantName());
         Assertions.assertThat(plant.getPlantBirth()).isEqualTo(savedPlant.getPlantBirth());
         Assertions.assertThat(plant.getPlantSpecies()).isEqualTo(savedPlant.getPlantSpecies());
+        Assertions.assertThat(plant.getWaterSupply()).isEqualTo(savedPlant.getWaterSupply());
     }
 
     @Test
