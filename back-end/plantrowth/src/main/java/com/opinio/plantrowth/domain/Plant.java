@@ -1,11 +1,14 @@
 package com.opinio.plantrowth.domain;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@NoArgsConstructor
 @Entity
 @Getter @Setter
 public class Plant {
@@ -25,5 +28,14 @@ public class Plant {
     private int waterSupply;
     private int alarmCycle;
 
-
+    @Builder
+    public Plant(String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {
+        this.plantSpecies = plantSpecies;
+        this.plantName = plantName;
+        this.plantBirth = plantBirth;
+        this.plantExp = plantExp;
+        this.fileName = fileName;
+        this.waterSupply = waterSupply;
+        this.alarmCycle = alarmCycle;
+    }
 }
