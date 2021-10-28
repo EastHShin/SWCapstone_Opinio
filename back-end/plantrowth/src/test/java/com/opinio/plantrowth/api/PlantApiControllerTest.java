@@ -3,6 +3,7 @@ package com.opinio.plantrowth.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
+import com.opinio.plantrowth.api.dto.CreatePlantResponseDto;
 import com.opinio.plantrowth.service.PlantService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,5 +49,15 @@ class PlantApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"id\":1000}"))
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("식물 목록 테스트")
+    public void findPlants() throws Exception{
+        //given
+        CreatePlantResponseDto responseDto =
+        //when
+
+        //then
     }
 }
