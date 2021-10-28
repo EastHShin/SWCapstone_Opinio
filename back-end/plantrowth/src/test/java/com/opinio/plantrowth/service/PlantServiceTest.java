@@ -2,7 +2,9 @@ package com.opinio.plantrowth.service;
 
 import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
 import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.PlantRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -42,6 +44,26 @@ class PlantServiceTest {
         //when
         plantService.join(plant);
 
+        //then
+    }
+
+    @Test
+    @DisplayName("식물 목록 테스트")
+    public void plantList() throws Exception{
+        //given
+        User user = new User();
+        user.setEmail("xlddd@gmail.com");
+        user.setPassword("fffff");
+        Plant plant = new Plant();
+        plant.setUser(user);
+        plant.setPlantSpecies("장미");
+        plant.setPlantName("토로리");
+        plant.setPlantBirth(LocalDate.now());
+        plant.setPlantExp(0);
+        plant.setWaterSupply(10);
+        plant.setAlarmCycle(2);
+
+        //when
         //then
     }
 }

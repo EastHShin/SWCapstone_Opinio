@@ -1,7 +1,9 @@
 package com.opinio.plantrowth.service;
 
 import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.PlantRepository;
+import com.opinio.plantrowth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class PlantService {
 
     private final PlantRepository plantRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long join(Plant plant) {
@@ -23,11 +26,7 @@ public class PlantService {
         return plant.getId();
     }
 
-    public List<Plant> findPlants(){
-        /* userId 정해지면 풀기
-        Long id = plantRepository.findById(id);
-        return plantRepository.findAllById(id);
-         */
-        return plantRepository.findAll();
+    public List<Plant> findPlants(Long userId){
+        return plantRepository.findAllByUserId(userId);
     }
 }

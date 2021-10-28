@@ -8,10 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,10 +35,10 @@ public class PlantApiController {
         return new CreatePlantResponseDto(id);
     }
 
-    @GetMapping("/api/plants/profiles")
-    public PlantResult plants(){
-//        List<Plant> findPlants = plantService.findPlants(id);
-        List<Plant> findPlants = plantService.findPlants();
+    @GetMapping("/api/plants/profiles/{user-id}")
+    public PlantResult plants(@PathVariable("user-id") Long id){
+        List<Plant> findPlants = plantService.findPlants(id);
+//        List<Plant> findPlants = plantService.findPlants();
         List<PlantDto> collect = findPlants.stream()
                 .map(m -> new PlantDto(m.getPlantName()))
                 .collect(Collectors.toList());

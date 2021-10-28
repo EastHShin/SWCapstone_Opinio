@@ -55,7 +55,7 @@ class PlantApiControllerTest {
     @DisplayName("식물 목록 테스트")
     public void findPlants() throws Exception{
         //given
-        CreatePlantResponseDto responseDto =
+//        CreatePlantResponseDto responseDto =
         //when
 
         //then
