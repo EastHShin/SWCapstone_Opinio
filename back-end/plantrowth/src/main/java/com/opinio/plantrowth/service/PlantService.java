@@ -18,7 +18,6 @@ import java.util.Optional;
 public class PlantService {
 
     private final PlantRepository plantRepository;
-    private final UserRepository userRepository;
 
     @Transactional
     public Long join(Plant plant) {
