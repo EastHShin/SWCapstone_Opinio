@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#81C147'
+        backgroundColor:'#8EB695'
     },
     activityIndicator:{
         flex:1,

@@ -6,13 +6,15 @@ import {
     StyleSheet,
 } from 'react-native';
 
-const LoginScreen = () =>{
+const LoginScreen = ({navigation}) =>{
 
     return(
         <View style={styles.body}>
-          <Text style={styles.text}>
-              Login Page
-          </Text>
+           <Text
+                style={styles.text}
+                onPress={() => navigation.navigate('RegisterScreen')}>
+                New Here ? Register
+              </Text>
         </View>
     );
   };
@@ -22,11 +24,16 @@ const LoginScreen = () =>{
     body: {
       flex: 1,
       justifyContent: 'center',
-      backgroundColor: '#81C147',
+      backgroundColor: '#8EB695',
       alignContent: 'center',
     },
     text:{
-      textAlign:'center'
+      color: '#FFFFFF',
+      textAlign: 'center',
+      fontWeight: 'bold',
+      fontSize: 14,
+      alignSelf: 'center',
+      padding: 10,
     }
     
   });
