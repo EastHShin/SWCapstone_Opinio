@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.service;
 
+import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.PlantRepository;
@@ -28,4 +29,12 @@ public class PlantService {
     public List<Plant> findPlants(Long userId){
         return plantRepository.findAllByUserId(userId);
     }
+
+    @Transactional
+    public void update(Long id, CreatePlantRequestDto requestDto) {
+        Plant plant = plantRepository.getById(id);
+    }
+
+
+
 }

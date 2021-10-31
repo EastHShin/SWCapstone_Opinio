@@ -4,7 +4,6 @@ spring:
     username: sa
     password:
       driver-class-name: org.h2.Driver
-
   jpa:
     hibernate:
       ddl-auto: create
@@ -13,6 +12,15 @@ spring:
         #        show_sql: true
         format_sql: true
         default_batch_fetch_size: 1000
+  profiles:
+    include:
+      - aws
+      - credentials
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 
 logging:
   level:

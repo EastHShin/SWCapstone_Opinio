@@ -4,16 +4,15 @@ import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
 import com.opinio.plantrowth.api.dto.CreatePlantResponseDto;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
+import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,11 +22,22 @@ public class PlantApiController {
 
     private final PlantService plantService;
     private final UserService userService;
+    private final FileUploadService fileUploadService;
+
+//    Postman Test
+/*
+    @PostMapping("/api/upload")
+    public String uploadImage(@RequestPart MultipartFile file) {
+        return fileUploadService.uploadImage(file);
+    }
+ */
+
 
     @PostMapping("/api/plants/profiles/{user-id}")
     public CreatePlantResponseDto savePlant(
             @PathVariable("user-id") Long userId,
-            @RequestBody CreatePlantRequestDto request) {
+            @RequestBody CreatePlantRequestDto request,
+            @RequestPart(required = false) MultipartFile file) {
         Plant plant = new Plant();
         plant.setPlantSpecies(request.getPlantSpecies());
         plant.setPlantName(request.getPlantName());
@@ -37,17 +47,19 @@ public class PlantApiController {
         plant.setWaterSupply(request.getWaterSupply());
         plant.setAlarmCycle(request.getAlarmCycle());
 
+        String uploadImageName = fileUploadService.uploadImage(file);
+        plant.setFileName(uploadImageName);
         User user = userService.findUser(userId);
         plant.setUser(user);
 
         Long id = plantService.join(plant);
+
         return new CreatePlantResponseDto(id);
     }
 
     @GetMapping(value = "/api/plants/profiles/{user-id}")
     public PlantResult plants(@PathVariable("user-id") Long id){
         List<Plant> findPlants = plantService.findPlants(id);
-//        List<Plant> findPlants = plantService.findPlants();
         List<PlantDto> collect = findPlants.stream()
                 .map(m -> new PlantDto(m.getPlantName()))
                 .collect(Collectors.toList());
