@@ -1,7 +1,7 @@
 import React,{useState, createRef} from 'react';
 
 import {
-    StyleSheet,
+  StyleSheet,
   TextInput,
   View,
   Text,
@@ -14,6 +14,7 @@ import {
 } from 'react-native'
 
 import Loader from './Loader';
+import EntypoIcons from 'react-native-vector-icons/Entypo';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useDispatch} from 'react-redux';
@@ -59,7 +60,10 @@ function RegisterScreen({navigation}) {
   const [userPassword, setUserPassword] = useState('');
   const [userBirth, setUserBirth] = useState(new Date());
   const [textBirth, setTextBirth] = useState('');
-
+  
+  const [checkEmail, setCheckEmail] = useState(true);
+  const [checkPassword, setCheckPassword] = useState(true);
+      
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [
     isRegistraionSuccess,
@@ -129,6 +133,29 @@ function RegisterScreen({navigation}) {
     console.log(textBirth);
   }
 
+  const validationEmail = (e) => {
+
+    var emailExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    if(!emailExp.test(e.nativeEvent.text)){
+      setCheckEmail(false);
+    }
+    else{
+      setCheckEmail(true);
+    }
+
+  }
+
+  const validationPassword = (e) => {
+
+    var passwordExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,12}$/;
+    if(!passwordExp.test(e.nativeEvent.text)){
+      setCheckPassword(false);
+    }
+    else{
+      setCheckPassword(true);
+    }
+  }
+
     if(isRegistraionSuccess){
 
         return(
@@ -177,15 +204,18 @@ function RegisterScreen({navigation}) {
               margin: 30,
             }}
           />
+          
         </View>
         <KeyboardAvoidingView enabled>
+          <View style={styles.sectionWrapper}>
           <View style={styles.section}>
+            <EntypoIcons  name='user' size={20} color="#8EB695" style={styles.icon}/>
             <TextInput
               style={styles.input}
               onChangeText={(UserName) => setUserName(UserName)}
               underlineColorAndroid="#f000"
-              placeholder="이름을 입력해주세요."
-              placeholderTextColor="#FFFFFF"
+              placeholder="Name"
+              placeholderTextColor="#808080"
               autoCapitalize="sentences"
               returnKeyType="next"
               onSubmitEditing={
@@ -196,13 +226,14 @@ function RegisterScreen({navigation}) {
           </View>
 
           <View style={styles.section}>
+          <EntypoIcons name='calendar' size={20} color="#8EB695" style={styles.icon}/>
             <TouchableOpacity onPress = {showDatePicker}>
             <TextInput
               pointerEvents="none"
               style={styles.input}
               underlineColorAndroid="#f000"
-              placeholder="생년월일을 입력해주세요."
-              placeholderTextColor="#FFFFFF"
+              placeholder="Date of birth"
+              placeholderTextColor="#808080"
               editable={false}
               blurOnSubmit={false}
               value = {textBirth} 
@@ -215,19 +246,23 @@ function RegisterScreen({navigation}) {
             onCancel={()=>{
               setDatePickerVisibility(false);
             }}/>
-            
             </TouchableOpacity>
+
           </View>
           <View style={styles.section}>
+            <EntypoIcons name='email' size={20} color="#8EB695" style={styles.icon} />
             <TextInput
               style={styles.input}
               onChangeText={(UserEmail) => setUserEmail(UserEmail)}
               underlineColorAndroid="#f000"
-              placeholder="이메일을 입력해주세요."
-              placeholderTextColor="#FFFFFF"
+              placeholder="abc@ajou.ac.kr"
+              placeholderTextColor="#808080"
               keyboardType="email-address"
               ref={emailInputRef}
               returnKeyType="next"
+              onEndEditing = {
+                validationEmail
+              }
               onSubmitEditing={() =>
                 passwordInputRef.current &&
                 passwordInputRef.current.focus()
@@ -235,36 +270,54 @@ function RegisterScreen({navigation}) {
               blurOnSubmit={false}
             />
           </View>
+          {checkEmail == false ? (
+            <Text style={styles.errorText}>
+              이메일을 다시 확인해주세요.
+            </Text>
+          ) : null}
+
           <View style={styles.section}>
+            <EntypoIcons name='key'size={20} color="#8EB695" style={styles.icon}/>
             <TextInput
               style={styles.input}
               onChangeText={(UserPassword) =>
                 setUserPassword(UserPassword)
               }
               underlineColorAndroid="#f000"
-              placeholder="비밀번호를 입력해주세요."
-              placeholderTextColor="#FFFFFF"
+              placeholder="8~12자 영문,숫자 조합"
+              placeholderTextColor="#808080"
               ref={passwordInputRef}
               returnKeyType="next"
               secureTextEntry={true}
+              onEndEditing = {
+                validationPassword
+              }
               onSubmitEditing={
                Keyboard.dismiss
               }
               blurOnSubmit={false}
             />
           </View>
+          {checkPassword == false ? (
+            <Text style={styles.errorText}>
+              비밀번호를 다시 확인해주세요.
+            </Text>
+          ) : null}
+          
           
           {errortext!= '' ? (
             <Text style={styles.errorText}>
               {errortext}
             </Text>
           ) : null}
+
           <TouchableOpacity
             style={styles.button}
             activeOpacity={0.5}
             onPress={onPressHandler}>
             <Text style={styles.buttonText}>Join</Text>
           </TouchableOpacity>
+          </View>
         </KeyboardAvoidingView>
       </ScrollView>
     </View>
@@ -275,6 +328,23 @@ export default RegisterScreen;
 
 
 const styles = StyleSheet.create({
+  sectionWrapper:{
+    backgroundColor: '#FFFFFF',
+    height: 450,
+    width: 300,
+    borderRadius: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    marginLeft:30,
+    shadowColor:'#000000',
+    shadowOffset:{
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity:0.3,
+    shadowRadius: 3.00,
+    elevation:5
+  },
     section: {
       flexDirection: 'row',
       height: 40,
@@ -298,15 +368,16 @@ const styles = StyleSheet.create({
       color: '#FFFFFF',
       paddingVertical: 10,
       fontSize: 16,
+
     },
     input: {
       flex: 1,
-      color: 'white',
+      color: '#000000',
       paddingLeft: 15,
-      paddingRight: 15,
+      paddingRight: 45,   
       borderWidth: 1,
       borderRadius: 30,
-      borderColor: '#FFFFFF',
+      borderColor: '#BEE9B4',
     },
     errorText: {
       color: 'red',
@@ -319,4 +390,9 @@ const styles = StyleSheet.create({
       fontSize: 18,
       padding: 30,
     },
+    icon:{
+      marginTop:8,
+      marginRight:10,
+      marginLeft:-5
+    }
   }); 
