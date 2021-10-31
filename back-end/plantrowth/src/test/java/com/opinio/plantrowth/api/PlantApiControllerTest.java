@@ -8,6 +8,7 @@ import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.UserService;
+import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ class PlantApiControllerTest {
     private PlantService plantService;
     @MockBean
     private UserService userService;
+    @MockBean
+    private FileUploadService fileUploadService;
 
 
     @Test
