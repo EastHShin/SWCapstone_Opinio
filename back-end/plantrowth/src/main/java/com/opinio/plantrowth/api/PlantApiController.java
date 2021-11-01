@@ -25,12 +25,11 @@ public class PlantApiController {
     private final FileUploadService fileUploadService;
 
 //    Postman Test
-/*
     @PostMapping("/api/upload")
     public String uploadImage(@RequestPart MultipartFile file) {
         return fileUploadService.uploadImage(file);
     }
- */
+
 
 
     @PostMapping("/api/plants/profiles/{user-id}")
