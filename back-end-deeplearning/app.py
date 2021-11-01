@@ -5,13 +5,14 @@ import os
 from PIL import Image
 
 import fastbook
+import torch
 from fastbook import *
 
 import pathlib
 temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='')
 
 #업로드 HTML 렌더링
 @app.route('/upload')
@@ -29,15 +30,18 @@ def upload_file():
       learner = load_learner('./plantrowth_resnet50_train.pkl')
       print('model loaded!')
 
-      os.remove('test.jpg')
+      os.remove('static/test.jpg')
       img = Image.open(f.filename)
       img_resize = img.resize((224, 224))
       img_resize.save('test.jpg')
 
       answer = learner.predict('./test.jpg')
-      print(answer)
+      list2 = list(answer)
+      print(list2)
+      #print(answer)
+      #print(type(answer))
 
-      
+      return render_template('answer.html', image_file='static/test.jpg', list=list2[0])
       #return 'uploads 디렉토리 -> 파일 업로드 성공!'
 
 if __name__ == '__main__':
