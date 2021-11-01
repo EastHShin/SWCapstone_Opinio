@@ -17,9 +17,10 @@ public class Plant {
     @Column(name = "plant_id")
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;      //User 클래스 완성하면 풀기
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;      //User 클래스 완성하면 풀기
+
     private String plantSpecies;
     private String plantName;
     private LocalDate plantBirth;

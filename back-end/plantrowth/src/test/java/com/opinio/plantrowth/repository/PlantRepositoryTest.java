@@ -1,6 +1,7 @@
 package com.opinio.plantrowth.repository;
 
 import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +18,9 @@ class PlantRepositoryTest {
 
     @Autowired
     private PlantRepository plantRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     @DisplayName("식물이 DB에 저장되는지 확인")
@@ -74,6 +79,40 @@ class PlantRepositoryTest {
 
         Assertions.assertThat(findPlant2.getPlantSpecies()).isEqualTo("가시");
         Assertions.assertThat(findPlant2.getPlantName()).isEqualTo("토리이");
+    }
 
+    @Test
+    public void plantList() throws Exception{
+        //given
+        User user = new User();
+        user.setEmail("xlddd@gmail.com");
+        user.setPassword("fffff");
+
+        Plant plant = getPlant(user, "장미", "토로리",
+                LocalDate.now(), 0, 3, 2);
+        Plant plant2 = getPlant(user, "가시", "토리이",
+                LocalDate.now(), 0, 3, 2);
+
+        User savedUser = userRepository.save(user);
+        Plant savedPlant = plantRepository.save(plant);
+        Plant savedPlant2 = plantRepository.save(plant2);
+        //when
+        List<Plant> plantList = plantRepository.findAllByUserId(savedUser.getId());
+        //then
+        Assertions.assertThat(plantList.size()).isEqualTo(2);
+    }
+
+    private Plant getPlant(User user, String species, String name,
+                           LocalDate birth, int exp, int supply,
+                           int cycle) {
+        Plant plant = new Plant();
+        plant.setUser(user);
+        plant.setPlantSpecies(species);
+        plant.setPlantName(name);
+        plant.setPlantBirth(birth);
+        plant.setPlantExp(exp);
+        plant.setWaterSupply(supply);
+        plant.setAlarmCycle(cycle);
+        return plant;
     }
 }
