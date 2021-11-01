@@ -61,7 +61,7 @@ public class PlantApiController {
     public PlantResult plants(@PathVariable("user-id") Long id){
         List<Plant> findPlants = plantService.findPlants(id);
         List<PlantDto> collect = findPlants.stream()
-                .map(m -> new PlantDto(m.getPlantName()))
+                .map(m -> new PlantDto(m.getPlantName(), m.getFileName()))
                 .collect(Collectors.toList());
 
         return new PlantResult(collect);
@@ -77,6 +77,7 @@ public class PlantApiController {
     @AllArgsConstructor
     static class PlantDto{
         private String plantName;
+        private String fileName;
     }
 
 
