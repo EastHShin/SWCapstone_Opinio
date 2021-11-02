@@ -9,8 +9,7 @@ JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
-if [ -z $CURRENT_PID]
-then
+if [ -z $CURRENT_PID]; then
         echo "> no stop."
 else
         echo "> kill -9 $CURRENT_PID"
@@ -19,4 +18,8 @@ else
 fi
 
 echo "> $JAR_PATH deploy"
-nohup java -jar -Dspring.profiles.active=prod $JAR_PATH > /dev/null 2> /dev/null &
+
+nohup java -jar \
+    -Dspring.config.location=classpath:/application.properties,classpath:/application-real.properties,/home/ec2-user/application-real-db.properties,/home/ec2-user/application-aws.properties,/home/ec2-user/application-credentials.properties \
+    -Dspring.profiles.active=real \
+    $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &

@@ -26,6 +26,10 @@ public class PlantService {
         return plant.getId();
     }
 
+    public Plant findOnePlant(Long id) {
+        return plantRepository.getById(id);
+    }
+
     public List<Plant> findPlants(Long userId){
         return plantRepository.findAllByUserId(userId);
     }
@@ -33,6 +37,13 @@ public class PlantService {
     @Transactional
     public void update(Long id, CreatePlantRequestDto requestDto) {
         Plant plant = plantRepository.getById(id);
+        plant.setPlantSpecies(requestDto.getPlantSpecies());
+        plant.setPlantName(requestDto.getPlantName());
+        plant.setPlantBirth(requestDto.getPlantBirth());
+        plant.setPlantExp(requestDto.getPlantExp());
+        plant.setFileName(requestDto.getFileName());
+        plant.setWaterSupply(requestDto.getWaterSupply());
+        plant.setAlarmCycle(requestDto.getAlarmCycle());
     }
 
 
