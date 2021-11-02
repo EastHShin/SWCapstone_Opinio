@@ -25,12 +25,11 @@ public class PlantApiController {
     private final FileUploadService fileUploadService;
 
 //    Postman Test
-/*
     @PostMapping("/api/upload")
     public String uploadImage(@RequestPart MultipartFile file) {
         return fileUploadService.uploadImage(file);
     }
- */
+
 
 
     @PostMapping("/api/plants/profiles/{user-id}")
@@ -67,9 +66,18 @@ public class PlantApiController {
         return new PlantResult(collect);
     }
 
+    @PutMapping("/api/plants/profiles/{plant-id}")
+    public CreatePlantResponseDto updatePlant(@PathVariable("plant-id") Long id,
+                                              @RequestBody CreatePlantRequestDto request) {
+        plantService.update(id, request);
+        Plant plant = plantService.findOnePlant(id);
+        return new CreatePlantResponseDto(plant.getId());
+    }
+
+
     @Data
     @AllArgsConstructor
-    static class PlantResult<T>{
+    static class PlantResult<T> {
         private T data;
     }
 

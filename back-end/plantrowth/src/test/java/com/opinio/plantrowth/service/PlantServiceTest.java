@@ -36,20 +36,19 @@ class PlantServiceTest {
     @DisplayName("join 기능 테스트")
     public void join() throws Exception{
         //given
-        Plant plant = new Plant();
-        plant.setPlantSpecies("장미");
-        plant.setPlantName("토로리");
-        plant.setPlantBirth(LocalDate.now());
-        plant.setPlantExp(0);
-        plant.setWaterSupply(10);
-        plant.setAlarmCycle(2);
+        User user = new User();
+        user.setEmail("xlddd@gmail.com");
+        user.setPassword("fffff");
+        user.setId(1L);
+        Plant plant = getPlant(user, "장미", "토로리",
+                LocalDate.now(), 0, 3, 2);
 
         when(plantRepository.save(any())).thenReturn(plant.getId());
 
         //when
-        plantService.join(plant);
-
+        Long id = plantService.join(plant);
         //then
+        Assertions.assertThat(plant.getId()).isEqualTo(id);
     }
 
     @Test
@@ -77,6 +76,28 @@ class PlantServiceTest {
         Assertions.assertThat(findPlants.get(1)).isSameAs(plant2);
     }
 
+    @Test
+    public void updatePlant() throws Exception{
+        //given
+        User user = new User();
+        user.setEmail("xlddd@gmail.com");
+        user.setPassword("fffff");
+        user.setId(1L);
+        Plant plant = getPlant(user, "장미", "토로리",
+                LocalDate.now(), 0, 3, 2);
+        //when
+        CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
+                LocalDate.now(), 5,null, 5, 3);
+        when(plantRepository.getById(any())).thenReturn(plant);
+        plantService.update(plant.getId(), requestDto);
+
+        //then
+        Assertions.assertThat(plant.getPlantSpecies()).isEqualTo("가시");
+        Assertions.assertThat(plant.getPlantExp()).isEqualTo(5);
+        Assertions.assertThat(plant.getWaterSupply()).isEqualTo(5);
+        Assertions.assertThat(plant.getAlarmCycle()).isEqualTo(3);
+    }
+
     private Plant getPlant(User user, String species, String name,
                            LocalDate birth, int exp, int supply,
                            int cycle) {
@@ -90,4 +111,5 @@ class PlantServiceTest {
         plant.setAlarmCycle(cycle);
         return plant;
     }
+
 }
