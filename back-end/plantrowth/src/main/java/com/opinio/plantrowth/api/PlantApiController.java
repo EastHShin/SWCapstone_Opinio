@@ -66,9 +66,18 @@ public class PlantApiController {
         return new PlantResult(collect);
     }
 
+    @PutMapping("/api/plants/profiles/{plant-id}")
+    public CreatePlantResponseDto updatePlant(@PathVariable("plant-id") Long id,
+                                              @RequestBody CreatePlantRequestDto request) {
+        plantService.update(id, request);
+        Plant plant = plantService.findOnePlant(id);
+        return new CreatePlantResponseDto(plant.getId());
+    }
+
+
     @Data
     @AllArgsConstructor
-    static class PlantResult<T>{
+    static class PlantResult<T> {
         private T data;
     }
 

@@ -9,6 +9,7 @@ import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.UserService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ class PlantApiControllerTest {
     @MockBean
     private FileUploadService fileUploadService;
 
+    @BeforeEach
 
     @Test
     @DisplayName("식물 등록 확인")
@@ -93,6 +95,15 @@ class PlantApiControllerTest {
                 .andExpect(jsonPath("$.data[1].plantName").value("토리이"))
                 .andDo(print());
 
+    }
+
+    @Test
+    public void updatePlant() throws Exception{
+        //given
+
+        //when
+
+        //then
     }
 
     private Plant getPlant(User user, String species, String name,

@@ -26,6 +26,10 @@ public class PlantService {
         return plant.getId();
     }
 
+    public Plant findOnePlant(Long id) {
+        return plantRepository.getById(id);
+    }
+
     public List<Plant> findPlants(Long userId){
         return plantRepository.findAllByUserId(userId);
     }
