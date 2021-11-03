@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React,{useState, useEffect} from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { logoutUser } from './actions/userActions';
 
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
@@ -21,10 +21,18 @@ function Home({navigation}) {
 
     const [name, setName] = useState('');
     const dispatch = useDispatch();
+    const isLogin = useSelector(state => state.userReducer.isLogin);
 
     useEffect(()=>{
         getData();
     },[]);
+
+    useEffect(()=>{
+        if(isLogin == 'end'){
+            navigation.replace('LoginScreen');
+        }
+        
+    },[isLogin])
 
     const getData = () =>{
         try {
@@ -53,9 +61,8 @@ function Home({navigation}) {
     }
 
     const onPressHandler = () =>{
-        unlinkKaka();
+        // unlinkKaka();
         dispatch(logoutUser());
-        navigation.replace('LoginScreen');
     }
 
     return(

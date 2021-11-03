@@ -14,12 +14,13 @@ import {
   Dimensions
 } from 'react-native';
 
+import { useIsFocused } from '@react-navigation/native';
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loader from './Loader';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink } from './actions/userActions';
+import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink,setRegisterState } from './actions/userActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
@@ -34,15 +35,18 @@ const LoginScreen = ({ navigation }) => {
   const [errortext, setErrortext] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+ 
   const passwordInputRef = createRef();
 
   const dispatch = useDispatch();
 
   const isLogin = useSelector(state => state.userReducer.isLogin);
   const kakaoRegisterState = useSelector(state => state.userReducer.kakaoRegisterState);
+  const registerState = useSelector(state => state.userReducer.registerState);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
+
     if (isLogin == 'success') {
       setLoading(false);
       navigation.replace('HomeScreen');
@@ -64,6 +68,20 @@ const LoginScreen = ({ navigation }) => {
       setErrortext('회원가입 실패');
     }
   }, [kakaoRegisterState])
+
+  useEffect(()=>{
+    
+    if(registerState == 'success'&& isFocused){
+      dispatch(kakaoRegister('success'));
+      setIsModalVisible(false);
+      dispatch(setRegisterState(''));
+    }
+    else if(registerState =='failure' && isFocused){
+      setLoading(false);
+      kakaoRegisterFail();
+    }
+  
+  },[registerState])
 
   const KakaoLoginActive = async () => {
     try {
@@ -127,17 +145,8 @@ const LoginScreen = ({ navigation }) => {
       password: userPassword,
     });
 
-    const res = dispatch(registerUser(user));
-    res.payload.then(data => {
-      if (data.message == 'success') {
-        dispatch(kakaoRegister('success'));
-        setIsModalVisible(false);
-      }
-      else {
-        setLoading(false);
-        kakaoRegisterFail();
-      }
-    });
+    dispatch(registerUser(user));
+
   }
 
   const kakaoRegisterFail = () => {

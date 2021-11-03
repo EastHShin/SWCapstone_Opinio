@@ -3,12 +3,13 @@ import {REGISTER_USER,LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK,LOGOUT_USER} from
 const initialState = {
     kakaoRegisterState:'',
     isLogin:'',
+    registerState:''
 };
 
 function userReducer(state=initialState, action){
     switch (action.type){
         case REGISTER_USER :
-            return state;
+            return {...state, registerState:action.payload};
         case LOGIN_USER:
             return { ...state, isLogin:action.payload};
         case KAKAO_REGISTER:

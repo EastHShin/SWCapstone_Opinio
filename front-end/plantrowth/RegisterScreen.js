@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useEffect,useState, createRef } from 'react';
 
 import {
   StyleSheet,
@@ -16,9 +16,10 @@ import {
 import Loader from './Loader';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 
+import { useIsFocused } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useDispatch } from 'react-redux';
-import { registerUser } from './actions/userActions';
+import { useDispatch,useSelector } from 'react-redux';
+import { registerUser,setRegisterState } from './actions/userActions';
 
 function RegisterScreen({ navigation }) {
 
@@ -37,9 +38,24 @@ function RegisterScreen({ navigation }) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
 
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
 
+  const registerState = useSelector(state => state.userReducer.registerState);
   const passwordInputRef = createRef();
+
+  useEffect(() => {
+    if(registerState == 'success' && isFocused){
+      setLoading(false);
+      setIsRegistraionSuccess(true);
+      dispatch(setRegisterState(''));
+    }
+    else if(registerState == 'failure' && isFocused){
+      setLoading(false);
+      setErrortext('회원가입 실패');
+      dispatch(setRegisterState(''));
+    }
+  }, [registerState])
 
   const onPressHandler = () => {
     setErrortext('');
@@ -68,20 +84,10 @@ function RegisterScreen({ navigation }) {
       user_birth: userBirth,
       email: userEmail,
       password: userPassword,
-
     });
 
-    const res = dispatch(registerUser(user));
-    res.payload.then(data => {
-      if (data.message == 'success') {
-        setLoading(false);
-        setIsRegistraionSuccess(true);
-      }
-      else {
-        setLoading(false);
-        setErrortext('회원가입 실패');
-      }
-    });
+    dispatch(registerUser(user));
+ 
 
   }
 
@@ -124,7 +130,6 @@ function RegisterScreen({ navigation }) {
   }
 
   if (isRegistraionSuccess) {
-
     return (
       <View style={{
         flex: 1, 

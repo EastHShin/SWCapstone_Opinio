@@ -1,111 +1,131 @@
 import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK,LOGOUT_USER } from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
+import axios from "axios";
 
-export function registerUser(user) {
+export const registerUser = (user) =>  {
 
-    const req = fetch('http://localhost:8080/api/auth/join', {
-        method: 'POST',
-        body: user,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }).then(res => res.json());
-    return { type: REGISTER_USER, payload: req }
+    return async dispatch =>{
+        return await axios.post('http://localhost:8080/api/auth/join',user)
+        .then(function(res){
+            dispatch({
+                type:REGISTER_USER,
+                payload:res.data.message,
+            })})
+            .catch(function (error){
+                console.log(error);
+            })
+        }
+    }
 
+
+export const setRegisterState = state => dispatch=>{
+    dispatch({
+        type:REGISTER_USER,
+        payload:state
+    })
 }
 
 export const loginUser = (user) => {
-    return async dispatch => {
-        return await fetch('http://localhost:8080/api/auth/login', {
-            method: 'POST',
-            body: user,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(res => res.json())
-            .then(data => {
-                if (data.accessToken) {
-                    AsyncStorage.setItem('accessToken', data.accessToken);
-                    AsyncStorage.setItem('userEmail',user.email);
-                    
-                    dispatch({
-                        type: LOGIN_USER,
-                        payload: "success"
-                    });
-                }
-                else{
-                    dispatch({
-                        type: LOGIN_USER,
-                        payload: "failure"
-                    });
-                }
-                
-            }).catch(err => {
-                console.log(err);
-            })
 
+    return async dispatch =>{
+        return await axios.post("http://localhost:8080/api/auth/login",user)
+        .then(function(res){
+            if(res.data.accessToken){
+                AsyncStorage.setItem('accessToken', res.data.accessToken);
+                AsyncStorage.setItem('userId', res.data.user_id);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
+                dispatch({
+                    type: LOGIN_USER,
+                    payload: "success"
+                });
+            }
+            else{
+                dispatch({
+                    type: LOGIN_USER,
+                    payload: "failure"
+                });
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+        })
     }
 };
 
 export const kakaoLogin = (email) => {
-    return async dispatch => {
-        return await fetch('http://localhost:8080/api/auth/kakao', {
-            method: 'POST',
-            body:email,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(res => res.json())
-            .then(data => {
-                if (data.accessToken) {
-                    AsyncStorage.setItem('accessToken', data.accessToken);
-                    AsyncStorage.setItem('kakaoLogin', 'yes');
-                    dispatch({
-                        type: LOGIN_USER,
-                        payload: "success"
-                    }); 
-                }
-                  else{
-                    dispatch({
-                        type: KAKAO_REGISTER,
-                        payload : 'loading',
-                    });
-                  } 
-            }).catch(err => {
-                console.log(err);
-            })
-    }
-}
 
+    return async dispatch => {
+        return await axios.post('http://localhost:8080/api/auth/kakao',email)
+        .then(function(res){
+            if (res.data.accessToken) {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
+                AsyncStorage.setItem('accessToken', res.data.accessToken);
+                AsyncStorage.setItem('userId', res.data.user_id);
+                AsyncStorage.setItem('kakaoLogin', 'yes');
+
+                dispatch({
+                    type: LOGIN_USER,
+                    payload: "success"
+                }); 
+            }
+              else{
+                dispatch({
+                    type: KAKAO_REGISTER,
+                    payload : 'loading',
+                });
+              } 
+        }).catch(function(err){
+            console.log(err);
+        })
+    }
+   
+}
 
 export const kakaoRegister = register => dispatch =>{
 
     if(register=='success'){
-        dispatch(kakaoLogin(AsyncStorage.getItem('userEmail')));
+        AsyncStorage.getItem('userEmail').then(value=>{
+            dispatch(kakaoLogin(value));
+            dispatch({
+                type: KAKAO_REGISTER,
+                payload : register,
+            });
+        });
     }
+    else{
     dispatch({
         type: KAKAO_REGISTER,
         payload : register,
     });
+    }
 }
 
-export const logoutUser = () => dispatch => {
-    //서버 post 요청 필요
-    AsyncStorage.getItem('kakaoLogin').then((value)=>{
-           if(value){
-               KakaoLogins.logout().then(result=>{
-                    console.log(result);
-               })   
-           }
-    });
+export const logoutUser = (email) => {
 
-    AsyncStorage.clear();
-    
-    dispatch({
-        type: LOGOUT_USER,
-        payload: '',
-    });
+    return async dispatch => {
+        return await axios.post('http://localhost:8080/api/auth/logout',email)
+        .then(function(res){
+            console.log(res.data);
+            AsyncStorage.getItem('kakaoLogin').then((value)=>{
+                AsyncStorage.clear();
+                dispatch({
+                    type: LOGOUT_USER,
+                    payload: 'end',
+                });
+
+                if(value){
+                    KakaoLogins.logout().then(result=>{
+                         console.log(result);
+                         
+                    })   
+                } 
+            });
+        }).catch(function(err){
+            console.log(err);
+        })
+    }
+
 };
 
 export const kakaoUnlink = () => dispatch => {
@@ -123,7 +143,7 @@ export const kakaoUnlink = () => dispatch => {
     } catch (error) {
         console.log(error);
     }
-    
+
 };
 
 
