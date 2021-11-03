@@ -55,7 +55,7 @@ def upload_file():
       #print(answer)
       #print(type(answer))
 
-      return render_template('answer.html', first=list_1[0], second=list_2[0], value1=list_1[2][value] * 100, value2=list_2[2][value2] * 100)
+      return render_template('answer.html', first=list_1[0], second=list_2[0], value2=list_1[2][value] * 100, value1=list_2[2][value2] * 100)
       #return 'uploads 디렉토리 -> 파일 업로드 성공!'
 
 if __name__ == '__main__':
