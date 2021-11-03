@@ -11,12 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -43,7 +45,7 @@ class PlantServiceTest {
         Plant plant = getPlant(user, "장미", "토로리",
                 LocalDate.now(), 0, 3, 2);
 
-        when(plantRepository.save(any())).thenReturn(plant.getId());
+        when(plantRepository.save(any())).thenReturn(plant);
 
         //when
         Long id = plantService.join(plant);
@@ -88,14 +90,32 @@ class PlantServiceTest {
         //when
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
                 LocalDate.now(), 5,null, 5, 3);
-        when(plantRepository.getById(any())).thenReturn(plant);
-        plantService.update(plant.getId(), requestDto);
+        when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
+        Plant updatedPlant = plantService.update(plant.getId(), requestDto);
 
         //then
         Assertions.assertThat(plant.getPlantSpecies()).isEqualTo("가시");
         Assertions.assertThat(plant.getPlantExp()).isEqualTo(5);
         Assertions.assertThat(plant.getWaterSupply()).isEqualTo(5);
         Assertions.assertThat(plant.getAlarmCycle()).isEqualTo(3);
+        Assertions.assertThat(plant).isSameAs(updatedPlant);
+    }
+
+    @Test
+    public void deletePlant() throws Exception{
+        //given
+        User user = new User();
+        user.setEmail("xlddd@gmail.com");
+        user.setPassword("fffff");
+        user.setId(1L);
+        Plant plant = getPlant(user, "장미", "토로리",
+                LocalDate.now(), 0, 3, 2);
+        plant.setId(1L);
+        //when
+        when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
+        plantService.delete(1L);
+        //then
+        Mockito.verify(plantRepository).delete(plant);
     }
 
     private Plant getPlant(User user, String species, String name,

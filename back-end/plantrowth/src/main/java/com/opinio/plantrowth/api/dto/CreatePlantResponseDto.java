@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class CreatePlantResponseDto {
     private Long id;
 
+
     public CreatePlantResponseDto(Long id) {
         this.id = id;
     }
