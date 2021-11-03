@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as KakaoLogins from "@react-native-seoul/kakao-login";
 
 const SplashScreen =({navigation}) =>{
     const [animating, setAnimating] = useState(true);
@@ -15,11 +16,12 @@ const SplashScreen =({navigation}) =>{
     useEffect(()=>{
         setTimeout(()=>{
             setAnimating(false);
-            AsyncStorage.getItem('accessTocken').then((value)=>
+            AsyncStorage.getItem('accessToken').then((value)=>
             navigation.replace(value === null ? 'LoginScreen':'HomeScreen'),
             );
         }, 5000);
     }, []);
+
 
     return(
         <View style ={styles.body}>
