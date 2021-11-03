@@ -8,13 +8,17 @@ import pathlib
 temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
 
-learner = load_learner('./plantrowth_resnet50_train.pkl')
+
+def get_x(x): return x['image']
+def get_y(y): return y['labels']
+
+
+learner = load_learner('./plantrowth_second_resnet50_train.pkl')
 print('model loaded!')
 
-os.remove('static/test.jpg')
-img = Image.open('./picture8_224x224.jpg')
-img_resize = img.resize((224, 224))
-img_resize.save('test.jpg')
+#img = Image.open('./aaaaa.jpg')
+#img_resize = img.resize((512, 512))
+#img_resize.save('test.jpg')
 
-answer = learner.predict('./test.jpg')
+answer = learner.predict('./test2.jpg')
 print(answer)
