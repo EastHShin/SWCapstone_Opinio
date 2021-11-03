@@ -8,10 +8,8 @@ import pathlib
 temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
 
-
 def get_x(x): return x['image']
 def get_y(y): return y['labels']
-
 
 learner = load_learner('./plantrowth_second_resnet50_train.pkl')
 print('model loaded!')

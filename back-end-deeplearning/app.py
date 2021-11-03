@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
+import deeplearning
 
 import os
 from PIL import Image
@@ -23,9 +24,6 @@ def render_file():
 @app.route('/fileUpload', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
-      def get_x(x): return x['image']
-      def get_y(y): return y['labels']
-
       f = request.files['file']
       #저장할 경로 + 파일명
       f.save(secure_filename(f.filename))
@@ -39,18 +37,18 @@ def upload_file():
       os.remove('test2.jpg')
       img_resize_2.save('test2.jpg')
 
-      #first_learner = load_learner('./plantrowth_first_resnet50_train.pkl')
+      first_learner = load_learner('./plantrowth_first_resnet50_train.pkl')
       second_learner = load_learner('./plantrowth_second_resnet50_train.pkl')
       print('first model loaded!')
       print('second model loaded!')
 
 
       answer_1 = first_learner.predict('./test.jpg')
-      #answer_2 = second_learner.predict('./test2.jpg')
+      answer_2 = second_learner.predict('./test2.jpg')
       list_1 = list(answer_1)
-      #list_2 = list(answer_2)
+      list_2 = list(answer_2)
       print(list_1)
-      #print(list_2)
+      print(list_2)
 
 
       #print(answer)
