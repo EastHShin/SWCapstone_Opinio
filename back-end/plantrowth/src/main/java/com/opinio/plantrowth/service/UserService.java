@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -17,7 +19,9 @@ public class UserService {
         /*
         getById는 지연로딩 시킴, id값 외에 다른 필드를 참조할때 쿼리가 발생
         -> Id외에 다른 필드에 대한 정보가 필요하지 않을때 유리함
+        -> 지연로딩 시켜서 plant에 user를 저장시키지 못하는 문제 발생시킴 (2021/11/03)
          */
-        return userRepository.getById(id);
+        User user = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        return user;
     }
 }

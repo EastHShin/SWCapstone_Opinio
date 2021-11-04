@@ -6,30 +6,36 @@ import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
 import com.opinio.plantrowth.api.dto.CreatePlantResponseDto;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
+import com.opinio.plantrowth.repository.PlantRepository;
+import com.opinio.plantrowth.repository.UserRepository;
 import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.UserService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.GsonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,7 +52,12 @@ class PlantApiControllerTest {
     @MockBean
     private FileUploadService fileUploadService;
 
-    @BeforeEach
+    @MockBean
+    private PlantRepository plantRepository;
+    @MockBean
+    private UserRepository userRepository;
+
+
 
     @Test
     @DisplayName("식물 등록 확인")
@@ -100,10 +111,44 @@ class PlantApiControllerTest {
     @Test
     public void updatePlant() throws Exception{
         //given
-
+        User user = new User();
+        user.setEmail("Ffff@fadf");
+        Plant plant = getPlant(user, "장미", "fff",
+                LocalDate.now(), 0, 3, 2);
+        user.setId(1L);
+        plant.setId(1L);
         //when
+        CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
+                LocalDate.now(), 5,null, 5, 3);
+        Plant updatedPlant = getPlant(user, "가시", "토로리", LocalDate.now(),5, 5, 3);
+        updatedPlant.setId(1L);
+//        plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
+
+//        when(plantService.update(1L, requestDto)).thenReturn(updatedPlant);
+//        when(plantService.update(1L, requestDto)).thenReturn(plant);
+//        doReturn(Optional.of(updatedPlant)).when(plantRepository).findById(1L);
+//        doReturn(updatedPlant).when(plantService).update(1L, requestDto);
 
         //then
+        mockMvc.perform(put("/api/plants/profiles/{plant-id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.plantName").value("토로리"))
+                .andDo(print());
+    }
+    
+    @Test
+    public void deletePlant() throws Exception{
+        //given
+
+        //when
+//        Mockito.when(plantService.delete(1L)).thenReturn(1L);
+        //then
+        mockMvc.perform(delete("/api/plants/profiles/{plant-id}", 1L))
+                .andExpect(status().isOk());
     }
 
     private Plant getPlant(User user, String species, String name,

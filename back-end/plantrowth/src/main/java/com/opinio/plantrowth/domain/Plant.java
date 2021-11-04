@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ public class Plant {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;      //User 클래스 완성하면 풀기
+    @JsonIgnore
+    private User user;
 
     private String plantSpecies;
     private String plantName;

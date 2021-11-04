@@ -22,21 +22,21 @@ public class PlantService {
 
     @Transactional
     public Long join(Plant plant) {
-        plantRepository.save(plant);
-        return plant.getId();
+        Plant savedPlant = plantRepository.save(plant);
+        return savedPlant.getId();
     }
 
     public Plant findOnePlant(Long id) {
         return plantRepository.getById(id);
     }
 
-    public List<Plant> findPlants(Long userId){
+    public List<Plant> findPlants(Long userId) {
         return plantRepository.findAllByUserId(userId);
     }
 
     @Transactional
-    public void update(Long id, CreatePlantRequestDto requestDto) {
-        Plant plant = plantRepository.getById(id);
+    public Plant update(Long id, CreatePlantRequestDto requestDto) {
+        Plant plant = plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
         plant.setPlantSpecies(requestDto.getPlantSpecies());
         plant.setPlantName(requestDto.getPlantName());
         plant.setPlantBirth(requestDto.getPlantBirth());
@@ -44,8 +44,15 @@ public class PlantService {
         plant.setFileName(requestDto.getFileName());
         plant.setWaterSupply(requestDto.getWaterSupply());
         plant.setAlarmCycle(requestDto.getAlarmCycle());
+        return plant;
     }
 
+    @Transactional
+    public Long delete(Long id) {
+        Plant plant = plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        plantRepository.delete(plant);
+        return id;
+    }
 
 
 }
