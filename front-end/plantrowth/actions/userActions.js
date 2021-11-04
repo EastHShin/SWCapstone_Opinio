@@ -6,7 +6,7 @@ import axios from "axios";
 export const registerUser = (user) =>  {
 
     return async dispatch =>{
-        return await axios.post('http://localhost:8080/api/auth/join',user)
+        return await axios.post('https://ddc5935c-e447-4f84-bb74-3549e177f250.mock.pstmn.io/join',user)
         .then(function(res){
             dispatch({
                 type:REGISTER_USER,
@@ -16,8 +16,7 @@ export const registerUser = (user) =>  {
                 console.log(error);
             })
         }
-    }
-
+}
 
 export const setRegisterState = state => dispatch=>{
     dispatch({
@@ -29,7 +28,7 @@ export const setRegisterState = state => dispatch=>{
 export const loginUser = (user) => {
 
     return async dispatch =>{
-        return await axios.post("http://localhost:8080/api/auth/login",user)
+        return await axios.post("https://ddc5935c-e447-4f84-bb74-3549e177f250.mock.pstmn.io/login",user)
         .then(function(res){
             if(res.data.accessToken){
                 AsyncStorage.setItem('accessToken', res.data.accessToken);
@@ -56,7 +55,7 @@ export const loginUser = (user) => {
 export const kakaoLogin = (email) => {
 
     return async dispatch => {
-        return await axios.post('http://localhost:8080/api/auth/kakao',email)
+        return await axios.post('https://ddc5935c-e447-4f84-bb74-3549e177f250.mock.pstmn.io/kakao',email)
         .then(function(res){
             if (res.data.accessToken) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
@@ -104,9 +103,9 @@ export const kakaoRegister = register => dispatch =>{
 export const logoutUser = (email) => {
 
     return async dispatch => {
-        return await axios.post('http://localhost:8080/api/auth/logout',email)
+        return await axios.post('https://ddc5935c-e447-4f84-bb74-3549e177f250.mock.pstmn.io/logout',email)
         .then(function(res){
-            console.log(res.data);
+            axios.defaults.headers.common['Authorization'] = undefined
             AsyncStorage.getItem('kakaoLogin').then((value)=>{
                 AsyncStorage.clear();
                 dispatch({

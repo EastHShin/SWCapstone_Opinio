@@ -46,7 +46,6 @@ const LoginScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-
     if (isLogin == 'success') {
       setLoading(false);
       navigation.replace('HomeScreen');

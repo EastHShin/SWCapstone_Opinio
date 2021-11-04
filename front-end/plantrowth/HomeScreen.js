@@ -11,7 +11,8 @@ import {
     Text,
     Alert,
     TextInput,
-    Pressable
+    Pressable,
+    Button
 } from 'react-native';
 
 
@@ -75,6 +76,10 @@ function Home({navigation}) {
              title = 'Logout'
              color = '#1eb900'
             onPressFunction={onPressHandler} />
+
+            <Button title = "change" 
+            onPress = {()=> navigation.push("DiaryScreen")}
+            />
           
         </View>
     )
