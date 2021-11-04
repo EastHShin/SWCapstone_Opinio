@@ -41,14 +41,23 @@ public class PlantApiController {
             @PathVariable("user-id") Long userId,
             @RequestBody CreatePlantRequestDto request,
             @RequestPart(required = false) Optional<MultipartFile> file) {
-        Plant plant = new Plant();
-        plant.setPlantSpecies(request.getPlantSpecies());
-        plant.setPlantName(request.getPlantName());
-        plant.setPlantBirth(request.getPlantBirth());
-        plant.setPlantExp(request.getPlantExp());
-        plant.setFileName(request.getFileName());
-        plant.setWaterSupply(request.getWaterSupply());
-        plant.setAlarmCycle(request.getAlarmCycle());
+        Plant plant = Plant.builder()
+                .plantSpecies(request.getPlantSpecies())
+                .plantName(request.getPlantName())
+                .plantBirth(request.getPlantBirth())
+                .plantExp(request.getPlantExp())
+                .fileName(request.getFileName())
+                .waterSupply(request.getWaterSupply())
+                .alarmCycle(request.getAlarmCycle())
+                .build();
+//                new Plant();
+//        plant.setPlantSpecies(request.getPlantSpecies());
+//        plant.setPlantName(request.getPlantName());
+//        plant.setPlantBirth(request.getPlantBirth());
+//        plant.setPlantExp(request.getPlantExp());
+//        plant.setFileName(request.getFileName());
+//        plant.setWaterSupply(request.getWaterSupply());
+//        plant.setAlarmCycle(request.getAlarmCycle());
 
         if(file.isPresent()) {
             String uploadImageName = fileUploadService.uploadImage(file.get());

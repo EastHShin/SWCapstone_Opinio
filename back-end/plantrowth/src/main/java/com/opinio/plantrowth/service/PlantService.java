@@ -44,7 +44,7 @@ public class PlantService {
         plant.setFileName(requestDto.getFileName());
         plant.setWaterSupply(requestDto.getWaterSupply());
         plant.setAlarmCycle(requestDto.getAlarmCycle());
-        return plant;
+        return plantRepository.save(plant);
     }
 
     @Transactional
