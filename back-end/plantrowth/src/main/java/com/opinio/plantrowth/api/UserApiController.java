@@ -1,6 +1,7 @@
 package com.opinio.plantrowth.api;
 
 
+import com.opinio.plantrowth.api.dto.JoinDTO;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.api.dto.UserDTO;
 import com.opinio.plantrowth.domain.User;
@@ -41,7 +42,7 @@ public class UserApiController {
  */
 
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody UserDTO user){
+    public ResponseEntity join(@RequestBody JoinDTO user){
         Long result = userService.join(user);
 
         return result != null?
