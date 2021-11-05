@@ -1,6 +1,9 @@
 <html>
+<head>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico')}}"/>
+</head>
    <body>
-      <form action = "http://localhost:5000/fileUpload" method = "POST"
+      <form action = "http://localhost:5000/dignosiserver/answer" method = "POST"
          enctype = "multipart/form-data">
          <input type = "file" name = "file" />
          <input type = "submit"/>

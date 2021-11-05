@@ -16,13 +16,13 @@ app = Flask(__name__)
 
 
 # 업로드 HTML 렌더링
-@app.route('/upload')
+@app.route('/api/plants/diagnosis')
 def render_file():
     return render_template('upload.html')
 
 
 # 파일 업로드 처리
-@app.route('/fileUpload', methods=['GET', 'POST'])
+@app.route('/dignosiserver/answer', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         f = request.files['file']
