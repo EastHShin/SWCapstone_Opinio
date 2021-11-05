@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.service;
 
+import com.opinio.plantrowth.api.dto.JoinDTO;
 import com.opinio.plantrowth.api.dto.UserDTO;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
@@ -23,9 +24,11 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Long join(UserDTO user){
+    public Long join(JoinDTO user){
         Long userId = userRepository.save(
                 User.builder()
+                        .name(user.getUser_name())
+                        .birth(user.getUser_birth())
                         .email(user.getEmail())
                         .password(passwordEncoder.encode(user.getPassword()))
                         .roles(Collections.singletonList("ROLE_USER"))
