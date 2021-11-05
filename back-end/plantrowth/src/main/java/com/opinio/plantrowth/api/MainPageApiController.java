@@ -25,7 +25,6 @@ public class MainPageApiController {
 
     private final UserService userService;
     private final PlantService plantService;
-    private final UserRepository userRepository;
 
 //    @PostConstruct
 //    public void testInit(){
@@ -35,12 +34,13 @@ public class MainPageApiController {
 //        user.setName("east");
 //        User savedUser = userRepository.save(user);
 //    }
-    
+
     @GetMapping("/api/main/{user-id}")
-    public ResponseEntity<MainPageDto> getMainPage(@PathVariable("user-id") Long id) {
+    public ResponseEntity<MainPageResult> getMainPage(@PathVariable("user-id") Long id) {
         User user = userService.findUser(id);
         List<Plant> plants = plantService.findPlants(id);
-        return new ResponseEntity<>(new MainPageDto(user,plants), HttpStatus.OK);
+        //List<Board> boards = boardService.findBestPost();      나중에 게시판 구현하면 수정
+        return new ResponseEntity<>(new MainPageResult<MainPageDto>(new MainPageDto(user,plants)), HttpStatus.OK);
     }
 
     @Getter
@@ -54,8 +54,9 @@ public class MainPageApiController {
         private String userName;
         private int point;
         private List<MainPagePlantDto> plants;
+        //private List<Board> boards;
 
-        public MainPageDto(User user, List<Plant> plantList) {
+        public MainPageDto(User user, List<Plant> plantList) { //List<Board> boardList
             userName = user.getName();
             point = user.getPoint();
 
@@ -77,5 +78,11 @@ public class MainPageApiController {
             plantImageUri = plant.getFileName();
         }
     }
+    /* 게시판 구현하면 풀기
+    @Getter
+    static class MainPageBoardDto{
+        private String postName;
+    }
+     */
 
 }
