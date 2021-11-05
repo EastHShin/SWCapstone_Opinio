@@ -6,17 +6,20 @@ import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.PlantRepository;
 import com.opinio.plantrowth.repository.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -32,18 +35,50 @@ class PlantServiceTest {
     @InjectMocks
     private PlantService plantService;
 
+    private User user;
+    private Plant plant;
+    private Plant plant2;
+
+    @BeforeEach
+    public void setUpTest() {
+        user = User.builder()
+                .email("fff")
+                .name("east")
+                .password("orort")
+                .build();
+
+        plant = Plant.builder()
+                .plantSpecies("장미")
+                .plantName("토리이")
+                .plantBirth(LocalDate.now())
+                .alarmCycle(2)
+                .waterSupply(3)
+                .plantExp(0)
+                .build();
+
+        plant2 = Plant.builder()
+                .plantSpecies("가시")
+                .plantName("토이이이")
+                .plantBirth(LocalDate.now())
+                .alarmCycle(5)
+                .waterSupply(1)
+                .plantExp(0)
+                .build();
+
+    }
+
     @Test
     @DisplayName("join 기능 테스트")
     public void join() throws Exception{
         //given
-        User user = new User();
-        user.setEmail("xlddd@gmail.com");
-        user.setPassword("fffff");
-        user.setId(1L);
-        Plant plant = getPlant(user, "장미", "토로리",
-                LocalDate.now(), 0, 3, 2);
+//        User user = new User();
+//        user.setEmail("xlddd@gmail.com");
+//        user.setPassword("fffff");
+//        user.setId(1L);
+//        Plant plant = getPlant(user, "장미", "토로리",
+//                LocalDate.now(), 0, 3, 2);
 
-        when(plantRepository.save(any())).thenReturn(plant.getId());
+        when(plantRepository.save(any())).thenReturn(plant);
 
         //when
         Long id = plantService.join(plant);
@@ -55,19 +90,10 @@ class PlantServiceTest {
     @DisplayName("식물 목록 테스트")
     public void plantList() throws Exception{
         //given
-        User user = new User();
-        user.setEmail("xlddd@gmail.com");
-        user.setPassword("fffff");
-        user.setId(1L);
-
-        Plant plant = getPlant(user, "장미", "토로리",
-                LocalDate.now(), 0, 3, 2);
-        Plant plant2 = getPlant(user, "가시", "토리이",
-                LocalDate.now(), 0, 3, 2);
         List<Plant> plants = new ArrayList<>();
         plants.add(plant);
         plants.add(plant2);
-        given(plantRepository.findAllByUserId(1L)).willReturn(plants);
+        given(plantRepository.findAllByUserId(any())).willReturn(plants);
         //when
         List<Plant> findPlants = plantService.findPlants(user.getId());
         //then
@@ -79,37 +105,31 @@ class PlantServiceTest {
     @Test
     public void updatePlant() throws Exception{
         //given
-        User user = new User();
-        user.setEmail("xlddd@gmail.com");
-        user.setPassword("fffff");
-        user.setId(1L);
-        Plant plant = getPlant(user, "장미", "토로리",
-                LocalDate.now(), 0, 3, 2);
+
         //when
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
                 LocalDate.now(), 5,null, 5, 3);
-        when(plantRepository.getById(any())).thenReturn(plant);
-        plantService.update(plant.getId(), requestDto);
+        when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
+        Plant updatedPlant = plantService.update(plant.getId(), requestDto);
 
         //then
         Assertions.assertThat(plant.getPlantSpecies()).isEqualTo("가시");
         Assertions.assertThat(plant.getPlantExp()).isEqualTo(5);
         Assertions.assertThat(plant.getWaterSupply()).isEqualTo(5);
         Assertions.assertThat(plant.getAlarmCycle()).isEqualTo(3);
+        Assertions.assertThat(plant).isSameAs(updatedPlant);
     }
 
-    private Plant getPlant(User user, String species, String name,
-                           LocalDate birth, int exp, int supply,
-                           int cycle) {
-        Plant plant = new Plant();
-        plant.setUser(user);
-        plant.setPlantSpecies(species);
-        plant.setPlantName(name);
-        plant.setPlantBirth(birth);
-        plant.setPlantExp(exp);
-        plant.setWaterSupply(supply);
-        plant.setAlarmCycle(cycle);
-        return plant;
+    @Test
+    public void deletePlant() throws Exception{
+        //given
+
+        //when
+        when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
+        plantService.delete(1L);
+        //then
+        Mockito.verify(plantRepository).delete(plant);
     }
+
 
 }
