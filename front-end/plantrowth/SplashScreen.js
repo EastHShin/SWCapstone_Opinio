@@ -2,13 +2,12 @@ import React, {useState, useEffect} from 'react';
 
 import {
     ActivityIndicator,
-    View,
     StyleSheet,
-    Image
+    Image,
+    SafeAreaView
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as KakaoLogins from "@react-native-seoul/kakao-login";
 
 const SplashScreen =({navigation}) =>{
     const [animating, setAnimating] = useState(true);
@@ -24,7 +23,7 @@ const SplashScreen =({navigation}) =>{
 
 
     return(
-        <View style ={styles.body}>
+        <SafeAreaView style ={styles.body}>
             <Image 
             source={require('./assets/plantrowth.png')}
             style = {{flex:1,width:'90%', resizeMode:'contain',margin:30}}/>
@@ -35,7 +34,7 @@ const SplashScreen =({navigation}) =>{
             color ="#ffffff"
             size="large"
             />
-        </View>
+        </SafeAreaView>
     )
 }
 export default SplashScreen;

@@ -3,6 +3,7 @@ import React, { useEffect,useState, createRef } from 'react';
 import {
   StyleSheet,
   TextInput,
+  SafeAreaView,
   View,
   Text,
   Image,
@@ -10,7 +11,7 @@ import {
   Keyboard,
   TouchableOpacity,
   ScrollView,
-  Dimensions
+  Dimensions,
 } from 'react-native'
 
 import Loader from './Loader';
@@ -88,7 +89,6 @@ function RegisterScreen({ navigation }) {
 
     dispatch(registerUser(user));
  
-
   }
 
   const showDatePicker = () => {
@@ -97,11 +97,12 @@ function RegisterScreen({ navigation }) {
 
   const handleConfirm = (date) => {
     setDatePickerVisibility(false);
-    setUserBirth(date);
     
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
+
+    setUserBirth(year+ '-' + month + '-' + day);
     setTextBirth(year+ '-' + month + '-' + day);
 
   }
@@ -131,7 +132,7 @@ function RegisterScreen({ navigation }) {
 
   if (isRegistraionSuccess) {
     return (
-      <View style={{
+      <SafeAreaView style={{
         flex: 1, 
         backgroundColor: '#8EB695',
         justifyContent: 'center'
@@ -154,12 +155,12 @@ function RegisterScreen({ navigation }) {
           <Text style={styles.buttonText}>Login Now</Text>
         </TouchableOpacity>
 
-      </View>
+      </SafeAreaView>
     )
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#8EB695',alignItems:'center' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#8EB695',alignItems:'center' }}>
       <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -289,7 +290,7 @@ function RegisterScreen({ navigation }) {
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 

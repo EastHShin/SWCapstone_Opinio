@@ -11,7 +11,8 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Modal,
-  Dimensions
+  Dimensions,
+  SafeAreaView
 } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
@@ -169,7 +170,7 @@ const LoginScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.body}>
+    <SafeAreaView style={styles.body}>
       <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -313,7 +314,7 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 export default LoginScreen;

@@ -15,12 +15,10 @@ import Evillcons from 'react-native-vector-icons/EvilIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { fetchDiaries } from './actions/diaryActions';
 import { useSelector, useDispatch } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native'
+
 
 const Item = ({ item, onPress, style }) => {
-
-  // const year = item.diary_date.getFullYear();
-  // const month = ('0' + (item.diary_date.getMonth() + 1)).slice(-2);
-  // const day = ('0' + item.diary_date.getDate()).slice(-2);
 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
@@ -42,13 +40,16 @@ const Item = ({ item, onPress, style }) => {
 
 const DiaryScreen = ({ navigation }) => {
 
-  const [selectedId, setSelectedId] = useState(null)
+  const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
   const diaries = useSelector(state => state.diaryReducer.diaries);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     dispatch(fetchDiaries(123));  //plant id는 식물 조회 완성되면 연결
-  },[])
+  }, [isFocused])
+
+
 
   const renderItem = ({ item }) => {
 
@@ -57,9 +58,9 @@ const DiaryScreen = ({ navigation }) => {
         item={item}
         onPress={() => {
           setSelectedId(item.diary_id);
-          navigation.push("DiaryDetailScreen",item.diary_id);
+          navigation.push("DiaryDetailScreen", item.diary_id);
         }
-      }
+        }
         style={{ backgroundColor: "#FFFFFF" }}
       />
     )
@@ -67,25 +68,16 @@ const DiaryScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.body}>
-
-   
       <View style={styles.top}>
-      <Image
-            source={require('./assets/plantrowth.png')}
-            style={{
-              width: '40%',
-              height: 50,
-              marginTop: Dimensions.get('window').height * -0.02,
-              resizeMode: 'contain',
-            
-            }}
-          />
-          
-      <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.push("DiaryCreateScreen")}>
-            <SimpleLineIcons name='note' size={25} color="#FFFFFF" style={styles.noteIcon} />
-          </TouchableOpacity>
+        <Image
+          source={{ uri: "https://img.marieclairekorea.com/2021/04/mck_60657bd4d3c01.jpg" }}
+          style={styles.image}
+        />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => navigation.push("DiaryCreateScreen")}>
+          <SimpleLineIcons name='note' size={25} color="#FFFFFF" />
+        </TouchableOpacity>
       </View>
       <View style={styles.diaryWrapper}>
         {diaries.length == 0 ? (
@@ -116,9 +108,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   top: {
-    flexDirection:"row",
+    flexDirection: "row",
+    justifyContent: "center",
     height: 40,
-    
+
   },
   diaryWrapper: {
     height: Dimensions.get('window').height * 0.83,
@@ -145,10 +138,13 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get('window').height / 3,
     marginStart: Dimensions.get('window').width * 0.4
   },
-  noteIcon: {
-    marginHorizontal: Dimensions.get('window').width / 6,
-    marginTop: Dimensions.get('window').height * -0.01,
-    marginEnd: Dimensions.get('window').height * -0.2,
+  image: {
+    width: '40%',
+    height: Dimensions.get('window').height * 0.1,
+    marginTop: Dimensions.get('window').height * -0.045,
+    marginRight: Dimensions.get('window').width * 0.15,
+    marginLeft: Dimensions.get('window').width * 0.23,
+    resizeMode: 'contain',
   },
-  
+
 })

@@ -4,4 +4,4 @@ export const KAKAO_REGISTER = "KAKAO_REGISTER";
 export const KAKAO_UNLINK = "KAKAO_UNLINK";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const FETCH_DIARIES = "FETCH_DIARIES";
-
+export const FETCH_DIARY = "FETCH_DIARY";
