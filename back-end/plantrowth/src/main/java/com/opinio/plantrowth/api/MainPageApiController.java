@@ -52,7 +52,7 @@ public class MainPageApiController {
     @Getter
     static class MainPageDto{
         private String userName;
-        private int point;
+        private Integer point;
         private List<MainPagePlantDto> plants;
         //private List<Board> boards;
 
@@ -69,7 +69,7 @@ public class MainPageApiController {
     @Getter
     static class MainPagePlantDto{
         private String plantName;
-        private int plantExp;
+        private Integer plantExp;
         private String plantImageUri;
 
         public MainPagePlantDto(Plant plant) {
