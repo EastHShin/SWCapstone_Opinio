@@ -1,14 +1,13 @@
 package com.opinio.plantrowth.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Getter @Setter
 public class Plant {
@@ -17,9 +16,10 @@ public class Plant {
     @Column(name = "plant_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private User user;      //User 클래스 완성하면 풀기
+    @JsonIgnore
+    private User user;
 
     private String plantSpecies;
     private String plantName;
@@ -29,14 +29,14 @@ public class Plant {
     private int waterSupply;
     private int alarmCycle;
 
-    @Builder
-    public Plant(String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {
-        this.plantSpecies = plantSpecies;
-        this.plantName = plantName;
-        this.plantBirth = plantBirth;
-        this.plantExp = plantExp;
-        this.fileName = fileName;
-        this.waterSupply = waterSupply;
-        this.alarmCycle = alarmCycle;
-    }
+//    @Builder
+//    public Plant(String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {
+//        this.plantSpecies = plantSpecies;
+//        this.plantName = plantName;
+//        this.plantBirth = plantBirth;
+//        this.plantExp = plantExp;
+//        this.fileName = fileName;
+//        this.waterSupply = waterSupply;
+//        this.alarmCycle = alarmCycle;
+//    }
 }

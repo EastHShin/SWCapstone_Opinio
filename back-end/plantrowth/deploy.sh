@@ -20,6 +20,6 @@ fi
 echo "> $JAR_PATH deploy"
 
 nohup java -jar \
-    -Dspring.config.location=classpath:/application.properties,classpath:/application-real.properties,/home/ec2-user/application-real-db.properties,/home/ec2-user/application-aws.properties,/home/ec2-user/application-credentials.properties \
+    -Dspring.config.location=classpath:/application.properties,classpath:/application-real.properties,/home/ec2-user/application-real-db.properties,/home/ec2-user/application-aws.properties,/home/ec2-user/application-credentials.properties,/home/ec2-user/application-kakao.properties \
     -Dspring.profiles.active=real \
     $JAR_PATH > $REPOSITORY/nohup.out 2>&1 &
