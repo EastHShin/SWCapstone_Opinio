@@ -1,20 +1,20 @@
 package com.opinio.plantrowth.service;
 
 import com.opinio.plantrowth.api.dto.JoinDTO;
-import com.opinio.plantrowth.api.dto.UserDTO;
+import com.opinio.plantrowth.api.dto.KakaoDTO;
+import com.opinio.plantrowth.api.dto.LoginDTO;
+import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -23,6 +23,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public Long join(JoinDTO user){
         Long userId = userRepository.save(
@@ -36,7 +37,23 @@ public class UserService implements UserDetailsService {
                 .getId();
         return userId;
     }
+    public String login(LoginDTO user){
+        User member = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
+        if (!passwordEncoder.matches(user.getPassword(), member.getPassword())){
+            throw new IllegalArgumentException("잘못된 아이디 혹은 비밀번호입니다.");
+        }
+        String token = jwtTokenProvider.createToken(member.getName(), member.getRoles());
 
+        return token;
+    }
+
+    public Long kakaoLogin(KakaoDTO user){
+        User member = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
+        Long userId = member.getId();
+        return userId;
+    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
         return userRepository.findByEmail(username)
