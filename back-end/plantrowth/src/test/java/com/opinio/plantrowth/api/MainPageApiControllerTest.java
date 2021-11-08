@@ -1,7 +1,10 @@
 package com.opinio.plantrowth.api;
 
+import com.opinio.plantrowth.config.WebSecurityConfig;
+import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
+import com.opinio.plantrowth.repository.UserRepository;
 import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.UserService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
@@ -11,6 +14,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -27,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
+@Import(WebSecurityConfig.class)
 class MainPageApiControllerTest {
 
     @Autowired
@@ -36,7 +42,13 @@ class MainPageApiControllerTest {
     @MockBean
     private UserService userService;
     @MockBean
+    private UserRepository userRepository;
+    @MockBean
     private FileUploadService fileUploadService;
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
 
     private User user;
     private Plant plant;

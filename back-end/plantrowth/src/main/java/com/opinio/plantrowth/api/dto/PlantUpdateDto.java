@@ -1,7 +1,5 @@
 package com.opinio.plantrowth.api.dto;
 
-import com.opinio.plantrowth.domain.Plant;
-import com.opinio.plantrowth.domain.User;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -12,10 +10,10 @@ public class PlantUpdateDto {
     private String plantSpecies;
     private String plantName;
     private LocalDate plantBirth;
-    private int plantExp;
+    private Integer plantExp;
     private String fileName;
-    private int waterSupply;
-    private int alarmCycle;
+    private Integer waterSupply;
+    private Integer alarmCycle;
 
     public PlantUpdateDto(Long id, String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {
         this.id = id;

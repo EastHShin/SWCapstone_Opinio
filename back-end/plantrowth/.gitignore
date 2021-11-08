@@ -8,6 +8,7 @@ build/
 application-aws.properties
 application-credentials.properties
 application-kakao.properties
+serviceAccountKey.json
 
 ### STS ###
 .apt_generated
