@@ -4,15 +4,15 @@ package com.opinio.plantrowth.api;
 import com.opinio.plantrowth.api.dto.JoinDTO;
 import com.opinio.plantrowth.api.dto.KakaoDTO;
 import com.opinio.plantrowth.api.dto.LoginDTO;
+import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Message;
-import com.opinio.plantrowth.repository.UserRepository;
+import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,11 +27,8 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserApiController {
-    private final PasswordEncoder passwordEncoder;
-    ;
-    private final UserRepository userRepository;
     private final UserService userService;
-
+    private final JwtTokenProvider jwtTokenProvider;
     //회원가입
 /*
     @PostMapping("/join")
@@ -47,7 +44,7 @@ public class UserApiController {
 
  */
 
-    @PostMapping("/join")
+    @PostMapping("/api/auth/join")
     public ResponseEntity join(@RequestBody JoinDTO user){
         Long result = userService.join(user);
 
@@ -69,15 +66,17 @@ public class UserApiController {
         return  jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
     }
     */
-   @PostMapping("/auth/login")
+   @PostMapping("/api/auth/login")
     public ResponseEntity<?> login(HttpServletResponse response, @RequestBody LoginDTO user){
-        String result = userService.login(user);
-        response.setHeader("Authorization", result);
-        return  result != null?
-                ResponseEntity.ok().body("로그인 성공"):
-                ResponseEntity.badRequest().build();
+        User member = userService.login(user);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        String token = jwtTokenProvider.createToken(member.getName(), member.getRoles());
+        response.setHeader("Authorization", token);
+        return  ResponseEntity.ok().body("로그인 성공");
     }
-    @PostMapping("/auth/kakao")
+
+    @PostMapping("/api/auth/kakao")
     public ResponseEntity<Message> kakaoLogin(@RequestBody KakaoDTO user){
         Long result = userService.kakaoLogin(user);
         Message message = new Message();
@@ -106,6 +105,4 @@ public class UserApiController {
     }
 
 }
-
-//컨트롤러 - 서비스 - 리포지토리
 
