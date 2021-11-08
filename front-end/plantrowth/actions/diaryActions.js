@@ -1,4 +1,4 @@
-import { FETCH_DIARIES, FETCH_DIARY } from "./type";
+import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY ,DELETE_DIARY } from "./type";
 import axios from "axios";
 
 export const fetchDiaries = (plantId) =>  {
@@ -48,4 +48,36 @@ export const fetchDiary = (diaryId) => {
             })
         }
 
+}
+
+export const setResultState = state => dispatch =>{
+    dispatch({
+        type:RESULT_STATE,
+        payload:state
+    })
+}
+
+export const saveDiary = (diary,plantId) => {
+    return async dispatch =>{
+        return await axios.post(`https://9605e160-bbf0-40ed-8055-1b45c403c2e3.mock.pstmn.io/plants/diary/${plantId}`,diary,{
+        headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if(res.status==200){
+                dispatch({
+                    type:SAVE_DIARY,
+                    payload:"success"
+                })
+            }
+            else{
+                dispatch({
+                    type:SAVE_DIARY,
+                    payload:"failure"
+                })
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+        })
+    }
 }

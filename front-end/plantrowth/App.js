@@ -10,6 +10,7 @@ import HomeScreen from './HomeScreen';
 import DiaryScreen from './DiaryScreen';
 import DiaryCreateScreen from './DiaryCreateScreen';
 import DiaryDetailScreen from './DiaryDetail';
+import DiaryEditScreen from './DiaryEditScreen';
 import { Provider } from 'react-redux';
 import Store  from './store';
 
@@ -72,6 +73,14 @@ function App() {
           <Stack.Screen
             name="DiaryDetailScreen"
             component={DiaryDetailScreen}
+            options={{
+              headerShown: false
+            }}
+          />
+
+<Stack.Screen
+            name="DiaryEditScreen"
+            component={DiaryEditScreen}
             options={{
               headerShown: false
             }}

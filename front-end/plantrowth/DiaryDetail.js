@@ -10,11 +10,13 @@ import {
     Text,
     Dimensions,
     ScrollView,
-    Modal
+    Modal,
+    Alert
 } from 'react-native';
 
 import { fetchDiary } from './actions/diaryActions';
-
+import { useIsFocused } from '@react-navigation/native'
+import Loader from './Loader';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -23,16 +25,21 @@ const DiaryDetailScreen = ({ route, navigation }) => {
     const selectedId = route.params;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
-    const diary = useSelector(state => state.diaryReducer.diary);
+    const isFocused = useIsFocused();
 
+    const diary = useSelector(state => state.diaryReducer.diary);
+ 
     useEffect(() => {
         dispatch(fetchDiary(selectedId));
-    }, [])
+    }, [isFocused])
+
 
     return (
         <SafeAreaView style={styles.body}>
+             <Loader loading={loading} />
             <View style={{ marginVertical: "5%", marginEnd: "-80%" }}>
                 <TouchableOpacity
                     activeOpacity={0.5}
@@ -53,7 +60,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                             <View style={styles.wrapper}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={() => setIsModalVisible(true)}
+                                    onPress={()=> console.log('삭제')}
                                     style={{ flexDirection: "row" }}>
                                     <FontAwesome5 name='trash' size={20} color="#000000" style={styles.icon} />
                                     <Text style={styles.text}>삭제</Text>
@@ -63,7 +70,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                             <View style={styles.wrapper}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={() => setIsModalVisible(true)}
+                                    onPress={() => navigation.navigate('DiaryEditScreen')}
                                     style={{ flexDirection: "row" }}>
                                     <FontAwesome5 name='pen' size={25} color="#000000" style={styles.icon} />
                                     <Text style={styles.text}>수정</Text>

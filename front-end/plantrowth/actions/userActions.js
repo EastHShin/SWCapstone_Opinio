@@ -33,7 +33,7 @@ export const registerUser = (user) => {
                         payload: "success",
                     })
                 }
-                else{
+                else {
                     dispatch({
                         type: REGISTER_USER,
                         payload: "failure",
@@ -82,10 +82,14 @@ export const loginUser = (user) => {
     }
 };
 
-export const kakaoLogin = (email) => {
+export const kakaoLogin = (data) => {
 
     return async dispatch => {
-        return await axios.post('https://9605e160-bbf0-40ed-8055-1b45c403c2e3.mock.pstmn.io/kakao', email)
+        return await axios.post('https://9605e160-bbf0-40ed-8055-1b45c403c2e3.mock.pstmn.io/kakao', data,
+            {
+                headers: { "Content-Type": `application/json` }
+            })
+
             .then(function (res) {
                 if (res.status == 200) {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
@@ -111,23 +115,23 @@ export const kakaoLogin = (email) => {
 
 }
 
-export const kakaoRegister = register => dispatch => {
+export const kakaoRegister = (register) => dispatch => {
 
-    if (register == 'success') {
-        AsyncStorage.getItem('userEmail').then(value => {
-            dispatch(kakaoLogin(value));
-            dispatch({
-                type: KAKAO_REGISTER,
-                payload: register,
-            });
-        });
-    }
-    else {
+    // if (register == 'success') {
+    //     AsyncStorage.getItem('userEmail').then(value => {
+    //         dispatch(kakaoLogin(value));
+    //         dispatch({
+    //             type: KAKAO_REGISTER,
+    //             payload: register,
+    //         });
+    //     });
+    // }
+    // else {
         dispatch({
             type: KAKAO_REGISTER,
             payload: register,
         });
-    }
+    // }
 }
 
 export const logoutUser = (email) => {

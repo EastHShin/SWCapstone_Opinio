@@ -31,6 +31,8 @@ const LoginScreen = ({ navigation }) => {
   const [userName, setUserName] = useState('');
   const [userBirth, setUserBirth] = useState(new Date());
   const [textBirth, setTextBirth] = useState('');
+  const [accessToken, setAccessToken] = useState('');
+  const [refreshToken, setRefreshToken] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
@@ -62,6 +64,14 @@ const LoginScreen = ({ navigation }) => {
       setLoading(false);
     }
     else if (kakaoRegisterState == 'success') {
+
+      const kakaoLoginData = JSON.stringify({
+        email: userEmail,
+        access_token : accessToken,
+        refresh_token : refreshToken
+      });
+
+      dispatch(kakaoLogin(kakaoLoginData));
       dispatch(kakaoRegister(''));
     }
     else if (kakaoRegisterState == 'failure') {
@@ -90,9 +100,19 @@ const LoginScreen = ({ navigation }) => {
       if (result) {
         const profile = await KakaoLogins.getProfile();
         setUserEmail(profile.email);
-        setUserPassword(' ');
-        AsyncStorage.setItem('userEmail',userEmail);
-        dispatch(kakaoLogin(userEmail));
+        setUserPassword(' '); //협의 후 작성 
+        setAccessToken(result.accessToken);
+        setRefreshToken(result.refreshToken);
+        
+        
+        const kakaoLoginData = JSON.stringify({
+          email: userEmail,
+          access_token : accessToken,
+          refresh_token : refreshToken
+        });
+
+        dispatch(kakaoLogin(kakaoLoginData));
+
     }
     } catch (err) {
       setLoading(false);

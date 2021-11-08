@@ -17,7 +17,6 @@ import { fetchDiaries } from './actions/diaryActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native'
 
-
 const Item = ({ item, onPress, style }) => {
 
   return (
@@ -45,10 +44,12 @@ const DiaryScreen = ({ navigation }) => {
   const diaries = useSelector(state => state.diaryReducer.diaries);
   const isFocused = useIsFocused();
 
+
+
   useEffect(() => {
     dispatch(fetchDiaries(123));  //plant id는 식물 조회 완성되면 연결
-  }, [isFocused])
 
+  }, [isFocused])
 
 
   const renderItem = ({ item }) => {
