@@ -10,10 +10,10 @@ public class CreatePlantRequestDto {
     private String plantSpecies;
     private String plantName;
     private LocalDate plantBirth;
-    private int plantExp;
+    private Integer plantExp;
     private String fileName;
-    private int waterSupply;
-    private int alarmCycle;
+    private Integer waterSupply;
+    private Integer alarmCycle;
 
     public CreatePlantRequestDto() {
     }

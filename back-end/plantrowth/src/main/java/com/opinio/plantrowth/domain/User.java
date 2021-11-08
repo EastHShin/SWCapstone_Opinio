@@ -29,11 +29,11 @@ public class User implements UserDetails {
 
     private String email;
     private String password;
-    private int point;
+    private Integer point;
     @Column(name = "plant_num")
-    private int plantNum;
+    private Integer plantNum;
     @Column(name = "max_plant_num")
-    private int maxPlantNum;
+    private Integer maxPlantNum;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
