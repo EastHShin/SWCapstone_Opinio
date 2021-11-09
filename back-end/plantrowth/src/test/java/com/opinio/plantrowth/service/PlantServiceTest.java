@@ -108,7 +108,7 @@ class PlantServiceTest {
 
         //when
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
-                LocalDate.now(), 5,null, 5, 3);
+                LocalDate.now(), 5, 5, 3);
         when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
         plantService.update(plant.getId(), requestDto);
 
