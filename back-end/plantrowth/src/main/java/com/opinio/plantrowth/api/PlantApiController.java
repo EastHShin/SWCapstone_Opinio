@@ -36,7 +36,7 @@ public class PlantApiController {
 
 
 
-    @PostMapping("/api/plants/profiles/{user-id}")
+    @PostMapping(value = "/api/plants/profiles/{user-id}", consumes = {"multipart/form-data"})
     public CreatePlantResponseDto savePlant(
             @PathVariable("user-id") Long userId,
             @RequestPart(name = "data") CreatePlantRequestDto request,
@@ -49,6 +49,7 @@ public class PlantApiController {
 //                .fileName(request.getFile_name())
                 .waterSupply(request.getWater_supply())
                 .alarmCycle(request.getAlarm_cycle())
+                .recentWatering(request.getRecent_watering())
                 .build();
 
 

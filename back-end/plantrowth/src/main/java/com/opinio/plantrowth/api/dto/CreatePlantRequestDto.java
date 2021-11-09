@@ -14,11 +14,12 @@ public class CreatePlantRequestDto {
 //    private String file_name;
     private Integer water_supply;
     private Integer alarm_cycle;
+    private LocalDate recent_watering;
 
     public CreatePlantRequestDto() {
     }
 
-    public CreatePlantRequestDto(String plant_species, String plant_name, LocalDate plant_birth, Integer water_supply, Integer alarm_cycle) {
+    public CreatePlantRequestDto(String plant_species, String plant_name, LocalDate plant_birth, Integer water_supply, Integer alarm_cycle, LocalDate recent_watering) {
         this.plant_species = plant_species;
         this.plant_name = plant_name;
         this.plant_birth = plant_birth;
@@ -26,6 +27,7 @@ public class CreatePlantRequestDto {
 //        this.file_name = fileName;
         this.water_supply = water_supply;
         this.alarm_cycle = alarm_cycle;
+        this.recent_watering = recent_watering;
     }
 
     public Plant toEntity() {
@@ -37,6 +39,7 @@ public class CreatePlantRequestDto {
 //                .fileName(file_name)
                 .waterSupply(water_supply)
                 .alarmCycle(alarm_cycle)
+                .recentWatering(recent_watering)
                 .build();
     }
 
