@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +37,7 @@ public class PlantApiController {
 
 
 
-    @PostMapping(value = "/api/plants/profiles/{user-id}", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/api/plants/profiles/{user-id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public CreatePlantResponseDto savePlant(
             @PathVariable("user-id") Long userId,
             @RequestPart(name = "data") CreatePlantRequestDto request,
@@ -46,7 +47,6 @@ public class PlantApiController {
                 .plantName(request.getPlant_name())
                 .plantBirth(request.getPlant_birth())
                 .plantExp(0)
-//                .fileName(request.getFile_name())
                 .waterSupply(request.getWater_supply())
                 .alarmCycle(request.getAlarm_cycle())
                 .recentWatering(request.getRecent_watering())
@@ -79,8 +79,10 @@ public class PlantApiController {
     @PutMapping("/api/plants/profiles/{plant-id}")
     public ResponseEntity<PlantUpdateDto> updatePlant(@PathVariable("plant-id") Long id,
                                                       @RequestBody CreatePlantRequestDto request) {
-        Plant plant = plantService.findOnePlant(id);
-        plantService.update(id, request);
+//        Plant plant = plantService.findOnePlant(id);
+//        plantService.update(id, request);
+        Long updatedId = plantService.update(id, request);
+        Plant plant = plantService.findOnePlant(updatedId);
         return new ResponseEntity<PlantUpdateDto>(new PlantUpdateDto(plant), HttpStatus.OK);
     }
 

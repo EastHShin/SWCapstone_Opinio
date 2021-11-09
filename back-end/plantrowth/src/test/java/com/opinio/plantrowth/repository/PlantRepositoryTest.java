@@ -76,8 +76,8 @@ class PlantRepositoryTest {
     @DisplayName("저장된 식물이 조회되는지 확인")
     void findPlant() throws Exception{
         //given
+        userRepository.save(user);
         Plant savedPlant = plantRepository.save(plant);
-
         Plant savedPlant2 = plantRepository.save(plant2);
 
         //when
