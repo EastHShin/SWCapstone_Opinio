@@ -31,16 +31,15 @@ public class PlantService {
     }
 
     @Transactional
-    public void update(Long id, CreatePlantRequestDto requestDto) {
+    public Long update(Long id, CreatePlantRequestDto requestDto) {
         Plant plant = plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
         plant.setPlantSpecies(requestDto.getPlant_species());
         plant.setPlantName(requestDto.getPlant_name());
         plant.setPlantBirth(requestDto.getPlant_birth());
-//        plant.setPlantExp(requestDto.getPlant_exp());
-//        plant.setFileName(requestDto.getFile_name());
         plant.setWaterSupply(requestDto.getWater_supply());
         plant.setAlarmCycle(requestDto.getAlarm_cycle());
-        plantRepository.save(plant);
+//        return plantRepository.save(plant);
+        return id;
     }
 
     @Transactional

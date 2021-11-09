@@ -150,17 +150,13 @@ class PlantApiControllerTest {
 //        //when
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
                 LocalDate.now(),  5, 3, LocalDate.now());
-//        Plant updatedPlant = getPlant(user, "가시", "토로리", LocalDate.now(),5, 5, 3);
-//        updatedPlant.setId(1L);
-//        plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
-//        when(plantRepository.save(any())).thenReturn(plant);
-//        plantRepository.save(plant);
-//        when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
-//        when(plantService.update(1L, requestDto)).thenReturn(plant);
-//        given(plantService.update(plant.getId(), requestDto)).willReturn(plant);
+        plant.setPlantSpecies(requestDto.getPlant_species());
+        plant.setPlantName(requestDto.getPlant_name());
+        plant.setPlantBirth(requestDto.getPlant_birth());
+        plant.setWaterSupply(requestDto.getWater_supply());
+        plant.setAlarmCycle(requestDto.getAlarm_cycle());
 
-
-//        when(plantService.update(any(), eq(requestDto))).thenReturn(plant);
+        when(plantService.update(any(), eq(requestDto))).thenReturn(1L);
         when(plantService.findOnePlant(any())).thenReturn(plant);
 
         //then
@@ -169,7 +165,10 @@ class PlantApiControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.plant_name").value("토로리"))
+                .andExpect(jsonPath("$.plant_name").value(requestDto.getPlant_name()))
+                .andExpect(jsonPath("$.plant_species").value(requestDto.getPlant_species()))
+                .andExpect(jsonPath("$.water_supply").value(requestDto.getWater_supply()))
+                .andExpect(jsonPath("$.alarm_cycle").value(requestDto.getAlarm_cycle()))
                 .andDo(print());
     }
     
