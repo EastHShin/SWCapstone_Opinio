@@ -34,6 +34,7 @@ public class User implements UserDetails {
     private Integer plantNum;
     @Column(name = "max_plant_num")
     private Integer maxPlantNum;
+    private String FCMAccessToken;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

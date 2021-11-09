@@ -1,4 +1,4 @@
-package com.opinio.plantrowth.api.dto;
+package com.opinio.plantrowth.api.dto.diary;
 
 import lombok.Getter;
 

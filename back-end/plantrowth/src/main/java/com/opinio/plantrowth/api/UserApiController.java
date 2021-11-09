@@ -1,9 +1,7 @@
 package com.opinio.plantrowth.api;
 
 
-import com.opinio.plantrowth.api.dto.auth.JoinDTO;
-import com.opinio.plantrowth.api.dto.auth.KakaoDTO;
-import com.opinio.plantrowth.api.dto.auth.LoginDTO;
+import com.opinio.plantrowth.api.dto.auth.*;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.User;
@@ -13,10 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.Charset;
@@ -87,7 +82,37 @@ public class UserApiController {
         message.setData(result);
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
+    @GetMapping("/api/user/{user-id}")
+    public ResponseEntity<?> lookUpUser(@PathVariable("user-id") Long id){
+       User member = userService.findUser(id);
+       UserLookUpDTO user = new UserLookUpDTO();
+       user.setUser_name(member.getName());
+       user.setUser_birth(member.getBirth());
+       user.setEmail(member.getEmail());
+       user.setPoint(member.getPoint());
+       user.setPlantNum(member.getPlantNum());
+       user.setMaxPlantNum(member.getMaxPlantNum());
+       Message message = new Message();
+       HttpHeaders headers = new HttpHeaders();
+       headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+       message.setStatus(Message.StatusEnum.OK);
+       message.setMessage("회원 조회 성공");
+       message.setData(user);
 
+       return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+    @PutMapping("/api/user/{user-id}")
+    public ResponseEntity<?> updateUser(@PathVariable("user-id") Long id, @RequestBody UserUpdateDTO user){
+       userService.updateUser(id, user);
+       Message message = new Message();
+       HttpHeaders headers = new HttpHeaders();
+       headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+       message.setStatus(Message.StatusEnum.OK);
+       message.setMessage("회원 정보가 수정되었습니다.");
+       message.setData(user);
+
+       return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
     @PostMapping("/user/test")
     public Map userResponseTest(){
        Map<String, String> result = new HashMap<>();

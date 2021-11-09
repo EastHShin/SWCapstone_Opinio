@@ -3,6 +3,7 @@ package com.opinio.plantrowth.service;
 import com.opinio.plantrowth.api.dto.auth.JoinDTO;
 import com.opinio.plantrowth.api.dto.auth.KakaoDTO;
 import com.opinio.plantrowth.api.dto.auth.LoginDTO;
+import com.opinio.plantrowth.api.dto.auth.UserUpdateDTO;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,17 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
         Long userId = member.getId();
         return userId;
+    }
+
+    public void updateUser(Long id, UserUpdateDTO user){
+        User member = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        member.setName(user.getUser_name());
+        member.setBirth(user.getUser_birth());
+        member.setEmail(user.getEmail());
+        String rawPassword = user.getPassword();
+        String encPassword =passwordEncoder.encode(rawPassword);
+        member.setPassword(encPassword);
+        userRepository.save(member);
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
