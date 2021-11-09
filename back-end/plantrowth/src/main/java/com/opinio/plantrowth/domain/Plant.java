@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Builder
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class Plant {
 
     @Id @GeneratedValue

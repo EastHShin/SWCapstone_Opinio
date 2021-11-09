@@ -45,7 +45,7 @@ public class PlantApiController {
                 .plantSpecies(request.getPlant_species())
                 .plantName(request.getPlant_name())
                 .plantBirth(request.getPlant_birth())
-                .plantExp(request.getPlant_exp())
+//                .plantExp(request.getPlant_exp())
 //                .fileName(request.getFile_name())
                 .waterSupply(request.getWater_supply())
                 .alarmCycle(request.getAlarm_cycle())

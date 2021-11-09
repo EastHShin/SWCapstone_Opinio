@@ -36,7 +36,7 @@ public class PlantService {
         plant.setPlantSpecies(requestDto.getPlant_species());
         plant.setPlantName(requestDto.getPlant_name());
         plant.setPlantBirth(requestDto.getPlant_birth());
-        plant.setPlantExp(requestDto.getPlant_exp());
+//        plant.setPlantExp(requestDto.getPlant_exp());
 //        plant.setFileName(requestDto.getFile_name());
         plant.setWaterSupply(requestDto.getWater_supply());
         plant.setAlarmCycle(requestDto.getAlarm_cycle());
