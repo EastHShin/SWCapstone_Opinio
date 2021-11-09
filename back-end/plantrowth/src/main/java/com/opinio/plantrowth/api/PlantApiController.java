@@ -42,22 +42,15 @@ public class PlantApiController {
             @RequestBody CreatePlantRequestDto request,
             @RequestPart(required = false) Optional<MultipartFile> file) {
         Plant plant = Plant.builder()
-                .plantSpecies(request.getPlantSpecies())
-                .plantName(request.getPlantName())
-                .plantBirth(request.getPlantBirth())
-                .plantExp(request.getPlantExp())
-                .fileName(request.getFileName())
-                .waterSupply(request.getWaterSupply())
-                .alarmCycle(request.getAlarmCycle())
+                .plantSpecies(request.getPlant_species())
+                .plantName(request.getPlant_name())
+                .plantBirth(request.getPlant_birth())
+                .plantExp(request.getPlant_exp())
+                .fileName(request.getFile_name())
+                .waterSupply(request.getWater_supply())
+                .alarmCycle(request.getAlarm_cycle())
                 .build();
-//                new Plant();
-//        plant.setPlantSpecies(request.getPlantSpecies());
-//        plant.setPlantName(request.getPlantName());
-//        plant.setPlantBirth(request.getPlantBirth());
-//        plant.setPlantExp(request.getPlantExp());
-//        plant.setFileName(request.getFileName());
-//        plant.setWaterSupply(request.getWaterSupply());
-//        plant.setAlarmCycle(request.getAlarmCycle());
+
 
         if(file.isPresent()) {
             String uploadImageName = fileUploadService.uploadImage(file.get());
@@ -85,10 +78,9 @@ public class PlantApiController {
     @PutMapping("/api/plants/profiles/{plant-id}")
     public ResponseEntity<PlantUpdateDto> updatePlant(@PathVariable("plant-id") Long id,
                                                       @RequestBody CreatePlantRequestDto request) {
-        Plant updatedPlant = plantService.update(id, request);
-        return new ResponseEntity<PlantUpdateDto>(new PlantUpdateDto(updatedPlant.getId(), updatedPlant.getPlantSpecies(),
-                updatedPlant.getPlantName(),updatedPlant.getPlantBirth(), updatedPlant.getPlantExp()
-        ,updatedPlant.getFileName(),updatedPlant.getWaterSupply(),updatedPlant.getAlarmCycle()), HttpStatus.OK);
+        Plant plant = plantService.findOnePlant(id);
+        plantService.update(id, request);
+        return new ResponseEntity<PlantUpdateDto>(new PlantUpdateDto(plant), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/plants/profiles/{plant-id}")

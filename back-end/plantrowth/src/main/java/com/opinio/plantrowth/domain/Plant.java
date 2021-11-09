@@ -24,10 +24,11 @@ public class Plant {
     private String plantSpecies;
     private String plantName;
     private LocalDate plantBirth;
-    private int plantExp;
+    private Integer plantExp;
     private String fileName;
-    private int waterSupply;
-    private int alarmCycle;
+    private Integer waterSupply;
+    private Integer alarmCycle;
+    private LocalDate recentWatering;
 
 //    @Builder
 //    public Plant(String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {
