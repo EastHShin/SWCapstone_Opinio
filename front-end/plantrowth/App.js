@@ -3,17 +3,16 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginScreen from './LoginScreen';
-import RegisterScreen from './RegisterScreen';
-import SplashScreen from './SplashScreen';
+import LoginScreen from './src/Auth/LoginScreen';
+import RegisterScreen from './src/Auth/RegisterScreen';
+import SplashScreen from './src/Auth/SplashScreen';
 import HomeScreen from './HomeScreen';
-import DiaryScreen from './DiaryScreen';
-import DiaryCreateScreen from './DiaryCreateScreen';
-import DiaryDetailScreen from './DiaryDetail';
-import DiaryEditScreen from './DiaryEditScreen';
+import DiaryScreen from './src/Diary/DiaryScreen';
+import DiaryCreateScreen from './src/Diary/DiaryCreateScreen';
+import DiaryDetailScreen from './src/Diary/DiaryDetail';
+import DiaryEditScreen from './src/Diary/DiaryEditScreen';
 import { Provider } from 'react-redux';
-import Store  from './store';
-
+import Store  from './src/store';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +37,7 @@ function App() {
               headerShown: false,
             }} />
 
+
           <Stack.Screen
             name="RegisterScreen"
             component={RegisterScreen}
@@ -46,6 +46,7 @@ function App() {
             }}
           />
 
+
           <Stack.Screen
             name="HomeScreen"
             component={HomeScreen}
@@ -53,6 +54,12 @@ function App() {
               headerShown: false
             }}
           />
+
+
+
+
+
+
 
           <Stack.Screen
             name="DiaryScreen"
@@ -78,7 +85,7 @@ function App() {
             }}
           />
 
-<Stack.Screen
+          <Stack.Screen
             name="DiaryEditScreen"
             component={DiaryEditScreen}
             options={{

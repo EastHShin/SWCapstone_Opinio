@@ -19,9 +19,9 @@ import { useIsFocused } from '@react-navigation/native';
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import Loader from './Loader';
+import Loader from '../Loader';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink,setRegisterState } from './actions/userActions';
+import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink,setRegisterState } from '../actions/userActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
@@ -203,7 +203,7 @@ const LoginScreen = ({ navigation }) => {
           <KeyboardAvoidingView enabled>
             <View style={{ alignItems: 'center' }}>
               <Image
-                source={require('./assets/plantrowth.png')}
+                source={require('../assets/plantrowth.png')}
                 style={{
                   width: '50%',
                   height: 100,
@@ -265,7 +265,7 @@ const LoginScreen = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.5}
                 onPress={KakaoLoginActive}>
-                <Image source={require('./assets/kakao_login.png')}
+                <Image source={require('../assets/kakao_login.png')}
                   style={styles.kakaoImage} />
               </TouchableOpacity>
             </View>

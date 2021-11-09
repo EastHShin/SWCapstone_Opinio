@@ -23,7 +23,7 @@ export const registerUser = (user) => {
     // 'http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/join'
 
     return async dispatch => {
-        return await axios.post('https://9605e160-bbf0-40ed-8055-1b45c403c2e3.mock.pstmn.io/join', user, {
+        return await axios.post('https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/register', user, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
@@ -56,13 +56,13 @@ export const setRegisterState = state => dispatch => {
 export const loginUser = (user) => {
 
     return async dispatch => {
-        return await axios.post("https://9605e160-bbf0-40ed-8055-1b45c403c2e3.mock.pstmn.io/login", user, {
+        return await axios.post("https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/login", user, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
                 if (res.status == 200) {
                     AsyncStorage.setItem('accessToken', res.data.accessToken);
-                    AsyncStorage.setItem('userId', res.data.user_id);
+                    AsyncStorage.setItem('userId', JSON.stringify(res.data.user_id));
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
                     dispatch({
                         type: LOGIN_USER,
@@ -85,7 +85,7 @@ export const loginUser = (user) => {
 export const kakaoLogin = (data) => {
 
     return async dispatch => {
-        return await axios.post('https://9605e160-bbf0-40ed-8055-1b45c403c2e3.mock.pstmn.io/kakao', data,
+        return await axios.post('https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/kakao', data,
             {
                 headers: { "Content-Type": `application/json` }
             })
@@ -94,7 +94,7 @@ export const kakaoLogin = (data) => {
                 if (res.status == 200) {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
                     AsyncStorage.setItem('accessToken', res.data.accessToken);
-                    AsyncStorage.setItem('userId', res.data.user_id);
+                    AsyncStorage.setItem('userId', JSON.stringify(res.data.user_id));
                     AsyncStorage.setItem('kakaoLogin', 'yes');
 
                     dispatch({
@@ -138,7 +138,7 @@ export const logoutUser = (email) => {
 
 
     return async dispatch => {
-        return await axios.post('https://9605e160-bbf0-40ed-8055-1b45c403c2e3.mock.pstmn.io/logout', email, {
+        return await axios.post('https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/logout', email, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {

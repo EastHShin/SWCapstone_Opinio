@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,11 +15,12 @@ import {
     Alert
 } from 'react-native';
 
-import { fetchDiary } from './actions/diaryActions';
+import { fetchDiary } from '../actions/diaryActions';
 import { useIsFocused } from '@react-navigation/native'
-import Loader from './Loader';
+import Loader from '../Loader';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { deleteDiary, setResultState } from '../actions/diaryActions';
 
 const DiaryDetailScreen = ({ route, navigation }) => {
 
@@ -31,11 +33,45 @@ const DiaryDetailScreen = ({ route, navigation }) => {
     const isFocused = useIsFocused();
 
     const diary = useSelector(state => state.diaryReducer.diary);
- 
+    const result = useSelector(state => state.diaryReducer.result);
+
     useEffect(() => {
         dispatch(fetchDiary(selectedId));
     }, [isFocused])
 
+    useEffect(()=>{
+        if(result=='success'&&isFocused){
+            setLoading(false);
+            dispatch(setResultState(''));
+            navigation.navigate('DiaryScreen');
+        }
+        else if(result == 'failure' && isFocused){
+            setLoading(false);
+            dispatch(setResultState(''));
+            alert('삭제 실패');
+        }
+        
+    },[result])
+
+    // const deleteMode = () => {
+    //     Alert.alert(
+    //         "삭제", "식물일기를 삭제하시겠습니까?",[
+    //             {
+    //                 text:"취소",
+    //                 onPress : () => console.log("취소")
+
+    //         },
+    //         {
+    //             text:"확인",
+    //             onPress : () => {
+    //                 setLoading(true);
+    //                 dispatch(deleteDiary(selectedId))
+    //             }
+    //         }
+    //     ]
+    //     )
+
+    // }
 
     return (
         <SafeAreaView style={styles.body}>
@@ -60,7 +96,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                             <View style={styles.wrapper}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={()=> console.log('삭제')}
+                                    onPress={()=>console.log("dd")}  //
                                     style={{ flexDirection: "row" }}>
                                     <FontAwesome5 name='trash' size={20} color="#000000" style={styles.icon} />
                                     <Text style={styles.text}>삭제</Text>

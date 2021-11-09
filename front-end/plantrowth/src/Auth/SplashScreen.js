@@ -25,7 +25,7 @@ const SplashScreen =({navigation}) =>{
     return(
         <SafeAreaView style ={styles.body}>
             <Image 
-            source={require('./assets/plantrowth.png')}
+            source={require('../assets/plantrowth.png')}
             style = {{flex:1,width:'90%', resizeMode:'contain',margin:30}}/>
             
             <ActivityIndicator 

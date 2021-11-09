@@ -13,7 +13,7 @@ import {
 
 import Evillcons from 'react-native-vector-icons/EvilIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { fetchDiaries } from './actions/diaryActions';
+import { fetchDiaries } from '../actions/diaryActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native'
 

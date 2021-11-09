@@ -14,13 +14,13 @@ import {
   Dimensions,
 } from 'react-native'
 
-import Loader from './Loader';
+import Loader from '../Loader';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 
 import { useIsFocused } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useDispatch,useSelector } from 'react-redux';
-import { registerUser,setRegisterState } from './actions/userActions';
+import { registerUser,setRegisterState } from '../actions/userActions';
 
 function RegisterScreen({ navigation }) {
 
@@ -138,7 +138,7 @@ function RegisterScreen({ navigation }) {
         justifyContent: 'center'
       }}>
         <Image
-          source={require('./assets/plantrowth.png')}
+          source={require('../assets/plantrowth.png')}
           style={{
             height: 150,
             resizeMode: 'contain',
@@ -170,7 +170,7 @@ function RegisterScreen({ navigation }) {
         }}>
         <View style={{ alignItems: 'center' }}>
           <Image
-            source={require('./assets/plantrowth.png')}
+            source={require('../assets/plantrowth.png')}
             style={{
               width: '50%',
               height: 100,

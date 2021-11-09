@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,87 +12,82 @@ import {
     ScrollView,
     TextInput,
     KeyboardAvoidingView,
-    
+    Text
 } from 'react-native';
 
-import Loader from './Loader';
+import Loader from '../Loader';
 import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { saveDiary, setResultState } from './actions/diaryActions';
+import { editDiary, setResultState } from '../actions/diaryActions';
 import { useIsFocused } from '@react-navigation/native'
 
-const DiaryCreateScreen = ({ navigation }) => {
+const DiaryEditScreen = ({ navigation }) => {
 
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [image, setImage] = useState("");
-    const [loading, setLoading] = useState(false);
+//     const diary = useSelector(state => state.diaryReducer.diary);
 
-    const contentInputRef = createRef();
+//     const [title, setTitle] = useState(diary.diary_title);
+//     const [content, setContent] = useState(diary.diary_content);
+//     const [image, setImage] = useState(diary.file_name);
+//     const [loading, setLoading] = useState(false);
 
-    const dispatch = useDispatch();
-    const isFocused = useIsFocused();
+//     const contentInputRef = createRef();
 
-    const result = useSelector(state => state.diaryReducer.result);
-   // const plantId   plant id 가져오기
-
-   useEffect(() => {
-       if(result == "success" && isFocused){
-           console.log('dd');
-           setLoading(false);
-           dispatch(setResultState(''));
-           navigation.navigate("DiaryScreen");
-       }
-       
-       else if(result == "failure" && isFocused){
-           setLoading(false);
-           dispatch(setResultState(''));
-           alert("식물일기 업로드 실패");
-       }
-      
-   }, [result])
+//     const dispatch = useDispatch();
+//     const isFocused = useIsFocused();
     
-    const addGalleryImage = () => {
-        launchImageLibrary({mediaType:'photo' }, response =>{
-            console.log(response.assets[0].uri);
-            setImage(response.assets[0].uri);
-        })
-    }
+//     const result = useSelector(state => state.diaryReducer.result);
+//    // const plantId   plant id 가져오기
 
-    const addCameraImage = () => {
-        launchCamera({mediaType:'photo'}, response => {
-            console.log(response.assets[0].uri);
-            setImage(response.assets[0].uri);
-        })
-    }
+//    useEffect(() => {
+//       if(result == "success" && isFocused){
+//           setLoading(false);
+//           dispatch(setResultState(''));
+//           navigation.navigate('DiaryDetailScreen');
+//       }
+//       else if(result == "failure" && isFocused){
+//           setLoading(false);
+//           dispatch(setResultState(''));
+//           alert("식물일기 수정 실패");
+//       }
+//    }, [result])
+
+//     const addGalleryImage = () => {
+//         launchImageLibrary({mediaType:'photo' }, response =>{
+//             console.log(response.assets[0].uri);
+//             setImage(response.assets[0].uri);
+//         })
+//     }
+
+//     const addCameraImage = () => {
+//         launchCamera({mediaType:'photo'}, response => {
+//             console.log(response.assets[0].uri);
+//             setImage(response.assets[0].uri);
+//         })
+//     }
     
-    const onPressHandler = () => {
+//     const onPressHandler = () => {
 
-        setLoading(true);
-        const date = new Date();
-    
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
-    
-        const plantId = 123; //예시
+//         setLoading(true);
 
-        const diaryData = JSON.stringify({
-            plant_id: plantId,
-            diary_title: title,
-            diary_content: content,
-            diary_date: year+ '-' + month + '-' + day,
-            file_name : image
-          });
+//         const plantId = 123; //예시 
 
-          dispatch(saveDiary(diaryData, plantId));
-    }
+//         const diaryData = JSON.stringify({
+//             plant_id: plantId,
+//             diary_title: title,
+//             diary_content: content,
+//             diary_date: diary.diary_date,
+//             file_name : image
+//           });
+
+//         dispatch(editDiary(diaryData, diary.diary_id));
+        
+//     }
 
     return (
         <SafeAreaView style={styles.body}>
-            <Loader loading={loading} />
+             {/* <Loader loading={loading} />
             <View style={{ marginVertical: "5%", marginEnd: "-80%" }}>
                 <TouchableOpacity
                     activeOpacity={0.5}
@@ -121,6 +117,7 @@ const DiaryCreateScreen = ({ navigation }) => {
                                     contentInputRef.current &&
                                     contentInputRef.current.focus()
                                 }
+                                value = {title}
                                 underlineColorAndroid="#f000"
                                 blurOnSubmit={false}
                             />
@@ -132,6 +129,7 @@ const DiaryCreateScreen = ({ navigation }) => {
                                 onChangeText={(content) =>
                                     setContent(content)
                                 }
+                                value = {content}
                                 multiline={true}
                                 placeholder="Enter Content"
                                 placeholderTextColor="#808080"
@@ -190,11 +188,11 @@ const DiaryCreateScreen = ({ navigation }) => {
                     onPress={onPressHandler}>
                     <FontAwesome name='check' size={25} color="#FFFFFF" />
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </SafeAreaView>
     )
 }
-export default DiaryCreateScreen;
+export default DiaryEditScreen;
 
 const styles = StyleSheet.create({
     body: {

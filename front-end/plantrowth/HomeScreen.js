@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React,{useState, useEffect} from 'react';
 import { useDispatch,useSelector } from 'react-redux';
-import { logoutUser } from './actions/userActions';
+import { logoutUser } from './src/actions/userActions';
 
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 
@@ -37,9 +37,11 @@ function Home({navigation}) {
 
     const getData = () =>{
         try {
-            AsyncStorage.getItem('accessToken').then(value=>{
+            AsyncStorage.getItem('userId').then(value=>{
                 if(value !=null) {  
-                    setName(value);
+    
+                    setName(JSON.parse(value));
+                  
                 };
             })  
         } catch (error) {
