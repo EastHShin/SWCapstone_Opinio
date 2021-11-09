@@ -105,7 +105,7 @@ class PlantApiControllerTest {
     void createPlant() throws Exception {
         //given
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("장미", "토로리",
-                LocalDate.now(), 0, 10, 2);
+                LocalDate.now(), 10, 2);
         given(userService.findUser(1L)).willReturn(user);
         String json = "{\"plant_species\":\"가시\",\"plant_name\":\"토로리\",\"plant_birth\":[2021,11,9],\"plant_exp\":5,\"water_supply\":5,\"alarm_cycle\":3}";
         //when
@@ -149,7 +149,7 @@ class PlantApiControllerTest {
         plant.setId(1L);
 //        //when
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
-                LocalDate.now(), 5, 5, 3);
+                LocalDate.now(),  5, 3);
 //        Plant updatedPlant = getPlant(user, "가시", "토로리", LocalDate.now(),5, 5, 3);
 //        updatedPlant.setId(1L);
 //        plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
