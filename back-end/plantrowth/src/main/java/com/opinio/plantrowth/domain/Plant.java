@@ -28,6 +28,7 @@ public class Plant {
     private String fileName;
     private Integer waterSupply;
     private Integer alarmCycle;
+    private LocalDate recentWatering;
 
 //    @Builder
 //    public Plant(String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {
