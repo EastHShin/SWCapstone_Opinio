@@ -2,6 +2,7 @@ package com.opinio.plantrowth.service;
 
 import com.opinio.plantrowth.api.dto.JoinDTO;
 import com.opinio.plantrowth.api.dto.UserDTO;
+import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -34,6 +34,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -140,10 +141,10 @@ class PlantApiControllerTest {
     @Test
     public void updatePlant() throws Exception{
         //given
-//        plant.setId(30L);
+        plant.setId(1L);
 //        //when
-//        CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
-//                LocalDate.now(), 5,null, 5, 3);
+        CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
+                LocalDate.now(), 5,null, 5, 3);
 //        Plant updatedPlant = getPlant(user, "가시", "토로리", LocalDate.now(),5, 5, 3);
 //        updatedPlant.setId(1L);
 //        plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
@@ -154,19 +155,17 @@ class PlantApiControllerTest {
 //        given(plantService.update(plant.getId(), requestDto)).willReturn(plant);
 
 
-//        when(plantService.update(1L, requestDto)).thenReturn(updatedPlant);
-//        when(plantService.update(1L, requestDto)).thenReturn(plant);
-//        doReturn(Optional.of(updatedPlant)).when(plantRepository).findById(1L);
-//        doReturn(updatedPlant).when(plantService).update(1L, requestDto);
+//        when(plantService.update(any(), eq(requestDto))).thenReturn(plant);
+        when(plantService.findOnePlant(any())).thenReturn(plant);
 
         //then
-//        mockMvc.perform(put("/api/plants/profiles/{plant-id}", plant.getId().toString())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.plantName").value("토로리"))
-//                .andDo(print());
+        mockMvc.perform(put("/api/plants/profiles/{plant-id}", plant.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.plant_name").value("토로리"))
+                .andDo(print());
     }
     
     @Test

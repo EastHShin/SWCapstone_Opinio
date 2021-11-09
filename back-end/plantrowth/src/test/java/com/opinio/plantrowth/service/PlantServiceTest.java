@@ -110,14 +110,13 @@ class PlantServiceTest {
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
                 LocalDate.now(), 5,null, 5, 3);
         when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
-        Plant updatedPlant = plantService.update(plant.getId(), requestDto);
+        plantService.update(plant.getId(), requestDto);
 
         //then
         Assertions.assertThat(plant.getPlantSpecies()).isEqualTo("가시");
         Assertions.assertThat(plant.getPlantExp()).isEqualTo(5);
         Assertions.assertThat(plant.getWaterSupply()).isEqualTo(5);
         Assertions.assertThat(plant.getAlarmCycle()).isEqualTo(3);
-        Assertions.assertThat(plant).isSameAs(updatedPlant);
     }
 
     @Test
