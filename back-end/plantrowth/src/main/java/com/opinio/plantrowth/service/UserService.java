@@ -33,6 +33,7 @@ public class UserService implements UserDetailsService {
                         .email(user.getEmail())
                         .password(passwordEncoder.encode(user.getPassword()))
                         .roles(Collections.singletonList("ROLE_USER"))
+                        .point(0)
                         .build())
                 .getId();
         return userId;
