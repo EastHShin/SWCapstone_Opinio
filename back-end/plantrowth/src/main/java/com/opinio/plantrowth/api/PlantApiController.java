@@ -39,7 +39,7 @@ public class PlantApiController {
     @PostMapping("/api/plants/profiles/{user-id}")
     public CreatePlantResponseDto savePlant(
             @PathVariable("user-id") Long userId,
-            @RequestBody CreatePlantRequestDto request,
+            @RequestPart CreatePlantRequestDto request,
             @RequestPart(required = false) Optional<MultipartFile> file) {
         Plant plant = Plant.builder()
                 .plantSpecies(request.getPlant_species())
