@@ -23,7 +23,7 @@ public class PlantService {
     }
 
     public Plant findOnePlant(Long id) {
-        return plantRepository.getById(id);
+        return plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
     }
 
     public List<Plant> findPlants(Long userId) {
@@ -37,7 +37,7 @@ public class PlantService {
         plant.setPlantName(requestDto.getPlant_name());
         plant.setPlantBirth(requestDto.getPlant_birth());
         plant.setPlantExp(requestDto.getPlant_exp());
-        plant.setFileName(requestDto.getFile_name());
+//        plant.setFileName(requestDto.getFile_name());
         plant.setWaterSupply(requestDto.getWater_supply());
         plant.setAlarmCycle(requestDto.getAlarm_cycle());
         plantRepository.save(plant);
