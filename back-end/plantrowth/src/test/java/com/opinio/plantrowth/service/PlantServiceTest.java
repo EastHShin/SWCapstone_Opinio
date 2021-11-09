@@ -1,6 +1,6 @@
 package com.opinio.plantrowth.service;
 
-import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
+import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.PlantRepository;
@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

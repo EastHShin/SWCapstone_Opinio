@@ -14,11 +14,20 @@ public class UserPointService {
     private final UserRepository userRepository;
 
     private static final Integer increasingPoint = 10;
+    private static final Integer decreasingPoint = 10;
     @Transactional
-    public User updatePoint(Long id) {
+    public User increasePoint(Long id) {
         User user = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
         Integer curPoint = user.getPoint();
         user.setPoint(curPoint + increasingPoint);
+        userRepository.save(user);
+        return user;
+    }
+    @Transactional
+    public User decreasePoint(Long id){
+        User user = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        Integer curPoint = user.getPoint();
+        user.setPoint(curPoint - decreasingPoint);
         userRepository.save(user);
         return user;
     }

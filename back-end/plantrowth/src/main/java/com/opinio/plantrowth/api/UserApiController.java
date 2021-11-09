@@ -1,9 +1,9 @@
 package com.opinio.plantrowth.api;
 
 
-import com.opinio.plantrowth.api.dto.JoinDTO;
-import com.opinio.plantrowth.api.dto.KakaoDTO;
-import com.opinio.plantrowth.api.dto.LoginDTO;
+import com.opinio.plantrowth.api.dto.auth.JoinDTO;
+import com.opinio.plantrowth.api.dto.auth.KakaoDTO;
+import com.opinio.plantrowth.api.dto.auth.LoginDTO;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.User;

@@ -1,8 +1,8 @@
 package com.opinio.plantrowth.service;
 
-import com.opinio.plantrowth.api.dto.JoinDTO;
-import com.opinio.plantrowth.api.dto.KakaoDTO;
-import com.opinio.plantrowth.api.dto.LoginDTO;
+import com.opinio.plantrowth.api.dto.auth.JoinDTO;
+import com.opinio.plantrowth.api.dto.auth.KakaoDTO;
+import com.opinio.plantrowth.api.dto.auth.LoginDTO;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

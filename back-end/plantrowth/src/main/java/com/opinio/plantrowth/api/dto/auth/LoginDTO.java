@@ -1,9 +1,10 @@
-package com.opinio.plantrowth.api.dto;
+package com.opinio.plantrowth.api.dto.auth;
 
 import lombok.Getter;
 
 @Getter
-public class UserDTO {
+public class LoginDTO {
     private String email;
     private String password;
+
 }

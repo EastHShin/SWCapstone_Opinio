@@ -1,17 +1,13 @@
 package com.opinio.plantrowth.service;
 
-import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
+import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.domain.Plant;
-import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.PlantRepository;
-import com.opinio.plantrowth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
