@@ -10,6 +10,7 @@ public interface DiaryRepository extends JpaRepository<PlantDiary, Long>{
    Optional<PlantDiary> findByPlantId(Long id);
    Optional<PlantDiary> findByPlant(Long id);
    Optional<PlantDiary> findByDiaryId(Long id);
+
 }
 
 //JPA repo 문서 보기
