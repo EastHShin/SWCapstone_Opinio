@@ -3,6 +3,7 @@ package com.opinio.plantrowth.api.dto;
 import com.opinio.plantrowth.domain.Plant;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,11 +13,13 @@ import java.time.LocalDate;
 public class CreatePlantRequestDto implements Serializable {
     private String plant_species;
     private String plant_name;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate plant_birth;
 //    private Integer plant_exp;
 //    private String file_name;
     private Integer water_supply;
     private Integer alarm_cycle;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate recent_watering;
 
     public CreatePlantRequestDto() {
