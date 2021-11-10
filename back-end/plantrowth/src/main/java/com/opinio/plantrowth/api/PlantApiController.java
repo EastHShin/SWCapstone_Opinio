@@ -37,11 +37,13 @@ public class PlantApiController {
 
 
 
-    @PostMapping(value = "/api/plants/profiles/{user-id}")
+    @PostMapping(value = "/api/plants/profiles/{user-id}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public CreatePlantResponseDto savePlant(
             @PathVariable("user-id") Long userId,
-            @RequestParam(name = "data") CreatePlantRequestDto request,
+            @ModelAttribute CreatePlantRequestDto request,
             @RequestPart(name = "file_name",required = false) Optional<MultipartFile> file) {
+        System.out.println(request);
+        System.out.println(request.getPlant_name());
         Plant plant = Plant.builder()
                 .plantSpecies(request.getPlant_species())
                 .plantName(request.getPlant_name())
