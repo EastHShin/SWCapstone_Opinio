@@ -37,7 +37,7 @@ public class PlantApiController {
 
 
 
-    @PostMapping(value = "/api/plants/profiles/{user-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/api/plants/profiles/{user-id}")
     public CreatePlantResponseDto savePlant(
             @PathVariable("user-id") Long userId,
             @RequestPart(name = "data") CreatePlantRequestDto request,
