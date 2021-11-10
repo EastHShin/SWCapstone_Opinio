@@ -2,11 +2,14 @@ package com.opinio.plantrowth.api.dto;
 
 import com.opinio.plantrowth.domain.Plant;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
-public class CreatePlantRequestDto {
+@Setter
+public class CreatePlantRequestDto implements Serializable {
     private String plant_species;
     private String plant_name;
     private LocalDate plant_birth;
