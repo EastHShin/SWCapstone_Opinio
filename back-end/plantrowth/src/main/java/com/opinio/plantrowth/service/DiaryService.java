@@ -50,10 +50,23 @@ public class DiaryService {
     public List<PlantDiary> findDiariesByPlantId(Long plantId){
         return plantDiaryRepository.findAllByPlantId(plantId);
     }
-//
-//    public List<PlantDiary> findDiariesByUserId(Long userId){
-//        List<PlantDiary> diaries = plantDiaryRepository.findAllByUserId(userId);
-//        return diaries;
-//    }
+    @Transactional
+    public void updateDiary(Long id, CreateDiaryDTO dto){
+        PlantDiary diary = findDiary(id);
+        diary.setTitle(dto.getTitle());
+        diary.setContent(dto.getContent());
+        diary.setFilename(dto.getFilename());
+        diary.setDate(dto.getDate());
+        plantDiaryRepository.save(diary);
+    }
+
+    @Transactional
+    public Long delete(Long id){
+        PlantDiary diary = plantDiaryRepository.findById(id).
+                orElseThrow(()->new IllegalArgumentException("해당 식물일기가 존재하지 않습니다"));
+        plantDiaryRepository.delete(diary);
+        return id;
+    }
+
 }
 

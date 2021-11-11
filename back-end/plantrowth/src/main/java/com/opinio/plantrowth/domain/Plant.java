@@ -19,7 +19,7 @@ public class Plant {
     @Column(name = "plant_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
@@ -32,7 +32,7 @@ public class Plant {
     private Integer waterSupply;
     private Integer alarmCycle;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, mappedBy = "plant")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.MERGE, mappedBy = "plant")
     @Builder.Default
     private List<PlantDiary> diaries = new ArrayList<>();
 

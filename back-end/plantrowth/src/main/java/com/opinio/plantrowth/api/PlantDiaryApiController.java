@@ -69,6 +69,25 @@ public class PlantDiaryApiController {
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
+    @PutMapping("/api/plants/diary/{diary-id}")
+    public ResponseEntity<?> updateDiary(@PathVariable("diary-id") Long id, @RequestBody CreateDiaryDTO dto){
+        diaryService.updateDiary(id, dto);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("식물일기가 수정되었습니다.");
+        message.setData(dto);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+    @DeleteMapping("/api/plants/diary/{diary-id}")
+    public ResponseEntity<?> deleteDiary(@PathVariable("diary-id") Long id){
+        Long result = diaryService.delete(id);
+        return result !=null?
+                ResponseEntity.ok().body("식물 일기 삭제 완료"):
+                ResponseEntity.badRequest().build();
+    }
 
 
 }
