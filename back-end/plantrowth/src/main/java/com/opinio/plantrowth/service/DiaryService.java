@@ -17,9 +17,8 @@ import java.util.List;
 public class DiaryService {
     private final PlantDiaryRepository plantDiaryRepository;
     private final PlantRepository plantRepository;
-    private final PlantService plantService;
     @Transactional
-    public Long create(CreateDiaryDTO dto, Long plantId){
+    public Long createDiary(CreateDiaryDTO dto, Long plantId){
 
         PlantDiary diary = PlantDiary.builder()
                     .title(dto.getTitle())
@@ -27,13 +26,11 @@ public class DiaryService {
                     .content(dto.getContent())
                     .filename(dto.getFilename())
                     .build();
-//        User user = plant.getUser();
-//        diary.setUser(user);
         diary.setPlant( plantRepository.getById(plantId));
         PlantDiary plantDiary = plantDiaryRepository.save(diary);
         return plantDiary.getId();
     }
-    public DiaryLookUpDTO Lookup(Long id){
+    public DiaryLookUpDTO LookupDiary(Long id){
         PlantDiary diary = findDiary(id);
         DiaryLookUpDTO page = new DiaryLookUpDTO();
         page.setTitle(diary.getTitle());
@@ -44,7 +41,8 @@ public class DiaryService {
         return page;
     }
     public PlantDiary findDiary(Long diaryId) {
-        return plantDiaryRepository.findById(diaryId).orElseThrow(IllegalAccessError::new);
+        return plantDiaryRepository.findById(diaryId).
+                orElseThrow(()->new IllegalArgumentException("해당 식물일기를 찾을 수 없습니다."));
     }
 
     public List<PlantDiary> findDiariesByPlantId(Long plantId){
@@ -61,7 +59,7 @@ public class DiaryService {
     }
 
     @Transactional
-    public Long delete(Long id){
+    public Long deleteDiary(Long id){
         PlantDiary diary = plantDiaryRepository.findById(id).
                 orElseThrow(()->new IllegalArgumentException("해당 식물일기가 존재하지 않습니다"));
         plantDiaryRepository.delete(diary);

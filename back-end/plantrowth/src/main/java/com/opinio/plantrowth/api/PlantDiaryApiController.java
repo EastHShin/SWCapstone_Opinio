@@ -46,7 +46,7 @@ public class PlantDiaryApiController {
             @RequestBody CreateDiaryDTO dto,
             @RequestPart(required = false) Optional<MultipartFile> file){
 
-        Long result = diaryService.create(dto, plantId);
+        Long result = diaryService.createDiary(dto, plantId);
         if(file.isPresent()) {
 
             String uploadImageName = fileUploadService.uploadImage(file.get());
@@ -59,7 +59,7 @@ public class PlantDiaryApiController {
     }
     @GetMapping("/api/plants/diary/{diary-id}")
     public ResponseEntity<?> lookUpDiary(@PathVariable("diary-id") Long id){
-        DiaryLookUpDTO diary = diaryService.Lookup(id);
+        DiaryLookUpDTO diary = diaryService.LookupDiary(id);
         Message message= new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -83,7 +83,7 @@ public class PlantDiaryApiController {
     }
     @DeleteMapping("/api/plants/diary/{diary-id}")
     public ResponseEntity<?> deleteDiary(@PathVariable("diary-id") Long id){
-        Long result = diaryService.delete(id);
+        Long result = diaryService.deleteDiary(id);
         return result !=null?
                 ResponseEntity.ok().body("식물 일기 삭제 완료"):
                 ResponseEntity.badRequest().build();

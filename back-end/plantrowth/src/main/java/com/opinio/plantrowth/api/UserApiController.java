@@ -89,6 +89,14 @@ public class UserApiController {
 
        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
+
+    @DeleteMapping("api/user/{user-id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("user-id") Long id){
+        Long result = userService.deleteUser(id);
+        return result !=null?
+                ResponseEntity.ok().body("회원 탈퇴 성공"):
+                ResponseEntity.badRequest().build();
+    }
     @PostMapping("/user/test")
     public Map userResponseTest(){
        Map<String, String> result = new HashMap<>();

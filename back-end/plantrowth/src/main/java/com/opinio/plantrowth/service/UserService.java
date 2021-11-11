@@ -71,6 +71,15 @@ public class UserService implements UserDetailsService {
         member.setPassword(encPassword);
         userRepository.save(member);
     }
+
+    @Transactional
+    public Long deleteUser(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("찾을 수 없는 사용자입니다."));
+        userRepository.delete(user);
+
+        return id;
+    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
         return userRepository.findByEmail(username)
