@@ -1,14 +1,15 @@
 package com.opinio.plantrowth.api.dto.diary;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
-public class CreatePlantDiaryDTO {
+@Setter
+public class DiaryLookUpDTO {
     private String title;
     private String content;
     private LocalDate date;
-    private Long userId;
-    private Long plantId;
+    private String filename;
 }

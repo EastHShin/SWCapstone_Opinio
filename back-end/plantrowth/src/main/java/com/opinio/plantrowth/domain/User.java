@@ -26,7 +26,6 @@ public class User implements UserDetails {
     private String name;
     @Column(name = "user_birth")
     private LocalDate birth;
-
     private String email;
     private String password;
     private Integer point;
@@ -34,11 +33,17 @@ public class User implements UserDetails {
     private Integer plantNum;
     @Column(name = "max_plant_num")
     private Integer maxPlantNum;
+    @Column(name = "fcm_access_token")
     private String FCMAccessToken;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "plant_id")
+    @Builder.Default
+    List<Plant> plants = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){

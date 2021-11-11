@@ -98,6 +98,7 @@ public class PlantApiController {
     }
 
 
+
     @Data
     @AllArgsConstructor
     static class PlantResult<T> {

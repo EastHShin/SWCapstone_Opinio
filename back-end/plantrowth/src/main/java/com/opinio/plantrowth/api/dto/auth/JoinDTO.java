@@ -10,5 +10,5 @@ public class JoinDTO {
     private LocalDate user_birth;
     private String email;
     private String password;
-
+    private String fcm_access_token;
 }

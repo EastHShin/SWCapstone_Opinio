@@ -12,27 +12,25 @@ import java.time.LocalDate;
 @Entity
 @Getter @Setter
 public class PlantDiary {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diary_id")
     private Long id;
+/*
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+*/
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "plant_id")
     @JsonIgnore
     private Plant plant;
 
-    @Column(name = "diary_title")
+
     private String title;
-    @Column(name = "diary_content")
     private String content;
-    @Column(name = "diary_date")
     private LocalDate date;
-
-
-
+    private String filename;
 }

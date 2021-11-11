@@ -5,14 +5,17 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 @Getter @Setter
 public class Plant {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "plant_id")
     private Long id;
 
@@ -28,6 +31,10 @@ public class Plant {
     private String fileName;
     private Integer waterSupply;
     private Integer alarmCycle;
+    @OneToMany
+    @JoinColumn(name = "diary_id")
+    @Builder.Default
+    private List<PlantDiary> diaries = new ArrayList<>();
 
 //    @Builder
 //    public Plant(String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {

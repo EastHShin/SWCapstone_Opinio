@@ -24,7 +24,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-
+    @Transactional
     public Long join(JoinDTO user){
         Long userId = userRepository.save(
                 User.builder()
@@ -32,11 +32,17 @@ public class UserService implements UserDetailsService {
                         .birth(user.getUser_birth())
                         .email(user.getEmail())
                         .password(passwordEncoder.encode(user.getPassword()))
+                        .FCMAccessToken(user.getFcm_access_token())
+                        .point(0)
+                        .plantNum(0)
+                        .maxPlantNum(3)
                         .roles(Collections.singletonList("ROLE_USER"))
                         .build())
                 .getId();
         return userId;
     }
+
+
     public User login(LoginDTO user){
         User member = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
@@ -46,6 +52,7 @@ public class UserService implements UserDetailsService {
         return member;
     }
 
+    @Transactional
     public Long kakaoLogin(KakaoDTO user){
         User member = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
@@ -53,6 +60,7 @@ public class UserService implements UserDetailsService {
         return userId;
     }
 
+    @Transactional
     public void updateUser(Long id, UserUpdateDTO user){
         User member = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
         member.setName(user.getUser_name());

@@ -24,22 +24,10 @@ import java.util.Map;
 public class UserApiController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
-    //회원가입
-/*
-    @PostMapping("/join")
-    public Long join(@RequestBody Map<String, String> user){
 
-        return
-                userRepository.save(User.builder()
-                .email(user.get("email"))
-                .password(passwordEncoder.encode(user.get("password")))
-                .roles(Collections.singletonList("ROLE_USER"))
-                .build()).getId();
-    }
 
- */
 
-    @PostMapping("/api/auth/join")
+    @PostMapping("/api/auth/join") //회원가입
     public ResponseEntity join(@RequestBody JoinDTO user){
         Long result = userService.join(user);
 
@@ -49,19 +37,7 @@ public class UserApiController {
 
     }
 
-    //로그인
-    /*
-    @PostMapping("/login")
-    public String login(@RequestBody Map<String, String> user){
-        User member = userRepository.findByEmail(user.get("email"))
-                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
-        if (!passwordEncoder.matches(user.get("password"), member.getPassword())){
-            throw new IllegalArgumentException("잘못된 아이디 혹은 비밀번호입니다.");
-        }
-        return  jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
-    }
-    */
-   @PostMapping("/api/auth/login")
+   @PostMapping("/api/auth/login") //로그인
     public ResponseEntity<?> login(HttpServletResponse response, @RequestBody LoginDTO user){
         User member = userService.login(user);
         Message message = new Message();
@@ -71,7 +47,7 @@ public class UserApiController {
         return  ResponseEntity.ok().body("로그인 성공");
     }
 
-    @PostMapping("/api/auth/kakao")
+    @PostMapping("/api/auth/kakao") //소셜 로그인
     public ResponseEntity<Message> kakaoLogin(@RequestBody KakaoDTO user){
         Long result = userService.kakaoLogin(user);
         Message message = new Message();

@@ -23,7 +23,7 @@ public class PlantService {
     }
 
     public Plant findOnePlant(Long id) {
-        return plantRepository.getById(id);
+        return plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
     }
 
     public List<Plant> findPlants(Long userId) {
@@ -48,6 +48,11 @@ public class PlantService {
         Plant plant = plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
         plantRepository.delete(plant);
         return id;
+    }
+
+    public Plant findPlant(Long id){
+        Plant plant = plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        return plant;
     }
 
 

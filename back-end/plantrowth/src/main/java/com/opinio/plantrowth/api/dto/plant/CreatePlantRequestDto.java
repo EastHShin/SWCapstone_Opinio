@@ -15,9 +15,6 @@ public class CreatePlantRequestDto {
     private Integer waterSupply;
     private Integer alarmCycle;
 
-    public CreatePlantRequestDto() {
-    }
-
     public CreatePlantRequestDto(String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {
         this.plantSpecies = plantSpecies;
         this.plantName = plantName;

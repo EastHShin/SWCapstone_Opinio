@@ -1,42 +1,57 @@
 package com.opinio.plantrowth.service;
 
-import com.opinio.plantrowth.api.dto.diary.CreatePlantDiaryDTO;
+import com.opinio.plantrowth.api.dto.diary.CreateDiaryDTO;
+import com.opinio.plantrowth.api.dto.diary.DiaryLookUpDTO;
 import com.opinio.plantrowth.domain.PlantDiary;
-import com.opinio.plantrowth.repository.DiaryRepository;
-import com.opinio.plantrowth.repository.PlantRepository;
-import com.opinio.plantrowth.repository.UserRepository;
+import com.opinio.plantrowth.repository.PlantDiaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+@Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Service
 public class DiaryService {
-    private final DiaryRepository diaryRepository;
-    private final UserRepository userRepository;
-    private final PlantRepository plantRepository;
+    private final PlantDiaryRepository plantDiaryRepository;
+    private final PlantService plantService;
     @Transactional
-    public Long create(CreatePlantDiaryDTO diary){
-        Long diaryId = diaryRepository.save(
-                PlantDiary.builder()
-                    .title(diary.getTitle())
-                    .content(diary.getContent())
-                    .date(diary.getDate())
-                    .user(userRepository.findUserByUserId(diary.getUserId()))
-                    .plant(plantRepository.findPlantByPlantId(diary.getPlantId()))
-                    .build())
-                .getId();
+    public Long create(CreateDiaryDTO dto, Long plantId){
 
-        return diaryId;
+        PlantDiary diary = PlantDiary.builder()
+                    .title(dto.getTitle())
+                    .date(dto.getDate())
+                    .content(dto.getContent())
+                    .filename(dto.getFilename())
+                    .build();
+//        User user = plant.getUser();
+//        diary.setUser(user);
+        diary.setPlant( plantService.findPlant(plantId));
+        PlantDiary plantDiary = plantDiaryRepository.save(diary);
+        return plantDiary.getId();
+    }
+    public DiaryLookUpDTO Lookup(Long id){
+        PlantDiary diary = findDiary(id);
+        DiaryLookUpDTO page = new DiaryLookUpDTO();
+        page.setTitle(diary.getTitle());
+        page.setContent(diary.getContent());
+        page.setDate(diary.getDate());
+        page.setFilename(diary.getFilename());
+
+        return page;
+    }
+    public PlantDiary findDiary(Long diaryId) {
+        return plantDiaryRepository.findById(diaryId).orElseThrow(IllegalAccessError::new);
     }
 
-    public PlantDiary findDiarys(Long diaryId) {
-        PlantDiary diary =  diaryRepository.findByDiaryId(diaryId).orElseThrow(IllegalAccessError::new);
-        return diary;
+    public List<PlantDiary> findDiariesByPlantId(Long plantId){
+        return plantDiaryRepository.findAllByPlantId(plantId);
     }
-
-    public PlantDiary findAllDiarysByPlantId(Long plantId){
-        PlantDiary diary = diaryRepository.findDiaryByPlnatId(plantId);
-    }
+//
+//    public List<PlantDiary> findDiariesByUserId(Long userId){
+//        List<PlantDiary> diaries = plantDiaryRepository.findAllByUserId(userId);
+//        return diaries;
+//    }
 }
+
