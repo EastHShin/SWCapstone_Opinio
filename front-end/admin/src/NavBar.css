@@ -1,0 +1,11 @@
+.top {
+    background-color: #00A86B;
+    font-size: calc(10px + 1.5vmin);
+}
+
+.inline {
+    padding-right: 12px;
+    display: inline-block;
+    color: #FFF;
+    text-decoration: none;
+}
