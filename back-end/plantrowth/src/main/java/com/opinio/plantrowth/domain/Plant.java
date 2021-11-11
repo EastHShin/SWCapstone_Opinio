@@ -31,8 +31,8 @@ public class Plant {
     private String fileName;
     private Integer waterSupply;
     private Integer alarmCycle;
-    @OneToMany
-    @JoinColumn(name = "diary_id")
+
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, mappedBy = "plant")
     @Builder.Default
     private List<PlantDiary> diaries = new ArrayList<>();
 

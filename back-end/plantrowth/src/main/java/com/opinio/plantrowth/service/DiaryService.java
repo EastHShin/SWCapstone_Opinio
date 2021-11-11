@@ -4,6 +4,7 @@ import com.opinio.plantrowth.api.dto.diary.CreateDiaryDTO;
 import com.opinio.plantrowth.api.dto.diary.DiaryLookUpDTO;
 import com.opinio.plantrowth.domain.PlantDiary;
 import com.opinio.plantrowth.repository.PlantDiaryRepository;
+import com.opinio.plantrowth.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DiaryService {
     private final PlantDiaryRepository plantDiaryRepository;
+    private final PlantRepository plantRepository;
     private final PlantService plantService;
     @Transactional
     public Long create(CreateDiaryDTO dto, Long plantId){
@@ -27,7 +29,7 @@ public class DiaryService {
                     .build();
 //        User user = plant.getUser();
 //        diary.setUser(user);
-        diary.setPlant( plantService.findPlant(plantId));
+        diary.setPlant( plantRepository.getById(plantId));
         PlantDiary plantDiary = plantDiaryRepository.save(diary);
         return plantDiary.getId();
     }

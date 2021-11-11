@@ -40,8 +40,7 @@ public class User implements UserDetails {
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "plant_id")
+    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     @Builder.Default
     List<Plant> plants = new ArrayList<>();
 

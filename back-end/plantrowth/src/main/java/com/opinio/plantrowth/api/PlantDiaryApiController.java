@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +30,7 @@ public class PlantDiaryApiController {
     private final FileUploadService fileUploadService;
     private final DiaryService diaryService;
 
-    @GetMapping("/api/plants/diary/{plant-id}")
+    @GetMapping("/api/plants/diary/plant/{plant-id}")
     public ResponseEntity<DiaryResult> diaries(@PathVariable("plant-id") Long id){
         List<PlantDiary> findDiaries = diaryService.findDiariesByPlantId(id);
         List<DiaryDTO> collect = findDiaries.stream()
@@ -39,6 +40,7 @@ public class PlantDiaryApiController {
         return new ResponseEntity<DiaryResult>(new DiaryResult(collect), HttpStatus.OK);
     }
     @PostMapping("/api/plants/diary/{plant-id}")
+    @Transactional
     public ResponseEntity createDiary(
             @PathVariable("plant-id") Long plantId,
             @RequestBody CreateDiaryDTO dto,
