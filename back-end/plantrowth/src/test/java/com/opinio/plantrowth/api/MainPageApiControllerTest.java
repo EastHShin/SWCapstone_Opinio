@@ -5,10 +5,8 @@ import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
-import com.opinio.plantrowth.service.DiaryService;
+import com.opinio.plantrowth.service.*;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
-import com.opinio.plantrowth.service.PlantService;
-import com.opinio.plantrowth.service.UserService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +54,10 @@ class MainPageApiControllerTest {
     private FCMService fcmService;
     @MockBean
     private DiaryService diaryService;
+    @MockBean
+    private UserPointService userPointService;
+    @MockBean
+    private WateringService wateringService;
 
     private User user;
     private Plant plant;
@@ -104,10 +106,10 @@ class MainPageApiControllerTest {
         //then
         mockMvc.perform(get("/api/main/{user-id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.length()").value(3))
+                .andExpect(jsonPath("$.data.length()").value(4))
                 .andExpect(jsonPath("$.data.plants.length()").value(2))
-                .andExpect(jsonPath("$.data.plants[0].plantName").value(plant.getPlantName()))
-                .andExpect(jsonPath("$.data.plants[1].plantName").value(plant2.getPlantName()))
+                .andExpect(jsonPath("$.data.plants[0].plant_name").value(plant.getPlantName()))
+                .andExpect(jsonPath("$.data.plants[1].plant_name").value(plant2.getPlantName()))
                 .andDo(print());
     }
 }
