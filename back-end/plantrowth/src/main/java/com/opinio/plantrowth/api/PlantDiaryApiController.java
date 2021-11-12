@@ -50,7 +50,6 @@ public class PlantDiaryApiController {
 
         Long result = diaryService.createDiary(dto, plantId);
         if(file.isPresent()) {
-
             String uploadImageName = fileUploadService.uploadImage(file.get());
             PlantDiary diary = diaryService.findDiary(result);
             diary.setFilename(uploadImageName);
