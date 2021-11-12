@@ -3,6 +3,7 @@ package com.opinio.plantrowth.api.dto.diary;
 import com.opinio.plantrowth.domain.PlantDiary;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 public class CreateDiaryDTO {
     private String title;
     private String content;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     public CreateDiaryDTO(String title, String content, LocalDate date) {
         this.title = title;
