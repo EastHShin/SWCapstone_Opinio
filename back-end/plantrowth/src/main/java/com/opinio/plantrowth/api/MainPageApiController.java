@@ -48,13 +48,15 @@ public class MainPageApiController {
 
     @Getter
     static class MainPageDto{
-        private String userName;
+        private Long user_id;
+        private String user_name;
         private Integer point;
         private List<MainPagePlantDto> plants;
         //private List<Board> boards;
 
         public MainPageDto(User user, List<Plant> plantList) { //List<Board> boardList
-            userName = user.getName();
+            user_id = user.getId();
+            user_name = user.getName();
             point = user.getPoint();
 
             plants = plantList.stream()
@@ -65,14 +67,16 @@ public class MainPageApiController {
 
     @Getter
     static class MainPagePlantDto{
-        private String plantName;
-        private Integer plantExp;
-        private String plantImageUri;
+        private Long plant_id;
+        private String plant_name;
+        private Integer plant_exp;
+        private String file_name;
 
         public MainPagePlantDto(Plant plant) {
-            plantName = plant.getPlantName();
-            plantExp = plant.getPlantExp();
-            plantImageUri = plant.getFileName();
+            plant_id = plant.getId();
+            plant_name = plant.getPlantName();
+            plant_exp = plant.getPlantExp();
+            file_name = plant.getFileName();
         }
     }
     /* 게시판 구현하면 풀기
