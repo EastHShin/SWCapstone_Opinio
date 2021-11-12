@@ -15,17 +15,8 @@ permissions:
     mode: 755
 
 hooks:
-  ApplicationStart:
-    - location: run_new_was.sh
-      timeout: 180
-      runas: ec2-user
-    - location: health_check.sh
-      timeout: 180
-      runas: ec2-user
-    - location: switch.sh
-      timeout: 180
-      runsas: ec2-user
-#  AfterInstall:
-#    - location: deploy.sh
-#      timeout: 60
-#      runas: root
+  AfterInstall:
+    - location: deploy.sh
+      timeout: 60
+      runas: root
+
