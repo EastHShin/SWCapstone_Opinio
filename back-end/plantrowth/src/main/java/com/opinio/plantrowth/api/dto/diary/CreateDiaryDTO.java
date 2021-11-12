@@ -12,8 +12,7 @@ public class CreateDiaryDTO {
     private String title;
     private String content;
     private LocalDate date;
-    private String filename;
-    public CreateDiaryDTO(String title, String content, LocalDate date, String filename) {
+    public CreateDiaryDTO(String title, String content, LocalDate date) {
         this.title = title;
         this.content = content;
         this.date = date;
@@ -24,7 +23,6 @@ public class CreateDiaryDTO {
                 .title(title)
                 .content(content)
                 .date(date)
-                .filename(filename)
                 .build();
     }
 }

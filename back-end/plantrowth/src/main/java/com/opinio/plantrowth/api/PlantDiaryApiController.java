@@ -47,7 +47,7 @@ public class PlantDiaryApiController {
             @PathVariable("plant-id") Long plantId,
             @ModelAttribute CreateDiaryDTO dto,
             @RequestPart(required = false) Optional<MultipartFile> file){
-        
+
         Long result = diaryService.createDiary(dto, plantId);
         if(file.isPresent()) {
 
