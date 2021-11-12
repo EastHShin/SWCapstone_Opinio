@@ -24,7 +24,6 @@ public class DiaryService {
                     .title(dto.getTitle())
                     .date(dto.getDate())
                     .content(dto.getContent())
-                    .filename(dto.getFilename())
                     .build();
         diary.setPlant(plantRepository.getById(plantId));
         PlantDiary plantDiary = plantDiaryRepository.save(diary);
@@ -53,7 +52,6 @@ public class DiaryService {
         PlantDiary diary = findDiary(id);
         diary.setTitle(dto.getTitle());
         diary.setContent(dto.getContent());
-        diary.setFilename(dto.getFilename());
         diary.setDate(dto.getDate());
         plantDiaryRepository.save(diary);
     }
