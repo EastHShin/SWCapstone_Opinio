@@ -26,7 +26,7 @@ function App() {
   return (
     <Provider store={Store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="MainScreen">
+        <Stack.Navigator initialRouteName="SplashScreen">
           {/* <Stack.Navigator initialRouteName="SplashScreen"> */}
           <Stack.Screen
             name="SplashScreen"

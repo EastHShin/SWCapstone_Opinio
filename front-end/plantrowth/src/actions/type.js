@@ -14,4 +14,6 @@ export const GET_PLANT_LIST = 'get_plant_list';
 export const GET_PLANT_PROFILE = 'get_plant_profile';
 export const GET_PLANT_IMAGE = 'get_plant_image';
 export const POST_PLANT_IMAGE = 'post_plant_image';
-export const GET_HOME_INFO = 'get_home_info'
+export const GET_HOME_INFO = 'get_home_info';
+export const DELETE_PLANT = 'delete_plant';
+export const UPDATE_PLANT = 'update_plant';

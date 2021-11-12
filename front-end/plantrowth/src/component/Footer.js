@@ -23,7 +23,7 @@ const Footer = () => {
     <View style={styles.tabs}>
       <TouchableOpacity
         style={styles.tabButton}
-        onPress={() => navigation.navigate('MainScreen')}>
+        onPress={() => navigation.navigate('HomeScreen')}>
         <Text style={styles.tabLabel}>홈</Text>
       </TouchableOpacity>
       <TouchableOpacity

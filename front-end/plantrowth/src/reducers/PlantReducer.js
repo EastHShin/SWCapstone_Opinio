@@ -1,18 +1,21 @@
-import { ADD_PLANT, GET_PLANT_LIST, GET_PLANT_PROFILE } from "../actions/type";
+import { ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE } from "../actions/type";
 let initialState = {
-    plantList: [],
     profile: {},
-    result: '',
+    addResult: '',
+    deleteResult: '',
+    updateResult: '',
 };
 
-function PlantReducer(state=initialState, action){
-    switch (action.type){
-        case GET_PLANT_LIST:
-            return {...state, plantList: action.payload};
+function PlantReducer(state = initialState, action) {
+    switch (action.type) {
         case GET_PLANT_PROFILE:
-            return {...state, profile: action.payload};
+            return { ...state, profile: action.payload };
         case ADD_PLANT:
-            return {...state, result: action.payload};
+            return { ...state, addResult: action.payload };
+        case DELETE_PLANT:
+            return { ...state, deleteResult: action.payload };
+        case UPDATE_PLANT:
+            return { ...state, updateResult: action.payload };
         default:
             return state;
     }

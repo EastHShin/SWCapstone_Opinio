@@ -40,7 +40,7 @@ AddPlantProfile = () => {
   const [isWateringDatePickerVisible, setWateringDatePickerVisibility] =
     useState(false);
 
-  const addPlantState = useSelector(state => state.PlantReducer.AddPlantState);
+  const addPlantState = useSelector(state => state.PlantReducer.addResult);
   const [isAddSuccess, setAddSuccess] = useState(false);
   const isFocused = useIsFocused();
 
@@ -49,15 +49,17 @@ AddPlantProfile = () => {
 
   useEffect(() => {
     //console.warn('이미지 등록');
-    setLoading(false);
   }, [plantImage]);
 
   useEffect(() => {
+    console.log('addPlantState: '+addPlantState+' isFocused: '+isFocused);
     if (addPlantState == 'success' && isFocused) {
+      console.log('useEffect에서 success');
       setLoading(false);
       setAddSuccess(true);
       dispatch(setAddPlantState(''));
     } else if (addPlantState == 'failure' && isFocused) {
+      console.log('useEffec에서 failure');
       setLoading(false);
       dispatch(setAddPlantState(''));
     }
@@ -211,14 +213,14 @@ AddPlantProfile = () => {
       <SafeAreaView
         style={{
           flex: 1,
-          backgroundColor: '#8EB695',
+          backgroundColor: 'red',
           justifyContent: 'center',
         }}>
         <Text>프로필 등록 완료 했어요</Text>
         <Button
           title="등록 완료"
           onPress={() => {
-            navigation.navigate('MainScreen');
+            navigation.navigate('HomeScreen');
           }}
         />
       </SafeAreaView>
@@ -231,7 +233,7 @@ AddPlantProfile = () => {
         <Button
           title="Back"
           onPress={() => {
-            navigation.push('MainScreen');
+            navigation.push('HomeScreen');
           }}
         />
       </View>
