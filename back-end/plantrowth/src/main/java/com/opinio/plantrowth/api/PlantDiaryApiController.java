@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RestController
 @RequiredArgsConstructor
 public class PlantDiaryApiController {
@@ -40,13 +41,13 @@ public class PlantDiaryApiController {
         return new ResponseEntity<DiaryResult>(new DiaryResult(collect), HttpStatus.OK);
     }
 
-    @PostMapping(name = "/api/plants/diary/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
+    @PostMapping(name = "/api/plants/diary/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createDiary(
             @PathVariable("plant-id") Long plantId,
             @ModelAttribute CreateDiaryDTO dto,
             @RequestPart(required = false) Optional<MultipartFile> file){
-
+        
         Long result = diaryService.createDiary(dto, plantId);
         if(file.isPresent()) {
 
@@ -58,6 +59,7 @@ public class PlantDiaryApiController {
                 ResponseEntity.ok().body("식물 일기 생성 완료"):
                 ResponseEntity.badRequest().build();
     }
+
     @GetMapping("/api/plants/diary/{diary-id}")
     public ResponseEntity<?> lookUpDiary(@PathVariable("diary-id") Long id){
         DiaryLookUpDTO diary = diaryService.LookupDiary(id);
@@ -70,6 +72,8 @@ public class PlantDiaryApiController {
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
+
+    @Transactional
     @PutMapping("/api/plants/diary/{diary-id}")
     public ResponseEntity<?> updateDiary(@PathVariable("diary-id") Long id, @RequestBody CreateDiaryDTO dto){
         diaryService.updateDiary(id, dto);
@@ -82,6 +86,8 @@ public class PlantDiaryApiController {
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
+
+    @Transactional
     @DeleteMapping("/api/plants/diary/{diary-id}")
     public ResponseEntity<?> deleteDiary(@PathVariable("diary-id") Long id){
         Long result = diaryService.deleteDiary(id);
