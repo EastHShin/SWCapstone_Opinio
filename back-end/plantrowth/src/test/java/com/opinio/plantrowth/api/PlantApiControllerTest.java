@@ -8,10 +8,8 @@ import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.PlantRepository;
 import com.opinio.plantrowth.repository.UserRepository;
-import com.opinio.plantrowth.service.DiaryService;
+import com.opinio.plantrowth.service.*;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
-import com.opinio.plantrowth.service.PlantService;
-import com.opinio.plantrowth.service.UserService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,27 +41,26 @@ class PlantApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private PlantService plantService;
     @MockBean
     private UserService userService;
+    @MockBean
+    private UserRepository userRepository;
     @MockBean
     private FileUploadService fileUploadService;
     @MockBean
     private PasswordEncoder passwordEncoder;
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
-
-    @MockBean
-    private PlantRepository plantRepository;
-    @MockBean
-    private UserRepository userRepository;
-
     @MockBean
     private FCMService fcmService;
     @MockBean
     private DiaryService diaryService;
+    @MockBean
+    private UserPointService userPointService;
+    @MockBean
+    private WateringService wateringService;
 
     private User user;
     private Plant plant;

@@ -26,7 +26,7 @@ public class DiaryService {
                     .content(dto.getContent())
                     .filename(dto.getFilename())
                     .build();
-        diary.setPlant( plantRepository.getById(plantId));
+        diary.setPlant(plantRepository.getById(plantId));
         PlantDiary plantDiary = plantDiaryRepository.save(diary);
         return plantDiary.getId();
     }

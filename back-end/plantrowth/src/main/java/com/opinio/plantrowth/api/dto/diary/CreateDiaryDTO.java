@@ -17,7 +17,6 @@ public class CreateDiaryDTO {
         this.title = title;
         this.content = content;
         this.date = date;
-        this.filename = filename;
     }
 
     public PlantDiary toEntity() {
