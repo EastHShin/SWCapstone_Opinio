@@ -24,14 +24,24 @@ public class Plant {
     @JsonIgnore
     private User user;
 
+    @Column(name = "plant_species")
     private String plantSpecies;
+    @Column(name = "plant_name")
     private String plantName;
+    @Column(name = "plant_birth")
     private LocalDate plantBirth;
+    @Column(name = "plant_exp")
     private Integer plantExp;
+    @Column(name = "file_name")
     private String fileName;
+    @Column(name = "water_supply")
     private Integer waterSupply;
+    @Column(name = "alarm_cycle")
     private Integer alarmCycle;
+    @Column(name = "recent_watering")
     private LocalDate recentWatering;
+    @Column(name = "remain_cycle")
+    private Integer remainCycle;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.MERGE, mappedBy = "plant")
     @Builder.Default
