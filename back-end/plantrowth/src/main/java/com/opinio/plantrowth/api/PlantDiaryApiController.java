@@ -34,16 +34,17 @@ public class PlantDiaryApiController {
     public ResponseEntity<DiaryResult> diaries(@PathVariable("plant-id") Long id){
         List<PlantDiary> findDiaries = diaryService.findDiariesByPlantId(id);
         List<DiaryDTO> collect = findDiaries.stream()
-                .map(m -> new DiaryDTO(m.getTitle(), m.getFilename(), m.getContent()))
+                .map(m -> new DiaryDTO(m.getTitle(), m.getContent(), m.getDate(),m.getFilename(), m.getId()))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<DiaryResult>(new DiaryResult(collect), HttpStatus.OK);
     }
-    @PostMapping("/api/plants/diary/{plant-id}")
+
+    @PostMapping(name = "/api/plants/diary/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity createDiary(
             @PathVariable("plant-id") Long plantId,
-            @RequestBody CreateDiaryDTO dto,
+            @ModelAttribute CreateDiaryDTO dto,
             @RequestPart(required = false) Optional<MultipartFile> file){
 
         Long result = diaryService.createDiary(dto, plantId);
