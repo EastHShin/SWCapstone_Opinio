@@ -1,8 +1,8 @@
 package com.opinio.plantrowth.api;
 
-import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
-import com.opinio.plantrowth.api.dto.CreatePlantResponseDto;
-import com.opinio.plantrowth.api.dto.PlantUpdateDto;
+import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
+import com.opinio.plantrowth.api.dto.plant.CreatePlantResponseDto;
+import com.opinio.plantrowth.api.dto.plant.PlantUpdateDto;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
@@ -37,11 +37,13 @@ public class PlantApiController {
 
 
 
-    @PostMapping(value = "/api/plants/profiles/{user-id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/api/plants/profiles/{user-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public CreatePlantResponseDto savePlant(
             @PathVariable("user-id") Long userId,
-            @RequestPart(name = "data") CreatePlantRequestDto request,
+            @ModelAttribute CreatePlantRequestDto request,
             @RequestPart(name = "file_name",required = false) Optional<MultipartFile> file) {
+        System.out.println(request);
+        System.out.println(request.getPlant_name());
         Plant plant = Plant.builder()
                 .plantSpecies(request.getPlant_species())
                 .plantName(request.getPlant_name())

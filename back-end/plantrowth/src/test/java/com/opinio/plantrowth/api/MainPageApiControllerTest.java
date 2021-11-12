@@ -5,11 +5,14 @@ import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
+import com.opinio.plantrowth.service.DiaryService;
+import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
 import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.UserService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -49,6 +52,10 @@ class MainPageApiControllerTest {
     private PasswordEncoder passwordEncoder;
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    private FCMService fcmService;
+    @MockBean
+    private DiaryService diaryService;
 
     private User user;
     private Plant plant;
