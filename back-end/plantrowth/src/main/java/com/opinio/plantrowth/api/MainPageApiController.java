@@ -2,11 +2,9 @@ package com.opinio.plantrowth.api;
 
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.UserRepository;
 import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.UserService;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 

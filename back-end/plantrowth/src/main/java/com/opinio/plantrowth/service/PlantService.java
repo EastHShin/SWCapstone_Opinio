@@ -1,6 +1,6 @@
 package com.opinio.plantrowth.service;
 
-import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
+import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;

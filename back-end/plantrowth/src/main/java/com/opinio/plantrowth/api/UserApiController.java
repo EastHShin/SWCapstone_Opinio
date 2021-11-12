@@ -1,21 +1,22 @@
 package com.opinio.plantrowth.api;
 
 
-import com.opinio.plantrowth.api.dto.JoinDTO;
+import com.opinio.plantrowth.api.dto.auth.*;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
-import com.opinio.plantrowth.api.dto.UserDTO;
+import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
 import com.opinio.plantrowth.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,9 +24,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserApiController {
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     //회원가입
@@ -43,7 +42,7 @@ public class UserApiController {
 
  */
 
-    @PostMapping("/join")
+    @PostMapping("/api/auth/join")
     public ResponseEntity join(@RequestBody JoinDTO user){
         Long result = userService.join(user);
 
@@ -53,30 +52,67 @@ public class UserApiController {
 
     }
 
-    //로그인
-    /*
-    @PostMapping("/login")
-    public String login(@RequestBody Map<String, String> user){
-        User member = userRepository.findByEmail(user.get("email"))
-                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
-        if (!passwordEncoder.matches(user.get("password"), member.getPassword())){
-            throw new IllegalArgumentException("잘못된 아이디 혹은 비밀번호입니다.");
-        }
-        return  jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
-    }
-    */
-   @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletResponse response, @RequestBody Map<String, String> user){
-        User member = userRepository.findByEmail(user.get("email"))
-                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
-        if (!passwordEncoder.matches(user.get("password"), member.getPassword())){
-            throw new IllegalArgumentException("잘못된 아이디 혹은 비밀번호입니다.");
-        }
+    @PostMapping("/api/auth/login") //로그인
+    public ResponseEntity<?> login(HttpServletResponse response, @RequestBody LoginDTO user){
+        User member = userService.login(user);
+//        Message message = new Message();
+//        HttpHeaders headers = new HttpHeaders();
         String token = jwtTokenProvider.createToken(member.getName(), member.getRoles());
-
         response.setHeader("Authorization", token);
-        return
-                ResponseEntity.ok().body("로그인 성공");
+        return  ResponseEntity.ok().body("로그인 성공");
+    }
+
+    @PostMapping("/api/auth/kakao") //소셜 로그인
+    public ResponseEntity<?> kakaoLogin(@RequestBody KakaoDTO user){
+        Long result = userService.kakaoLogin(user);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("카카오 로그인 성공");
+        message.setData(result);
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/user/{user-id}")
+    public ResponseEntity<?> lookUpUser(@PathVariable("user-id") Long id){
+        User member = userService.findUser(id);
+        UserLookUpDTO user = new UserLookUpDTO();
+        user.setUser_name(member.getName());
+        user.setUser_birth(member.getBirth());
+        user.setEmail(member.getEmail());
+        user.setPoint(member.getPoint());
+        user.setPlantNum(member.getPlantNum());
+        user.setMaxPlantNum(member.getMaxPlantNum());
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("회원 조회 성공");
+        message.setData(user);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    @PutMapping("/api/user/{user-id}")
+    public ResponseEntity<?> updateUser(@PathVariable("user-id") Long id, @RequestBody UserUpdateDTO user){
+        userService.updateUser(id, user);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("회원 정보가 수정되었습니다.");
+        message.setData(user);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    @DeleteMapping("api/user/{user-id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("user-id") Long id){
+        Long result = userService.deleteUser(id);
+        return result !=null?
+                ResponseEntity.ok().body("회원 탈퇴 성공"):
+                ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/user/test")

@@ -1,8 +1,8 @@
 package com.opinio.plantrowth.api;
 
-import com.opinio.plantrowth.api.dto.CreatePlantRequestDto;
-import com.opinio.plantrowth.api.dto.CreatePlantResponseDto;
-import com.opinio.plantrowth.api.dto.PlantUpdateDto;
+import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
+import com.opinio.plantrowth.api.dto.plant.CreatePlantResponseDto;
+import com.opinio.plantrowth.api.dto.plant.PlantUpdateDto;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
