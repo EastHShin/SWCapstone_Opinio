@@ -18,7 +18,7 @@ public class FCMTestController {
 
     @GetMapping("/api/fcmtest")
     public ResponseEntity fcmTest() throws IOException {
-        fcmService.sendMessageTo(yebinToken, "테스트푸쉬", "안녕하세요", 1L);
+        fcmService.sendMessageTo(yebinToken, "테스트푸쉬", "안녕하세요", "1");
 
         return new ResponseEntity(HttpStatus.OK);
     }

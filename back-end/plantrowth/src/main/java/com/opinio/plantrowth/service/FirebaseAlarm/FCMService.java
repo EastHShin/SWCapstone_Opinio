@@ -42,7 +42,7 @@ public class FCMService {
 
     }
 
-    public void sendMessageTo(String targetToken, String title, String body, Long plant_id) throws IOException {
+    public void sendMessageTo(String targetToken, String title, String body, String plant_id) throws IOException {
         String message = makeMessage(targetToken, title, body, plant_id);
         System.out.println(message);
 
@@ -60,7 +60,7 @@ public class FCMService {
         System.out.println(response.body().string());
     }
 
-    private String makeMessage(String targetToken, String title, String body, Long plant_id) throws JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body, String plant_id) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                     .token(targetToken)
