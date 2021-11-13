@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { useState, useEffect,useCallback } from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { Alert } from 'react-native';
 import LoginScreen from './src/Auth/LoginScreen';
 import RegisterScreen from './src/Auth/RegisterScreen';
 import SplashScreen from './src/Auth/SplashScreen';
@@ -13,10 +15,52 @@ import DiaryDetailScreen from './src/Diary/DiaryDetail';
 import DiaryEditScreen from './src/Diary/DiaryEditScreen';
 import { Provider } from 'react-redux';
 import Store  from './src/store';
+import messaging from '@react-native-firebase/messaging';
+
 
 const Stack = createNativeStackNavigator();
 
-function App() {
+function App({navigation}) {
+
+  //로그인 시 오고, 유저 아이디
+//로그인 시에만 오게 
+//테스트 중 
+  useEffect(() => {
+    messaging().onMessage(async remoteMessage => {
+      console.log(remoteMessage.data.plant_id);
+      console.log(remoteMessage.data.user_id);
+      // Alert.alert("식물에게 물을 줄 시간입니다!",[
+      //   {
+      //     text: "확인",
+      //     onPress: () =>{
+      //       navigation.navigate("RegisterScreen");
+      //     }
+      //   },
+      //   {
+      //     text:"취소"
+      //   }
+      // ])
+    });
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+      console.log(remoteMessage.data.plant_id); //이거다 
+      
+    });
+
+    //알림 눌렀을 때 data로 온 plant 아이디 받아서 해당 식물로 이동
+    messaging().onNotificationOpenedApp(async remoteMessage=>{
+      console.log('open!');
+     
+      console.log(remoteMessage.data.plant_id);
+
+      // navigation.navigate("")
+      
+    })
+
+  }, []);
+    
+
   return (
     <Provider store={Store}>
       <NavigationContainer>
@@ -37,7 +81,6 @@ function App() {
               headerShown: false,
             }} />
 
-
           <Stack.Screen
             name="RegisterScreen"
             component={RegisterScreen}
@@ -54,11 +97,6 @@ function App() {
               headerShown: false
             }}
           />
-
-
-
-
-
 
 
           <Stack.Screen

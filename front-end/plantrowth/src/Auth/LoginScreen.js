@@ -1,4 +1,4 @@
-import React, { useState, createRef, useEffect } from 'react';
+import React, { useState, createRef, useEffect, useCallback} from 'react';
 
 import {
   View,
@@ -23,22 +23,25 @@ import Loader from '../Loader';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink,setRegisterState } from '../actions/userActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 const LoginScreen = ({ navigation }) => {
 
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [userName, setUserName] = useState('');
-  const [userBirth, setUserBirth] = useState(new Date());
-  const [textBirth, setTextBirth] = useState('');
+  const [userBirth, setUserBirth] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
+  const [fcmToken, setFcmToken] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
  
+  const maximumDate = new Date();
+
   const passwordInputRef = createRef();
 
   const dispatch = useDispatch();
@@ -60,6 +63,7 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (kakaoRegisterState == 'loading') {
+      console.log('ddd');
       setIsModalVisible(true);
       setLoading(false);
     }
@@ -93,6 +97,17 @@ const LoginScreen = ({ navigation }) => {
   
   },[registerState])
 
+  const getFcmToken = useCallback(async () => {
+    const fcmToken = await messaging().getToken();
+    setFcmToken(fcmToken);
+
+  }, []);
+
+  useEffect(() => {
+    getFcmToken();
+  }, [])
+
+
   const KakaoLoginActive = async () => {
     try {
       let result = await KakaoLogins.login();
@@ -103,12 +118,12 @@ const LoginScreen = ({ navigation }) => {
         setUserPassword(' '); //협의 후 작성 
         setAccessToken(result.accessToken);
         setRefreshToken(result.refreshToken);
-        
+        //삭제
         
         const kakaoLoginData = JSON.stringify({
-          email: userEmail,
-          access_token : accessToken,
-          refresh_token : refreshToken
+          email: profile.email,
+          accessToken : result.accessToken,
+          refreshToken : result.refreshToken
         });
 
         dispatch(kakaoLogin(kakaoLoginData));
@@ -151,19 +166,24 @@ const LoginScreen = ({ navigation }) => {
       alert('이름을 입력해주세요.');
       return;
     }
-    if (!textBirth) {
+    if (!userBirth) {
       alert('생년월일을 입력해주세요.');
       return;
     }
 
     setLoading(true);
 
+  
+
     const user = JSON.stringify({
       user_name: userName,
       user_birth: userBirth,
       email: userEmail,
       password: userPassword,
+      fcm_access_token: fcmToken
     });
+
+    console.log(user);
 
     dispatch(registerUser(user));
 
@@ -181,12 +201,11 @@ const LoginScreen = ({ navigation }) => {
 
   const handleConfirm = (date) => {
     setDatePickerVisibility(false);
-    setUserBirth(date);
 
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
-    setTextBirth(year + '-' + month + '-' + day);
+    setUserBirth(year + '-' + month + '-' + day);
   }
 
   return (
@@ -314,11 +333,13 @@ const LoginScreen = ({ navigation }) => {
                   placeholderTextColor="#808080"
                   editable={false}
                   blurOnSubmit={false}
-                  value={textBirth}
+                  value={userBirth}
                 />
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
                   mode="date"
+                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate()-1)} //
+                  minimumDate = {new Date(1921, 0, 1)}
                   onConfirm={handleConfirm}
                   onCancel={() => {
                     setDatePickerVisibility(false);

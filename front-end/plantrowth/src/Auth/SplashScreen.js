@@ -15,7 +15,7 @@ const SplashScreen =({navigation}) =>{
     useEffect(()=>{
         setTimeout(()=>{
             setAnimating(false);
-            AsyncStorage.getItem('accessToken').then((value)=>
+            AsyncStorage.getItem('userId').then((value)=>
             navigation.replace(value === null ? 'LoginScreen':'HomeScreen'),
             );
         }, 5000);

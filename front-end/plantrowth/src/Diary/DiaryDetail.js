@@ -53,25 +53,25 @@ const DiaryDetailScreen = ({ route, navigation }) => {
         
     },[result])
 
-    // const deleteMode = () => {
-    //     Alert.alert(
-    //         "삭제", "식물일기를 삭제하시겠습니까?",[
-    //             {
-    //                 text:"취소",
-    //                 onPress : () => console.log("취소")
+    const deleteMode = () => {
+        Alert.alert(
+            "삭제", "식물일기를 삭제하시겠습니까?",[
+                {
+                    text:"취소",
+                    onPress : () => console.log("취소")
 
-    //         },
-    //         {
-    //             text:"확인",
-    //             onPress : () => {
-    //                 setLoading(true);
-    //                 dispatch(deleteDiary(selectedId))
-    //             }
-    //         }
-    //     ]
-    //     )
+            },
+            {
+                text:"확인",
+                onPress : () => {
+                    setLoading(true);
+                    dispatch(deleteDiary(selectedId))
+                }
+            }
+        ]
+        )
 
-    // }
+    }
 
     return (
         <SafeAreaView style={styles.body}>
@@ -96,7 +96,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                             <View style={styles.wrapper}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={()=>console.log("dd")}  //
+                                    onPress={deleteMode}
                                     style={{ flexDirection: "row" }}>
                                     <FontAwesome5 name='trash' size={20} color="#000000" style={styles.icon} />
                                     <Text style={styles.text}>삭제</Text>
@@ -125,22 +125,28 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                 }}>
                 <View style={styles.diaryWrapper}>
                     <View style={styles.title}>
-                        <Text style={{ color: "#000000", fontWeight: "bold" }}>{diary.diary_title}</Text>
+                        <Text style={{ color: "#000000", fontWeight: "bold" }}>{diary.title}</Text>
                     </View>
-                    <View>
-                        <Image
-                            source={{ uri: diary.file_name }}
-                            style={{
-                                width: Dimensions.get('window').width * 0.8,
-                                height: Dimensions.get('window').height * 0.4,
-                                resizeMode: 'contain',
-                            }}
-                        />
-                    </View>
+
+                    {diary.file_name != '' ? (
+                             <View>
+                             <Image
+                                 source={{ uri: diary.file_name }}
+                                 style={{
+                                     width: Dimensions.get('window').width * 0.8,
+                                     height: Dimensions.get('window').height * 0.4,
+                                     resizeMode: 'contain',
+                                 }}
+                             />
+                         </View>
+                        ) : null}
+
+
+                  
 
                     <View style={styles.content}>
                         <Text style={{ color: "#000000" }}>
-                            {diary.diary_content}
+                            {diary.content}
                         </Text>
                     </View>
                 </View>
@@ -149,7 +155,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                 marginBottom: Dimensions.get('window').height * 0.02,
                 marginTop: Dimensions.get('window').height * 0.01
             }}>
-                <Text style={{ color: "#FFFFFF", fontWeight: "bold" }}>{diary.diary_date}</Text>
+                <Text style={{ color: "#FFFFFF", fontWeight: "bold" }}>{diary.date}</Text>
             </View>
         </SafeAreaView>
     )

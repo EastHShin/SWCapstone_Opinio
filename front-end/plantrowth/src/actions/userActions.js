@@ -23,7 +23,7 @@ export const registerUser = (user) => {
     // 'http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/join'
 
     return async dispatch => {
-        return await axios.post('https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/register', user, {
+        return await axios.post('http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/auth/join', user, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
@@ -56,13 +56,15 @@ export const setRegisterState = state => dispatch => {
 export const loginUser = (user) => {
 
     return async dispatch => {
-        return await axios.post("https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/login", user, {
+        return await axios.post("http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login", user, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
                 if (res.status == 200) {
+                    console.log(res.data.data);
+                    console.log(res.data);
                     AsyncStorage.setItem('accessToken', res.data.accessToken);
-                    AsyncStorage.setItem('userId', JSON.stringify(res.data.user_id));
+                    AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
                     dispatch({
                         type: LOGIN_USER,
@@ -76,8 +78,13 @@ export const loginUser = (user) => {
                     });
                 }
             })
-            .catch(function (err) {
-                console.log(err);
+            .catch(function (error) {
+                dispatch({
+                    type:LOGIN_USER,
+                    payload: "failure"
+                })
+                console.log(error);
+                
             })
     }
 };
@@ -85,16 +92,17 @@ export const loginUser = (user) => {
 export const kakaoLogin = (data) => {
 
     return async dispatch => {
-        return await axios.post('https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/kakao', data,
+        return await axios.post('http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/auth/kakao', data,
             {
                 headers: { "Content-Type": `application/json` }
             })
-
             .then(function (res) {
+            
                 if (res.status == 200) {
+                
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
-                    AsyncStorage.setItem('accessToken', res.data.accessToken);
-                    AsyncStorage.setItem('userId', JSON.stringify(res.data.user_id));
+                    // AsyncStorage.setItem('accessToken', res.data.accessToken);
+                    AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');
 
                     dispatch({
@@ -103,13 +111,17 @@ export const kakaoLogin = (data) => {
                     });
                 }
                 else {
+                    
                     dispatch({
                         type: KAKAO_REGISTER,
                         payload: 'loading',
                     });
                 }
             }).catch(function (err) {
-                console.log(err);
+                dispatch({
+                    type: KAKAO_REGISTER,
+                    payload: 'loading',
+                });
             })
     }
 

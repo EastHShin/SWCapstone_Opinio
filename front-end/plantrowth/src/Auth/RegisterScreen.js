@@ -1,4 +1,4 @@
-import React, { useEffect,useState, createRef } from 'react';
+import React, { useEffect,useState, createRef, useCallback } from 'react';
 
 import {
   StyleSheet,
@@ -21,17 +21,18 @@ import { useIsFocused } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useDispatch,useSelector } from 'react-redux';
 import { registerUser,setRegisterState } from '../actions/userActions';
+import messaging from '@react-native-firebase/messaging';
 
 function RegisterScreen({ navigation }) {
 
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
 
-  const [userName, setUserName] = useState('');
+  const [userNickName, setUserNickName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
-  const [userBirth, setUserBirth] = useState(new Date());
-  const [textBirth, setTextBirth] = useState('');
+  const [userBirth, setUserBirth] = useState('');
+  const [fcmToken, setFcmToken] = useState('');
 
   const [checkEmail, setCheckEmail] = useState(true);
   const [checkPassword, setCheckPassword] = useState(true);
@@ -44,6 +45,9 @@ function RegisterScreen({ navigation }) {
 
   const registerState = useSelector(state => state.userReducer.registerState);
   const passwordInputRef = createRef();
+
+  const maximumDate = new Date();
+
 
   useEffect(() => {
     if(registerState == 'success' && isFocused){
@@ -58,14 +62,25 @@ function RegisterScreen({ navigation }) {
     }
   }, [registerState])
 
+  const getFcmToken = useCallback(async () => {
+    const fcmToken = await messaging().getToken();
+    setFcmToken(fcmToken);
+  }, []);
+
+  useEffect(() => {
+    getFcmToken();
+  }, [])
+  
+
   const onPressHandler = () => {
     setErrortext('');
 
-    if (!userName) {
-      alert('이름을 입력해주세요.');
+
+    if (!userNickName) {
+      alert('닉네임을 입력해주세요.');
       return;
     }
-    if (!textBirth) {
+    if (!userBirth) {
       alert('생년월일을 입력해주세요.');
       return;
     }
@@ -80,12 +95,18 @@ function RegisterScreen({ navigation }) {
 
     setLoading(true);
 
+    console.log(fcmToken);
+
     const user = JSON.stringify({
-      user_name: userName,
+      user_name : userNickName,
       user_birth: userBirth,
       email: userEmail,
       password: userPassword,
+      fcm_access_token: fcmToken
+
     });
+
+    console.log(user);
 
     dispatch(registerUser(user));
  
@@ -103,7 +124,6 @@ function RegisterScreen({ navigation }) {
     const day = ('0' + date.getDate()).slice(-2);
 
     setUserBirth(year+ '-' + month + '-' + day);
-    setTextBirth(year+ '-' + month + '-' + day);
 
   }
 
@@ -121,7 +141,8 @@ function RegisterScreen({ navigation }) {
 
   const validationPassword = (e) => {
 
-    var passwordExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,12}$/;
+    var passwordExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/
+
     if (!passwordExp.test(e.nativeEvent.text)) {
       setCheckPassword(false);
     }
@@ -182,13 +203,15 @@ function RegisterScreen({ navigation }) {
         </View>
         <KeyboardAvoidingView enabled>
           <View style={styles.sectionWrapper}>
+
+
             <View style={styles.section}>
               <EntypoIcons name='user' size={20} color="#8EB695" style={styles.icon} />
               <TextInput
                 style={styles.input}
-                onChangeText={(UserName) => setUserName(UserName)}
+                onChangeText={(UserNickName) => setUserNickName(UserNickName)}
                 underlineColorAndroid="#f000"
-                placeholder="Name"
+                placeholder="NickName"
                 placeholderTextColor="#808080"
                 onSubmitEditing={
                   Keyboard.dismiss
@@ -208,12 +231,14 @@ function RegisterScreen({ navigation }) {
                   placeholderTextColor="#808080"
                   editable={false}
                   blurOnSubmit={false}
-                  value={textBirth}
+                  value={userBirth}
                 />
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
                   mode="date"
                   onConfirm={handleConfirm}
+                  minimumDate={new Date(1921, 0, 1)} 
+                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate()-1)}
                   onCancel={() => {
                     setDatePickerVisibility(false);
                   }} />
@@ -254,7 +279,7 @@ function RegisterScreen({ navigation }) {
                   setUserPassword(UserPassword)
                 }
                 underlineColorAndroid="#f000"
-                placeholder="8~12자 영문,숫자 조합"
+                placeholder="8~12자 영문,숫자,특수문자"
                 placeholderTextColor="#808080"
                 ref={passwordInputRef}
                 returnKeyType="next"
