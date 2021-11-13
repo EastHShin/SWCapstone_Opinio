@@ -22,22 +22,24 @@ const Item = ({ item, onPress, style }) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
       <View>
-        <Text style={styles.title}>{item.diary_title}</Text>
+        <Text style={styles.title}>{item.title}</Text>
       </View>
       <View>
         <Text style={styles.content}>
-          {item.diary_content.length > 33 ? (item.diary_content.substring(0, 31) + "···") : item.diary_content}
+          {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content}
         </Text>
       </View>
       <View style={{ alignItems: "flex-end" }}>
-        <Text style={styles.date}>{item.diary_date}</Text>
+        <Text style={styles.date}>{item.date}</Text>
       </View>
     </TouchableOpacity>
   );
 }
 
 
-const DiaryScreen = ({ navigation }) => {
+const DiaryScreen = ({ route,navigation }) => {
+  
+  const selectedPlantId = route.params; //받아온 식물 아이디 
 
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
@@ -47,8 +49,10 @@ const DiaryScreen = ({ navigation }) => {
 
 
   useEffect(() => {
-    dispatch(fetchDiaries(123));  //plant id는 식물 조회 완성되면 연결
-
+    if(isFocused){
+    dispatch(fetchDiaries(1));  //plant id는 식물 조회 완성되면 연결
+    console.log("dddd");
+    }
   }, [isFocused])
 
 

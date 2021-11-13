@@ -26,7 +26,9 @@ const DiaryCreateScreen = ({ navigation }) => {
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [image, setImage] = useState("");
+    const [imageUri, setImageUri] = useState("");
+    const [fileName, setFileName] = useState("");
+    const [imageType, setImageType] = useState("");
     const [loading, setLoading] = useState(false);
 
     const contentInputRef = createRef();
@@ -39,7 +41,7 @@ const DiaryCreateScreen = ({ navigation }) => {
 
    useEffect(() => {
        if(result == "success" && isFocused){
-           console.log('dd');
+           console.log('ddd');
            setLoading(false);
            dispatch(setResultState(''));
            navigation.navigate("DiaryScreen");
@@ -55,15 +57,18 @@ const DiaryCreateScreen = ({ navigation }) => {
     
     const addGalleryImage = () => {
         launchImageLibrary({mediaType:'photo' }, response =>{
-            console.log(response.assets[0].uri);
-            setImage(response.assets[0].uri);
+            setImageType(response.assets[0].type);
+            setFileName(response.assets[0].fileName);
+            setImageUri(response.assets[0].uri);
         })
     }
 
     const addCameraImage = () => {
         launchCamera({mediaType:'photo'}, response => {
-            console.log(response.assets[0].uri);
-            setImage(response.assets[0].uri);
+           
+            setImageType(response.assets[0].type);
+            setFileName(response.assets[0].fileName);
+            setImageUri(response.assets[0].uri);
         })
     }
     
@@ -76,30 +81,35 @@ const DiaryCreateScreen = ({ navigation }) => {
         const month = ('0' + (date.getMonth() + 1)).slice(-2);
         const day = ('0' + date.getDate()).slice(-2);
     
-        const plantId = 123; //예시
-
+        const plantId = 1; //예시
 
         //???
-        const Data = new FormData();
 
-        Data.append('plant_id', plantId);
-        Data.append('diary_title', title);
-        Data.append('diary_content', content);
-        Data.append('diary_date', year+ '-' + month + '-' + day );
-        Data.append('file_name',image);
-
-        console.log(Data);
-
-        // const diaryData = JSON.stringify({
+        //  const diaryData = {
         //     plant_id: plantId,
         //     diary_title: title,
         //     diary_content: content,
         //     diary_date: year+ '-' + month + '-' + day,
-        //     file_name : image
-        //   });
-         
+        //   };
+
+        const Data = new FormData();
+
+        Data.append('title', title);
+        Data.append('content', content);
+        Data.append('date', year+ '-' + month + '-' + day)
+
+
+        if (fileName) {
+            console.log("사진 있음");
+            Data.append('file_name', {
+                name: fileName,
+                type: imageType,
+                uri: imageUri
+            });
+        }
+        console.log(Data);
         
-        //   dispatch(saveDiary(diaryData, plantId));
+        dispatch(saveDiary(Data, plantId));
     }
 
     return (
@@ -155,9 +165,9 @@ const DiaryCreateScreen = ({ navigation }) => {
                             />
                         </View>
 
-                        {image != '' ? (
+                        {imageUri != '' ? (
                             <View style = {{marginBottom:Dimensions.get('window').width * 0.06,}}>
-                                <Image source={{ uri: image }}
+                                <Image source={{ uri: imageUri }}
                                     style={{
                                         width: Dimensions.get('window').width * 0.8,
                                         height: Dimensions.get('window').height * 0.4,

@@ -25,69 +25,91 @@ import { useIsFocused } from '@react-navigation/native'
 
 const DiaryEditScreen = ({ navigation }) => {
 
-//     const diary = useSelector(state => state.diaryReducer.diary);
+    const diary = useSelector(state => state.diaryReducer.diary);
 
-//     const [title, setTitle] = useState(diary.diary_title);
-//     const [content, setContent] = useState(diary.diary_content);
-//     const [image, setImage] = useState(diary.file_name);
-//     const [loading, setLoading] = useState(false);
+    const [title, setTitle] = useState(diary.title);
+    const [content, setContent] = useState(diary.content);
+    const [image, setImage] = useState(diary.file_name);
+    const [imageUri, setImageUri] = useState("");
+    const [fileName, setFileName] = useState("");
+    const [imageType, setImageType] = useState("");
+    const [loading, setLoading] = useState(false);
 
-//     const contentInputRef = createRef();
+    const contentInputRef = createRef();
 
-//     const dispatch = useDispatch();
-//     const isFocused = useIsFocused();
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
     
-//     const result = useSelector(state => state.diaryReducer.result);
-//    // const plantId   plant id 가져오기
+    const result = useSelector(state => state.diaryReducer.result);
+   // const plantId   plant id 가져오기
 
-//    useEffect(() => {
-//       if(result == "success" && isFocused){
-//           setLoading(false);
-//           dispatch(setResultState(''));
-//           navigation.navigate('DiaryDetailScreen');
-//       }
-//       else if(result == "failure" && isFocused){
-//           setLoading(false);
-//           dispatch(setResultState(''));
-//           alert("식물일기 수정 실패");
-//       }
-//    }, [result])
+   useEffect(() => {
+      if(result == "success" && isFocused){
+          setLoading(false);
+          dispatch(setResultState(''));
+          navigation.navigate('DiaryDetailScreen');
+      }
+      else if(result == "failure" && isFocused){
+          setLoading(false);
+          dispatch(setResultState(''));
+          alert("식물일기 수정 실패");
+      }
+   }, [result])
 
-//     const addGalleryImage = () => {
-//         launchImageLibrary({mediaType:'photo' }, response =>{
-//             console.log(response.assets[0].uri);
-//             setImage(response.assets[0].uri);
-//         })
-//     }
+    const addGalleryImage = () => {
+        launchImageLibrary({mediaType:'photo' }, response =>{
+            setImageType(response.assets[0].type);
+            setFileName(response.assets[0].fileName);
+            setImageUri(response.assets[0].uri);
+        })
+    }
 
-//     const addCameraImage = () => {
-//         launchCamera({mediaType:'photo'}, response => {
-//             console.log(response.assets[0].uri);
-//             setImage(response.assets[0].uri);
-//         })
-//     }
+    const addCameraImage = () => {
+        launchCamera({mediaType:'photo'}, response => {
+            setImageType(response.assets[0].type);
+            setFileName(response.assets[0].fileName);
+            setImageUri(response.assets[0].uri);
+        })
+    }
     
-//     const onPressHandler = () => {
+    const onPressHandler = () => {
 
-//         setLoading(true);
+        setLoading(true);
 
-//         const plantId = 123; //예시 
+        const plantId = 123; //예시 
 
-//         const diaryData = JSON.stringify({
-//             plant_id: plantId,
-//             diary_title: title,
-//             diary_content: content,
-//             diary_date: diary.diary_date,
-//             file_name : image
-//           });
+          const Data = new FormData();
 
-//         dispatch(editDiary(diaryData, diary.diary_id));
+          Data.append('title', title);
+          Data.append('content', content);
+        //   Data.append('date', diary.date); 
+  
+          if (fileName) {
+              console.log("새로운 사진");
+              Data.append('file_name', {
+                  name: fileName,
+                  type: imageType,
+                  uri: imageUri
+              });
+          }
+          else{
+            Data.append('file_name', {
+                name: fileName,
+                type: imageType,
+                uri: imageUri
+            });
+
+          }
+
         
-//     }
+
+        dispatch(editDiary(diaryData, diary.diary_id));
+        
+    }
 
     return (
         <SafeAreaView style={styles.body}>
-             {/* <Loader loading={loading} />
+             <Loader loading={loading} />
             <View style={{ marginVertical: "5%", marginEnd: "-80%" }}>
                 <TouchableOpacity
                     activeOpacity={0.5}
@@ -188,7 +210,7 @@ const DiaryEditScreen = ({ navigation }) => {
                     onPress={onPressHandler}>
                     <FontAwesome name='check' size={25} color="#FFFFFF" />
                 </TouchableOpacity>
-            </View> */}
+            </View>
         </SafeAreaView>
     )
 }

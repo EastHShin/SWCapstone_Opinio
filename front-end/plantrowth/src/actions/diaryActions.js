@@ -4,12 +4,14 @@ import axios from "axios";
 export const fetchDiaries = (plantId) =>  {
 
     return async dispatch =>{
-        return await axios.get(`https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/plants/diary/${plantId}`)
+        return await axios.get(`http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${plantId}/all`)
         .then(function(res){
             if(res.status==200){
+            console.log('diaries');
+            console.log(res);
             dispatch({
                 type:FETCH_DIARIES,
-                payload:res.data,
+                payload:res.data.data,
             })
         }
         else{
@@ -28,12 +30,14 @@ export const fetchDiaries = (plantId) =>  {
 export const fetchDiary = (diaryId) => {
 
     return async dispatch =>{
-        return await axios.get(`https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/plants/diary/detail/${diaryId}`)
+        return await axios.get(`http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`)
         .then(function(res){
+            console.log('diary')
+            console.log(res);
             if(res.status==200){
             dispatch({
                 type:FETCH_DIARY,
-                payload:res.data,
+                payload:res.data.data,
             })
         }
         else{
@@ -59,10 +63,14 @@ export const setResultState = state => dispatch =>{
 
 export const saveDiary = (diary,plantId) => {
     return async dispatch =>{
-        return await axios.post(`https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/plants/diary/${plantId}`,diary,{
-        headers: { "Content-Type": `application/json` }
+        console.log(JSON.stringify(diary));
+        return await axios.post(`http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${plantId}`,diary,{
+            headers: { "Content-Type": `multipart/form-data` }
         })
         .then(function(res){
+
+            console.log('save');
+            console.log(res);
             if(res.status==200){
                 dispatch({
                     type:SAVE_DIARY,
