@@ -3,10 +3,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Store from '../store';
 
-export const addPlant = profile => {
+export const addPlant = (profile, userId) => {
   console.log('axios 안');
   console.log(profile);
-  const userId = 1;
+  //const userId = 1;
   return async dispatch => {
     return await fetch(
       // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${userId}`,
@@ -28,9 +28,10 @@ export const addPlant = profile => {
         },
       },
     )
-      .then(function (response) {
-        if (response.status === 200) {
-          console.log('post response :', response);
+      .then(function (res) {
+        if (res.status === 200) {
+          console.log('addProfile 확인용: '+JSON.stringify(res));
+          //console.log('post response :', res);
           dispatch({type: ADD_PLANT, payload: 'success'});
         } else {
           dispatch({type: ADD_PLANT, payload: 'failure'});
@@ -93,13 +94,14 @@ export const getProfile = (plantId) => {
   return async dispatch => {
     return axios
       .get(
-        //`https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${userId}`,
-        `http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${plantId}`,
+        //`https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${plantId}`,
+        `ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com/api/plants/profiles/${plantId}`,
         {
           headers: {'content-Type': `application/json`},
         },
       )
       .then(function (res) {
+        //console.log('getProfile 확인용: '+JSON.stringify(res));
         console.log('get Profile res:'+JSON.stringify(res.data.data));
         if (res.status == 200) {
           console.log('get profile in reducer: ' + JSON.stringify(res.data.data));

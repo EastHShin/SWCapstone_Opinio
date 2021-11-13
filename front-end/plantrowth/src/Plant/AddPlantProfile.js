@@ -21,7 +21,7 @@ import Loader from '../Loader';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-AddPlantProfile = () => {
+AddPlantProfile = ({route}) => {
   const [loading, setLoading] = useState(false);
 
   const [plantName, setPlantName] = useState('');
@@ -129,7 +129,7 @@ AddPlantProfile = () => {
       type: selectedImage.assets[0].type,
     });
 
-    dispatch(addPlant(fd));
+    dispatch(addPlant(fd, route.params.userId));
   };
 
   const showDatePicker = value => {

@@ -56,11 +56,12 @@ export const setRegisterState = state => dispatch => {
 export const loginUser = (user) => {
 
     return async dispatch => {
-        return await axios.post("https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/login", user, {
+        return await axios.post(`https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/auth/login`, user, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
                 if (res.status == 200) {
+                    //console.log('login 확인용: '+JSON.stringify(res));
                     AsyncStorage.setItem('accessToken', res.data.accessToken);
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.user_id));
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
@@ -77,7 +78,7 @@ export const loginUser = (user) => {
                 }
             })
             .catch(function (err) {
-                console.log(err);
+                console.log('login err: '+err);
             })
     }
 };

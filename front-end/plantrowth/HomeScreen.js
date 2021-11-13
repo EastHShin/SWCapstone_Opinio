@@ -92,10 +92,11 @@ HomeScreen = () => {
     }
 
     useEffect(() => {
-        if (userId !== null) {
+        if (userId !== null && userId !== undefined) {
+            console.log('홈스크린 userId: '+userId);
             dispatch(getHomeInfo(userId));
-            console.log('홈인포 in use Effect: ');
-            console.log('홈인포 길이 in use Effect: ');
+            //console.log('홈인포 in use Effect: ');
+            //console.log('홈인포 길이 in use Effect: ');
             setLoading(false);
         } else {
             console.log('userId가 없어요');

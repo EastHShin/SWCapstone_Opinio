@@ -13,7 +13,6 @@ import DiaryDetailScreen from './src/Diary/DiaryDetail';
 import DiaryEditScreen from './src/Diary/DiaryEditScreen';
 import {Provider} from 'react-redux';
 import Store from './src/store';
-import MainScreen from './MainScreen';
 import AddProfileScreen from './src/Plant/AddPlantProfile';
 import ManagePlantScreen from './src/Plant/ManagePlant';
 import CommunityScreen from './src/Community';
@@ -86,14 +85,6 @@ function App() {
           <Stack.Screen
             name="DiaryEditScreen"
             component={DiaryEditScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="MainScreen"
-            component={MainScreen}
             options={{
               headerShown: false,
             }}
