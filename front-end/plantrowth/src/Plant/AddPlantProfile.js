@@ -52,12 +52,13 @@ AddPlantProfile = ({route}) => {
   }, [plantImage]);
 
   useEffect(() => {
-    console.log('addPlantState: '+addPlantState+' isFocused: '+isFocused);
+    console.log('addPlantState: ' + addPlantState + ' isFocused: ' + isFocused);
     if (addPlantState == 'success' && isFocused) {
       console.log('useEffect에서 success');
       setLoading(false);
       setAddSuccess(true);
       dispatch(setAddPlantState(''));
+      navigation.navigate('HomeScreen');
     } else if (addPlantState == 'failure' && isFocused) {
       console.log('useEffec에서 failure');
       setLoading(false);
@@ -208,27 +209,28 @@ AddPlantProfile = ({route}) => {
     });
   };
 
-  if (isAddSuccess) {
-    return (
-      <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: 'red',
-          justifyContent: 'center',
-        }}>
-        <Text>프로필 등록 완료 했어요</Text>
-        <Button
-          title="등록 완료"
-          onPress={() => {
-            navigation.navigate('HomeScreen');
-          }}
-        />
-      </SafeAreaView>
-    );
-  }
+  // if (isAddSuccess) {
+  //   return (
+  //     <SafeAreaView
+  //       style={{
+  //         flex: 1,
+  //         backgroundColor: 'red',
+  //         justifyContent: 'center',
+  //       }}>
+  //       <Text>프로필 등록 완료 했어요</Text>
+  //       <Button
+  //         title="등록 완료"
+  //         onPress={() => {
+ 
+  //         }}
+  //       />
+  //     </SafeAreaView>
+  //   );
+  // }
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Loader loading={loading} />
       <View style={{alignItems: 'flex-start'}}>
         <Button
           title="Back"

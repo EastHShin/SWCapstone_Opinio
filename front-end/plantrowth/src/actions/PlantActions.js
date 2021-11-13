@@ -16,6 +16,7 @@ export const addPlant = (profile, userId) => {
   return async dispatch => {
     return await axios
       .post(
+        // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${userId}`,
         `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/1`,
         profile,
         {
@@ -36,40 +37,6 @@ export const addPlant = (profile, userId) => {
         console.warn('에러요~~~~~~~~~~~~');
         console.log(error);
       });
-
-    // return await fetch(
-    //   // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${userId}`,
-    //   `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/1`,
-    //   {
-    //     method: 'POST',
-    //     //mode: 'no-cors',
-
-    //     //data: "plant_species=ddd&plant_name=ddd&plant_birth=2021-11-09&water_supply=5&alarm_recycle=5&recent_watering=2021-11-10",
-    //     // body: profile,
-    //     // body: "plant_species=ddd&plant_name=ddd&plant_birth=2021-11-09&water_supply=5&alarm_recycle=5&recent_watering=2021-11-10",
-    //     body: profile,
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //       //'Content-Type': 'multipart/form-data;boundary=--------------------------666341725624267226949082'
-    //       //"type": "formData"
-    //       // 'Content-Type': 'application/x-www-form-urlencoded',
-    //       // 'Content-Type': 'application/json',
-    //     },
-    //   },
-    // )
-    //   .then(function (res) {
-    //     if (res.status === 200) {
-    //       console.log('addProfile 확인용: '+JSON.stringify(res));
-    //       //console.log('post response :', res);
-    //       dispatch({type: ADD_PLANT, payload: 'success'});
-    //     } else {
-    //       dispatch({type: ADD_PLANT, payload: 'failure'});
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     console.warn('에러요~~~~~~~~~~~~');
-    //     console.log(error);
-    //   });
   };
 };
 
@@ -82,16 +49,15 @@ export const setAddPlantState = state => dispatch => {
 
 export const deletePlant = plantId => {
   return async dispatch => {
-    return await fetch(
-      // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${plantId}`,
-      `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${plantId}`,
-      {
-        method: 'DELETE',
-      },
-    )
+    console.log('delete action Id: '+ plantId)
+    return await axios
+      .delete(
+        // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${plantId}`,
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${plantId}`,
+      )
       .then(function (response) {
+        console.log('delete response :', response);
         if (response.status === 200) {
-          console.log('delete response :', response);
           dispatch({type: DELETE_PLANT, payload: 'success'});
         } else {
           dispatch({type: DELETE_PLANT, payload: 'failure'});
@@ -103,6 +69,29 @@ export const deletePlant = plantId => {
       });
   };
 };
+// export const deletePlant = plantId => {
+//   return async dispatch => {
+//     return await (
+//       // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${plantId}`,
+//       `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${plantId}`,
+//       {
+//         method: 'DELETE',
+//       },
+//     )
+//       .then(function (response) {
+//         if (response.status === 200) {
+//           console.log('delete response :', response);
+//           dispatch({type: DELETE_PLANT, payload: 'success'});
+//         } else {
+//           dispatch({type: DELETE_PLANT, payload: 'failure'});
+//         }
+//       })
+//       .catch(function (error) {
+//         console.warn('delete 에러요~~~~~~~~~~~~');
+//         console.log(error);
+//       });
+//   };
+// };
 
 export const setDeletePlantState = state => dispatch => {
   dispatch({

@@ -7,11 +7,13 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
+  SafeAreaView,
 } from 'react-native';
+import Loader from '../Loader';
 import {useSelector, useDispatch} from 'react-redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
-import {getProfile} from '../actions/PlantActions';
+import {getProfile, deletePlant, setDeletePlantState } from '../actions/PlantActions';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -19,7 +21,7 @@ const screenWidth = Dimensions.get('window').width;
 const ManagePlant = ({route}) => {
   console.log('manage Plant에서 plant_id: ' + JSON.stringify(route.params));
   const plantId = route.params.plantId;
-  const [isLoading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isDeleteSuccess, setDeleteSuccess] = useState(false);
   const [isGetProfileSuccess, setGetProfileSuccess] = useState(false);
@@ -34,20 +36,6 @@ const ManagePlant = ({route}) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
-  // useEffect(() => {
-  //   console.log('getProfileState: ' + getProfileState + ' isFocused: ' + isFocused);
-  //   if (getProfileState == 'success' && isFocused) {
-  //     console.log('useEffect에서 get profile success');
-  //     setLoading(false);
-  //     setGetProfileSuccess(true);
-  //     dispatch(setGetProfileState(''));
-  //   } else if (getProfileState == 'failure' && isFocused) {
-  //     console.log('useEffect에서 get profile failure');
-  //     setLoading(false);
-  //     dispatch(setGetProfileState(''));
-  //   }
-  // }, [getProfileState]);
 
   useEffect(() => {
     dispatch(getProfile(plantId)); //plantId 추가
@@ -65,18 +53,13 @@ const ManagePlant = ({route}) => {
       setLoading(false);
       setDeleteSuccess(true);
       dispatch(setDeletePlantState(''));
+      navigation.navigate('HomeScreen');
     } else if (deletePlantState == 'failure' && isFocused) {
       console.log('useEffec에서 delete failure');
       setLoading(false);
       dispatch(setDeletePlantState(''));
     }
   }, [deletePlantState]);
-
-  const onPressDeleteHandler = () => {
-    setLoading(true);
-
-    dispatch(deletePlant(plantId));
-  };
 
   const photoUpload = async choice => {
     if (choice === 'take') {
@@ -88,7 +71,12 @@ const ManagePlant = ({route}) => {
   };
 
   const updatePlant = () => {};
-  const deletePlant = () => {};
+
+  const deletePlantHandler = () => {
+    setLoading(true);
+    console.log('deletePlantHandler 호출');
+    dispatch(deletePlant(plantId));
+  };
 
   const takePicture = () => {
     return new Promise((resolve, reject) => {
@@ -105,8 +93,6 @@ const ManagePlant = ({route}) => {
     return new Promise((resolve, reject) => {
       launchImageLibrary({mediaType: 'photo'}, response => {
         if (!response.didCancel) {
-          // console.warn(response);
-          // console.warn(response.assets[0].base64);
           setSelectedImage(response);
           resolve(response);
         }
@@ -135,26 +121,36 @@ const ManagePlant = ({route}) => {
   //       식물 관리화면 불러오는 중
   //     </Text>
   //   </View>);
+
   return (
-    <View
-      style={{flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
+      <Loader loading={loading} />
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text>Manage Plant Screen</Text>
         <Text>plant ID: {plantId}</Text>
         <Text>식물 이름: {profile.plantName}</Text>
-        <Image style={styles.plantImage} source={{uri: profile.fileName}}/>
+        <Image style={styles.plantImage} source={{uri: profile.fileName}} />
         <View style={{flexDirection: 'row'}}>
           <Button title="식물 정보 수정" onPress={() => updatePlant} />
-          <Button title="식물 정보 삭제" onPress={() => deletePlant} />
+          <Button title="식물 정보 삭제" onPress={() => {deletePlantHandler()}} />
           {/* <Button title="사진 촬영" onPress={() => photoUpload('take')} />
           <Button title="이미지 선택" onPress={() => photoUpload('pick')} /> */}
         </View>
       </View>
       <View style={styles.tabs}>
-        <TouchableOpacity style={styles.tabButton} onPress={()=>alert('물 줬음')}>
+        <TouchableOpacity
+          style={styles.tabButton}
+          onPress={() => alert('물 줬음')}>
           <Text style={styles.tabLabel}>물 주기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabButton} onPress={()=>alert('질병진단 했음')}>
+        <TouchableOpacity
+          style={styles.tabButton}
+          onPress={() => alert('질병진단 했음')}>
           <Text style={styles.tabLabel}>질병 진단</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -165,21 +161,21 @@ const ManagePlant = ({route}) => {
           <Text style={styles.tabLabel}>식물 일기</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   plantImage: {
-    width: screenWidth*0.5,
-    height: screenWidth*0.5,
+    width: screenWidth * 0.5,
+    height: screenWidth * 0.5,
   },
   tabLabel: {
     textAlign: 'center',
     justifyContent: 'center',
   },
   tabButton: {
-    flex:1,
+    flex: 1,
     width: screenWidth * 0.33,
     height: 60,
     backgroundColor: '#A0A0A0',
