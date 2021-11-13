@@ -67,30 +67,6 @@ HomeScreen = () => {
         console.log(err);
     })
 
-    const onPressHandler = () => {
-        AsyncStorage.clear();
-        dispatch(logoutUser());
-    }
-
-    const CustomButton = (props) => {
-        return (
-            <Pressable
-                onPress={props.onPressFunction}
-                hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
-                android_ripple={{ color: '#00000050' }}
-                style={({ pressed }) => [
-                    { backgroundColor: pressed ? '#dddddd' : props.color },
-                    styles.button,
-                    { ...props.style }
-                ]}
-            >
-                <Text style={styles.text}>
-                    {props.title}
-                </Text>
-            </Pressable>
-        )
-    }
-
     useEffect(() => {
         if (userId !== null && userId !== undefined) {
             console.log('홈스크린 userId: '+userId);
@@ -118,10 +94,9 @@ HomeScreen = () => {
                                 });
                             }}>
                             <Image
-                                source={{ uri: item.file_name }} //file_name으로 수정 예정
+                                source={{ uri: item.file_name }}
                                 style={styles.profileImage}
                             />
-                            <Text>{item.plant_id}</Text>
                             <Text>{item.plant_name}</Text>
                             <Text>{item.plant_exp}</Text>
                         </TouchableOpacity>
@@ -142,6 +117,7 @@ HomeScreen = () => {
                     }}
                     style={{
                         backgroundColor: '#f0f0f0',
+                        borderRadius: 10,
                         padding: 5,
                     }}>
                     {renderPlantList(infoList.plants)}
@@ -173,10 +149,6 @@ HomeScreen = () => {
                 <View style={styles.memberInfoSectionWrapper}>
                     <Text>환영합니다! {infoList.user_name}님</Text>
                     <Text>보유 포인트: {infoList.point}</Text>
-                    <CustomButton
-                        title='Logout'
-                        color='#1eb900'
-                        onPressFunction={onPressHandler} />
                 </View>
                 <View style={styles.plantListSectionWrapper}>
 
@@ -199,6 +171,7 @@ const styles = StyleSheet.create({
         //height: screenHeight * 0.2,
         borderRadius: 15,
         margin: 5,
+        padding: 5,
     },
     plantListSectionWrapper: {
         backgroundColor: '#fff',
@@ -218,7 +191,6 @@ const styles = StyleSheet.create({
     },
     plantListWrapper: {
         flex: 1,
-        backgroundColor: 'red',
         padding: 2,
     },
     profileContainer: {

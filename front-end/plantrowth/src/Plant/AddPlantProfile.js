@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Keyboard,
 } from 'react-native';
 import {addPlant, setAddPlantState} from '../actions/PlantActions';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,6 +18,9 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import {useIsFocused, useNavigation} from '@react-navigation/core';
 import Loader from '../Loader';
+import Modal from 'react-native-modal';
+import ScrollPicker from 'react-native-wheel-scrollview-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -29,6 +33,7 @@ AddPlantProfile = ({route}) => {
   const [plantBirth, setPlantBirth] = useState(new Date());
   const [plantTextBirth, setPlantTextBirth] = useState('');
   const [alarmCycle, setAlarmCycle] = useState();
+  const [textAlarmCycle, setTextAlarmCycle] = useState('');
   const [lastWatering, setLastWatering] = useState(new Date());
   const [textLastWatering, setTextLastWatering] = useState('');
   const [waterSupply, setWaterSupply] = useState();
@@ -36,6 +41,7 @@ AddPlantProfile = ({route}) => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const [isDayPickerVisible, setDayPickerVisibility] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isWateringDatePickerVisible, setWateringDatePickerVisibility] =
     useState(false);
@@ -46,7 +52,10 @@ AddPlantProfile = ({route}) => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
+  const dayArray = [];
+  for (let i = 0; i < 30; i++) {
+    dayArray[i] = i + 1;
+  }
   useEffect(() => {
     //console.warn('이미지 등록');
   }, [plantImage]);
@@ -209,139 +218,202 @@ AddPlantProfile = ({route}) => {
     });
   };
 
-  // if (isAddSuccess) {
-  //   return (
-  //     <SafeAreaView
-  //       style={{
-  //         flex: 1,
-  //         backgroundColor: 'red',
-  //         justifyContent: 'center',
-  //       }}>
-  //       <Text>프로필 등록 완료 했어요</Text>
-  //       <Button
-  //         title="등록 완료"
-  //         onPress={() => {
- 
-  //         }}
-  //       />
-  //     </SafeAreaView>
-  //   );
-  // }
-
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 5,
+        backgroundColor: "#BEE9B4" 
+      }}>
+        <KeyboardAwareScrollView>
+
       <Loader loading={loading} />
-      <View style={{alignItems: 'flex-start'}}>
-        <Button
-          title="Back"
-          onPress={() => {
-            navigation.push('HomeScreen');
-          }}
-        />
-      </View>
-      <View style={{flexDirection: 'row'}}>
-        <Text>식물 등록 페이지</Text>
-      </View>
-      <View style={styles.sectionWrapper}>
-        <View style={styles.imageWrapper}>
-          {plantImage ? (
-            <Image
-              style={{width: 100, height: 100}}
-              source={{uri: plantImage}}
-            />
-          ) : null}
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <Button title="사진 촬영" onPress={() => photoUpload('take')} />
-          <Button title="이미지 선택" onPress={() => photoUpload('pick')} />
-        </View>
-        <View style={styles.section}>
-          <Icon name="pencil" size={30} color="#BEE9B4" />
-          <TextInput
-            style={styles.input}
-            onChangeText={PlantName => setPlantName(PlantName)}
-            underlineColorAndroid="#f000"
-            placeholder="식물 이름"
-            placeholderTextColor="#808080"
+        <View style={{alignItems: 'flex-start'}}>
+          <Button
+            title="Back"
+            onPress={() => {
+              navigation.navigate('HomeScreen');
+            }}
           />
         </View>
-        <View style={styles.section}>
-          <Icon name="md-rose" size={30} color="#BEE9B4" />
-          <TextInput
-            style={styles.input}
-            onChangeText={PlantSpecies => setPlantSpecies(PlantSpecies)}
-            underlineColorAndroid="#f000"
-            placeholder="식물 종"
-            placeholderTextColor="#808080"
-          />
-        </View>
-        <View style={styles.section}>
-          <Icon name="md-calendar" size={30} color="#BEE9B4" />
-          <TouchableOpacity
-            style={{backgroundColor: '#fff', marginLeft: 5}}
-            onPress={() => showDatePicker('plantBirth')}>
+        <View style={styles.sectionWrapper}>
+          <Text>식물 등록 페이지</Text>
+          <View style={styles.imageWrapper}>
+            {plantImage ? (
+              <Image
+                style={{width: 100, height: 100}}
+                source={{uri: plantImage}}
+              />
+            ) : null}
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <Button title="사진 촬영" onPress={() => photoUpload('take')} />
+            <Button title="이미지 선택" onPress={() => photoUpload('pick')} />
+          </View>
+          <View style={styles.section}>
+            <Icon name="pencil" size={30} color="#BEE9B4" />
             <TextInput
-              pointerEvents="none"
               style={styles.input}
-              placeholder="키우기 시작한 날"
+              onChangeText={PlantName => setPlantName(PlantName)}
+              underlineColorAndroid="#f000"
+              placeholder="식물 이름"
               placeholderTextColor="#808080"
-              underlineColorAndroid="transparent"
-              editable={false}
-              value={plantTextBirth}
+              onSubmitEditing={
+                Keyboard.dismiss
+              }
             />
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handlePlantBirthConfirm}
-            onCancel={() => hideDatePicker('plantBirth')}
-          />
-        </View>
-        <View style={styles.section}>
-          <Icon name="alarm" size={30} color="#BEE9B4" />
-          <TextInput
-            style={styles.input}
-            onChangeText={AlarmCycle => setAlarmCycle(AlarmCycle)}
-            underlineColorAndroid="#f000"
-            placeholder="Water Cycle"
-            placeholderTextColor="#808080"
-          />
-        </View>
-        <View style={styles.section}>
-          <Icon name="alarm" size={30} color="#BEE9B4" />
-          <TextInput
-            style={styles.input}
-            onChangeText={WaterSupply => setWaterSupply(WaterSupply)}
-            underlineColorAndroid="#f000"
-            placeholder="Water Supply"
-            placeholderTextColor="#808080"
-          />
-        </View>
-        <View style={styles.section}>
-          <Icon name="md-calendar" size={30} color="#BEE9B4" />
-          <TouchableOpacity
-            style={{backgroundColor: '#fff', marginLeft: 5}}
-            onPress={() => showDatePicker('watering')}>
+          </View>
+          <View style={styles.section}>
+            <Icon name="md-rose" size={30} color="#BEE9B4" />
             <TextInput
-              pointerEvents="none"
               style={styles.input}
-              placeholder="마지막 물 준 날"
+              onChangeText={PlantSpecies => setPlantSpecies(PlantSpecies)}
+              underlineColorAndroid="#f000"
+              placeholder="식물 종"
               placeholderTextColor="#808080"
-              underlineColorAndroid="transparent"
-              editable={false}
-              value={textLastWatering}
+              onSubmitEditing={
+                Keyboard.dismiss
+              }
             />
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isWateringDatePickerVisible}
-            mode="date"
-            onConfirm={handleLastWateringConfirm}
-            onCancel={() => hideDatePicker('watering')}
-          />
+          </View>
+          <View style={styles.section}>
+            <Icon name="md-calendar" size={30} color="#BEE9B4" />
+            <TouchableOpacity
+              style={{backgroundColor: '#fff'}}
+              onPress={() => showDatePicker('plantBirth')}>
+              <TextInput
+                pointerEvents="none"
+                style={styles.input}
+                placeholder="키우기 시작한 날"
+                placeholderTextColor="#808080"
+                underlineColorAndroid="transparent"
+                editable={false}
+                value={plantTextBirth}
+                onSubmitEditing={
+                  Keyboard.dismiss
+                }
+              />
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handlePlantBirthConfirm}
+              onCancel={() => hideDatePicker('plantBirth')}
+            />
+          </View>
+          <View style={styles.section}>
+            <Icon name="alarm" size={30} color="#BEE9B4" />
+            <TouchableOpacity
+              style={{backgroundColor: '#fff'}}
+              onPress={() => setDayPickerVisibility(true)}>
+              <TextInput
+                style={styles.input}
+                underlineColorAndroid="#f000"
+                placeholder="Water Cycle"
+                placeholderTextColor="#808080"
+                editable={false}
+                value={textAlarmCycle}
+                onSubmitEditing={
+                  Keyboard.dismiss
+                }
+              />
+            </TouchableOpacity>
+          </View>
+          <Modal
+            isVisible={isDayPickerVisible}
+            onBackButtonPress={() => setDayPickerVisibility(false)}
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                backgroundColor: 'white',
+                width: screenWidth * 0.6,
+                height: screenHeight * 0.5,
+                padding: 10,
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: 'RED',
+                }}>
+                <Text> </Text>
+                <View style={{width: 150, height: 250, backgroundColor: 'RED'}}>
+                  <ScrollPicker
+                    dataSource={dayArray}
+                    selectedIndex={6}
+                    onValueChange={selectedIndex => {
+                      setAlarmCycle(selectedIndex);
+                      setTextAlarmCycle(`물을 ${selectedIndex}일 마다 줘요`);
+                    }}
+                    wrapperHeight={250}
+                    wrapperWidth={50}
+                    itemHeight={50}
+                    highlightColor="#BEE9B4"
+                  />
+                </View>
+                <Text style={{fontWeight: 'bold'}}> Days</Text>
+              </View>
+
+              <Button
+                title="close"
+                onPress={() => {
+                  setDayPickerVisibility(false);
+                }}
+              />
+            </View>
+          </Modal>
+
+          <View style={styles.section}>
+            <Icon name="alarm" size={30} color="#BEE9B4" />
+
+            <TextInput
+              style={styles.input}
+              onChangeText={WaterSupply => setWaterSupply(WaterSupply)}
+              underlineColorAndroid="#f000"
+              placeholder="Water Supply"
+              placeholderTextColor="#808080"
+              onSubmitEditing={
+                Keyboard.dismiss
+              }
+            />
+          </View>
+          <View style={styles.section}>
+            <Icon name="md-calendar" size={30} color="#BEE9B4" />
+            <TouchableOpacity
+              style={{backgroundColor: '#fff'}}
+              onPress={() => showDatePicker('watering')}>
+              <TextInput
+                pointerEvents="none"
+                style={styles.input}
+                placeholder="마지막 물 준 날"
+                placeholderTextColor="#808080"
+                underlineColorAndroid="transparent"
+                editable={false}
+                value={textLastWatering}
+                onSubmitEditing={
+                  Keyboard.dismiss
+                }
+              />
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isWateringDatePickerVisible}
+              mode="date"
+              onConfirm={handleLastWateringConfirm}
+              onCancel={() => hideDatePicker('watering')}
+            />
+          </View>
         </View>
-      </View>
-      <Button title="프로필 등록" onPress={onPressHandler} />
-    </View>
+        <Button title="프로필 등록" onPress={onPressHandler} />
+        </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -357,7 +429,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: screenHeight * 0.6,
+    height: screenHeight * 0.78,
     width: screenWidth * 0.9,
     padding: 10,
     margin: 10,
@@ -371,10 +443,11 @@ const styles = StyleSheet.create({
   },
   input: {
     color: '#000000',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#BEE9B4',
     width: screenWidth * 0.6,
     marginLeft: 5,
+    borderRadius: 10,
   },
 });
 
