@@ -10,7 +10,7 @@ export const addPlant = (profile, userId) => {
   return async dispatch => {
     return await fetch(
       // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${userId}`,
-      `http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${userId}`,
+      `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/1`,
       {
         method: 'POST',
         //mode: 'no-cors',
@@ -55,7 +55,7 @@ export const deletePlant = plantId => {
   return async dispatch => {
     return await fetch(
       // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${plantId}`,
-      `http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${plantId}`,
+      `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${plantId}`,
       {
         method: 'DELETE',
       },
@@ -94,8 +94,8 @@ export const getProfile = (plantId) => {
   return async dispatch => {
     return axios
       .get(
-        //`https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${plantId}`,
-        `ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com/api/plants/profiles/${plantId}`,
+        `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${plantId}`,
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${plantId}`,
         {
           headers: {'content-Type': `application/json`},
         },

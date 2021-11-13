@@ -8,7 +8,7 @@ export const getHomeInfo = (userId) => {
       return axios
         .get(
           //`https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/main/1`,
-          `ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com/api/main/${userId}`,
+          `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/main/1`,
           {
             headers: {'content-Type': `application/json`},
           },
