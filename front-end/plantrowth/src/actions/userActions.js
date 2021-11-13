@@ -23,7 +23,7 @@ export const registerUser = (user) => {
     // 'http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/join'
 
     return async dispatch => {
-        return await axios.post('http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/auth/join', user, {
+        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/join', user, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
@@ -56,7 +56,7 @@ export const setRegisterState = state => dispatch => {
 export const loginUser = (user) => {
 
     return async dispatch => {
-        return await axios.post("http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login", user, {
+        return await axios.post("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login", user, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
@@ -92,7 +92,7 @@ export const loginUser = (user) => {
 export const kakaoLogin = (data) => {
 
     return async dispatch => {
-        return await axios.post('http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/api/auth/kakao', data,
+        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/kakao', data,
             {
                 headers: { "Content-Type": `application/json` }
             })

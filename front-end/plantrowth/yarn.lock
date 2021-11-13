@@ -1228,7 +1228,7 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz"
   "version" "1.1.0"
 
-"@react-native-firebase/app@^13.0.1":
+"@react-native-firebase/app@^13.0.1", "@react-native-firebase/app@13.0.1":
   "integrity" "sha512-ZURaagmBy97oI5it9IiZkX+0Fpfbv6nc5CKs9ISShxEmDqgTbGXcD8o6k0uDxtG9nbi0ft2dsWgKqXm6YI1o9w=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-13.0.1.tgz"
   "version" "13.0.1"
@@ -1236,6 +1236,11 @@
     "@expo/config-plugins" "^4.0.3"
     "opencollective-postinstall" "^2.0.1"
     "superstruct" "^0.6.2"
+
+"@react-native-firebase/messaging@^13.0.1":
+  "integrity" "sha512-EYEExRXtGrDgYciWPDvCKXGVQLXEAErE1KFWglzcEBjFOyp9NGf0kj1Gd54r03g7BN1JybK8AC+pWgkTTkFf5A=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-13.0.1.tgz"
+  "version" "13.0.1"
 
 "@react-native-seoul/kakao-login@^3.3.3":
   "integrity" "sha512-rDmeFkAg161kLOMcTO/z463pexZulUb6HJokDXKU+bQ2EiDnIk3KC0dqDgXaF2Yxn/1cfMUAu5ndl5YfPbla4w=="
