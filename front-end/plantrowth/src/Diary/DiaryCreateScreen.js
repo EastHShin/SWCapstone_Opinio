@@ -57,7 +57,6 @@ const DiaryCreateScreen = ({ navigation }) => {
     
     const addGalleryImage = () => {
         launchImageLibrary({mediaType:'photo' }, response =>{
-           
             setImageType(response.assets[0].type);
             setFileName(response.assets[0].fileName);
             setImageUri(response.assets[0].uri);

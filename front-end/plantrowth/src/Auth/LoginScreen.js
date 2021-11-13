@@ -1,3 +1,4 @@
+
 import React, { useState, createRef, useEffect, useCallback} from 'react';
 
 import {
@@ -35,11 +36,13 @@ const LoginScreen = ({ navigation }) => {
   const [refreshToken, setRefreshToken] = useState('');
   const [fcmToken, setFcmToken] = useState('');
 
+
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
  
+
   const maximumDate = new Date();
 
   const passwordInputRef = createRef();
@@ -106,8 +109,6 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     getFcmToken();
   }, [])
-
-
   const KakaoLoginActive = async () => {
     try {
       let result = await KakaoLogins.login();
@@ -173,8 +174,6 @@ const LoginScreen = ({ navigation }) => {
 
     setLoading(true);
 
-  
-
     const user = JSON.stringify({
       user_name: userName,
       user_birth: userBirth,
@@ -184,7 +183,6 @@ const LoginScreen = ({ navigation }) => {
     });
 
     console.log(user);
-
     dispatch(registerUser(user));
 
   }

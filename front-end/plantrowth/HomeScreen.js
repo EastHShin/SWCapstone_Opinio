@@ -1,149 +1,245 @@
+import React, { useState, useEffect } from 'react';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Button,
+    Dimensions,
+    TouchableOpacity,
+    ScrollView,
+    Image,
+    Pressable,
+    SafeAreaView,
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { useIsFocused, useNavigation } from '@react-navigation/core';
+import Footer from './src/component/Footer';
+import Loader from './src/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React,{useState, useEffect} from 'react';
-import { useDispatch,useSelector } from 'react-redux';
+import { getHomeInfo } from './src/actions/HomeActions';
 import { logoutUser } from './src/actions/userActions';
 
-import * as KakaoLogins from "@react-native-seoul/kakao-login";
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
-import {
-    View,
-    StyleSheet,
-    Text,
-    Alert,
-    TextInput,
-    Pressable,
-    Button
-} from 'react-native';
-
-
-//테스트용 스크린 !
-//dddd
-//ddd
-function Home({navigation}) {
-
-    const [name, setName] = useState('');
+HomeScreen = () => {
+    const navigation = useNavigation();
+    const isFocused = useIsFocused();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
+
+    const [userId, setUserId] = useState('');
+
+    const infoList = useSelector(state => state.HomeReducer.infoList);
+    const [name, setName] = useState('');
     const isLogin = useSelector(state => state.userReducer.isLogin);
 
-    useEffect(()=>{
+    useEffect(() => {
         getData();
-    },[]);
+    }, []);
 
-    useEffect(()=>{
-        if(isLogin == 'end'){
+    useEffect(() => {
+        if (isLogin == 'end') {
             navigation.replace('LoginScreen');
         }
-        
-    },[isLogin])
 
-    const getData = () =>{
+    }, [isLogin])
+
+    const getData = () => {
         try {
-            AsyncStorage.getItem('userId').then(value=>{
-                if(value !=null) {  
-    
+            AsyncStorage.getItem('userId').then(value => {
+                if (value != null) {
                     setName(JSON.parse(value));
-                  
                 };
-            })  
+            })
         } catch (error) {
             console.log(error);
-            
+
         }
     }
 
-
-    const unlinkKaka = async () =>{
-        try {
-            let result = await KakaoLogins.unlink();
-            
-            if(result){
-                console.log('unlink');
-            }
-        } catch (error) {
-            console.log(error);
+    AsyncStorage.getItem('userId').then(value => {
+        if (value !== null) {
+            setUserId(JSON.parse(value));
+            console.log('userId in async: ' + userId);
         }
-    }
+    }).catch(err => {
+        console.log(err);
+    })
 
-    const onPressHandler = () =>{
-        // unlinkKaka();
+    const onPressHandler = () => {
+        AsyncStorage.clear();
         dispatch(logoutUser());
     }
 
-    return(
-        <View style={styles.body}>
-            <Text style = {styles.text}>
-               Welcome {name}
-            </Text>
+    const CustomButton = (props) => {
+        return (
+            <Pressable
+                onPress={props.onPressFunction}
+                hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
+                android_ripple={{ color: '#00000050' }}
+                style={({ pressed }) => [
+                    { backgroundColor: pressed ? '#dddddd' : props.color },
+                    styles.button,
+                    { ...props.style }
+                ]}
+            >
+                <Text style={styles.text}>
+                    {props.title}
+                </Text>
+            </Pressable>
+        )
+    }
 
-            <CustomButton
-             title = 'Logout'
-             color = '#1eb900'
-            onPressFunction={onPressHandler} />
+    useEffect(() => {
+        if (userId !== null && userId !== undefined) {
+            console.log('홈스크린 userId: '+userId);
+            dispatch(getHomeInfo(userId));
+            //console.log('홈인포 in use Effect: ');
+            //console.log('홈인포 길이 in use Effect: ');
+            setLoading(false);
+        } else {
+            console.log('userId가 없어요');
+        }
+    }, [isFocused])
 
-            <Button title = "change" 
-            onPress = {()=> navigation.push("DiaryScreen")}
-            />
-          
-        </View>
-    )
-}
+    const renderPlantList = (PlantList) => {
+        if (PlantList !== null && PlantList !== undefined) {
+            return PlantList
+                ? PlantList.map((item, index) => {
+                    console.log('hi:' + item);
+                    return (
+                        <TouchableOpacity
+                            style={styles.profileContainer}
+                            key={index}
+                            onPress={() => {
+                                navigation.navigate('ManagePlantScreen', {
+                                    plantId: item.plant_id
+                                });
+                            }}>
+                            <Image
+                                source={{ uri: item.file_name }} //file_name으로 수정 예정
+                                style={styles.profileImage}
+                            />
+                            <Text>{item.plant_id}</Text>
+                            <Text>{item.plant_name}</Text>
+                            <Text>{item.plant_exp}</Text>
+                        </TouchableOpacity>
+                    );
+                })
+                : null;
+        }
+    };
+    const PlantList = () => {
+        console.log('plants: '+infoList.plants);
+        return (
+            <View style={styles.plantListWrapper}>
+                <ScrollView
+                    contentContainerStyle={{
+                        justifyContent: 'flex-start',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                    }}
+                    style={{
+                        backgroundColor: '#f0f0f0',
+                        padding: 5,
+                    }}>
+                    {renderPlantList(infoList.plants)}
+                    <TouchableOpacity
+                        style={[styles.profileContainer, { justifyContent: 'center' }]}
+                        onPress={() => navigation.navigate('AddProfileScreen', { userId: userId })}>
+                        <Text>프로필 추가</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.profileContainer, { justifyContent: 'center' }]}
+                        onPress={() => navigation.navigate('ShopScreen')}>
+                        <Text>프로필 개수 추가</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </View>
+        )
+    }
 
-const CustomButton = (props) => {
+
     return (
-        <Pressable
-            onPress={props.onPressFunction}
-            hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
-            android_ripple={{ color: '#00000050' }}
-            style={({ pressed }) => [
-                { backgroundColor: pressed ? '#dddddd' : props.color },
-                styles.button,
-                { ...props.style }
-            ]}
-        >
-            <Text style={styles.text}>
-                {props.title}
-            </Text>
-        </Pressable>
-    )
+        <SafeAreaView>
+            <Loader loading={loading} />
+            <View
+                style={{
+                    backgroundColor: '#C9E7BE',
+                    height: '100%',
+                    justifyContent: 'space-between',
+                }}>
+                <View style={styles.memberInfoSectionWrapper}>
+                    <Text>환영합니다! {infoList.user_name}님</Text>
+                    <Text>보유 포인트: {infoList.point}</Text>
+                    <CustomButton
+                        title='Logout'
+                        color='#1eb900'
+                        onPressFunction={onPressHandler} />
+                </View>
+                <View style={styles.plantListSectionWrapper}>
 
-}
-export default Home;
+
+                    <PlantList />
+                </View>
+                <View style={styles.hotSectionWrapper}></View>
+                <Footer />
+
+            </View>
+        </SafeAreaView>
+    );
+};
 
 const styles = StyleSheet.create({
-
-    body:{
-        flex:1,
-        alignItems:'center',
-        justifyContent:'center'
-
+    memberInfoSectionWrapper: {
+        flex: 2,
+        backgroundColor: '#fff',
+        //width: screenWidth*0.4,
+        //height: screenHeight * 0.2,
+        borderRadius: 15,
+        margin: 5,
     },
-    logo:{
-        width:100,
-        height:100,
-        margin:20
+    plantListSectionWrapper: {
+        backgroundColor: '#fff',
+        //width: screenWidth*0.4,
+        flex: 6,
+        borderRadius: 15,
+        margin: 5,
+        padding: 10,
     },
-    text:{
-        fontSize:30,
-        color:'#ffffff'
+    hotSectionWrapper: {
+        flex: 3,
+        backgroundColor: '#fff',
+        //width: screenWidth*0.4,
+        //height: screenHeight * 0.2,
+        borderRadius: 15,
+        margin: 5,
     },
-    input:{
-        width:300,
-        borderWidth:1,
-        borderColor:'#555',
-        borderRadius:10,
-        backgroundColor:'#ffffff',
-        textAlign:'center',
-        fontSize:20,
-        marginTop:130,
-        marginBottom:10,
-
+    plantListWrapper: {
+        flex: 1,
+        backgroundColor: 'red',
+        padding: 2,
     },
-    button: {
-        width: 150,
-        height: 50,
+    profileContainer: {
+        width: screenWidth * 0.273,
+        height: screenHeight * 0.3,
+        padding: 5,
+        backgroundColor: '#C9E7BE',
+        flexDirection: 'column',
         alignItems: 'center',
-        borderRadius: 5,
-        margin: 10,
+        margin: 5,
+        shadowColor: '#cccccc',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        borderRadius: 10,
     },
+    profileImage: {
+        width: screenWidth * 0.2,
+        height: screenWidth * 0.2,
+        borderRadius: 20,
+    },
+});
 
-})
+export default HomeScreen;

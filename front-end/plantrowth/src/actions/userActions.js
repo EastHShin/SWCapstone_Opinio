@@ -111,7 +111,6 @@ export const kakaoLogin = (data) => {
                     });
                 }
                 else {
-                    
                     dispatch({
                         type: KAKAO_REGISTER,
                         payload: 'loading',

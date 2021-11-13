@@ -33,7 +33,6 @@ function RegisterScreen({ navigation }) {
   const [userPassword, setUserPassword] = useState('');
   const [userBirth, setUserBirth] = useState('');
   const [fcmToken, setFcmToken] = useState('');
-
   const [checkEmail, setCheckEmail] = useState(true);
   const [checkPassword, setCheckPassword] = useState(true);
 
@@ -47,7 +46,6 @@ function RegisterScreen({ navigation }) {
   const passwordInputRef = createRef();
 
   const maximumDate = new Date();
-
 
   useEffect(() => {
     if(registerState == 'success' && isFocused){
@@ -142,7 +140,6 @@ function RegisterScreen({ navigation }) {
   const validationPassword = (e) => {
 
     var passwordExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/
-
     if (!passwordExp.test(e.nativeEvent.text)) {
       setCheckPassword(false);
     }
@@ -203,8 +200,6 @@ function RegisterScreen({ navigation }) {
         </View>
         <KeyboardAvoidingView enabled>
           <View style={styles.sectionWrapper}>
-
-
             <View style={styles.section}>
               <EntypoIcons name='user' size={20} color="#8EB695" style={styles.icon} />
               <TextInput
