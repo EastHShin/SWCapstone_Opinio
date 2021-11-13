@@ -17,7 +17,8 @@ import {
 
 
 //테스트용 스크린 !
-
+//dddd
+//ddd
 function Home({navigation}) {
 
     const [name, setName] = useState('');
