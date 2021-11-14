@@ -26,7 +26,7 @@ const Item = ({ item, onPress, style }) => {
       </View>
       <View>
         <Text style={styles.content}>
-          {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content}
+          {/* {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content} */}
         </Text>
       </View>
       <View style={{ alignItems: "flex-end" }}>

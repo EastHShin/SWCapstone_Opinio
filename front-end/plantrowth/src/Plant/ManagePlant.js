@@ -13,7 +13,11 @@ import Loader from '../Loader';
 import {useSelector, useDispatch} from 'react-redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
-import {getProfile, deletePlant, setDeletePlantState } from '../actions/PlantActions';
+import {
+  getProfile,
+  deletePlant,
+  setDeletePlantState,
+} from '../actions/PlantActions';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -40,7 +44,6 @@ const ManagePlant = ({route}) => {
   useEffect(() => {
     dispatch(getProfile(plantId)); //plantId 추가
     console.log('Profile in use Effect: ' + JSON.stringify(profile));
-    console.log('PlantName in use Effect: ' + profile.plantName);
     setLoading(false);
   }, [isFocused]);
 
@@ -69,8 +72,6 @@ const ManagePlant = ({route}) => {
     }
     //console.warn('after picture: ' + plantImage);
   };
-
-  const updatePlant = () => {};
 
   const deletePlantHandler = () => {
     setLoading(true);
@@ -121,6 +122,17 @@ const ManagePlant = ({route}) => {
   //       식물 관리화면 불러오는 중
   //     </Text>
   //   </View>);
+  const renderProfile = profile => {
+    console.log('renderProfile에서: ' + JSON.stringify(profile));
+    return profile ? (
+      <View style={{alignItems:'center'}}>
+        <Text>{profile.plant_name}</Text>
+
+        <Image style = {{width: 300, height: 300, borderRadius: 15, borderWidth: 5, borderColor: '#C9E7BE'}}source={{uri: profile.file_name}} />
+        <Text>{profile.plant_exp}</Text>
+      </View>
+    ) : null;
+  };
 
   return (
     <SafeAreaView
@@ -132,14 +144,15 @@ const ManagePlant = ({route}) => {
       <Loader loading={loading} />
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text>Manage Plant Screen</Text>
-        <Text>plant ID: {plantId}</Text>
-        <Text>식물 이름: {profile.plantName}</Text>
-        <Image style={styles.plantImage} source={{uri: profile.fileName}} />
+        {renderProfile(profile)}
         <View style={{flexDirection: 'row'}}>
-          <Button title="식물 정보 수정" onPress={() => updatePlant} />
-          <Button title="식물 정보 삭제" onPress={() => {deletePlantHandler()}} />
-          {/* <Button title="사진 촬영" onPress={() => photoUpload('take')} />
-          <Button title="이미지 선택" onPress={() => photoUpload('pick')} /> */}
+          <Button title="식물 정보 수정" onPress={() => navigation.navigate('UpdatePlantProfileScreen', {profile: profile})} />
+          <Button
+            title="식물 정보 삭제"
+            onPress={() => {
+              deletePlantHandler();
+            }}
+          />
         </View>
       </View>
       <View style={styles.tabs}>
