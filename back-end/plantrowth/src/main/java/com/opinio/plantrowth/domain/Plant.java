@@ -47,14 +47,4 @@ public class Plant {
     @Builder.Default
     private List<PlantDiary> diaries = new ArrayList<>();
 
-//    @Builder
-//    public Plant(String plantSpecies, String plantName, LocalDate plantBirth, int plantExp, String fileName, int waterSupply, int alarmCycle) {
-//        this.plantSpecies = plantSpecies;
-//        this.plantName = plantName;
-//        this.plantBirth = plantBirth;
-//        this.plantExp = plantExp;
-//        this.fileName = fileName;
-//        this.waterSupply = waterSupply;
-//        this.alarmCycle = alarmCycle;
-//    }
 }

@@ -35,6 +35,7 @@ public class FcmMessage {
     @Getter
     public static class Data{
         private String plant_id;
+        private String user_id;
     }
 
 }

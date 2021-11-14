@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -74,7 +73,7 @@ class UserPointServiceTest {
         Integer curPoint = user.getPoint();
         //when
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        User updatedUser = userPointService.updatePoint(user.getId());
+        User updatedUser = userPointService.increasePoint(user.getId());
         //then
         Assertions.assertThat(updatedUser.getPoint()).isEqualTo(curPoint+increasingPoint);
     }

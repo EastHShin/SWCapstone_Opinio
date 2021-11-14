@@ -2,6 +2,7 @@ package com.opinio.plantrowth.api;
 
 import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.api.dto.plant.CreatePlantResponseDto;
+import com.opinio.plantrowth.api.dto.plant.PlantManageDto;
 import com.opinio.plantrowth.api.dto.plant.PlantUpdateDto;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
@@ -76,6 +77,13 @@ public class PlantApiController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<PlantResult>(new PlantResult(collect), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/api/plants/profiles/manage/{plant-id}")
+    public ResponseEntity<PlantManageDto> getOnePlant(@PathVariable("plant-id") Long id) {
+        Plant plant = plantService.findOnePlant(id);
+
+        return new ResponseEntity<PlantManageDto>(new PlantManageDto(plant), HttpStatus.OK);
     }
 
     @PutMapping("/api/plants/profiles/{plant-id}")

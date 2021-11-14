@@ -81,6 +81,8 @@ class PlantApiControllerTest {
                 .alarmCycle(2)
                 .waterSupply(3)
                 .plantExp(0)
+                .remainCycle(2)
+                .fileName("ffff")
                 .user(user)
                 .build();
 
@@ -138,6 +140,29 @@ class PlantApiControllerTest {
                 .andExpect(jsonPath("$.data[0].plantName").value(plant.getPlantName()))
                 .andExpect(jsonPath("$.data[1].plantName").value(plant2.getPlantName()))
                 .andDo(print());
+    }
+
+    @Test
+    public void managePlant() throws Exception{
+        //given
+        plant.setId(1L);
+        //when
+        when(plantService.findOnePlant(any())).thenReturn(plant);
+        //then
+
+        mockMvc.perform(get("/api/plants/profiles/manage/{plant-id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.plant_id").value(plant.getId()))
+                .andExpect(jsonPath("$.plant_species").value(plant.getPlantSpecies()))
+                .andExpect(jsonPath("$.plant_name").value(plant.getPlantName()))
+                .andExpect(jsonPath("$.plant_birth").value(plant.getPlantBirth().toString()))
+                .andExpect(jsonPath("$.plant_exp").value(plant.getPlantExp()))
+                .andExpect(jsonPath("$.file_name").value(plant.getFileName()))
+                .andExpect(jsonPath("$.water_supply").value(plant.getWaterSupply()))
+                .andExpect(jsonPath("$.alarm_cycle").value(plant.getAlarmCycle()))
+                .andExpect(jsonPath("$.remain_cycle").value(plant.getRemainCycle()))
+                .andDo(print());
+
     }
 
     @Test
