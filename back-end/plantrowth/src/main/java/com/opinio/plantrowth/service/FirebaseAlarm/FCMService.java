@@ -42,8 +42,8 @@ public class FCMService {
 
     }
 
-    public void sendMessageTo(String targetToken, String title, String body, String plant_id) throws IOException {
-        String message = makeMessage(targetToken, title, body, plant_id);
+    public void sendMessageTo(String targetToken, String title, String body, String plant_id, String user_id) throws IOException {
+        String message = makeMessage(targetToken, title, body, plant_id, user_id);
         System.out.println(message);
 
         OkHttpClient client = new OkHttpClient();
@@ -60,7 +60,7 @@ public class FCMService {
         System.out.println(response.body().string());
     }
 
-    private String makeMessage(String targetToken, String title, String body, String plant_id) throws JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body, String plant_id, String user_id) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                     .token(targetToken)
@@ -70,6 +70,7 @@ public class FCMService {
                         .build())
                     .data(FcmMessage.Data.builder()
                         .plant_id(plant_id)
+                        .user_id(user_id)
                         .build())
                     .build())
                 .validate_only(false)
