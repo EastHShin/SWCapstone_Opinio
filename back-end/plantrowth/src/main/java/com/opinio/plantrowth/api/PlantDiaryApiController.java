@@ -30,6 +30,7 @@ public class PlantDiaryApiController {
 
     private final FileUploadService fileUploadService;
     private final DiaryService diaryService;
+    private final String filePath = "diary";
 
     @GetMapping("/api/plants/diary/{plant-id}/all")
     public ResponseEntity<DiaryResult> diaries(@PathVariable("plant-id") Long id){
@@ -42,7 +43,7 @@ public class PlantDiaryApiController {
     }
 
     @Transactional
-    @PostMapping(name = "/api/plants/diary/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/plants/diary/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createDiary(
             @PathVariable("plant-id") Long plantId,
             @ModelAttribute CreateDiaryDTO dto,
@@ -50,7 +51,7 @@ public class PlantDiaryApiController {
 
         Long result = diaryService.createDiary(dto, plantId);
         if(file.isPresent()) {
-            String uploadImageName = fileUploadService.uploadImage(file.get());
+            String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
             PlantDiary diary = diaryService.findDiary(result);
             diary.setFilename(uploadImageName);
         }
