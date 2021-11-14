@@ -51,6 +51,8 @@ public class MainPageApiController {
         private Long user_id;
         private String user_name;
         private Integer point;
+        private Integer max_plant_num;
+        private Integer plant_num;
         private List<MainPagePlantDto> plants;
         //private List<Board> boards;
 
@@ -58,6 +60,8 @@ public class MainPageApiController {
             user_id = user.getId();
             user_name = user.getName();
             point = user.getPoint();
+            plant_num = user.getPlantNum();
+            max_plant_num = user.getMaxPlantNum();
 
             plants = plantList.stream()
                     .map(plant -> new MainPagePlantDto(plant))
