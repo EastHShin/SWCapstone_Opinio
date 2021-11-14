@@ -14,8 +14,8 @@ import java.util.UUID;
 public class FileUploadService {
     private final UploadService s3Service;
 
-    public String uploadImage(MultipartFile file) {
-        String fileName = createFileName(file.getOriginalFilename());
+    public String uploadImage(MultipartFile file, String path) {
+        String fileName = path + "/" + createFileName(file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());

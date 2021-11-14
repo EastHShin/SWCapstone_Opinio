@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,11 +31,11 @@ public class PlantApiController {
     private final PlantService plantService;
     private final UserService userService;
     private final FileUploadService fileUploadService;
-
+    private final String filePath = "profiles";
 //    Postman Test
     @PostMapping("/api/upload")
     public String uploadImage(@RequestPart MultipartFile file) {
-        return fileUploadService.uploadImage(file);
+        return fileUploadService.uploadImage(file, filePath);
     }
 
 
@@ -45,6 +47,14 @@ public class PlantApiController {
             @RequestPart(name = "file_name",required = false) Optional<MultipartFile> file) {
         System.out.println(request);
         System.out.println(request.getPlant_name());
+        long until = request.getRecent_watering().until(LocalDate.now(), ChronoUnit.DAYS);
+        Integer remainCycle;
+        if(until > request.getAlarm_cycle()){
+            remainCycle = 0;
+        }
+        else{
+            remainCycle = request.getAlarm_cycle() - (int)until;
+        }
         Plant plant = Plant.builder()
                 .plantSpecies(request.getPlant_species())
                 .plantName(request.getPlant_name())
@@ -53,11 +63,12 @@ public class PlantApiController {
                 .waterSupply(request.getWater_supply())
                 .alarmCycle(request.getAlarm_cycle())
                 .recentWatering(request.getRecent_watering())
+                .remainCycle(remainCycle)
                 .build();
 
 
         if(file.isPresent()) {
-            String uploadImageName = fileUploadService.uploadImage(file.get());
+            String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
             plant.setFileName(uploadImageName);
         }
 
