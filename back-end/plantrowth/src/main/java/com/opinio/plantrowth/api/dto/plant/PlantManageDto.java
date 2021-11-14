@@ -21,6 +21,8 @@ public class PlantManageDto {
     private Integer water_supply;
     private Integer alarm_cycle;
     private Integer remain_cycle;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private LocalDate recent_watering;
 
     public PlantManageDto(Plant plant) {
         plant_id = plant.getId();
