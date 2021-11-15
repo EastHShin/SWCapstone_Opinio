@@ -33,12 +33,18 @@ public class PlantService {
     @Transactional
     public Long update(Long id, CreatePlantRequestDto requestDto) {
         Plant plant = plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
-        plant.setPlantSpecies(requestDto.getPlant_species());
-        plant.setPlantName(requestDto.getPlant_name());
-        plant.setPlantBirth(requestDto.getPlant_birth());
-        plant.setWaterSupply(requestDto.getWater_supply());
-        plant.setAlarmCycle(requestDto.getAlarm_cycle());
-//        return plantRepository.save(plant);
+        if(!(requestDto.getPlant_species() == null))
+            plant.setPlantSpecies(requestDto.getPlant_species());
+        if(!(requestDto.getPlant_name() == null))
+            plant.setPlantName(requestDto.getPlant_name());
+        if(!(requestDto.getPlant_birth() == null))
+            plant.setPlantBirth(requestDto.getPlant_birth());
+        if(!(requestDto.getWater_supply() == null))
+            plant.setWaterSupply(requestDto.getWater_supply());
+        if(!(requestDto.getAlarm_cycle() == null))
+            plant.setAlarmCycle(requestDto.getAlarm_cycle());
+        if(!(requestDto.getRecent_watering() == null))
+            plant.setRecentWatering(requestDto.getRecent_watering());
         return id;
     }
 

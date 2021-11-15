@@ -105,6 +105,7 @@ public class PlantApiController {
 //        plantService.update(id, request);
         Long updatedId = plantService.update(id, request);
         Plant plant = plantService.findOnePlant(updatedId);
+
         if(file.isPresent()) {
             String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
             plant.setFileName(uploadImageName);

@@ -15,10 +15,10 @@ public class FCMTestController {
 
     private final FCMService fcmService;
     private static final String yebinToken = "eDxZkcEsRZ6EOIJs_lvtye:APA91bHr0TriGKbCSYIqbJVl4qwmv0ndeiQoqY21YrSQ05fXzpQq4JNjdZlUWqyCJ4vIpg2MV_m9OpzVwr5EPwv7F9ni4We-clSMgVwFVz_whzKqFha6fKEovzRQCXSZQQmdlZ4mYoq1";
-
+    private static final String emulToken = "fc-k885DR5uHk2v13MC3lf:APA91bHkIU9GjxwCQFt8JlBFvUa_Hpckh8Wj8A-og-S6E0eOeXRa_vgoVeMYc5L58uGA-L2XPY-ICVSeuvzY_K-m9av65VcHFtOhMV_tO0pWsBTVRrdq7FBdD05IntGmmw-hI9rCOmMJ";
     @GetMapping("/api/fcmtest")
     public ResponseEntity fcmTest() throws IOException {
-        fcmService.sendMessageTo(yebinToken, "테스트푸쉬", "안녕하세요", "1", "1");
+        fcmService.sendMessageTo(emulToken, "테스트푸쉬", "안녕하세요", "22", "7");
 
         return new ResponseEntity(HttpStatus.OK);
     }
