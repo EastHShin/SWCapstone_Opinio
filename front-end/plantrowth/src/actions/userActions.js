@@ -3,24 +3,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
 
+let timer;
+
+const clearLogoutTimer = () => {
+    
+    if (timer) {
+   
+        clearTimeout(timer);
+    }
+};
+
+const setLogoutTimer = (expirationTime) => dispatch=> {
+       
+        timer = setTimeout(() => {
+            dispatch(logoutUser());
+        }, expirationTime);
+};
+
+
 export const registerUser = (user) => {
-
-    // return async dispatch => {
-    //     return await fetch("http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/join", {
-    //         method: "POST",
-    //         body: user,
-    //         headers:{"Content-Type": "application/json"}
-    //     }).then(res => {
-    //         if(res.status == 200){
-    //             dispatch({
-    //                 type: REGISTER_USER,
-    //                 payload:"success"
-    //             })
-    //         }
-
-    //     })
-    // }
-    // 'http://ec2-3-37-194-56.ap-northeast-2.compute.amazonaws.com:8080/join'
 
     return async dispatch => {
         return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/join', user, {
@@ -61,15 +62,14 @@ export const loginUser = (user) => {
         })
             .then(function (res) {
                 if (res.status == 200) {
-                    console.log(res.data.data);
-                    console.log(res.data);
-                    AsyncStorage.setItem('accessToken', res.data.accessToken);
-                    AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
+                    dispatch(setLogoutTimer(6000000));
+                    AsyncStorage.setItem('userId', '1'); //JSON.stringify(res.data.data)
+                    // axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.get('x-auth-token')}`;
                     dispatch({
                         type: LOGIN_USER,
                         payload: "success"
                     });
+
                 }
                 else {
                     dispatch({
@@ -97,7 +97,7 @@ export const kakaoLogin = (data) => {
                 headers: { "Content-Type": `application/json` }
             })
             .then(function (res) {
-            
+
                 if (res.status == 200) {
                 
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
@@ -128,22 +128,14 @@ export const kakaoLogin = (data) => {
 
 export const kakaoRegister = (register) => dispatch => {
 
-    // if (register == 'success') {
-    //     AsyncStorage.getItem('userEmail').then(value => {
-    //         dispatch(kakaoLogin(value));
-    //         dispatch({
-    //             type: KAKAO_REGISTER,
-    //             payload: register,
-    //         });
-    //     });
-    // }
-    // else {
         dispatch({
             type: KAKAO_REGISTER,
             payload: register,
         });
-    // }
+
 }
+
+
 
 export const logoutUser = (email) => {
 
@@ -156,6 +148,7 @@ export const logoutUser = (email) => {
                 if (res.status == 200) {
                     axios.defaults.headers.common['Authorization'] = undefined
                     AsyncStorage.getItem('kakaoLogin').then((value) => {
+                        clearLogoutTimer();
                         AsyncStorage.clear();
                         dispatch({
                             type: LOGOUT_USER,
@@ -176,6 +169,7 @@ export const logoutUser = (email) => {
     }
 
 };
+
 
 export const kakaoUnlink = () => dispatch => {
     try {

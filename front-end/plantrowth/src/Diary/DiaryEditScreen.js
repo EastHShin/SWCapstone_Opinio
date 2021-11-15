@@ -23,14 +23,15 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { editDiary, setResultState } from '../actions/diaryActions';
 import { useIsFocused } from '@react-navigation/native'
 
-const DiaryEditScreen = ({ navigation }) => {
+const DiaryEditScreen = ({ route, navigation }) => {
+
+    const {selectedId} = route.params;
 
     const diary = useSelector(state => state.diaryReducer.diary);
 
     const [title, setTitle] = useState(diary.title);
     const [content, setContent] = useState(diary.content);
-    const [image, setImage] = useState(diary.file_name);
-    const [imageUri, setImageUri] = useState("");
+    const [imageUri, setImageUri] = useState(diary.file_name);
     const [fileName, setFileName] = useState("");
     const [imageType, setImageType] = useState("");
     const [loading, setLoading] = useState(false);
@@ -41,13 +42,12 @@ const DiaryEditScreen = ({ navigation }) => {
     const isFocused = useIsFocused();
     
     const result = useSelector(state => state.diaryReducer.result);
-   // const plantId   plant id 가져오기
-
+ 
    useEffect(() => {
       if(result == "success" && isFocused){
           setLoading(false);
           dispatch(setResultState(''));
-          navigation.navigate('DiaryDetailScreen');
+          navigation.navigate('DiaryDetailScreen',{selectedId: selectedId});
       }
       else if(result == "failure" && isFocused){
           setLoading(false);
@@ -76,34 +76,25 @@ const DiaryEditScreen = ({ navigation }) => {
 
         setLoading(true);
 
-        const plantId = 123; //예시 
-
           const Data = new FormData();
 
           Data.append('title', title);
           Data.append('content', content);
-        //   Data.append('date', diary.date); 
+          Data.append('date', diary.date); 
   
-          if (fileName) {
-              console.log("새로운 사진");
-              Data.append('file_name', {
-                  name: fileName,
-                  type: imageType,
-                  uri: imageUri
-              });
-          }
-          else{
+        if (fileName) {
+            console.log("새로운 사진");
             Data.append('file_name', {
                 name: fileName,
                 type: imageType,
                 uri: imageUri
             });
-
-          }
-
-        
-
-        dispatch(editDiary(diaryData, diary.diary_id));
+        }
+        else if(!imageUri){
+            Data.append('file_status','delete');
+        }
+          
+        dispatch(editDiary(Data, diary.diary_id));
         
     }
 
@@ -162,9 +153,9 @@ const DiaryEditScreen = ({ navigation }) => {
                             />
                         </View>
 
-                        {image != '' ? (
+                        {imageUri != '' ? (
                             <View style = {{marginBottom:Dimensions.get('window').width * 0.06,}}>
-                                <Image source={{ uri: image }}
+                                <Image source={{ uri: imageUri }}
                                     style={{
                                         width: Dimensions.get('window').width * 0.8,
                                         height: Dimensions.get('window').height * 0.4,
@@ -185,7 +176,12 @@ const DiaryEditScreen = ({ navigation }) => {
                             <View style={styles.imageButton}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={() => setImage('')}>
+                                    onPress={() => {
+                                        setImageUri('');
+                                        setFileName('');
+                                        setImageType('');
+                                    }
+                                    }>
                                     <MaterialIcons name='cancel' size={43} color="#FF0000" />
                                 </TouchableOpacity>
                             </View>

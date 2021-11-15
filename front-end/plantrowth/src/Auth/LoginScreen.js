@@ -66,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (kakaoRegisterState == 'loading') {
-      console.log('ddd');
+      getFcmToken();
       setIsModalVisible(true);
       setLoading(false);
     }
@@ -106,9 +106,6 @@ const LoginScreen = ({ navigation }) => {
 
   }, []);
 
-  useEffect(() => {
-    getFcmToken();
-  }, [])
   const KakaoLoginActive = async () => {
     try {
       let result = await KakaoLogins.login();

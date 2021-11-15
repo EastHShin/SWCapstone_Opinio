@@ -18,50 +18,57 @@ import ManagePlantScreen from './src/Plant/ManagePlant';
 import CommunityScreen from './src/Community';
 import ShopScreen from './src/Shop';
 import MyPageScreen from './src/MyPage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Stack = createNativeStackNavigator();
 
 function App({navigation}) {
 
-  //로그인 시 오고, 유저 아이디
-//로그인 시에만 오게 
-//테스트 중 
   useEffect(() => {
-    messaging().onMessage(async remoteMessage => {
-      console.log(remoteMessage.data.plant_id);
-      console.log(remoteMessage.data.user_id);
-      // Alert.alert("식물에게 물을 줄 시간입니다!",[
-      //   {
-      //     text: "확인",
-      //     onPress: () =>{
-      //       navigation.navigate("RegisterScreen");
-      //     }
-      //   },
-      //   {
-      //     text:"취소"
-      //   }
-      // ])
-    });
 
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-      console.log(remoteMessage.data.plant_id); //이거다 
-      
-    });
+    AsyncStorage.getItem('user_id').then(value => {
+      if (value != null) {
+        
+        messaging().onMessage(async remoteMessage => {
+          console.log(remoteMessage.data.plant_id);
 
-    //알림 눌렀을 때 data로 온 plant 아이디 받아서 해당 식물로 이동
-    messaging().onNotificationOpenedApp(async remoteMessage=>{
-      console.log('open!');
-     
-      console.log(remoteMessage.data.plant_id);
+          Alert.alert(
+            "물주기 알림", "식물에게 물을 줄 시간입니다!",[
+                {
+                    text:"취소",
+                    onPress : () => console.log("취소")
 
-      // navigation.navigate("")
-      
+            },
+            {
+                text:"확인",
+                onPress : () => {
+                    navigation.navigate("ManagePlantScreen", {plantId:remoteMessage.data.plant_id})
+                }
+            }
+        ]
+        )
+        });
+
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
+          console.log('Message handled in the background!', remoteMessage);
+        });
+
+        messaging().onNotificationOpenedApp(async remoteMessage => {
+          console.log('open!');
+          console.log(remoteMessage.data.plant_id);
+
+          navigation.navigate("ManagePlantScreen",{plantId:remoteMessage.data.plant_id});
+
+        })
+
+      }
     })
 
+
   }, []);
-    
+
+ 
 
   return (
     <Provider store={Store}>

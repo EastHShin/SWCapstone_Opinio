@@ -22,7 +22,9 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { saveDiary, setResultState } from '../actions/diaryActions';
 import { useIsFocused } from '@react-navigation/native'
 
-const DiaryCreateScreen = ({ navigation }) => {
+const DiaryCreateScreen = ({ route,navigation }) => {
+
+    const {plantId} = route.params;
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -37,14 +39,16 @@ const DiaryCreateScreen = ({ navigation }) => {
     const isFocused = useIsFocused();
 
     const result = useSelector(state => state.diaryReducer.result);
-   // const plantId   plant id 가져오기
 
+    useEffect(()=>{
+        console.log(plantId + " " +"here is plantid! createscrren");
+    }, [])
+    
    useEffect(() => {
        if(result == "success" && isFocused){
-           console.log('ddd');
            setLoading(false);
            dispatch(setResultState(''));
-           navigation.navigate("DiaryScreen");
+           navigation.navigate("DiaryScreen", {plantId:plantId});
        }
        
        else if(result == "failure" && isFocused){
@@ -64,8 +68,7 @@ const DiaryCreateScreen = ({ navigation }) => {
     }
 
     const addCameraImage = () => {
-        launchCamera({mediaType:'photo'}, response => {
-           
+        launchCamera({mediaType:'photo'}, response => {   
             setImageType(response.assets[0].type);
             setFileName(response.assets[0].fileName);
             setImageUri(response.assets[0].uri);
@@ -80,24 +83,12 @@ const DiaryCreateScreen = ({ navigation }) => {
         const year = date.getFullYear();
         const month = ('0' + (date.getMonth() + 1)).slice(-2);
         const day = ('0' + date.getDate()).slice(-2);
-    
-        const plantId = 1; //예시
-
-        //???
-
-        //  const diaryData = {
-        //     plant_id: plantId,
-        //     diary_title: title,
-        //     diary_content: content,
-        //     diary_date: year+ '-' + month + '-' + day,
-        //   };
 
         const Data = new FormData();
 
         Data.append('title', title);
         Data.append('content', content);
         Data.append('date', year+ '-' + month + '-' + day)
-
 
         if (fileName) {
             console.log("사진 있음");
@@ -107,6 +98,7 @@ const DiaryCreateScreen = ({ navigation }) => {
                 uri: imageUri
             });
         }
+
         console.log(Data);
         
         dispatch(saveDiary(Data, plantId));

@@ -24,7 +24,7 @@ import { deleteDiary, setResultState } from '../actions/diaryActions';
 
 const DiaryDetailScreen = ({ route, navigation }) => {
 
-    const selectedId = route.params;
+    const {selectedId, plantId} = route.params;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
         if(result=='success'&&isFocused){
             setLoading(false);
             dispatch(setResultState(''));
-            navigation.navigate('DiaryScreen');
+            navigation.navigate('DiaryScreen',{plantId:plantId});
         }
         else if(result == 'failure' && isFocused){
             setLoading(false);
@@ -106,7 +106,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                             <View style={styles.wrapper}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={() => navigation.navigate('DiaryEditScreen')}
+                                    onPress={() => navigation.navigate('DiaryEditScreen',{selectedId:selectedId})}
                                     style={{ flexDirection: "row" }}>
                                     <FontAwesome5 name='pen' size={25} color="#000000" style={styles.icon} />
                                     <Text style={styles.text}>수정</Text>
@@ -128,7 +128,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                         <Text style={{ color: "#000000", fontWeight: "bold" }}>{diary.title}</Text>
                     </View>
 
-                    {diary.file_name != '' ? (
+                    {diary.file_name ? (
                              <View>
                              <Image
                                  source={{ uri: diary.file_name }}
