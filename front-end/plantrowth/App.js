@@ -18,61 +18,56 @@ import ManagePlantScreen from './src/Plant/ManagePlant';
 import CommunityScreen from './src/Community';
 import ShopScreen from './src/Shop';
 import MyPageScreen from './src/MyPage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {Alert} from 'react-native';
+import * as RootNavigation from './RootNavigation';
+import { navigationRef } from './RootNavigation';
 
 const Stack = createNativeStackNavigator();
 
-function App({navigation}) {
+function App() {
+
 
   useEffect(() => {
 
-    AsyncStorage.getItem('user_id').then(value => {
-      if (value != null) {
-        
-        messaging().onMessage(async remoteMessage => {
-          console.log(remoteMessage.data.plant_id);
+    messaging().onMessage(async remoteMessage => {
+      console.log(remoteMessage.data.plant_id);
 
-          Alert.alert(
-            "물주기 알림", "식물에게 물을 줄 시간입니다!",[
-                {
-                    text:"취소",
-                    onPress : () => console.log("취소")
+      Alert.alert(
+        "물주기 알림", "식물에게 물을 줄 시간입니다!", [
+        {
+          text: "취소",
+          onPress: () => console.log("취소")
 
-            },
-            {
-                text:"확인",
-                onPress : () => {
-                    navigation.navigate("ManagePlantScreen", {plantId:remoteMessage.data.plant_id})
-                }
-            }
-        ]
-        )
-        });
+        },
+        {
+          text: "확인",
+          onPress: () => {
+            RootNavigation.navigate("ManagePlantScreen", { plantId: remoteMessage.data.plant_id })
+          }
+        }
+      ]
+      )
+    });
 
-        messaging().setBackgroundMessageHandler(async remoteMessage => {
-          console.log('Message handled in the background!', remoteMessage);
-        });
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
 
-        messaging().onNotificationOpenedApp(async remoteMessage => {
-          console.log('open!');
-          console.log(remoteMessage.data.plant_id);
+    messaging().onNotificationOpenedApp(async remoteMessage => {
+      console.log('open!');
+      console.log(remoteMessage.data.plant_id);
 
-          navigation.navigate("ManagePlantScreen",{plantId:remoteMessage.data.plant_id});
+      RootNavigation.navigate("ManagePlantScreen", { plantId: remoteMessage.data.plant_id })
 
-        })
-
-      }
     })
-
 
   }, []);
 
- 
+
 
   return (
     <Provider store={Store}>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
           initialRouteName="SplashScreen">
 

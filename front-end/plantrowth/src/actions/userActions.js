@@ -65,6 +65,8 @@ export const loginUser = (user) => {
                     dispatch(setLogoutTimer(6000000));
                     AsyncStorage.setItem('userId', '1'); //JSON.stringify(res.data.data)
                     // axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.get('x-auth-token')}`;
+                    //위에 두개는 서버에서 넘겨주면 코드 수정 
+                    //헤더로 잘 넘어오는지 체크하기
                     dispatch({
                         type: LOGIN_USER,
                         payload: "success"
