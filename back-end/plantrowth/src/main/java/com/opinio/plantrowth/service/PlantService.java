@@ -6,6 +6,7 @@ import com.opinio.plantrowth.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -46,6 +47,12 @@ public class PlantService {
         if(!(requestDto.getRecent_watering() == null))
             plant.setRecentWatering(requestDto.getRecent_watering());
         return id;
+    }
+
+    @Transactional
+    public void updateImage(Long id, String imageName) {
+        Plant plant = plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        plant.setFileName(imageName);
     }
 
     @Transactional
