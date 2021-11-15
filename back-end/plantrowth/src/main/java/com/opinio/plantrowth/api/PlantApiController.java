@@ -97,13 +97,18 @@ public class PlantApiController {
         return new ResponseEntity<PlantManageDto>(new PlantManageDto(plant), HttpStatus.OK);
     }
 
-    @PutMapping("/api/plants/profiles/{plant-id}")
+    @PutMapping(value =  "/api/plants/profiles/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PlantUpdateDto> updatePlant(@PathVariable("plant-id") Long id,
-                                                      @RequestBody CreatePlantRequestDto request) {
+                                                      @ModelAttribute CreatePlantRequestDto request,
+                                                      @RequestPart(value = "file_name", required = false) Optional<MultipartFile> file) {
 //        Plant plant = plantService.findOnePlant(id);
 //        plantService.update(id, request);
         Long updatedId = plantService.update(id, request);
         Plant plant = plantService.findOnePlant(updatedId);
+        if(file.isPresent()) {
+            String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
+            plant.setFileName(uploadImageName);
+        }
         return new ResponseEntity<PlantUpdateDto>(new PlantUpdateDto(plant), HttpStatus.OK);
     }
 
