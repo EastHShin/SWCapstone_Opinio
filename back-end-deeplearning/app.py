@@ -9,7 +9,7 @@ from PIL import Image
 import fastbook
 import torch
 from fastbook import *
-
+import urllib.request
 import pathlib
 
 temp = pathlib.PosixPath
@@ -32,17 +32,11 @@ def infer_image():
     # 저장할 경로 + 파일명
     f.save(secure_filename(f.filename))"""
 
-    print(request.json);
-
-    if 'file' not in request.files:
-        return "Please try again. The Image doesn't exist"
-
-    file = request.files.get('file', None)
-
-    if not file:
-        return
-
-    img_bytes = file.read();
+    text = request.json
+    print(text)
+    url = text['link']
+    print(url)
+    urllib.request.urlretrieve(url, "temp.jpg")
 
     first_learner = load_learner('./plantrowth_first_resnet50_train.pkl')
     second_learner = load_learner('./plantrowth_second_resnet50_train.pkl')
@@ -50,13 +44,12 @@ def infer_image():
     print('second model loaded!')
 
     os.remove('test.jpg')
-    # img = Image.open(f.filename)
-    img = Image.open(io.BytesIO(img_bytes))
+    os.remove('test2.jpg')
+
+    img = Image.open("temp.jpg")
     img_resize = img.resize((224, 224))
     img_resize_2 = img.resize((512, 512))
     img_resize.save('test.jpg')
-
-    os.remove('test2.jpg')
     img_resize_2.save('test2.jpg')
 
     answer_1 = first_learner.predict('./test.jpg')
