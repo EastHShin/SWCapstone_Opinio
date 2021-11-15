@@ -1,13 +1,4 @@
-from flask import Flask, render_template, request, jsonify
-from flask_restx import Api, Resource
-from werkzeug.utils import secure_filename
-from collections import OrderedDict
-import io
-import os
-from PIL import Image
-
-import fastbook
-import torch
+from flask import Flask, render_template, request
 from fastbook import *
 import urllib.request
 import pathlib
@@ -28,12 +19,7 @@ def render_file():
 # 파일 업로드 처리
 @app.route('/predict', methods=['GET', 'POST'])
 def infer_image():
-    """f = request.files['file']
-    # 저장할 경로 + 파일명
-    f.save(secure_filename(f.filename))"""
-
     text = request.json
-    print(text)
     url = text['link']
     print(url)
     urllib.request.urlretrieve(url, "temp.jpg")
@@ -56,8 +42,6 @@ def infer_image():
     answer_2 = second_learner.predict('./test2.jpg')
     list_1 = list(answer_1)
     list_2 = list(answer_2)
-    print(list_1)
-    print(list_2)
 
     val1Mild = list_1[2][5] + list_1[2][7] + list_1[2][25] + list_1[2][31] + list_1[2][16] * 0.6 + \
                list_1[2][18] * 0.6 + list_1[2][28] * 0.6 + list_1[2][32] * 0.6 + list_1[2][34] * 0.6
@@ -85,20 +69,6 @@ def infer_image():
 
     val2Healthy = list_2[2][3]
 
-    print("Value for Dataset 1")
-    print(round(float(val1Mild) * 100, 8))
-    print(round(float(val1Severe) * 100, 8))
-    print(round(float(val1Blight) * 100, 8))
-    print(round(float(val1Healthy) * 100, 8))
-    print(round(float(val1Parasite) * 100, 8))
-    print(round(float(val1Virus) * 100, 8))
-
-    print("Value for Dataset 2")
-    print(round(float(val2Mild) * 100, 8))
-    print(round(float(val2Severe) * 100, 8))
-    print(round(float(val2Complex) * 100, 8))
-    print(round(float(val2Healthy) * 100, 8))
-
     val1Mild = round(float(val1Mild) * 100, 8)
     val1Severe = round(float(val1Severe) * 100, 8)
     val1Blight = round(float(val1Blight) * 100, 8)
@@ -113,8 +83,6 @@ def infer_image():
 
     value = list_1[1]
     value2 = list_2[1]
-
-    print(list_1[2][value] * 100)
 
     answer = OrderedDict()
     answer["disease_model_1"] = list_1[0]
@@ -133,15 +101,7 @@ def infer_image():
     answer["model_2_Severe"] = val2Severe
 
     print(answer)
-
-
     return (json.dumps(answer, indent="\t"))
-    """return render_template('answer.html', first=list_1[0], second=list_2[0], value2=list_1[2][value] * 100,
-                           value1=list_2[2][value2] * 100, val2Mild=val2Mild, val2Severe=val2Severe,
-                           val2Complex=val2Complex, val2Healthy=val2Healthy,
-                           val1Mild=val1Mild, val1Severe=val1Severe, val1Blight=val1Blight,
-                           val1Healthy=val1Healthy, val1Parasite=val1Parasite, val1Virus=val1Virus)
-"""
 
 
 @app.route('/', methods=['GET'])
