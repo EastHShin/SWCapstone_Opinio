@@ -5,14 +5,12 @@ import com.opinio.plantrowth.api.dto.auth.*;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.UserRepository;
 import com.opinio.plantrowth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,43 +25,31 @@ public class UserApiController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
-    //회원가입
-/*
-    @PostMapping("/join")
-    public Long join(@RequestBody Map<String, String> user){
-
-        return
-                userRepository.save(User.builder()
-                .email(user.get("email"))
-                .password(passwordEncoder.encode(user.get("password")))
-                .roles(Collections.singletonList("ROLE_USER"))
-                .build()).getId();
-    }
-
- */
-
     @PostMapping("/api/auth/join")
-    public ResponseEntity join(@RequestBody JoinDTO user){
+    public ResponseEntity join(@RequestBody JoinDTO user) {
         Long result = userService.join(user);
 
-        return result != null?
-                ResponseEntity.ok().body("회원가입 성공"):
+        return result != null ?
+                ResponseEntity.ok().body("회원가입 성공") :
                 ResponseEntity.badRequest().build();
 
     }
 
     @PostMapping("/api/auth/login") //로그인
-    public ResponseEntity<?> login(HttpServletResponse response, @RequestBody LoginDTO user){
+    public ResponseEntity<?> login(HttpServletResponse response, @RequestBody LoginDTO user) {
         User member = userService.login(user);
-//        Message message = new Message();
-//        HttpHeaders headers = new HttpHeaders();
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
         String token = jwtTokenProvider.createToken(member.getName(), member.getRoles());
         response.setHeader("Authorization", token);
-        return  ResponseEntity.ok().body("로그인 성공");
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("카카오 로그인 성공");
+        message.setData(member.getId());
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
     @PostMapping("/api/auth/kakao") //소셜 로그인
-    public ResponseEntity<?> kakaoLogin(@RequestBody KakaoDTO user){
+    public ResponseEntity<?> kakaoLogin(@RequestBody KakaoDTO user) {
         Long result = userService.kakaoLogin(user);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
@@ -75,7 +61,7 @@ public class UserApiController {
     }
 
     @GetMapping("/api/user/{user-id}")
-    public ResponseEntity<?> lookUpUser(@PathVariable("user-id") Long id){
+    public ResponseEntity<?> lookUpUser(@PathVariable("user-id") Long id) {
         User member = userService.findUser(id);
         UserLookUpDTO user = new UserLookUpDTO();
         user.setUser_name(member.getName());
@@ -95,7 +81,7 @@ public class UserApiController {
     }
 
     @PutMapping("/api/user/{user-id}")
-    public ResponseEntity<?> updateUser(@PathVariable("user-id") Long id, @RequestBody UserUpdateDTO user){
+    public ResponseEntity<?> updateUser(@PathVariable("user-id") Long id, @RequestBody UserUpdateDTO user) {
         userService.updateUser(id, user);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
@@ -108,28 +94,25 @@ public class UserApiController {
     }
 
     @DeleteMapping("api/user/{user-id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("user-id") Long id){
+    public ResponseEntity<?> deleteUser(@PathVariable("user-id") Long id) {
         Long result = userService.deleteUser(id);
-        return result !=null?
-                ResponseEntity.ok().body("회원 탈퇴 성공"):
+        return result != null ?
+                ResponseEntity.ok().body("회원 탈퇴 성공") :
                 ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/user/test")
-    public Map userResponseTest(){
-       Map<String, String> result = new HashMap<>();
-       result.put("result", "user ok");
-       return result;
+    public Map userResponseTest() {
+        Map<String, String> result = new HashMap<>();
+        result.put("result", "user ok");
+        return result;
     }
 
     @PostMapping("/admin/test")
-    public Map adminResponseTest(){
-       Map<String, String> result = new HashMap<>();
-       result.put("result", "admin ok");
-       return result;
+    public Map adminResponseTest() {
+        Map<String, String> result = new HashMap<>();
+        result.put("result", "admin ok");
+        return result;
     }
 
 }
-
-//컨트롤러 - 서비스 - 리포지토리
-
