@@ -34,6 +34,7 @@ public class PlantManageDto {
         water_supply = plant.getWaterSupply();
         alarm_cycle = plant.getAlarmCycle();
         remain_cycle = plant.getRemainCycle();
+        recent_watering = plant.getRecentWatering();
     }
 
 }
