@@ -1,5 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
+from flask_restx import Api, Resource
 from werkzeug.utils import secure_filename
+from collections import OrderedDict
+import io
 import os
 from PIL import Image
 
@@ -13,6 +16,7 @@ temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
 
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 
 
 # 업로드 HTML 렌더링
@@ -22,96 +26,134 @@ def render_file():
 
 
 # 파일 업로드 처리
-@app.route('/dignosiserver/answer', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        f = request.files['file']
-        # 저장할 경로 + 파일명
-        f.save(secure_filename(f.filename))
+@app.route('/predict', methods=['GET', 'POST'])
+def infer_image():
+    """f = request.files['file']
+    # 저장할 경로 + 파일명
+    f.save(secure_filename(f.filename))"""
 
-        first_learner = load_learner('./plantrowth_first_resnet50_train.pkl')
-        second_learner = load_learner('./plantrowth_second_resnet50_train.pkl')
-        print('first model loaded!')
-        print('second model loaded!')
+    print(request.json);
 
-        os.remove('test.jpg')
-        img = Image.open(f.filename)
-        img_resize = img.resize((224, 224))
-        img_resize_2 = img.resize((512, 512))
-        img_resize.save('test.jpg')
+    if 'file' not in request.files:
+        return "Please try again. The Image doesn't exist"
 
-        os.remove('test2.jpg')
-        img_resize_2.save('test2.jpg')
+    file = request.files.get('file', None)
 
-        answer_1 = first_learner.predict('./test.jpg')
-        answer_2 = second_learner.predict('./test2.jpg')
-        list_1 = list(answer_1)
-        list_2 = list(answer_2)
-        print(list_1)
-        print(list_2)
+    if not file:
+        return
 
-        val1Mild = list_1[2][5] + list_1[2][7] + list_1[2][25] + list_1[2][31] + list_1[2][16] * 0.6 + \
-                   list_1[2][18] * 0.6 + list_1[2][28] * 0.6 + list_1[2][32] * 0.6 + list_1[2][34] * 0.6
+    img_bytes = file.read();
 
-        val1Severe = list_1[2][0] + list_1[2][1] + list_1[2][2] + list_1[2][8] + list_1[2][11] + list_1[2][12] + \
-                     list_1[2][15] + list_1[2][16] * 0.4 + list_1[2][18] * 0.4 + list_1[2][28] * 0.4 + \
-                     list_1[2][32] * 0.4 + list_1[2][34] * 0.4
+    first_learner = load_learner('./plantrowth_first_resnet50_train.pkl')
+    second_learner = load_learner('./plantrowth_second_resnet50_train.pkl')
+    print('first model loaded!')
+    print('second model loaded!')
 
-        val1Blight = list_1[2][9] + list_1[2][13] + list_1[2][20] + list_1[2][21] + list_1[2][29] + list_1[2][30]
+    os.remove('test.jpg')
+    # img = Image.open(f.filename)
+    img = Image.open(io.BytesIO(img_bytes))
+    img_resize = img.resize((224, 224))
+    img_resize_2 = img.resize((512, 512))
+    img_resize.save('test.jpg')
 
-        val1Healthy = list_1[2][3] + list_1[2][4] + list_1[2][6] + list_1[2][10] + list_1[2][14] + list_1[2][17] + \
-                      list_1[2][19] + list_1[2][22] + list_1[2][23] + list_1[2][24] + list_1[2][27] + list_1[2][37]
+    os.remove('test2.jpg')
+    img_resize_2.save('test2.jpg')
 
-        val1Parasite = list_1[2][33]
+    answer_1 = first_learner.predict('./test.jpg')
+    answer_2 = second_learner.predict('./test2.jpg')
+    list_1 = list(answer_1)
+    list_2 = list(answer_2)
+    print(list_1)
+    print(list_2)
 
-        val1Virus = list_1[2][26] + list_1[2][35] + list_1[2][37]
+    val1Mild = list_1[2][5] + list_1[2][7] + list_1[2][25] + list_1[2][31] + list_1[2][16] * 0.6 + \
+               list_1[2][18] * 0.6 + list_1[2][28] * 0.6 + list_1[2][32] * 0.6 + list_1[2][34] * 0.6
 
-        val2Mild = list_2[2][1] + list_2[2][2] * 0.6 + list_2[2][4] + list_2[2][5] * 0.6 + \
-                   list_2[2][9] * 0.35 + list_2[2][10] * 0.2 + list_2[2][11] * 0.1
+    val1Severe = list_1[2][0] + list_1[2][1] + list_1[2][2] + list_1[2][8] + list_1[2][11] + list_1[2][12] + \
+                 list_1[2][15] + list_1[2][16] * 0.4 + list_1[2][18] * 0.4 + list_1[2][28] * 0.4 + \
+                 list_1[2][32] * 0.4 + list_1[2][34] * 0.4
 
-        val2Severe = list_2[2][6] + list_2[2][7] * 0.7 + list_2[2][8] + list_2[2][9] * 0.65 + \
-                     list_2[2][10] * 0.8 + list_2[2][11] * 0.5
+    val1Blight = list_1[2][9] + list_1[2][13] + list_1[2][20] + list_1[2][21] + list_1[2][29] + list_1[2][30]
 
-        val2Complex = list_2[2][0] + list_2[2][2] * 0.4 + list_2[2][5] * 0.4 + list_2[2][7] * 0.3 + list_2[2][11] * 0.4
+    val1Healthy = list_1[2][3] + list_1[2][4] + list_1[2][6] + list_1[2][10] + list_1[2][14] + list_1[2][17] + \
+                  list_1[2][19] + list_1[2][22] + list_1[2][23] + list_1[2][24] + list_1[2][27] + list_1[2][37]
 
-        val2Healthy = list_2[2][3]
+    val1Parasite = list_1[2][33]
 
-        print("Value for Dataset 1")
-        print(round(float(val1Mild) * 100, 8))
-        print(round(float(val1Severe) * 100, 8))
-        print(round(float(val1Blight) * 100, 8))
-        print(round(float(val1Healthy) * 100, 8))
-        print(round(float(val1Parasite) * 100, 8))
-        print(round(float(val1Virus) * 100, 8))
+    val1Virus = list_1[2][26] + list_1[2][35] + list_1[2][37]
 
-        print("Value for Dataset 2")
-        print(round(float(val2Mild) * 100, 8))
-        print(round(float(val2Severe) * 100, 8))
-        print(round(float(val2Complex) * 100, 8))
-        print(round(float(val2Healthy) * 100, 8))
+    val2Mild = list_2[2][1] + list_2[2][2] * 0.6 + list_2[2][4] + list_2[2][5] * 0.6 + \
+               list_2[2][9] * 0.35 + list_2[2][10] * 0.2 + list_2[2][11] * 0.1
 
-        val1Mild = round(float(val1Mild) * 100, 8)
-        val1Severe = round(float(val1Severe) * 100, 8)
-        val1Blight = round(float(val1Blight) * 100, 8)
-        val1Healthy = round(float(val1Healthy) * 100, 8)
-        val1Parasite = round(float(val1Parasite) * 100, 8)
-        val1Virus = round(float(val1Virus) * 100, 8)
+    val2Severe = list_2[2][6] + list_2[2][7] * 0.7 + list_2[2][8] + list_2[2][9] * 0.65 + \
+                 list_2[2][10] * 0.8 + list_2[2][11] * 0.5
 
-        val2Mild = round(float(val2Mild) * 100, 8)
-        val2Severe = round(float(val2Severe) * 100, 8)
-        val2Complex = round(float(val2Complex) * 100, 8)
-        val2Healthy = round(float(val2Healthy) * 100, 8)
+    val2Complex = list_2[2][0] + list_2[2][2] * 0.4 + list_2[2][5] * 0.4 + list_2[2][7] * 0.3 + list_2[2][11] * 0.4
 
-        value = list_1[1]
-        value2 = list_2[1]
+    val2Healthy = list_2[2][3]
 
-        print(list_1[2][value] * 100)
+    print("Value for Dataset 1")
+    print(round(float(val1Mild) * 100, 8))
+    print(round(float(val1Severe) * 100, 8))
+    print(round(float(val1Blight) * 100, 8))
+    print(round(float(val1Healthy) * 100, 8))
+    print(round(float(val1Parasite) * 100, 8))
+    print(round(float(val1Virus) * 100, 8))
 
-        return render_template('answer.html', first=list_1[0], second=list_2[0], value2=list_1[2][value] * 100,
-                               value1=list_2[2][value2] * 100, val2Mild=val2Mild, val2Severe=val2Severe,
-                               val2Complex=val2Complex, val2Healthy=val2Healthy,
-                               val1Mild=val1Mild, val1Severe=val1Severe, val1Blight=val1Blight,
-                               val1Healthy=val1Healthy, val1Parasite=val1Parasite, val1Virus=val1Virus)
+    print("Value for Dataset 2")
+    print(round(float(val2Mild) * 100, 8))
+    print(round(float(val2Severe) * 100, 8))
+    print(round(float(val2Complex) * 100, 8))
+    print(round(float(val2Healthy) * 100, 8))
+
+    val1Mild = round(float(val1Mild) * 100, 8)
+    val1Severe = round(float(val1Severe) * 100, 8)
+    val1Blight = round(float(val1Blight) * 100, 8)
+    val1Healthy = round(float(val1Healthy) * 100, 8)
+    val1Parasite = round(float(val1Parasite) * 100, 8)
+    val1Virus = round(float(val1Virus) * 100, 8)
+
+    val2Mild = round(float(val2Mild) * 100, 8)
+    val2Severe = round(float(val2Severe) * 100, 8)
+    val2Complex = round(float(val2Complex) * 100, 8)
+    val2Healthy = round(float(val2Healthy) * 100, 8)
+
+    value = list_1[1]
+    value2 = list_2[1]
+
+    print(list_1[2][value] * 100)
+
+    answer = OrderedDict()
+    answer["disease_model_1"] = list_1[0]
+    answer["disease_model_2"] = list_2[0]
+    answer["percent_model_1"] = float(list_1[2][value] * 100)
+    answer["percent_model_2"] = float(list_2[2][value2] * 100)
+    answer["model_1_Healthy"] = val1Healthy
+    answer["model_1_Mild"] = val1Mild
+    answer["model_1_Severe"] = val1Severe
+    answer["Blight"] = val1Blight
+    answer["Parasite"] = val1Parasite
+    answer["Virus"] = val1Virus
+    answer["model_2_Healthy"] = val2Healthy
+    answer["model_2_Mild"] = val2Mild
+    answer["model_2_Complex"] = val2Complex
+    answer["model_2_Severe"] = val2Severe
+
+    print(answer)
+
+
+    return (json.dumps(answer, indent="\t"))
+    """return render_template('answer.html', first=list_1[0], second=list_2[0], value2=list_1[2][value] * 100,
+                           value1=list_2[2][value2] * 100, val2Mild=val2Mild, val2Severe=val2Severe,
+                           val2Complex=val2Complex, val2Healthy=val2Healthy,
+                           val1Mild=val1Mild, val1Severe=val1Severe, val1Blight=val1Blight,
+                           val1Healthy=val1Healthy, val1Parasite=val1Parasite, val1Virus=val1Virus)
+"""
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return 'Machine Learning Inference'
 
 
 if __name__ == '__main__':
