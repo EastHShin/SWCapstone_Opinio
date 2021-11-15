@@ -15,8 +15,6 @@ public class CreatePlantRequestDto implements Serializable {
     private String plant_name;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate plant_birth;
-//    private Integer plant_exp;
-//    private String file_name;
     private Integer water_supply;
     private Integer alarm_cycle;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
