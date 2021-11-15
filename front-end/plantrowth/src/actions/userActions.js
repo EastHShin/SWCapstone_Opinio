@@ -2,11 +2,11 @@ import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER } 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
-
+//email, 닉네임 존재여부 서버에서 message로 받아서 
+//실패 시 해당 text 뜨도록 
 let timer;
 
 const clearLogoutTimer = () => {
-    
     if (timer) {
    
         clearTimeout(timer);
@@ -43,6 +43,7 @@ export const registerUser = (user) => {
             })
             .catch(function (error) {
                 console.log(error);
+                //에러 메시지 어떻게 오는지 확인
             })
     }
 }
@@ -63,7 +64,7 @@ export const loginUser = (user) => {
             .then(function (res) {
                 if (res.status == 200) {
                     dispatch(setLogoutTimer(6000000));
-                    AsyncStorage.setItem('userId', '1'); //JSON.stringify(res.data.data)
+                    AsyncStorage.setItem('userId',JSON.stringify(res.data.data));
                     // axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.get('x-auth-token')}`;
                     //위에 두개는 서버에서 넘겨주면 코드 수정 
                     //헤더로 잘 넘어오는지 체크하기
@@ -102,7 +103,7 @@ export const kakaoLogin = (data) => {
 
                 if (res.status == 200) {
                 
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
+                    // axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
                     // AsyncStorage.setItem('accessToken', res.data.accessToken);
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');

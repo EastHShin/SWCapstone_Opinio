@@ -43,6 +43,7 @@ function App() {
           text: "확인",
           onPress: () => {
             RootNavigation.navigate("ManagePlantScreen", { plantId: remoteMessage.data.plant_id })
+            
           }
         }
       ]

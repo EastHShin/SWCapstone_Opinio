@@ -32,7 +32,7 @@ const MyPageScreen = ({navigation}) => {
   const onPressHandler = () => {
     // unlinkKaka();
     dispatch(logoutUser());
-    navigation.replace('LoginScreen');
+   
   }
 
   return(

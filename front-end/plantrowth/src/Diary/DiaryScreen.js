@@ -39,7 +39,7 @@ const Item = ({ item, onPress, style }) => {
 
 const DiaryScreen = ({ route,navigation }) => {
   
-  const {plantId} = route.params; 
+  const {plantId, plantImg} = route.params; 
 
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
@@ -62,7 +62,7 @@ const DiaryScreen = ({ route,navigation }) => {
         item={item}
         onPress={() => {
           setSelectedId(item.diary_id);
-          navigation.push("DiaryDetailScreen", {selectedId:item.diary_id,plantId:plantId});
+          navigation.push("DiaryDetailScreen", {selectedId:item.diary_id,plantId:plantId,plantImg:plantImg});
         }
         }
         style={{ backgroundColor: "#FFFFFF" }}
@@ -74,12 +74,12 @@ const DiaryScreen = ({ route,navigation }) => {
     <SafeAreaView style={styles.body}>
       <View style={styles.top}>
         <Image
-          source={{ uri: "https://img.marieclairekorea.com/2021/04/mck_60657bd4d3c01.jpg" }}
+          source={{ uri: "https://img.marieclairekorea.com/2021/04/mck_60657bd4d3c01.jpg" }} //merge 할ㄸ plantImg로 변경 
           style={styles.image}
         />
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId})}>
+          onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId, plantImg:plantImg})}>
           <SimpleLineIcons name='note' size={25} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
@@ -87,7 +87,7 @@ const DiaryScreen = ({ route,navigation }) => {
         {diaries.length == 0 ? (
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId})}>
+            onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId, plantImg:plantImg})}>
             <Evillcons name='plus' size={80} color="#DCDCDC" style={styles.icon} />
           </TouchableOpacity>
         ) : null}

@@ -24,7 +24,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 const DiaryCreateScreen = ({ route,navigation }) => {
 
-    const {plantId} = route.params;
+    const {plantId, plantImg} = route.params;
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -40,15 +40,11 @@ const DiaryCreateScreen = ({ route,navigation }) => {
 
     const result = useSelector(state => state.diaryReducer.result);
 
-    useEffect(()=>{
-        console.log(plantId + " " +"here is plantid! createscrren");
-    }, [])
-    
    useEffect(() => {
        if(result == "success" && isFocused){
            setLoading(false);
            dispatch(setResultState(''));
-           navigation.navigate("DiaryScreen", {plantId:plantId});
+           navigation.navigate("DiaryScreen", {plantId:plantId, plantImg:plantImg});
        }
        
        else if(result == "failure" && isFocused){
@@ -77,7 +73,18 @@ const DiaryCreateScreen = ({ route,navigation }) => {
     
     const onPressHandler = () => {
 
+        if(!title){
+            alert('제목을 입력해주세요!');
+            return;
+        }
+        if(!content){
+            alert('내용을 입력해주세요!');
+            return;
+        }
+
         setLoading(true);
+
+        
         const date = new Date();
     
         const year = date.getFullYear();
@@ -99,8 +106,6 @@ const DiaryCreateScreen = ({ route,navigation }) => {
             });
         }
 
-        console.log(Data);
-        
         dispatch(saveDiary(Data, plantId));
     }
 

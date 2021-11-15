@@ -24,7 +24,7 @@ import { deleteDiary, setResultState } from '../actions/diaryActions';
 
 const DiaryDetailScreen = ({ route, navigation }) => {
 
-    const {selectedId, plantId} = route.params;
+    const {selectedId, plantId, plantImg} = route.params;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
         if(result=='success'&&isFocused){
             setLoading(false);
             dispatch(setResultState(''));
-            navigation.navigate('DiaryScreen',{plantId:plantId});
+            navigation.navigate('DiaryScreen',{plantId:plantId, plantImg:plantImg});
         }
         else if(result == 'failure' && isFocused){
             setLoading(false);

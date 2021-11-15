@@ -14,15 +14,15 @@ export const fetchDiaries = (plantId) =>  {
                 payload:res.data.data,
             })
         }
-        else{
-            dispatch({
-                type:FETCH_DIARIES,
-                payload:[],
-            })
-        }
         })
             .catch(function (error){
                 console.log(error);
+               
+                    dispatch({
+                        type:FETCH_DIARIES,
+                        payload:[],
+                    })
+                
             })
         }
 }
@@ -40,14 +40,12 @@ export const fetchDiary = (diaryId) => {
                 payload:res.data.data,
             })
         }
-        else{
-            dispatch({
-                type:FETCH_DIARY,
-                payload:{},
-            })
-        }
     })
             .catch(function (error){
+                dispatch({
+                    type:FETCH_DIARY,
+                    payload:{},
+                })
                 console.log(error);
             })
         }
@@ -77,15 +75,14 @@ export const saveDiary = (diary,plantId) => {
                     payload:"success"
                 })
             }
-            else{
-                dispatch({
-                    type:SAVE_DIARY,
-                    payload:"failure"
-                })
-            }
+            
         })
         .catch(function(err){
             console.log(err);
+            dispatch({
+                type:SAVE_DIARY,
+                payload:"failure"
+            })
         })
     }
 }
@@ -102,15 +99,14 @@ export const editDiary = (diary, diaryId) => {
                         payload:"success"
                     })
                 }
-                else{
-                    dispatch({
-                        type:EDIT_DIARY,
-                        payload:"failure"
-                    })
-                }
+                
             })
             .catch(function(err){
                 console.log(err);
+                dispatch({
+                        type:EDIT_DIARY,
+                        payload:"failure"
+                    })
             })
     }
 }
@@ -125,15 +121,13 @@ export const deleteDiary = (diaryId) => {
                         payload: "success"
                     })
                 }
-                else {
-                    dispatch({
-                        type: DELETE_DIARY,
-                        payload: "failure"
-                    })
-                }
             })
             .catch(function(err){
                 console.log(err);
+                dispatch({
+                    type: DELETE_DIARY,
+                    payload: "failure"
+                })
             })
     }
 }

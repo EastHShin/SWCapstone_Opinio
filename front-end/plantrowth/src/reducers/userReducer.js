@@ -3,7 +3,8 @@ import {REGISTER_USER,LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK,LOGOUT_USER} from
 const initialState = {
     kakaoRegisterState:'',
     isLogin:'',
-    registerState:''
+    registerState:'',
+    registerText:''
 };
 
 function userReducer(state=initialState, action){
