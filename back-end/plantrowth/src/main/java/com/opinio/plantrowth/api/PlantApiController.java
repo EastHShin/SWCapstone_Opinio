@@ -97,7 +97,7 @@ public class PlantApiController {
         return new ResponseEntity<PlantManageDto>(new PlantManageDto(plant), HttpStatus.OK);
     }
 
-    @PutMapping(value =  "/api/plants/profiles/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/api/plants/profiles/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PlantUpdateDto> updatePlant(@PathVariable("plant-id") Long id,
                                                       @ModelAttribute CreatePlantRequestDto request,
                                                       @RequestPart(value = "file_name", required = false) Optional<MultipartFile> file) {
