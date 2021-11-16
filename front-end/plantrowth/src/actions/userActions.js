@@ -8,16 +8,15 @@ let timer;
 
 const clearLogoutTimer = () => {
     if (timer) {
-   
         clearTimeout(timer);
     }
 };
 
-const setLogoutTimer = (expirationTime) => dispatch=> {
-       
-        timer = setTimeout(() => {
-            dispatch(logoutUser());
-        }, expirationTime);
+const setLogoutTimer = (expirationTime) => dispatch => {
+
+    timer = setTimeout(() => {
+        dispatch(logoutUser());
+    }, expirationTime);
 };
 
 
@@ -34,15 +33,13 @@ export const registerUser = (user) => {
                         payload: "success",
                     })
                 }
-                else {
-                    dispatch({
-                        type: REGISTER_USER,
-                        payload: "failure",
-                    })
-                }
             })
             .catch(function (error) {
                 console.log(error);
+                dispatch({
+                    type: REGISTER_USER,
+                    payload: "failure", //여기 왜 실패했는지 
+                })
                 //에러 메시지 어떻게 오는지 확인
             })
     }
@@ -62,32 +59,27 @@ export const loginUser = (user) => {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
+                console.log(res.headers.authorization);
                 if (res.status == 200) {
                     dispatch(setLogoutTimer(6000000));
-                    AsyncStorage.setItem('userId',JSON.stringify(res.data.data));
-                    // axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.get('x-auth-token')}`;
-                    //위에 두개는 서버에서 넘겨주면 코드 수정 
-                    //헤더로 잘 넘어오는지 체크하기
+                    AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
+                   
                     dispatch({
                         type: LOGIN_USER,
                         payload: "success"
                     });
 
                 }
-                else {
-                    dispatch({
-                        type: LOGIN_USER,
-                        payload: "failure"
-                    });
-                }
+
             })
             .catch(function (error) {
                 dispatch({
-                    type:LOGIN_USER,
+                    type: LOGIN_USER,
                     payload: "failure"
                 })
                 console.log(error);
-                
+
             })
     }
 };
@@ -102,9 +94,8 @@ export const kakaoLogin = (data) => {
             .then(function (res) {
 
                 if (res.status == 200) {
-                
-                    // axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
-                    // AsyncStorage.setItem('accessToken', res.data.accessToken);
+
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');
 
@@ -113,12 +104,7 @@ export const kakaoLogin = (data) => {
                         payload: "success"
                     });
                 }
-                else {
-                    dispatch({
-                        type: KAKAO_REGISTER,
-                        payload: 'loading',
-                    });
-                }
+
             }).catch(function (err) {
                 dispatch({
                     type: KAKAO_REGISTER,
@@ -131,10 +117,10 @@ export const kakaoLogin = (data) => {
 
 export const kakaoRegister = (register) => dispatch => {
 
-        dispatch({
-            type: KAKAO_REGISTER,
-            payload: register,
-        });
+    dispatch({
+        type: KAKAO_REGISTER,
+        payload: register,
+    });
 
 }
 
@@ -168,6 +154,10 @@ export const logoutUser = (email) => {
                 }
             }).catch(function (err) {
                 console.log(err);
+                dispatch({
+                    type: LOGOUT_USER,
+                    payload: 'failure',
+                });
             })
     }
 
@@ -188,8 +178,11 @@ export const kakaoUnlink = () => dispatch => {
 
     } catch (error) {
         console.log(error);
+        dispatch({
+            type: KAKAO_UNLINK,
+            payload: "failure"
+        })
     }
-
 };
 
 

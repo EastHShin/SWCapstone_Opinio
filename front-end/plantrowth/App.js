@@ -17,7 +17,12 @@ import AddProfileScreen from './src/Plant/AddPlantProfile';
 import ManagePlantScreen from './src/Plant/ManagePlant';
 import CommunityScreen from './src/Community';
 import ShopScreen from './src/Shop';
-import MyPageScreen from './src/MyPage';
+import MyPageScreen from './src/MyPage/MyPageScreen'
+import AccountInfoScreen from './src/MyPage/AccountInfoScreen';
+import AccountDeleteScreen from './src/MyPage/AccountDelete';
+import AccountEditScreen from './src/MyPage/AccountEditScreen';
+import DiseaseDiagnosisHistoryScreen from './src/MyPage/DiseaseDiagnosisHistoryScreen';
+import PointHistoryScreen from './src/MyPage/PointHistoryScreen';
 import {Alert} from 'react-native';
 import * as RootNavigation from './RootNavigation';
 import { navigationRef } from './RootNavigation';
@@ -163,6 +168,41 @@ function App() {
           <Stack.Screen
             name="MyPageScreen"
             component={MyPageScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AccountInfoScreen"
+            component={AccountInfoScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AccountEditScreen"
+            component={AccountEditScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AccountDeleteScreen"
+            component={AccountDeleteScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DiseaseDiagnosisHistoryScreen"
+            component={DiseaseDiagnosisHistoryScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PointHistoryScreen"
+            component={PointHistoryScreen}
             options={{
               headerShown: false,
             }}

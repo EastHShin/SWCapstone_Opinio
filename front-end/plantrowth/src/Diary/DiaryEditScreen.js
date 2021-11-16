@@ -23,6 +23,9 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { editDiary, setResultState } from '../actions/diaryActions';
 import { useIsFocused } from '@react-navigation/native'
 
+
+
+//edit 할 때 카메라 다녀오면 modal이 켜지는거 변경하기 
 const DiaryEditScreen = ({ route, navigation }) => {
 
     const {selectedId, plantId, plantImg} = route.params;

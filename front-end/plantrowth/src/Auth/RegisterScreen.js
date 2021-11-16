@@ -53,9 +53,9 @@ function RegisterScreen({ navigation }) {
       setIsRegistraionSuccess(true);
       dispatch(setRegisterState(''));
     }
-    else if(registerState == 'failure' && isFocused){
+    else if(!registerState == 'success' && isFocused){
       setLoading(false);
-      setErrortext('회원가입 실패');
+      setErrortext('회원가입 실패'); //registerState를 여기 
       dispatch(setRegisterState(''));
     }
   }, [registerState])

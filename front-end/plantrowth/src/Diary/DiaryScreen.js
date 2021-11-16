@@ -114,8 +114,7 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: "row",
     justifyContent: "center",
-    height: 40,
-
+    height: Dimensions.get('window').height * 0.05,
   },
   diaryWrapper: {
     height: Dimensions.get('window').height * 0.83,
