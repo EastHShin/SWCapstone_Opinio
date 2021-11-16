@@ -30,39 +30,46 @@ function App({navigation}) {
   //로그인 시에만 오게
   //테스트 중
   useEffect(() => {
+
     messaging().onMessage(async remoteMessage => {
       console.log(remoteMessage.data.plant_id);
-      Alert.alert('물주기 알림', '식물에게 물을 줄 시간입니다!', [
+
+      Alert.alert(
+        "물주기 알림", "식물에게 물을 줄 시간입니다!", [
         {
-          text: '취소',
-          onPress: () => console.log('취소'),
+          text: "취소",
+          onPress: () => console.log("취소")
+
         },
         {
-          text: '확인',
+          text: "확인",
           onPress: () => {
-            RootNavigation.navigate('ManagePlantScreen', {
-              plantId: remoteMessage.data.plant_id,
-            });
-          },
-        },
-      ]);
+            RootNavigation.navigate("ManagePlantScreen", { plantId: remoteMessage.data.plant_id })
+          }
+        }
+      ]
+      )
     });
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       console.log('Message handled in the background!', remoteMessage);
     });
+
     messaging().onNotificationOpenedApp(async remoteMessage => {
       console.log('open!');
       console.log(remoteMessage.data.plant_id);
-      RootNavigation.navigate('ManagePlantScreen', {
-        plantId: remoteMessage.data.plant_id,
-      });
-    });
+
+      RootNavigation.navigate("ManagePlantScreen", { plantId: remoteMessage.data.plant_id })
+
+    })
+
   }, []);
+
 
   return (
     <Provider store={Store}>
       <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Navigator
+          initialRouteName="SplashScreen">
           <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
