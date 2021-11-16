@@ -52,7 +52,7 @@ public class DiagnosisApiController {
         }
 
 //        return new ResponseEntity<DiagnosisDto>(new DiagnosisDto())
-        return ResponseEntity.ok(diagnosisResult);
+        return ResponseEntity.ok().build();
     }
 
     @Getter
