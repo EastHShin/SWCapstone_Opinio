@@ -1,19 +1,17 @@
-from flask import Flask, render_template, request
-from fastbook import *
+from fastai.learner import load_learner
+from flask import Flask, request
+from PIL import Image
+from collections import OrderedDict
 import urllib.request
 import pathlib
+import os
+import json
 
 temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
-
-
-# 업로드 HTML 렌더링
-@app.route('/api/plants/diagnosis')
-def render_file():
-    return render_template('upload.html')
 
 
 # 파일 업로드 처리
@@ -102,11 +100,6 @@ def infer_image():
 
     print(answer)
     return (json.dumps(answer, indent="\t"))
-
-
-@app.route('/', methods=['GET'])
-def index():
-    return 'Machine Learning Inference'
 
 
 if __name__ == '__main__':
