@@ -24,6 +24,7 @@ public class DiaryService {
         PlantDiary plantDiary = plantDiaryRepository.save(diary);
         return plantDiary.getId();
     }
+
     public DiaryLookUpDTO LookupDiary(Long id){
         PlantDiary diary = findDiary(id);
         DiaryLookUpDTO page = new DiaryLookUpDTO();
