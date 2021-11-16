@@ -11,5 +11,5 @@ public class DiaryLookUpDTO {
     private String title;
     private String content;
     private LocalDate date;
-    private String filename;
+    private String file_name;
 }
