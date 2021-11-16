@@ -8,7 +8,7 @@ import os
 import json
 
 temp = pathlib.PosixPath
-#pathlib.PosixPath = pathlib.WindowsPath
+pathlib.PosixPath = pathlib.WindowsPath
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -20,15 +20,15 @@ def infer_image():
     text = request.json
     url = text['file_name']
     print(url)
-    urllib.request.urlretrieve(url, "temp.jpg")
+    urllib.request.urlretrieve(url, "temp.png")
+    img_c = Image.open("temp.png")
+    rgb_img = img_c.convert('RGB')
+    rgb_img.save("temp.jpg")
 
     first_learner = load_learner('./plantrowth_first_resnet50_train.pkl')
     second_learner = load_learner('./plantrowth_second_resnet50_train.pkl')
     print('first model loaded!')
     print('second model loaded!')
-
-    os.remove('test.jpg')
-    os.remove('test2.jpg')
 
     img = Image.open("temp.jpg")
     img_resize = img.resize((224, 224))
