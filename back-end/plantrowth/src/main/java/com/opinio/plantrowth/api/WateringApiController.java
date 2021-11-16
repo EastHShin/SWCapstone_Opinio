@@ -2,6 +2,7 @@ package com.opinio.plantrowth.api;
 
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
+import com.opinio.plantrowth.service.PlantExpService;
 import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.UserPointService;
 import com.opinio.plantrowth.service.WateringService;
@@ -21,10 +22,12 @@ public class WateringApiController {
     private final PlantService plantService;
     private final UserPointService userPointService;
     private final WateringService wateringService;
+    private final PlantExpService plantExpService;
 
     @PostMapping("/api/plants/watering/{plant-id}")
     public ResponseEntity<WateringDto> watering(@PathVariable("plant-id") Long id) {
         Long plant_id = wateringService.watering(id);
+        plantExpService.increaseExp(id);
         Plant plant = plantService.findOnePlant(plant_id);
         User user = userPointService.increasePoint(plant.getUser().getId());
         return new ResponseEntity<WateringDto>(new WateringDto(user, plant), HttpStatus.OK);
