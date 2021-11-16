@@ -19,7 +19,10 @@ import CommunityScreen from './src/Community';
 import ShopScreen from './src/Shop';
 import MyPageScreen from './src/MyPage';
 import UpdatePlantProfileScreen from './src/Plant/UpdatePlantProfile';
-
+import DiagnosisScreen from './src/Plant/DiagnosisScreen';
+import * as RootNavigation from './RootNavigation';
+import {navigationRef} from './RootNavigation';
+import {Alert} from 'react-native';
 const Stack = createNativeStackNavigator();
 
 function App({navigation}) {
@@ -29,38 +32,36 @@ function App({navigation}) {
   useEffect(() => {
     messaging().onMessage(async remoteMessage => {
       console.log(remoteMessage.data.plant_id);
-      console.log(remoteMessage.data.user_id);
-      // Alert.alert("식물에게 물을 줄 시간입니다!",[
-      //   {
-      //     text: "확인",
-      //     onPress: () =>{
-      //       navigation.navigate("RegisterScreen");
-      //     }
-      //   },
-      //   {
-      //     text:"취소"
-      //   }
-      // ])
+      Alert.alert('물주기 알림', '식물에게 물을 줄 시간입니다!', [
+        {
+          text: '취소',
+          onPress: () => console.log('취소'),
+        },
+        {
+          text: '확인',
+          onPress: () => {
+            RootNavigation.navigate('ManagePlantScreen', {
+              plantId: remoteMessage.data.plant_id,
+            });
+          },
+        },
+      ]);
     });
-
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       console.log('Message handled in the background!', remoteMessage);
-      console.log(remoteMessage.data.plant_id); //이거다
     });
-
-    //알림 눌렀을 때 data로 온 plant 아이디 받아서 해당 식물로 이동
     messaging().onNotificationOpenedApp(async remoteMessage => {
       console.log('open!');
-
       console.log(remoteMessage.data.plant_id);
-
-      // navigation.navigate("")
+      RootNavigation.navigate('ManagePlantScreen', {
+        plantId: remoteMessage.data.plant_id,
+      });
     });
   }, []);
 
   return (
     <Provider store={Store}>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator initialRouteName="SplashScreen">
           <Stack.Screen
             name="SplashScreen"
@@ -159,6 +160,13 @@ function App({navigation}) {
           <Stack.Screen
             name="UpdatePlantProfileScreen"
             component={UpdatePlantProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DiagnosisScreen"
+            component={DiagnosisScreen}
             options={{
               headerShown: false,
             }}

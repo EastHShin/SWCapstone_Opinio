@@ -1,4 +1,4 @@
-import {ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE} from './type';
+import {ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE, WATER_PLANT, DIAGNOSIS_PLANT} from './type';
 import axios from 'axios';
 
 export const addPlant = (profile, userId) => {
@@ -9,7 +9,7 @@ export const addPlant = (profile, userId) => {
     return await axios
       .post(
         // `https://58c0739c-1d48-48a7-b99b-4be92192716b.mock.pstmn.io/api/plants/profiles/${userId}`,
-        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/1`,
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/profiles/${userId}`,
         profile,
         {
           headers: {
@@ -82,6 +82,54 @@ export const deletePlant = plantId => {
   };
 };
 
+export const waterPlant = plantId => {
+  return async dispatch => {
+    console.log('watering action Id: ' + plantId);
+    return await axios
+      .post(
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/watering/${plantId}`,
+      )
+      .then(function (response) {
+        console.log('watering response :', response);
+        if (response.status === 200) {
+          dispatch({type: WATER_PLANT, payload: 'success'});
+        }
+      })
+      .catch(function (error) {
+        console.warn('watering 에러요~~~~~~~~~~~~');
+        dispatch({type: WATER_PLANT, payload: 'failure'});
+        console.log(error);
+      });
+  };
+};
+
+export const diagnosisPlant = (plantId, image) => {
+  return async dispatch => {
+    console.log('diagnosis action Id: ' + plantId);
+    return await axios
+      .post(
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diagnosis/${plantId}`,
+        image,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      )
+      .then(function (response) {
+        console.log('diagnosis response :', response);
+        if (response.status === 200) {
+          dispatch({type: DIAGNOSIS_PLANT, payload: 'success'});
+        }
+      })
+      .catch(function (error) {
+        console.warn('diagnosis 에러요~~~~~~~~~~~~');
+        dispatch({type: DIAGNOSIS_PLANT, payload: 'failure'});
+        console.log(error);
+      });
+  };
+};
+
 export const setAddPlantState = state => dispatch => {
   dispatch({
     type: ADD_PLANT,
@@ -99,6 +147,20 @@ export const setDeletePlantState = state => dispatch => {
 export const setUpdatePlantState = state => dispatch => {
   dispatch({
     type: UPDATE_PLANT,
+    payload: state,
+  });
+};
+
+export const setWateringState = state => dispatch => {
+  dispatch({
+    type: WATER_PLANT,
+    payload: state,
+  });
+};
+
+export const setDiagnosisState = state => dispatch => {
+  dispatch({
+    type: DIAGNOSIS_PLANT,
     payload: state,
   });
 };

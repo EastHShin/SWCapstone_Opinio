@@ -41,7 +41,7 @@ UpdatePlantProfile = ({route}) => {
   const [alarmCycle, setAlarmCycle] = useState();
   const [textAlarmCycle, setTextAlarmCycle] = useState('');
   const [lastWatering, setLastWatering] = useState(
-    route.params.profile.recent_watering
+    route.params.profile.recent_watering !== null
       ? route.params.profile.recent_watering
       : '',
   );
@@ -90,7 +90,6 @@ UpdatePlantProfile = ({route}) => {
     console.log(updateSomething);
     const fd = new FormData();
 
-    console.log(fd);
     // if (plantSpecies !== '') {
     //   fd.append('plant_species', plantSpecies);
     //   setUpdateSomething(true);
@@ -130,16 +129,17 @@ UpdatePlantProfile = ({route}) => {
           {
             text: '네',
             onPress: () => {
-              console.log('네 눌렀음' + fd);
               const fd = new FormData();
 
               if (plantSpecies) fd.append('plant_species', plantSpecies);
               if (plantName) fd.append('plant_name', plantName);
               if (plantBirth) {
+                console.log('update할 때'+plantBirth)
                 fd.append('plant_birth', plantBirth);
                 fd.append('recent_watering', plantBirth);
               } else {
-                fd.append('recent_watering', route.params.profile.plantBirth);
+                console.log('update할 때 not plantBirth'+route.params.profile.plant_birth)
+                fd.append('recent_watering', route.params.profile.plant_birth);
               }
 
               if (waterSupply) fd.append('water_supply', waterSupply);
@@ -152,6 +152,7 @@ UpdatePlantProfile = ({route}) => {
                   type: selectedImage.assets[0].type,
                 });
               }
+              console.log(fd);
               setLoading(true);
               dispatch(updatePlant(fd, route.params.plantId));
             },
@@ -182,6 +183,7 @@ UpdatePlantProfile = ({route}) => {
           type: selectedImage.assets[0].type,
         });
       }
+      console.log(fd);
       setLoading(true);
       dispatch(updatePlant(fd, route.params.plantId));
     }
@@ -479,8 +481,8 @@ UpdatePlantProfile = ({route}) => {
                 pointerEvents="none"
                 style={styles.input}
                 placeholder={
-                  route.params.recent_watering
-                    ? {recent_watering}
+                  route.params.profile.recent_watering
+                    ? route.params.profile.recent_watering
                     : '마지막으로 물 준 날짜'
                 }
                 placeholderTextColor="#808080"
@@ -495,6 +497,7 @@ UpdatePlantProfile = ({route}) => {
               mode="date"
               onConfirm={handleLastWateringConfirm}
               onCancel={() => hideDatePicker('watering')}
+              //예외처리 해야함
               minimumDate={new Date(1921, 0, 1)}
               maximumDate={
                 new Date(

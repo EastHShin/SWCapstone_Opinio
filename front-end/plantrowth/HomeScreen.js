@@ -36,10 +36,6 @@ HomeScreen = () => {
   let plantNumber = 0;
 
   useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
     if (isLogin == 'end') {
       navigation.replace('LoginScreen');
     }
@@ -49,6 +45,7 @@ HomeScreen = () => {
     try {
       AsyncStorage.getItem('userId').then(value => {
         if (value != null) {
+          setUserId(JSON.parse(value));
           setName(JSON.parse(value));
         }
       });
@@ -57,27 +54,18 @@ HomeScreen = () => {
     }
   };
 
-  AsyncStorage.getItem('userId')
-    .then(value => {
-      if (value !== null) {
-        setUserId(JSON.parse(value));
-        console.log('userId in async: ' + userId);
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    });
-
   useEffect(() => {
-    if (userId !== null && userId !== undefined) {
-      console.log('홈스크린 userId: ' + userId);
-      dispatch(getHomeInfo(userId));
-      //console.log('홈인포 in use Effect: ');
-      //console.log('홈인포 길이 in use Effect: ');
-      setLoading(false);
-    } else {
-      console.log('userId가 없어요');
-    }
+    AsyncStorage.getItem('userId').then(value => {
+      if (value != null) {
+        setUserId(JSON.parse(value));
+        setName(JSON.parse(value));
+
+        console.log('홈스크린 userId: ' + userId);
+
+        dispatch(getHomeInfo(JSON.parse(value)));
+        setLoading(false);
+      }
+    });
   }, [isFocused]);
 
   const renderPlantList = PlantList => {
@@ -94,7 +82,8 @@ HomeScreen = () => {
                   navigation.navigate('ManagePlantScreen', {
                     plantId: item.plant_id,
                   });
-                }}>
+                }}
+                key={index}>
                 <Image
                   source={{uri: item.file_name}}
                   style={styles.profileImage}
@@ -107,22 +96,29 @@ HomeScreen = () => {
         : null;
     }
   };
+
   const renderProfileAddSlot = max_plant_num => {
-      console.log('plantNumber'+plantNumber);
-      console.log('maxplantNumber'+max_plant_num);
-    if (plantNumber < max_plant_num) {
-      for (let i = 0; i < max_plant_num - plantNumber; i++) {
-        return (
-          <TouchableOpacity
-            style={[styles.profileContainer, {justifyContent: 'center'}]}
-            onPress={() =>
-              navigation.navigate('AddProfileScreen', {userId: userId})
-            }>
-            <Text>프로필 추가</Text>
-          </TouchableOpacity>
-        );
-      }
+    console.log('plantNumber' + plantNumber);
+    console.log('maxplantNumber' + max_plant_num);
+    let arr = [];
+    for (i = 0; i < max_plant_num - plantNumber; i++) {
+      arr.push(1);
     }
+    console.log('renderProfileAddslot arr: ' + arr);
+    return arr
+      ? arr.map((value, index) => {
+          return (
+            <TouchableOpacity
+              style={[styles.profileContainer, {justifyContent: 'center'}]}
+              onPress={() =>
+                navigation.navigate('AddProfileScreen', {userId: userId})
+              }
+              key={index}>
+              <Text>프로필 추가</Text>
+            </TouchableOpacity>
+          );
+        })
+      : null;
   };
   const PlantList = () => {
     console.log('plants: ' + infoList.plants);
