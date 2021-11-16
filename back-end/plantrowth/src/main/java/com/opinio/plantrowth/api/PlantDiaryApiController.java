@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Transactional(readOnly = true)
 @RestController
 @RequiredArgsConstructor
 public class PlantDiaryApiController {
@@ -45,7 +44,6 @@ public class PlantDiaryApiController {
         return new ResponseEntity<DiaryResult>(new DiaryResult(collect), HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value = "/api/plants/diary/{plant-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createDiary(
             @PathVariable("plant-id") Long plantId,
@@ -85,7 +83,6 @@ public class PlantDiaryApiController {
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
-    @Transactional
     @PutMapping("/api/plants/diary/{diary-id}")
     public ResponseEntity<?> updateDiary(@PathVariable("diary-id") Long id, @RequestBody CreateDiaryDTO dto){
         diaryService.updateDiary(id, dto);
@@ -99,7 +96,6 @@ public class PlantDiaryApiController {
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
-    @Transactional
     @DeleteMapping("/api/plants/diary/{diary-id}")
     public ResponseEntity<?> deleteDiary(@PathVariable("diary-id") Long id){
         Long result = diaryService.deleteDiary(id);
