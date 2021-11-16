@@ -6,8 +6,10 @@ import com.opinio.plantrowth.api.dto.diary.DiaryDTO;
 import com.opinio.plantrowth.api.dto.diary.DiaryLookUpDTO;
 import com.opinio.plantrowth.api.dto.diary.DiaryResult;
 import com.opinio.plantrowth.domain.Message;
+import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.PlantDiary;
 import com.opinio.plantrowth.service.DiaryService;
+import com.opinio.plantrowth.service.PlantService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +32,7 @@ public class PlantDiaryApiController {
 
     private final FileUploadService fileUploadService;
     private final DiaryService diaryService;
+    private final PlantService plantService;
     private final String filePath = "diary";
 
     @GetMapping("/api/plants/diary/{plant-id}/all")
@@ -49,12 +52,21 @@ public class PlantDiaryApiController {
             @ModelAttribute CreateDiaryDTO dto,
             @RequestPart(required = false) Optional<MultipartFile> file){
 
-        Long result = diaryService.createDiary(dto, plantId);
+
+        PlantDiary diary = PlantDiary.builder()
+                .title(dto.getTitle())
+                .date(dto.getDate())
+                .content(dto.getContent())
+                .build();
+        Plant plant = plantService.findOnePlant(plantId);
+        diary.setPlant(plant);
+
         if(file.isPresent()) {
             String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
-            PlantDiary diary = diaryService.findDiary(result);
             diary.setFilename(uploadImageName);
         }
+        Long result = diaryService.createDiary(diary);
+
         return result !=null?
                 ResponseEntity.ok().body("식물 일기 생성 완료"):
                 ResponseEntity.badRequest().build();

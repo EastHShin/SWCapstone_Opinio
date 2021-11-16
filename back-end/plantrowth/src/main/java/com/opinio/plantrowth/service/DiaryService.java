@@ -17,15 +17,10 @@ import java.util.List;
 public class DiaryService {
     private final PlantDiaryRepository plantDiaryRepository;
     private final PlantRepository plantRepository;
-    @Transactional
-    public Long createDiary(CreateDiaryDTO dto, Long plantId){
 
-        PlantDiary diary = PlantDiary.builder()
-                    .title(dto.getTitle())
-                    .date(dto.getDate())
-                    .content(dto.getContent())
-                    .build();
-        diary.setPlant(plantRepository.getById(plantId));
+    @Transactional
+    public Long createDiary(PlantDiary diary){
+
         PlantDiary plantDiary = plantDiaryRepository.save(diary);
         return plantDiary.getId();
     }
