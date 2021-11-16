@@ -31,7 +31,7 @@ public class DiaryService {
         page.setTitle(diary.getTitle());
         page.setContent(diary.getContent());
         page.setDate(diary.getDate());
-        page.setFilename(diary.getFilename());
+        page.setFile_name(diary.getFilename());
 
         return page;
     }
