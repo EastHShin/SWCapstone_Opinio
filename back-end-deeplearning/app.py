@@ -8,7 +8,7 @@ import os
 import json
 
 temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
+#pathlib.PosixPath = pathlib.WindowsPath
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -18,7 +18,7 @@ app.config['JSON_SORT_KEYS'] = False
 @app.route('/predict', methods=['GET', 'POST'])
 def infer_image():
     text = request.json
-    url = text['link']
+    url = text['file_name']
     print(url)
     urllib.request.urlretrieve(url, "temp.jpg")
 
