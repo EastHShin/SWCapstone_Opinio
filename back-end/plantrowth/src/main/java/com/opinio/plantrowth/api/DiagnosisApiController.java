@@ -46,6 +46,7 @@ public class DiagnosisApiController {
             throw new FileIsEmptyException("파일을 업로드 하세요");
         }
 
+
         String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
         String json = "{ \"file_name\" : \"" + uploadImageName + "\" }";
         RequestBody requestBody = RequestBody.create(MediaType.get("application/json; charset=utf-8"), json);
@@ -59,7 +60,7 @@ public class DiagnosisApiController {
                 throw new IOException("Unexpected code " + response);
             diagnosisResult = response.body().string();
             System.out.println(diagnosisResult);
-            //disease_model1하고 percent_model1 만 프론트로 보내주기
+            //disease_model1하고 percent_model1만 프론트로 보내주기
         } catch (IOException e) {
             e.printStackTrace();
         }
