@@ -1,7 +1,7 @@
-import React, { useState, useEffect,useCallback }  from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from './src/Auth/LoginScreen';
 import RegisterScreen from './src/Auth/RegisterScreen';
 import SplashScreen from './src/Auth/SplashScreen';
@@ -18,15 +18,17 @@ import ManagePlantScreen from './src/Plant/ManagePlant';
 import CommunityScreen from './src/Community';
 import ShopScreen from './src/Shop';
 import MyPageScreen from './src/MyPage';
-import {Alert} from 'react-native';
+import UpdatePlantProfileScreen from './src/Plant/UpdatePlantProfile';
+import DiagnosisScreen from './src/Plant/DiagnosisScreen';
 import * as RootNavigation from './RootNavigation';
-import { navigationRef } from './RootNavigation';
-
+import {navigationRef} from './RootNavigation';
+import {Alert} from 'react-native';
 const Stack = createNativeStackNavigator();
 
-function App() {
-
-
+function App({navigation}) {
+  //로그인 시 오고, 유저 아이디
+  //로그인 시에만 오게
+  //테스트 중
   useEffect(() => {
 
     messaging().onMessage(async remoteMessage => {
@@ -48,7 +50,6 @@ function App() {
       ]
       )
     });
-
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       console.log('Message handled in the background!', remoteMessage);
     });
@@ -64,18 +65,16 @@ function App() {
   }, []);
 
 
-
   return (
     <Provider store={Store}>
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
           initialRouteName="SplashScreen">
-
           <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
-            options={{ 
-              headerShown: false 
+            options={{
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -83,28 +82,27 @@ function App() {
             component={LoginScreen}
             options={{
               headerShown: false,
-
             }}
           />
           <Stack.Screen
             name="RegisterScreen"
             component={RegisterScreen}
             options={{
-              headerShown: false
+              headerShown: false,
             }}
           />
           <Stack.Screen
             name="HomeScreen"
             component={HomeScreen}
             options={{
-              headerShown: false
+              headerShown: false,
             }}
           />
           <Stack.Screen
             name="DiaryScreen"
             component={DiaryScreen}
             options={{
-              headerShown: false
+              headerShown: false,
             }}
           />
 
@@ -112,7 +110,7 @@ function App() {
             name="DiaryCreateScreen"
             component={DiaryCreateScreen}
             options={{
-              headerShown: false
+              headerShown: false,
             }}
           />
 
@@ -120,7 +118,7 @@ function App() {
             name="DiaryDetailScreen"
             component={DiaryDetailScreen}
             options={{
-              headerShown: false
+              headerShown: false,
             }}
           />
 
@@ -162,6 +160,20 @@ function App() {
           <Stack.Screen
             name="MyPageScreen"
             component={MyPageScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="UpdatePlantProfileScreen"
+            component={UpdatePlantProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DiagnosisScreen"
+            component={DiagnosisScreen}
             options={{
               headerShown: false,
             }}

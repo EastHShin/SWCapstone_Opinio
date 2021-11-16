@@ -102,7 +102,7 @@ export const kakaoLogin = (data) => {
 
                 if (res.status == 200) {
                 
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
+                    //axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
                     // AsyncStorage.setItem('accessToken', res.data.accessToken);
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');

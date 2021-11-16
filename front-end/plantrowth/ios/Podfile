@@ -12,6 +12,8 @@ target 'plantrowth' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
+
   target 'plantrowthTests' do
     inherit! :complete
     # Pods for testing

@@ -12,7 +12,7 @@ import {
   Keyboard,
   Alert,
 } from 'react-native';
-import {addPlant, setAddPlantState} from '../actions/PlantActions';
+import {updatePlant, setUpdatePlantState} from '../actions/PlantActions';
 import {useDispatch, useSelector} from 'react-redux';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -27,22 +27,30 @@ import Slider from '@react-native-community/slider';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-AddPlantProfile = ({route}) => {
+UpdatePlantProfile = ({route}) => {
   const [loading, setLoading] = useState(false);
 
+  //const [plantName, setPlantName] = useState(route.params.profile.plant_name);
   const [plantName, setPlantName] = useState('');
+  //const [plantSpecies, setPlantSpecies] = useState(route.params.profile.plant_species);
   const [plantSpecies, setPlantSpecies] = useState('');
-  const [plantBirth, setPlantBirth] = useState();
+  //const [plantBirth, setPlantBirth] = useState(route.params.profile.plant_birth);
+  const [plantBirth, setPlantBirth] = useState('');
   const [plantTextBirth, setPlantTextBirth] = useState('');
+  //const [alarmCycle, setAlarmCycle] = useState(route.params.profile.alarm_cycle);
   const [alarmCycle, setAlarmCycle] = useState();
   const [textAlarmCycle, setTextAlarmCycle] = useState('');
-  const [lastWatering, setLastWatering] = useState('');
+  const [lastWatering, setLastWatering] = useState(
+    route.params.profile.recent_watering !== null
+      ? route.params.profile.recent_watering
+      : '',
+  );
+  //const [lastWatering, setLastWatering] = useState('');
   const [textLastWatering, setTextLastWatering] = useState('');
-  const [waterSupply, setWaterSupply] = useState(2);
+  //const [waterSupply, setWaterSupply] = useState(route.params.profile.water_supply);
+  const [waterSupply, setWaterSupply] = useState();
   const [plantImage, setPlantImage] = useState('');
 
-  const [validationPlantBirth, setValiationPlantBirth] = useState('');
-  const [validationLastWatering, setValiationLastWatering] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [isDayPickerVisible, setDayPickerVisibility] = useState(false);
@@ -50,56 +58,70 @@ AddPlantProfile = ({route}) => {
   const [isWateringDatePickerVisible, setWateringDatePickerVisibility] =
     useState(false);
 
-  const addPlantState = useSelector(state => state.PlantReducer.addResult);
+  const [updateSomething, setUpdateSomething] = useState(false);
+  const updatePlantState = useSelector(
+    state => state.PlantReducer.updateResult,
+  );
   const isFocused = useIsFocused();
   const maximumDate = new Date();
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const dayArray = [];
+
   for (let i = 0; i < 30; i++) {
     dayArray[i] = i + 1;
   }
-  useEffect(() => {
-    //console.warn('이미지 등록');
-  }, [plantImage]);
 
   useEffect(() => {
-    console.log('addPlantState: ' + addPlantState + ' isFocused: ' + isFocused);
-    if (addPlantState == 'success' && isFocused) {
+    if (updatePlantState == 'success' && isFocused) {
       console.log('useEffect에서 success');
       setLoading(false);
-      dispatch(setAddPlantState(''));
-      navigation.navigate('HomeScreen');
-    } else if (addPlantState == 'failure' && isFocused) {
-      console.log('useEffec에서 failure');
+      dispatch(setUpdatePlantState(''));
+      navigation.goBack();
+    } else if (updatePlantState == 'failure' && isFocused) {
+      console.log('useEffect에서 failure');
       setLoading(false);
-      dispatch(setAddPlantState(''));
+      dispatch(setUpdatePlantState(''));
     }
-  }, [addPlantState]);
+  }, [updatePlantState]);
 
   const onPressHandler = () => {
-    if (!plantImage) {
-      alert('식물 사진 입력');
+    console.log(updateSomething);
+    const fd = new FormData();
+
+    // if (plantSpecies !== '') {
+    //   fd.append('plant_species', plantSpecies);
+    //   setUpdateSomething(true);
+    // }
+    // if (plantName !== '') {
+    //   fd.append('plant_name', plantName);
+    //   setUpdateSomething(true);
+    // }
+    // if (plantBirth !== '') {
+    //   fd.append('plant_birth', plantBirth);
+    //   setUpdateSomething(true);
+    // }
+    // if (waterSupply !== undefined) {
+    //   fd.append('water_supply', waterSupply);
+    //   setUpdateSomething(true);
+    // }
+    // if (alarmCycle !== undefined) {
+    //   fd.append('alarm_cycle', alarmCycle);
+    //   setUpdateSomething(true);
+    // }
+    // if (plantImage !== '') {
+    //   fd.append('file_name', {
+    //     name: selectedImage.assets[0].fileName,
+    //     uri: selectedImage.assets[0].uri,
+    //     type: selectedImage.assets[0].type,
+    //   });
+    //   setUpdateSomething(true);
+    // }
+    if (updateSomething == false) {
+      alert('아직 아무 정보도 수정하지 않으셨어요!');
       return;
-    }
-    if (!plantName) {
-      alert('식물 이름 입력');
-      return;
-    }
-    if (!plantSpecies) {
-      alert('식물 종 입력');
-      return;
-    }
-    if (!plantBirth) {
-      alert('식물 키우기 시작한 날 입력');
-      return;
-    }
-    if (!alarmCycle) {
-      alert('Water Cycle 입력');
-      return;
-    }
-    if (!lastWatering) {
+    } else if (lastWatering == '') {
       Alert.alert(
         '마지막으로 물 준 날을 입력해주세요',
         '아직 물을 주지 않으셨나요?',
@@ -107,26 +129,32 @@ AddPlantProfile = ({route}) => {
           {
             text: '네',
             onPress: () => {
-
               const fd = new FormData();
-        
-              console.log('네 눌렀음'+fd);
 
-              fd.append('plant_species', plantSpecies);
-              fd.append('plant_name', plantName);
-              fd.append('plant_birth', plantBirth);
-        
-              fd.append('water_supply', waterSupply);
-              fd.append('alarm_cycle', alarmCycle);
-              fd.append('recent_watering', plantBirth);
-        
-              fd.append('file_name', {
-                name: selectedImage.assets[0].fileName,
-                uri: selectedImage.assets[0].uri,
-                type: selectedImage.assets[0].type,
-              });
+              if (plantSpecies) fd.append('plant_species', plantSpecies);
+              if (plantName) fd.append('plant_name', plantName);
+              if (plantBirth) {
+                console.log('update할 때'+plantBirth)
+                fd.append('plant_birth', plantBirth);
+                fd.append('recent_watering', plantBirth);
+              } else {
+                console.log('update할 때 not plantBirth'+route.params.profile.plant_birth)
+                fd.append('recent_watering', route.params.profile.plant_birth);
+              }
+
+              if (waterSupply) fd.append('water_supply', waterSupply);
+              if (alarmCycle) fd.append('alarm_cycle', alarmCycle);
+
+              if (plantImage) {
+                fd.append('file_name', {
+                  name: selectedImage.assets[0].fileName,
+                  uri: selectedImage.assets[0].uri,
+                  type: selectedImage.assets[0].type,
+                });
+              }
+              console.log(fd);
               setLoading(true);
-              dispatch(addPlant(fd, route.params.userId));
+              dispatch(updatePlant(fd, route.params.plantId));
             },
           },
           {
@@ -138,38 +166,26 @@ AddPlantProfile = ({route}) => {
         ],
       );
     } else {
-      setLoading(true);
-
       const fd = new FormData();
+      if (plantSpecies) fd.append('plant_species', plantSpecies);
+      if (plantName) fd.append('plant_name', plantName);
+      if (plantBirth) fd.append('plant_birth', plantBirth);
 
-      console.log('테스트전');
-      console.log(fd);
-      console.log('테스트후');
-      //file_name: plantImage,
-      const plant = {
-        plant_species: plantSpecies,
-        plant_name: plantName,
-        plant_birth: plantBirth,
+      if (waterSupply) fd.append('water_supply', waterSupply);
+      if (alarmCycle) fd.append('alarm_cycle', alarmCycle);
 
-        water_supply: waterSupply,
-        alarm_cycle: alarmCycle,
-        recent_watering: lastWatering,
-      };
-      fd.append('plant_species', plantSpecies);
-      fd.append('plant_name', plantName);
-      fd.append('plant_birth', plantBirth);
-
-      fd.append('water_supply', waterSupply);
-      fd.append('alarm_cycle', alarmCycle);
       fd.append('recent_watering', lastWatering);
 
-      fd.append('file_name', {
-        name: selectedImage.assets[0].fileName,
-        uri: selectedImage.assets[0].uri,
-        type: selectedImage.assets[0].type,
-      });
-
-      dispatch(addPlant(fd, route.params.userId));
+      if (plantImage) {
+        fd.append('file_name', {
+          name: selectedImage.assets[0].fileName,
+          uri: selectedImage.assets[0].uri,
+          type: selectedImage.assets[0].type,
+        });
+      }
+      console.log(fd);
+      setLoading(true);
+      dispatch(updatePlant(fd, route.params.plantId));
     }
   };
 
@@ -191,17 +207,16 @@ AddPlantProfile = ({route}) => {
 
   const handlePlantBirthConfirm = date => {
     setDatePickerVisibility(false);
-    //console.warn('date: '+date);
 
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
 
-    setValiationPlantBirth(date);
     setPlantBirth(year + '-' + month + '-' + day);
     setPlantTextBirth(year + '-' + month + '-' + day);
-    //console.warn('palntbirth: '+plantBirth);
+    setUpdateSomething(true);
   };
+
   const handleLastWateringConfirm = date => {
     setWateringDatePickerVisibility(false);
 
@@ -209,10 +224,9 @@ AddPlantProfile = ({route}) => {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
 
-    setValiationLastWatering(date);
-    setLastWatering(year + '-' + month + '-' + day)
+    setLastWatering(year + '-' + month + '-' + day);
     setTextLastWatering(year + '-' + month + '-' + day);
-    //console.warn('palntbirth: '+plantBirth);
+    setUpdateSomething(true);
   };
 
   const photoUpload = async choice => {
@@ -221,7 +235,6 @@ AddPlantProfile = ({route}) => {
     } else if (choice === 'pick') {
       await selectImage();
     }
-    //console.warn('after picture: ' + plantImage);
   };
 
   const takePicture = () => {
@@ -231,6 +244,7 @@ AddPlantProfile = ({route}) => {
           // console.warn(response);
           setPlantImage(response.assets[0].uri);
           setSelectedImage(response);
+          setUpdateSomething(true);
           resolve(response);
         }
       });
@@ -244,12 +258,27 @@ AddPlantProfile = ({route}) => {
           // console.warn(response.assets[0].base64);
           setPlantImage(response.assets[0].uri);
           setSelectedImage(response);
+          setUpdateSomething(true);
           resolve(response);
         }
       });
     });
   };
 
+  const renderImage = () => {
+    if (plantImage) {
+      return (
+        <Image style={{width: 100, height: 100}} source={{uri: plantImage}} />
+      );
+    } else {
+      return (
+        <Image
+          style={{width: 100, height: 100}}
+          source={{uri: route.params.profile.file_name}}
+        />
+      );
+    }
+  };
   return (
     <SafeAreaView
       style={{
@@ -265,13 +294,13 @@ AddPlantProfile = ({route}) => {
           <Button
             title="Back"
             onPress={() => {
-              navigation.navigate('HomeScreen');
+              navigation.goBack();
             }}
           />
         </View>
         <View style={styles.sectionWrapper}>
           <Text style={{fontWeight: 'bold', color: '#556951'}}>
-            식물 프로필 등록
+            식물 프로필 수정
           </Text>
           <View
             style={{
@@ -285,14 +314,7 @@ AddPlantProfile = ({route}) => {
               onPress={() => photoUpload('pick')}>
               <Icon name="image" size={35} color="#556951" />
             </TouchableOpacity>
-            <View style={styles.imageWrapper}>
-              {plantImage ? (
-                <Image
-                  style={{width: 100, height: 100}}
-                  source={{uri: plantImage}}
-                />
-              ) : null}
-            </View>
+            <View style={styles.imageWrapper}>{renderImage()}</View>
             <TouchableOpacity
               style={{margin: 20}}
               activeOpacity={0.5}
@@ -304,9 +326,12 @@ AddPlantProfile = ({route}) => {
             <Icon name="pencil" size={30} color="#BEE9B4" />
             <TextInput
               style={styles.input}
-              onChangeText={PlantName => setPlantName(PlantName)}
+              onChangeText={PlantName => {
+                setPlantName(PlantName);
+                setUpdateSomething(true);
+              }}
               underlineColorAndroid="#f000"
-              placeholder="식물 이름"
+              placeholder={route.params.profile.plant_name}
               placeholderTextColor="#808080"
               onSubmitEditing={Keyboard.dismiss}
             />
@@ -315,9 +340,12 @@ AddPlantProfile = ({route}) => {
             <Icon name="md-rose" size={30} color="#BEE9B4" />
             <TextInput
               style={styles.input}
-              onChangeText={PlantSpecies => setPlantSpecies(PlantSpecies)}
+              onChangeText={PlantSpecies => {
+                setPlantSpecies(PlantSpecies);
+                setUpdateSomething(true);
+              }}
               underlineColorAndroid="#f000"
-              placeholder="식물 종"
+              placeholder={route.params.profile.plant_species}
               placeholderTextColor="#808080"
               onSubmitEditing={Keyboard.dismiss}
             />
@@ -330,7 +358,7 @@ AddPlantProfile = ({route}) => {
               <TextInput
                 pointerEvents="none"
                 style={styles.input}
-                placeholder="키우기 시작한 날"
+                placeholder={route.params.profile.plant_birth}
                 placeholderTextColor="#808080"
                 underlineColorAndroid="transparent"
                 editable={false}
@@ -345,13 +373,11 @@ AddPlantProfile = ({route}) => {
               onCancel={() => hideDatePicker('plantBirth')}
               minimumDate={new Date(1921, 0, 1)}
               maximumDate={
-                validationLastWatering
-                  ? validationLastWatering
-                  : new Date(
-                      maximumDate.getFullYear(),
-                      maximumDate.getMonth(),
-                      maximumDate.getDate() - 1,
-                    )
+                new Date(
+                  maximumDate.getFullYear(),
+                  maximumDate.getMonth(),
+                  maximumDate.getDate() - 1,
+                )
               }
             />
           </View>
@@ -363,7 +389,7 @@ AddPlantProfile = ({route}) => {
               <TextInput
                 style={styles.input}
                 underlineColorAndroid="#f000"
-                placeholder="Water Cycle"
+                placeholder={`물을 ${route.params.profile.alarm_cycle}일마다 줘요`}
                 placeholderTextColor="#808080"
                 editable={false}
                 value={textAlarmCycle}
@@ -398,7 +424,7 @@ AddPlantProfile = ({route}) => {
                 <View style={{width: 150, height: 250, backgroundColor: 'RED'}}>
                   <ScrollPicker
                     dataSource={dayArray}
-                    selectedIndex={6}
+                    selectedIndex={route.params.profile.alarm_cycle}
                     onValueChange={selectedIndex => {
                       setAlarmCycle(selectedIndex);
                       setTextAlarmCycle(`물을 ${selectedIndex}일 마다 줘요`);
@@ -422,17 +448,6 @@ AddPlantProfile = ({route}) => {
           </Modal>
           <View style={styles.section}>
             <Icon name="water" size={30} color="#BEE9B4" />
-
-            {/* <TextInput
-              style={styles.input}
-              onChangeText={WaterSupply => setWaterSupply(WaterSupply)}
-              underlineColorAndroid="#f000"
-              placeholder="Water Supply"
-              placeholderTextColor="#808080"
-              onSubmitEditing={
-                Keyboard.dismiss
-              }
-            /> */}
             <View style={{alignItems: 'center'}}>
               <Text style={{fontWeight: 'bold', fontSize: 12}}>물 주는 양</Text>
               <Text style={{fontWeight: 'bold', fontSize: 11}}>
@@ -448,10 +463,11 @@ AddPlantProfile = ({route}) => {
                 minimumTrackTintColor="#0067a3"
                 maximumTrackTintColor="#000000"
                 thumbTintColor="#0067a3"
-                value={2}
+                value={route.params.profile.water_supply}
                 renderTrackMarkComponent={true}
                 onValueChange={value => {
                   setWaterSupply(value);
+                  setUpdateSomething(true);
                 }}
               />
             </View>
@@ -464,7 +480,11 @@ AddPlantProfile = ({route}) => {
               <TextInput
                 pointerEvents="none"
                 style={styles.input}
-                placeholder="마지막 물 준 날"
+                placeholder={
+                  route.params.profile.recent_watering
+                    ? route.params.profile.recent_watering
+                    : '마지막으로 물 준 날짜'
+                }
                 placeholderTextColor="#808080"
                 underlineColorAndroid="transparent"
                 editable={false}
@@ -477,11 +497,8 @@ AddPlantProfile = ({route}) => {
               mode="date"
               onConfirm={handleLastWateringConfirm}
               onCancel={() => hideDatePicker('watering')}
-              minimumDate={
-                validationPlantBirth
-                  ? validationPlantBirth
-                  : new Date(1921, 0, 1)
-              }
+              //예외처리 해야함
+              minimumDate={new Date(1921, 0, 1)}
               maximumDate={
                 new Date(
                   maximumDate.getFullYear(),
@@ -492,11 +509,12 @@ AddPlantProfile = ({route}) => {
             />
           </View>
         </View>
-        <Button title="프로필 등록" onPress={onPressHandler} />
+        <Button title="프로필 수정" onPress={onPressHandler} />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
+export default UpdatePlantProfile;
 
 const styles = StyleSheet.create({
   imageWrapper: {
@@ -531,5 +549,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
-export default AddPlantProfile;
