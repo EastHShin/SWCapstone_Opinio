@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,13 +11,14 @@ import {
   Pressable,
   SafeAreaView,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {useIsFocused, useNavigation} from '@react-navigation/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { useIsFocused, useNavigation } from '@react-navigation/core';
 import Footer from './src/component/Footer';
 import Loader from './src/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getHomeInfo} from './src/actions/HomeActions';
-import {logoutUser} from './src/actions/userActions';
+import { getHomeInfo } from './src/actions/HomeActions';
+import { logoutUser } from './src/actions/userActions';
+import Icon from 'react-native-vector-icons/dist/Ionicons';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -72,27 +73,39 @@ HomeScreen = () => {
     if (PlantList !== null && PlantList !== undefined) {
       return PlantList
         ? PlantList.map((item, index) => {
-            console.log('hi:' + item);
-            plantNumber++;
-            return (
-              <TouchableOpacity
-                style={styles.profileContainer}
-                key={index}
-                onPress={() => {
-                  navigation.navigate('ManagePlantScreen', {
-                    plantId: item.plant_id,
-                  });
-                }}
-                key={index}>
-                <Image
-                  source={{uri: item.file_name}}
-                  style={styles.profileImage}
-                />
-                <Text>{item.plant_name}</Text>
-                <Text>{item.plant_exp}</Text>
-              </TouchableOpacity>
-            );
-          })
+          console.log('hi:' + item);
+          plantNumber++;
+          return (
+            <TouchableOpacity
+              style={styles.profileContainer}
+              key={index}
+              onPress={() => {
+                navigation.navigate('ManagePlantScreen', {
+                  plantId: item.plant_id,
+                });
+              }}
+              key={index}>
+              <Image
+                source={{ uri: item.file_name }}
+                style={styles.profileImage}
+              />
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={{ fontWeight: 'bold' }}>LV.6</Text>
+                <View style={styles.levelBar}>
+                  <View style={styles.expBar}>
+                  </View>
+                </View>
+              </View>
+
+
+              <View style={styles.nameWrapper}>
+                <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{item.plant_name}</Text>
+              </View>
+
+
+            </TouchableOpacity>
+          );
+        })
         : null;
     }
   };
@@ -107,17 +120,17 @@ HomeScreen = () => {
     console.log('renderProfileAddslot arr: ' + arr);
     return arr
       ? arr.map((value, index) => {
-          return (
-            <TouchableOpacity
-              style={[styles.profileContainer, {justifyContent: 'center'}]}
-              onPress={() =>
-                navigation.navigate('AddProfileScreen', {userId: userId})
-              }
-              key={index}>
-              <Text>프로필 추가</Text>
-            </TouchableOpacity>
-          );
-        })
+        return (
+          <TouchableOpacity
+            style={[styles.profileContainer, { justifyContent: 'center' }]}
+            onPress={() =>
+              navigation.navigate('AddProfileScreen', { userId: userId })
+            }
+            key={index}>
+            <Icon name={'add'} color={'white'} size={60} />
+          </TouchableOpacity>
+        );
+      })
       : null;
   };
   const PlantList = () => {
@@ -131,18 +144,17 @@ HomeScreen = () => {
             flexWrap: 'wrap',
           }}
           style={{
-            backgroundColor: '#f0f0f0',
             borderRadius: 10,
-            padding: 5,
+            paddingTop: 5,
           }}>
           {renderPlantList(infoList.plants)}
           {renderProfileAddSlot(infoList.max_plant_num)}
-
-          <TouchableOpacity
-            style={[styles.profileContainer, {justifyContent: 'center'}]}
-            onPress={() => navigation.navigate('ShopScreen')}>
-            <Text>프로필 개수 추가</Text>
-          </TouchableOpacity>
+          {plantNumber == infoList.max_plant_num ?
+            <TouchableOpacity
+              style={[styles.profileContainer, { justifyContent: 'center' }]}
+              onPress={() => navigation.navigate('ShopScreen')}>
+              <Text style={{fontWeight: 'bold'}}>프로필 슬롯 추가</Text>
+            </TouchableOpacity> : null}
         </ScrollView>
       </View>
     );
@@ -158,14 +170,19 @@ HomeScreen = () => {
           justifyContent: 'space-between',
         }}>
         <View style={styles.memberInfoSectionWrapper}>
-          <Text>환영합니다! {infoList.user_name}님</Text>
-          <Text>보유 포인트: {infoList.point}</Text>
+          <Icon name={'person-circle-outline'} size={50} color={'gray'}/>
+          <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+            <Text style={{fontWeight: 'bold', fontSize: 16}}>환영합니다! {infoList.user_name}님</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 16}}>보유 포인트: {infoList.point}</Text>
+          </View>
+
         </View>
         <View style={styles.plantListSectionWrapper}>
+          <Text style={{ fontWeight: 'bold' }}>My Plants</Text>
           <PlantList />
         </View>
         <View style={styles.hotSectionWrapper}></View>
-        <Footer />
+        <Footer name={'Home'} />
       </View>
     </SafeAreaView>
   );
@@ -173,10 +190,11 @@ HomeScreen = () => {
 
 const styles = StyleSheet.create({
   memberInfoSectionWrapper: {
-    flex: 2,
+    flex: 1,
     backgroundColor: '#fff',
     //width: screenWidth*0.4,
     //height: screenHeight * 0.2,
+    flexDirection: 'row',
     borderRadius: 15,
     margin: 5,
     padding: 5,
@@ -184,13 +202,13 @@ const styles = StyleSheet.create({
   plantListSectionWrapper: {
     backgroundColor: '#fff',
     //width: screenWidth*0.4,
-    flex: 6,
+    flex: 5,
     borderRadius: 15,
     margin: 5,
     padding: 10,
   },
   hotSectionWrapper: {
-    flex: 3,
+    flex: 4,
     backgroundColor: '#fff',
     //width: screenWidth*0.4,
     //height: screenHeight * 0.2,
@@ -202,24 +220,50 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   profileContainer: {
-    width: screenWidth * 0.273,
-    height: screenHeight * 0.3,
+    width: screenWidth * 0.281,
+    height: screenHeight * 0.283,
     padding: 5,
     backgroundColor: '#C9E7BE',
     flexDirection: 'column',
     alignItems: 'center',
     margin: 5,
     shadowColor: '#cccccc',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     borderRadius: 10,
   },
   profileImage: {
-    width: screenWidth * 0.2,
-    height: screenWidth * 0.2,
-    borderRadius: 20,
+    width: screenWidth * 0.26,
+    height: screenWidth * 0.26,
+    borderRadius: screenWidth * 0.26 / 2,
+    backgroundColor: '#93d07d',
+    borderWidth: 3,
+    borderColor: '#93d07d',
   },
+  nameWrapper: {
+    backgroundColor: 'white',
+    width: screenWidth * 0.26,
+    height: screenHeight * 0.07,
+    borderRadius: 5,
+    padding: 5,
+  },
+  levelBar: {
+    backgroundColor: 'white',
+    width: screenWidth * 0.18,
+    height: screenHeight * 0.03,
+    borderRadius: 5,
+    marginBottom: 5,
+    marginTop: 5,
+    marginLeft: 5,
+  },
+  expBar: {
+    backgroundColor: '#f1c40f',
+    //50+LV*10
+    //width: screenWidth * 0.26 * ((50) - infoList.plant_exp)/
+    height: screenHeight * 0.03,
+    borderRadius: 5,
+  }
 });
 
 export default HomeScreen;

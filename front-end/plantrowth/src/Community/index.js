@@ -5,7 +5,7 @@ CommunityScreen = () => {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
       <Text>CommunityScreen</Text>
-      <Footer/>
+      <Footer name={'Community'}/>
     </View>
   );
 };
