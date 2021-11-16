@@ -53,7 +53,7 @@ public class PlantDiaryApiController {
         System.out.println(dto.getContent());
         System.out.println(dto.getTitle());
         System.out.println(dto.getDate());
-        
+
         PlantDiary diary = PlantDiary.builder()
                 .title(dto.getTitle())
                 .date(dto.getDate())
