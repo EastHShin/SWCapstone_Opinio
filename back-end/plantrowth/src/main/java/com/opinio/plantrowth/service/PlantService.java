@@ -62,5 +62,15 @@ public class PlantService {
         return id;
     }
 
+    public List<Plant> findAllPlant() {
+        return plantRepository.findAll();
+    }
+
+    @Transactional
+    public void updateRemainCycle(Long plantId, Integer remainCycle) {
+        Plant plant = plantRepository.findById(plantId).orElseThrow(IllegalAccessError::new);
+        plant.setRemainCycle(remainCycle);
+    }
+
 
 }
