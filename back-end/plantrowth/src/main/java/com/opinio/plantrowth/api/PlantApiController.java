@@ -45,8 +45,7 @@ public class PlantApiController {
             @PathVariable("user-id") Long userId,
             @ModelAttribute CreatePlantRequestDto request,
             @RequestPart(name = "file_name",required = false) Optional<MultipartFile> file) {
-        System.out.println(request);
-        System.out.println(request.getPlant_name());
+
         long until = request.getRecent_watering().until(LocalDate.now(), ChronoUnit.DAYS);
         Integer remainCycle;
         if(until > request.getAlarm_cycle()){

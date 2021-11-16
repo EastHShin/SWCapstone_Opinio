@@ -48,9 +48,12 @@ public class PlantDiaryApiController {
     public ResponseEntity createDiary(
             @PathVariable("plant-id") Long plantId,
             @ModelAttribute CreateDiaryDTO dto,
-            @RequestPart(required = false) Optional<MultipartFile> file){
+            @RequestPart(name = "file_name", required = false) Optional<MultipartFile> file){
 
-
+        System.out.println(dto.getContent());
+        System.out.println(dto.getTitle());
+        System.out.println(dto.getDate());
+        
         PlantDiary diary = PlantDiary.builder()
                 .title(dto.getTitle())
                 .date(dto.getDate())
