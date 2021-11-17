@@ -58,6 +58,8 @@ class MainPageApiControllerTest {
     private UserPointService userPointService;
     @MockBean
     private WateringService wateringService;
+    @MockBean
+    private PlantExpService plantExpService;
 
     private User user;
     private Plant plant;
@@ -106,7 +108,7 @@ class MainPageApiControllerTest {
         //then
         mockMvc.perform(get("/api/main/{user-id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.length()").value(4))
+                .andExpect(jsonPath("$.data.length()").value(MainPageApiController.MainPageDto.class.getDeclaredFields().length))
                 .andExpect(jsonPath("$.data.plants.length()").value(2))
                 .andExpect(jsonPath("$.data.plants[0].plant_name").value(plant.getPlantName()))
                 .andExpect(jsonPath("$.data.plants[1].plant_name").value(plant2.getPlantName()))

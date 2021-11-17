@@ -13,7 +13,8 @@ public class PlantExpService {
 
     private final PlantRepository plantRepository;
     private final static Integer increasingExp = 10;
-    private final static Integer initialMaxExp = 50;
+    private final static Integer initialMaxExp = 30;
+
     @Transactional
     public Long increaseExp(Long plant_id) {
         Plant plant = plantRepository.findById(plant_id).orElseThrow(IllegalAccessError::new);

@@ -61,6 +61,8 @@ class PlantApiControllerTest {
     private UserPointService userPointService;
     @MockBean
     private WateringService wateringService;
+    @MockBean
+    private PlantExpService plantExpService;
 
     private User user;
     private Plant plant;
@@ -81,8 +83,8 @@ class PlantApiControllerTest {
                 .alarmCycle(2)
                 .waterSupply(3)
                 .plantExp(0)
-                .remainCycle(2)
                 .fileName("ffff")
+                .recentWatering(LocalDate.now().minusDays(1))
                 .user(user)
                 .build();
 
@@ -104,11 +106,13 @@ class PlantApiControllerTest {
     void createPlant() throws Exception {
         //given
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("장미", "토로리",
-                LocalDate.now(), 10, 2, LocalDate.now());
-        given(userService.findUser(1L)).willReturn(user);
-        String json = "{\"plant_species\":\"가시\",\"plant_name\":\"토로리\",\"plant_birth\":[2021,11,9],\"plant_exp\":5,\"water_supply\":5,\"alarm_cycle\":3}";
+                LocalDate.now().minusDays(5), 10, 2, LocalDate.now().minusDays(2));
+        given(userService.findUser(any())).willReturn(user);
+//        String json = "{\"plant_species\":\"가시\",\"plant_name\":\"토로리\",\"plant_birth\":[2021,11,9],\"plant_exp\":5,\"water_supply\":5,\"alarm_cycle\":3}";
         //when
         when(plantService.join(any())).thenReturn(1L);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(requestDto);
         MockMultipartFile dataFile = new MockMultipartFile("data", "", "application/json", json.getBytes(StandardCharsets.UTF_8));
         //then
 //        mockMvc.perform(post("/api/plants/profiles/{user-id}", 1L)
@@ -120,6 +124,7 @@ class PlantApiControllerTest {
 //
         mockMvc.perform(multipart("/api/plants/profiles/{user-id}", 1L)
                 .file(dataFile))
+//                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"id\":1}"));
     }
