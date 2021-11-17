@@ -1,15 +1,15 @@
 package com.opinio.plantrowth.api;
 
 
-import com.opinio.plantrowth.api.dto.diary.CreateDiaryDTO;
-import com.opinio.plantrowth.api.dto.diary.DiaryDTO;
-import com.opinio.plantrowth.api.dto.diary.DiaryLookUpDTO;
-import com.opinio.plantrowth.api.dto.diary.DiaryResult;
+import com.opinio.plantrowth.api.dto.diary.*;
 import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.PlantDiary;
+import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.service.DiaryService;
+import com.opinio.plantrowth.service.PlantExpService;
 import com.opinio.plantrowth.service.PlantService;
+import com.opinio.plantrowth.service.UserPointService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +32,8 @@ public class PlantDiaryApiController {
     private final FileUploadService fileUploadService;
     private final DiaryService diaryService;
     private final PlantService plantService;
+    private final UserPointService userPointService;
+    private final PlantExpService plantExpService;
     private final String filePath = "diary";
 
     @GetMapping("/api/plants/diary/{plant-id}/all")
@@ -67,9 +69,22 @@ public class PlantDiaryApiController {
             diary.setFilename(uploadImageName);
         }
         Long result = diaryService.createDiary(diary);
+        Long updatedPlantId = plantExpService.increaseExp(plant.getId());
+        User user = userPointService.increasePoint(plant.getUser().getId());
+        Plant updatedPlant = plantService.findOnePlant(updatedPlantId);
+
+        DiaryResponseDTO responseDTO = new DiaryResponseDTO();
+        responseDTO.setPlantExp(updatedPlant.getPlantExp());
+        responseDTO.setPoint(user.getPoint());
+        Message message= new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("식물 일기 생성 완료");
+        message.setData(responseDTO);
 
         return result !=null?
-                ResponseEntity.ok().body("식물 일기 생성 완료"):
+                new ResponseEntity<>(message, headers, HttpStatus.OK):
                 ResponseEntity.badRequest().build();
     }
 

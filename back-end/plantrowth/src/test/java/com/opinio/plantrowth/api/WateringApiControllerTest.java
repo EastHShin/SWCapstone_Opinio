@@ -54,6 +54,8 @@ class WateringApiControllerTest {
     private UserPointService userPointService;
     @MockBean
     private WateringService wateringService;
+    @MockBean
+    private PlantExpService plantExpService;
 
     private User user;
     private Plant plant;

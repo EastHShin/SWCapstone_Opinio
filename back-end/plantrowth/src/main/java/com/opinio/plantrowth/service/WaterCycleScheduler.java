@@ -18,7 +18,7 @@ public class WaterCycleScheduler {
     private final PlantService plantService;
     private final FCMService fcmService;
 
-    @Scheduled(cron = "0 53 19 * * *")
+    @Scheduled(cron = "0 0 10 * * *")
     public void wateringSchedule() {
         /*
         질병진단 경험치 획득 중복 방지와 식물일기 작성 경험치,포인트 획득 중복 방지 로직 추가할 것
