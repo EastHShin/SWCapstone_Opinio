@@ -14,12 +14,12 @@ import {
     Alert
 } from 'react-native';
 
-import { fetchDiary } from '../actions/diaryActions';
+import { fetchDiary } from '../actions/DiaryActions';
 import { useIsFocused } from '@react-navigation/native'
 import Loader from '../Loader';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { deleteDiary, setResultState } from '../actions/diaryActions';
+import { deleteDiary, setResultState } from '../actions/DiaryActions';
 
 const DiaryDetailScreen = ({ route, navigation }) => {
 
@@ -31,8 +31,8 @@ const DiaryDetailScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
 
-    const diary = useSelector(state => state.diaryReducer.diary);
-    const result = useSelector(state => state.diaryReducer.result);
+    const diary = useSelector(state => state.DiaryReducer.diary);
+    const result = useSelector(state => state.DiaryReducer.result);
 
     useEffect(() => {
         if (isFocused) {

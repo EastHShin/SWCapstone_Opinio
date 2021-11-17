@@ -13,9 +13,10 @@ import {
 
 import Evillcons from 'react-native-vector-icons/EvilIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { fetchDiaries } from '../actions/diaryActions';
+import { fetchDiaries } from '../actions/DiaryActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native'
+import LevelUp from '../../LevelUp';
 
 const Item = ({ item, onPress, style }) => {
 
@@ -26,7 +27,7 @@ const Item = ({ item, onPress, style }) => {
       </View>
       <View>
         <Text style={styles.content}>
-          {/* {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content} */}
+          {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content}
         </Text>
       </View>
       <View style={{ alignItems: "flex-end" }}>
@@ -43,7 +44,7 @@ const DiaryScreen = ({ route,navigation }) => {
 
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
-  const diaries = useSelector(state => state.diaryReducer.diaries);
+  const diaries = useSelector(state => state.DiaryReducer.diaries);
   const isFocused = useIsFocused();
 
 
@@ -72,6 +73,7 @@ const DiaryScreen = ({ route,navigation }) => {
 
   return (
     <SafeAreaView style={styles.body}>
+      	<LevelUp />
       <View style={styles.top}>
         <Image
           source={{ uri: "https://img.marieclairekorea.com/2021/04/mck_60657bd4d3c01.jpg" }} //merge 할ㄸ plantImg로 변경 

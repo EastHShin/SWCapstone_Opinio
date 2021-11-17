@@ -17,7 +17,7 @@ import Footer from './src/component/Footer';
 import Loader from './src/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getHomeInfo } from './src/actions/HomeActions';
-import { logoutUser } from './src/actions/userActions';
+import { logoutUser } from './src/actions/UserActions';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -32,7 +32,7 @@ HomeScreen = () => {
 
     const infoList = useSelector(state => state.HomeReducer.infoList);
     const [name, setName] = useState('');
-    const isLogin = useSelector(state => state.userReducer.isLogin);
+    const isLogin = useSelector(state => state.UserReducer.isLogin);
 
     useEffect(() => {
         getData();

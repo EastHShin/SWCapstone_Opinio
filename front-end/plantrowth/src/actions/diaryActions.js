@@ -64,6 +64,7 @@ export const saveDiary = (diary, plantId) => {
         })
             .then(function (res) {
                 if (res.status == 200) {
+                    //경험치, 포인트 얻어오는거 dispatch 
                     dispatch({
                         type: SAVE_DIARY,
                         payload: "success"

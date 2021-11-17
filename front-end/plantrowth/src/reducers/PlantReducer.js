@@ -4,6 +4,7 @@ let initialState = {
     addResult: '',
     deleteResult: '',
     updateResult: '',
+    levelUp : false
 };
 
 function PlantReducer(state = initialState, action) {

@@ -36,7 +36,7 @@ function App() {
 
     messaging().onMessage(async remoteMessage => {
       console.log(remoteMessage.data.plant_id);
-
+      
       Alert.alert(
         "물주기 알림", "식물에게 물을 줄 시간입니다!", [
         {

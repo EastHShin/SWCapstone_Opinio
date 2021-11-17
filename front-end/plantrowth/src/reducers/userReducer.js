@@ -7,7 +7,7 @@ const initialState = {
     registerText:''
 };
 
-function userReducer(state=initialState, action){
+function UserReducer(state=initialState, action){
     switch (action.type){
         case REGISTER_USER :
             return {...state, registerState:action.payload};
@@ -25,4 +25,4 @@ function userReducer(state=initialState, action){
 
 }
 
-export default userReducer;
+export default UserReducer;

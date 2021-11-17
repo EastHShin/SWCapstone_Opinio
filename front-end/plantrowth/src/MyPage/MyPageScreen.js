@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../actions/userActions';
+import { logoutUser } from '../actions/UserActions';
 
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import {
+  SafeAreaView,
   View,
   StyleSheet,
   Text,
@@ -53,7 +54,7 @@ const MyPageScreen = ({ navigation }) => {
   }
  
   return (
-    <View style={styles.body}>
+    <SafeAreaView style={styles.body}>
       <View style={styles.top}>
         <TouchableOpacity
           style={{ marginStart: Dimensions.get('window').width * 0.03 }}
@@ -126,29 +127,9 @@ const MyPageScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <Footer />
-    </View>
+    </SafeAreaView>
   )
 };
-
-const CustomButton = (props) => {
-  return (
-    <Pressable
-      onPress={props.onPressFunction}
-      hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
-      android_ripple={{ color: '#00000050' }}
-      style={({ pressed }) => [
-        { backgroundColor: pressed ? '#dddddd' : props.color },
-        styles.button,
-        { ...props.style }
-      ]}
-    >
-      <Text style={styles.text}>
-        {props.title}
-      </Text>
-    </Pressable>
-  )
-
-}
 
 const styles = StyleSheet.create({
 
@@ -195,6 +176,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 10,
   },
+
+  
+
 
 })
 

@@ -19,7 +19,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { saveDiary, setResultState } from '../actions/diaryActions';
+import { saveDiary, setResultState } from '../actions/DiaryActions';
 import { useIsFocused } from '@react-navigation/native'
 
 const DiaryCreateScreen = ({ route,navigation }) => {
@@ -38,7 +38,7 @@ const DiaryCreateScreen = ({ route,navigation }) => {
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
 
-    const result = useSelector(state => state.diaryReducer.result);
+    const result = useSelector(state => state.DiaryReducer.result);
 
    useEffect(() => {
        if(result == "success" && isFocused){

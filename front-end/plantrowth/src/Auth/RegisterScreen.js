@@ -20,7 +20,7 @@ import EntypoIcons from 'react-native-vector-icons/Entypo';
 import { useIsFocused } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useDispatch,useSelector } from 'react-redux';
-import { registerUser,setRegisterState } from '../actions/userActions';
+import { registerUser,setRegisterState } from '../actions/UserActions';
 import messaging from '@react-native-firebase/messaging';
 
 function RegisterScreen({ navigation }) {
@@ -42,7 +42,7 @@ function RegisterScreen({ navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
 
-  const registerState = useSelector(state => state.userReducer.registerState);
+  const registerState = useSelector(state => state.UserReducer.registerState);
   const passwordInputRef = createRef();
 
   const maximumDate = new Date();
