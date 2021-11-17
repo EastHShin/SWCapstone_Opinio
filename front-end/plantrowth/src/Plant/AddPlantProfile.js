@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import {useIsFocused, useNavigation} from '@react-navigation/core';
 import Loader from '../Loader';
 import Modal from 'react-native-modal';
@@ -80,23 +81,23 @@ AddPlantProfile = ({route}) => {
 
   const onPressHandler = () => {
     if (!plantImage) {
-      alert('식물 사진 입력');
+      alert('식물의 사진을 등록해주세요');
       return;
     }
     if (!plantName) {
-      alert('식물 이름 입력');
+      alert('식물의 이름을 입력해주세요');
       return;
     }
     if (!plantSpecies) {
-      alert('식물 종 입력');
+      alert('식물의 종을 입력해주세요');
       return;
     }
     if (!plantBirth) {
-      alert('식물 키우기 시작한 날 입력');
+      alert('식물을 키우기 시작한 날을 입력해주세요');
       return;
     }
     if (!alarmCycle) {
-      alert('Water Cycle 입력');
+      alert('식물에게 물을 주는 주기를 입력해주세요');
       return;
     }
     if (!lastWatering) {
@@ -107,19 +108,18 @@ AddPlantProfile = ({route}) => {
           {
             text: '네',
             onPress: () => {
-
               const fd = new FormData();
-        
-              console.log('네 눌렀음'+fd);
+
+              console.log('네 눌렀음' + fd);
 
               fd.append('plant_species', plantSpecies);
               fd.append('plant_name', plantName);
               fd.append('plant_birth', plantBirth);
-        
+
               fd.append('water_supply', waterSupply);
               fd.append('alarm_cycle', alarmCycle);
               fd.append('recent_watering', plantBirth);
-        
+
               fd.append('file_name', {
                 name: selectedImage.assets[0].fileName,
                 uri: selectedImage.assets[0].uri,
@@ -210,7 +210,7 @@ AddPlantProfile = ({route}) => {
     const day = ('0' + date.getDate()).slice(-2);
 
     setValiationLastWatering(date);
-    setLastWatering(year + '-' + month + '-' + day)
+    setLastWatering(year + '-' + month + '-' + day);
     setTextLastWatering(year + '-' + month + '-' + day);
     //console.warn('palntbirth: '+plantBirth);
   };
@@ -259,18 +259,11 @@ AddPlantProfile = ({route}) => {
         padding: 5,
         backgroundColor: '#BEE9B4',
       }}>
-      <KeyboardAwareScrollView>
-        <Loader loading={loading} />
-        <View style={{alignItems: 'flex-start'}}>
-          <Button
-            title="Back"
-            onPress={() => {
-              navigation.navigate('HomeScreen');
-            }}
-          />
-        </View>
-        <View style={styles.sectionWrapper}>
-          <Text style={{fontWeight: 'bold', color: '#556951'}}>
+      <Loader loading={loading} />
+      <View style={styles.sectionWrapper}>
+        <KeyboardAwareScrollView>
+          <Text
+            style={{fontWeight: 'bold', color: '#556951', marginBottom: 10, textAlign: 'center'}}>
             식물 프로필 등록
           </Text>
           <View
@@ -280,7 +273,7 @@ AddPlantProfile = ({route}) => {
               justifyContent: 'center',
             }}>
             <TouchableOpacity
-              style={{margin: 20}}
+              style={styles.photoButton}
               activeOpacity={0.5}
               onPress={() => photoUpload('pick')}>
               <Icon name="image" size={35} color="#556951" />
@@ -294,36 +287,42 @@ AddPlantProfile = ({route}) => {
               ) : null}
             </View>
             <TouchableOpacity
-              style={{margin: 20}}
+              style={styles.photoButton}
               activeOpacity={0.5}
               onPress={() => photoUpload('take')}>
               <Icon name="camera" size={35} color="#556951" />
             </TouchableOpacity>
           </View>
           <View style={styles.section}>
-            <Icon name="pencil" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <FontAwesome name="pencil" size={30} color="#93d07d" />
+            </View>
             <TextInput
               style={styles.input}
               onChangeText={PlantName => setPlantName(PlantName)}
-              underlineColorAndroid="#f000"
+              underlineColorAndroid="#000"
               placeholder="식물 이름"
               placeholderTextColor="#808080"
               onSubmitEditing={Keyboard.dismiss}
             />
           </View>
           <View style={styles.section}>
-            <Icon name="md-rose" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <Icon name="md-rose" size={30} color="#93d07d" />
+            </View>
             <TextInput
               style={styles.input}
               onChangeText={PlantSpecies => setPlantSpecies(PlantSpecies)}
-              underlineColorAndroid="#f000"
+              underlineColorAndroid="#000"
               placeholder="식물 종"
               placeholderTextColor="#808080"
               onSubmitEditing={Keyboard.dismiss}
             />
           </View>
           <View style={styles.section}>
-            <Icon name="md-calendar" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <Icon name="md-calendar" size={30} color="#93d07d" />
+            </View>
             <TouchableOpacity
               style={{backgroundColor: '#fff'}}
               onPress={() => showDatePicker('plantBirth')}>
@@ -332,7 +331,7 @@ AddPlantProfile = ({route}) => {
                 style={styles.input}
                 placeholder="키우기 시작한 날"
                 placeholderTextColor="#808080"
-                underlineColorAndroid="transparent"
+                underlineColorAndroid="#000"
                 editable={false}
                 value={plantTextBirth}
                 onSubmitEditing={Keyboard.dismiss}
@@ -356,13 +355,15 @@ AddPlantProfile = ({route}) => {
             />
           </View>
           <View style={styles.section}>
-            <Icon name="notifications" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <Icon name="notifications" size={30} color="#93d07d" />
+            </View>
             <TouchableOpacity
               style={{backgroundColor: '#fff'}}
               onPress={() => setDayPickerVisibility(true)}>
               <TextInput
                 style={styles.input}
-                underlineColorAndroid="#f000"
+                underlineColorAndroid="#000"
                 placeholder="Water Cycle"
                 placeholderTextColor="#808080"
                 editable={false}
@@ -392,10 +393,9 @@ AddPlantProfile = ({route}) => {
                   flex: 1,
                   flexDirection: 'row',
                   alignItems: 'center',
-                  backgroundColor: 'RED',
                 }}>
                 <Text> </Text>
-                <View style={{width: 150, height: 250, backgroundColor: 'RED'}}>
+                <View style={{width: 150, height: 250}}>
                   <ScrollPicker
                     dataSource={dayArray}
                     selectedIndex={6}
@@ -421,27 +421,18 @@ AddPlantProfile = ({route}) => {
             </View>
           </Modal>
           <View style={styles.section}>
-            <Icon name="water" size={30} color="#BEE9B4" />
-
-            {/* <TextInput
-              style={styles.input}
-              onChangeText={WaterSupply => setWaterSupply(WaterSupply)}
-              underlineColorAndroid="#f000"
-              placeholder="Water Supply"
-              placeholderTextColor="#808080"
-              onSubmitEditing={
-                Keyboard.dismiss
-              }
-            /> */}
-            <View style={{alignItems: 'center'}}>
+          <View style={styles.iconWrapper}>
+              <Icon name="water" size={30} color="#93d07d" />
+            </View>
+            <View style={{alignItems: 'center',width: screenWidth * 0.6}}>
               <Text style={{fontWeight: 'bold', fontSize: 12}}>물 주는 양</Text>
               <Text style={{fontWeight: 'bold', fontSize: 11}}>
-                {
-                  '적게                            적당히                            많이'
+              {
+                  '조금만                             적당히                                많이'
                 }
               </Text>
               <Slider
-                style={{width: screenWidth * 0.6, height: 20, marginLeft: 5}}
+                style={{width: screenWidth * 0.66, height: 20, marginLeft: 11}}
                 minimumValue={1}
                 maximumValue={3}
                 step={1}
@@ -457,7 +448,9 @@ AddPlantProfile = ({route}) => {
             </View>
           </View>
           <View style={styles.section}>
-            <Icon name="md-calendar" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <Icon name="md-calendar" size={30} color="#93d07d" />
+            </View>
             <TouchableOpacity
               style={{backgroundColor: '#fff'}}
               onPress={() => showDatePicker('watering')}>
@@ -465,8 +458,8 @@ AddPlantProfile = ({route}) => {
                 pointerEvents="none"
                 style={styles.input}
                 placeholder="마지막 물 준 날"
-                placeholderTextColor="#808080"
-                underlineColorAndroid="transparent"
+                placeholderTextColor="#999999"
+                underlineColorAndroid="#000"
                 editable={false}
                 value={textLastWatering}
                 onSubmitEditing={Keyboard.dismiss}
@@ -491,44 +484,99 @@ AddPlantProfile = ({route}) => {
               }
             />
           </View>
+        </KeyboardAwareScrollView>
+        <View style={{width: 400, flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <FontAwesome name={'close'} size={40} color={'#e3242b'} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onPressHandler()}>
+            <FontAwesome name={'check'} size={40} color={'#93d07d'}/>
+          </TouchableOpacity>
         </View>
-        <Button title="프로필 등록" onPress={onPressHandler} />
-      </KeyboardAwareScrollView>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   imageWrapper: {
-    width: screenWidth * 0.25,
-    height: screenWidth * 0.25,
+    width: screenWidth * 0.3,
+    height: screenWidth * 0.3,
     backgroundColor: '#f1f3f5',
-    marginBottom: 5,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.30,
+    shadowRadius: 4.65,
+    
+    elevation: 8,
   },
   sectionWrapper: {
+    flex: 1,
     backgroundColor: '#FFFFFF',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: screenHeight * 0.78,
     width: screenWidth * 0.9,
+    //height: screenHeight * 0.78,
     padding: 10,
     margin: 10,
     borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+
+    elevation: 9,
   },
   section: {
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
-    height: screenHeight * 0.07,
+    justifyContent: 'flex-start',
+    //backgroundColor: 'red',
+    width: screenWidth * 0.66,
+    height: screenHeight * 0.09,
   },
   input: {
-    color: '#000000',
-    borderWidth: 2,
-    borderColor: '#BEE9B4',
+    color: '#222222',
     width: screenWidth * 0.6,
     marginLeft: 5,
     borderRadius: 10,
+    padding: 5,
+  },
+  photoButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    margin: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+
+    elevation: 9,
+  },
+  iconWrapper: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

@@ -7,7 +7,7 @@ ShopScreen = () => {
     <View
       style={{flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
       <Text>ShopScreen</Text>
-      <Footer />
+      <Footer name={'Shop'}/>
     </View>
   );
 };

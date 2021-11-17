@@ -24,6 +24,10 @@ import {
   setDiagnosisState,
 } from '../actions/PlantActions';
 import Modal from 'react-native-modal';
+import ProgressCircle from 'react-native-progress-circle';
+import Icon from 'react-native-vector-icons/dist/Ionicons';
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import Entypo from 'react-native-vector-icons/dist/Entypo';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -31,9 +35,12 @@ const screenWidth = Dimensions.get('window').width;
 const ManagePlant = ({route}) => {
   console.log('manage Plant에서 plant_id: ' + JSON.stringify(route.params));
   const plantId = route.params.plantId;
+  const point = route.params.point;
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [isModalVisible, setModalVisibility] = useState(false);
+  const [isDiagnosisModalVisible, setDiagnosisModalVisibility] =
+    useState(false);
+  const [isInfoModalVisible, setInfoModalVisibility] = useState(false);
 
   const profile = useSelector(state => state.PlantReducer.profile);
   const deletePlantState = useSelector(
@@ -90,8 +97,8 @@ const ManagePlant = ({route}) => {
     );
     if (diagnosisState == 'success' && isFocused) {
       console.log('useEffect에서 diagnosis success');
-      setLoading(false);
       alert('질병진단 성공');
+      setLoading(false);
       dispatch(setDiagnosisState(''));
       navigation.navigate('DiagnosisScreen');
     } else if (diagnosisState == 'failure' && isFocused) {
@@ -110,6 +117,7 @@ const ManagePlant = ({route}) => {
           text: '잘 가, 안녕',
           onPress: () => {
             setLoading(true);
+            setInfoModalVisibility(false);
             console.log('deletePlantHandler 호출');
             dispatch(deletePlant(plantId));
           },
@@ -131,7 +139,7 @@ const ManagePlant = ({route}) => {
   };
   const diagnosisHandler = choice => {
     photoUpload(choice);
-    setModalVisibility(false);
+    setDiagnosisModalVisibility(false);
     if (selectedImage) {
       console.log('selectedImage' + selectedImage);
       const fd = new FormData();
@@ -175,23 +183,54 @@ const ManagePlant = ({route}) => {
     });
   };
 
+  const renderWaterSupply = index => {
+    switch (index) {
+      case 1:
+        return <Text style={styles.infoModalText}>조금만</Text>;
+      case 2:
+        return <Text style={styles.infoModalText}>적당히</Text>;
+      case 3:
+        return <Text style={styles.infoModalText}>많이</Text>;
+      default:
+        return;
+    }
+  };
+
   const renderProfile = profile => {
     console.log('renderProfile에서: ' + JSON.stringify(profile));
     return profile ? (
       <View style={{alignItems: 'center'}}>
-        <Text>{profile.plant_name}</Text>
-
-        <Image
+        <View
           style={{
-            width: 300,
-            height: 300,
             borderRadius: 15,
             borderWidth: 5,
-            borderColor: '#C9E7BE',
-          }}
-          source={{uri: profile.file_name}}
-        />
-        <Text>{profile.plant_exp}</Text>
+            borderColor: '#93d07d',
+            backgroundColor: '#93d07d',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 5,
+            },
+            shadowOpacity: 0.34,
+            shadowRadius: 6.27,
+
+            elevation: 10,
+          }}>
+          <Image
+            style={{
+              width: 300,
+              height: 300,
+              borderRadius: 10,
+            }}
+            source={{uri: profile.file_name}}
+          />
+        </View>
+        <View style={styles.expWrapper}>
+          <Text>{profile.plant_exp}</Text>
+          <View style={styles.levelBar}>
+            <View style={styles.expBar}></View>
+          </View>
+        </View>
       </View>
     ) : null;
   };
@@ -204,58 +243,146 @@ const ManagePlant = ({route}) => {
         justifyContent: 'space-between',
       }}>
       <Loader loading={loading} />
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text>Manage Plant Screen</Text>
-        {renderProfile(profile)}
-        <View style={{flexDirection: 'row'}}>
-          <Button
-            title="식물 정보 수정"
-            onPress={() =>
-              navigation.navigate('UpdatePlantProfileScreen', {
-                profile: profile,
-                plantId: plantId,
-              })
-            }
-          />
-          <Button
-            title="식물 정보 삭제"
+      <View style={{justifyContent: 'space-between'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <TouchableOpacity
+            style={[styles.backButton, {marginLeft: 15, marginTop: 5}]}
+            onPress={() => navigation.navigate('HomeScreen')}>
+            <Icon name={'return-up-back'} size={40} color={'white'} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.backButton, {marginRight: 15, marginTop: 5}]}
+            onPress={() => navigation.navigate('ShopScreen')}>
+            <Entypo name={'shop'} size={40} color={'white'} />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <View
+            style={{
+              width: 300,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <View style={styles.plantNameWrapper}>
+              <Text style={{fontWeight: 'bold', fontSize: 14}}>
+                {profile.plant_name}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.plantInfoButton}
+              onPress={() => setInfoModalVisibility(true)}
+              activeOpacity={1.0}>
+              <Entypo name={'magnifying-glass'} size={30} color={'white'} />
+            </TouchableOpacity>
+          </View>
+          {renderProfile(profile)}
+        </View>
+        <View style={styles.tabs}>
+          <TouchableOpacity
+            style={styles.buttonOutside}
             onPress={() => {
-              deletePlantHandler();
-            }}
-          />
+              wateringHandler();
+            }}>
+            <ProgressCircle
+              percent={Math.floor(
+                (1 -
+                  (profile.alarm_cycle - profile.remain_cycle) /
+                    profile.alarm_cycle) *
+                  100,
+              )}
+              radius={(screenWidth * 0.27) / 2}
+              borderWidth={8}
+              color="#5d9cec"
+              shadowColor="#e8ebed"
+              bgColor="#fff">
+              <View
+                style={{
+                  flex: 1.5,
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                }}>
+                <Icon name={'water'} size={40} color={'#5d9cec'} />
+              </View>
+              <View style={{flex: 1, alignItems: 'center'}}>
+                <Text style={{fontSize: 13, fontWeight: 'bold'}}>물 주기</Text>
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>
+                  {profile.remain_cycle}일 후
+                </Text>
+              </View>
+            </ProgressCircle>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonOutside}
+            onPress={() => {
+              Alert.alert(
+                `질병진단에는 100포인트가 소모돼요`,
+                `질병진단을 계속 하시겠어요?`,
+                [
+                  {
+                    text: '아니오',
+                    onPress: () => {},
+                  },
+                  {
+                    text: '계속할게요',
+                    onPress: () => {
+                      if (point >= 100) {
+                        setDiagnosisModalVisibility(true);
+                      } else {
+                        alert(
+                          '갖고 계신 포인트가 모자라요!\n식물에게 물을 주거나, 식물일기를 작성하시면 포인트를 얻으실 수 있어요!\n',
+                        );
+                      }
+                    },
+                  },
+                ],
+              );
+            }}>
+            <View
+              style={{
+                flex: 1.5,
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+              }}>
+              <FontAwesome name={'plus-square'} size={40} color={'#8ab833'} />
+            </View>
+            <View style={{flex: 1, alignItems: 'center'}}>
+              <Text style={{fontSize: 14, fontWeight: 'bold', margin: 3}}>
+                질병진단
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.buttonOutside, {borderColor: '#a07e63'}]}
+            onPress={() =>
+              navigation.navigate('DiaryScreen', {
+                plantId: plantId,
+                plantImg: profile.file_name,
+              })
+            }>
+            <View
+              style={{
+                flex: 1.5,
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+              }}>
+              <Entypo name={'book'} size={40} color={'#a07e63'} />
+            </View>
+            <View style={{flex: 1, alignItems: 'center'}}>
+              <Text style={{fontSize: 14, fontWeight: 'bold', margin: 3}}>
+                식물일기
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.tabs}>
-        <TouchableOpacity
-          style={styles.tabButton}
-          onPress={() => {
-            wateringHandler();
-          }}>
-          <Text style={styles.tabLabel}>물 주기</Text>
-          <Text>{profile.remain_cycle}일 후</Text>
-          <Text>
-            수분량: {Math.floor((1-((profile.alarm_cycle - profile.remain_cycle) /
-              profile.alarm_cycle))*
-              100)}
-            %
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tabButton}
-          onPress={() => setModalVisibility(true)}>
-          <Text style={styles.tabLabel}>질병 진단</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tabButton}
-          onPress={() =>
-            navigation.navigate('DiaryScreen', {plantId: plantId, plantImg: profile.file_name})
-          }>
-          <Text style={styles.tabLabel}>식물 일기</Text>
-        </TouchableOpacity>
-      </View>
       <Modal
-        isVisible={isModalVisible}
-        onBackButtonPress={() => setModalVisibility(false)}
+        isVisible={isDiagnosisModalVisible}
+        onBackButtonPress={() => setDiagnosisModalVisibility(false)}
         style={{
           justifyContent: 'center',
           alignItems: 'center',
@@ -272,25 +399,122 @@ const ManagePlant = ({route}) => {
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              height: screenHeight * 0.1,
+              height: screenHeight * 0.2,
             }}>
             <TouchableOpacity
-              style={{margin: 10}}
+              style={styles.imageButton}
               onPress={() => diagnosisHandler('pick')}>
-              <Text>갤러리에서 이미지 선택</Text>
+              <Text style={styles.imageModalText}>갤러리에서 이미지 선택</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{margin: 10}}
+              style={styles.imageButton}
               onPress={() => diagnosisHandler('take')}>
-              <Text>카메라로 이미지 촬영</Text>
+              <Text style={styles.imageModalText}>카메라로 이미지 촬영</Text>
             </TouchableOpacity>
           </View>
 
-          <Button
-            title="close"
-            onPress={() => setModalVisibility(false)}
-            style={{margin: 10}}
-          />
+          <TouchableOpacity
+            style={styles.infoModalButton}
+            onPress={() => {
+              setDiagnosisModalVisibility(false);
+            }}>
+            <FontAwesome name={'close'} size={35} color={'#222222'} />
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <Modal
+        isVisible={isInfoModalVisible}
+        onBackButtonPress={() => setInfoModalVisibility(false)}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            width: screenWidth * 0.7,
+            height: screenHeight * 0.7,
+            backgroundColor: 'white',
+            justifyContent: 'space-between',
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 19,
+              color: '#222222',
+            }}>
+            식물 상세정보
+          </Text>
+          <View style={{flex: 10, alignItems: 'flex-start', padding: 10}}>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>이름: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_name}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>식물 종: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_species}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>키우기 시작한 날짜: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_birth}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>최근에 물 준 날짜: </Text>
+              <Text style={styles.infoModalText}>
+                {profile.recent_watering}
+              </Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>물 주는 정도: </Text>
+              {renderWaterSupply(profile.water_supply)}
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>식물 레벨: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_name}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>현재 보유 경험치: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>
+                레벨업 까지 필요한 경험치:{' '}
+              </Text>
+              <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity
+              style={styles.infoModalButton}
+              onPress={() => {
+                setInfoModalVisibility(false);
+                navigation.navigate('UpdatePlantProfileScreen', {
+                  profile: profile,
+                  plantId: plantId,
+                });
+              }}>
+              <FontAwesome name={'pencil'} size={35} color={'#222222'} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.infoModalButton}
+              onPress={() => {
+                setInfoModalVisibility(false);
+              }}>
+              <FontAwesome name={'close'} size={35} color={'#222222'} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.infoModalButton}
+              onPress={() => {
+                deletePlantHandler();
+              }}>
+              <FontAwesome name={'trash'} size={35} color={'#222222'} />
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </SafeAreaView>
@@ -301,28 +525,164 @@ const styles = StyleSheet.create({
   plantImage: {
     width: screenWidth * 0.5,
     height: screenWidth * 0.5,
-  },
-  tabLabel: {
-    textAlign: 'center',
-    justifyContent: 'center',
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: 'center',
-    width: screenWidth * 0.33,
-    height: 60,
-    backgroundColor: '#A0A0A0',
-    borderColor: 'gray',
-    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   tabs: {
-    height: 60,
+    width: '100%',
+    height: screenWidth * 0.27,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    margin: 10,
+  },
+  buttonOutside: {
+    width: screenWidth * 0.27,
+    height: screenWidth * 0.27,
+    borderRadius: (screenWidth * 0.27) / 2,
+    borderWidth: 8,
+    borderColor: '#8ab833',
     backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  plantNameWrapper: {
+    alignItems: 'center',
+    margin: 5,
+    marginLeft: 15,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    padding: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  expWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 5,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  levelBar: {
+    backgroundColor: 'white',
+    width: screenWidth * 0.6,
+    height: screenHeight * 0.03,
+    borderRadius: 5,
+    marginBottom: 5,
+    marginTop: 5,
+    marginLeft: 5,
+  },
+  expBar: {
+    backgroundColor: '#f1c40f',
+    //50+LV*10
+    //width: screenWidth * 0.6 * ((50) - infoList.plant_exp)/
+    height: screenHeight * 0.03,
+    borderRadius: 5,
+  },
+  backButton: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#93d07d',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.55,
+    shadowRadius: 3.84,
+    elevation: 7,
+  },
+  plantInfoButton: {
+    width: 40,
+    height: 40,
+    paddingTop: 3,
+    backgroundColor: '#93d07d',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginRight: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
+  infoModalButton: {
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageButton: {
+    width: screenWidth * 0.5,
+    height: 50,
+    margin: 3,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  imageModalText: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'center',
+  },
+  infoModalText: {
+    fontWeight: 'bold',
+    color: '#222222',
+    fontSize: 16,
+    margin: 10,
+  },
+  infoModalTextWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    borderTopWidth: 0.5,
-    borderColor: '#A0A0A0',
+    width: '100%',
   },
 });
 
