@@ -14,7 +14,7 @@ public class UserPointService {
     private final UserRepository userRepository;
 
     private static final Integer increasingPoint = 10;
-    private static final Integer decreasingPoint = 10;
+    private static final Integer decreasingPoint = 30;
 
     @Transactional
     public User increasePoint(Long id) {
