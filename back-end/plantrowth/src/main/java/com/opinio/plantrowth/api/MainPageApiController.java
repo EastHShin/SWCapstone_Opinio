@@ -74,12 +74,14 @@ public class MainPageApiController {
         private Long plant_id;
         private String plant_name;
         private Integer plant_exp;
+        private Integer plant_level;
         private String file_name;
 
         public MainPagePlantDto(Plant plant) {
             plant_id = plant.getId();
             plant_name = plant.getPlantName();
             plant_exp = plant.getPlantExp();
+            plant_level = plant.getPlantLevel();
             file_name = plant.getFileName();
         }
     }

@@ -17,6 +17,7 @@ public class PlantManageDto {
     private LocalDate plant_birth;
 
     private Integer plant_exp;
+    private Integer plant_level;
     private String file_name;
     private Integer water_supply;
     private Integer alarm_cycle;
@@ -30,6 +31,7 @@ public class PlantManageDto {
         plant_name = plant.getPlantName();
         plant_birth = plant.getPlantBirth();
         plant_exp = plant.getPlantExp();
+        plant_level = plant.getPlantLevel();
         file_name = plant.getFileName();
         water_supply = plant.getWaterSupply();
         alarm_cycle = plant.getAlarmCycle();
