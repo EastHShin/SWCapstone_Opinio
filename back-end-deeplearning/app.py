@@ -82,8 +82,36 @@ def infer_image():
     value = list_1[1]
     value2 = list_2[1]
 
+    disease_name = ''
+    if int(value) == 0:
+        disease_name = "Scab"
+    elif int(value) == 1 or int(value) == 11:
+        disease_name = "Black_Rot"
+    elif int(value) == 2 or int(value) == 8:
+        disease_name = "Rust"
+    elif int(value) == 5 or int(value) == 25:
+        disease_name = "Powdery_Mildew"
+    elif int(value) == 7 or int(value) == 16 or int(value) == 18 or int(value) == 28 or int(value) == 32 or int(value) == 34:
+        disease_name = "Leaf_Spot"
+    elif int(value) == 9 or int(value) == 13 or int(value) == 20 or int(value) == 21 or int(value) == 29 or int(value) == 30:
+        disease_name = "Blight"
+    elif int(value) == 12:
+        disease_name = "Black_Measles"
+    elif int(value) == 15:
+        disease_name = "Citrus_Greening"
+    elif int(value) == 26:
+        disease_name = "Leaf_Scorch(Virus)"
+    elif int(value) == 31:
+        disease_name = "Mold"
+    elif int(value) == 33:
+        disease_name = "Mite"
+    elif int(value) == 35 or int(value) == 36:
+        disease_name = "Virus"
+    else:
+        disease_name = "Healthy"
+
     answer = OrderedDict()
-    answer["disease_model_1"] = list_1[0]
+    answer["disease_model_1"] = disease_name
     answer["disease_model_2"] = list_2[0]
     answer["percent_model_1"] = float(list_1[2][value] * 100)
     answer["percent_model_2"] = float(list_2[2][value2] * 100)
