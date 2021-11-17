@@ -55,26 +55,6 @@ const Footer = (route) => {
           </TouchableOpacity>
         )
       })}
-      {/* <TouchableOpacity
-        style={styles.tabButton}
-        onPress={() => navigation.navigate('HomeScreen')}>
-        <Text style={styles.tabLabel}>홈</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.tabButton}
-        onPress={() => navigation.navigate('CommunityScreen')}>
-        <Text style={styles.tabLabel}>커뮤니티</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.tabButton}
-        onPress={() => navigation.navigate('ShopScreen')}>
-        <Text style={styles.tabLabel}>상점</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.tabButton}
-        onPress={() => navigation.navigate('MyPageScreen')}>
-        <Text style={styles.tabLabel}>마이페이지</Text>
-      </TouchableOpacity> */}
     </View>
   );
 };
@@ -91,8 +71,6 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.25,
     height: 60,
     backgroundColor: '#82B594',
-    // borderColor: 'gray',
-    // borderWidth: 1,
   },
   tabs: {
     marginTop: 5,
@@ -101,8 +79,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // borderTopWidth: 0.5,
-    // borderColor: '#A0A0A0',
   },
 });
 

@@ -35,9 +35,11 @@ const screenWidth = Dimensions.get('window').width;
 const ManagePlant = ({route}) => {
   console.log('manage Plant에서 plant_id: ' + JSON.stringify(route.params));
   const plantId = route.params.plantId;
+  const point = route.params.point;
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [isDiagnosisModalVisible, setDiagnosisModalVisibility] = useState(false);
+  const [isDiagnosisModalVisible, setDiagnosisModalVisibility] =
+    useState(false);
   const [isInfoModalVisible, setInfoModalVisibility] = useState(false);
 
   const profile = useSelector(state => state.PlantReducer.profile);
@@ -115,6 +117,7 @@ const ManagePlant = ({route}) => {
           text: '잘 가, 안녕',
           onPress: () => {
             setLoading(true);
+            setInfoModalVisibility(false);
             console.log('deletePlantHandler 호출');
             dispatch(deletePlant(plantId));
           },
@@ -136,7 +139,7 @@ const ManagePlant = ({route}) => {
   };
   const diagnosisHandler = choice => {
     photoUpload(choice);
-    setModalVisibility(false);
+    setDiagnosisModalVisibility(false);
     if (selectedImage) {
       console.log('selectedImage' + selectedImage);
       const fd = new FormData();
@@ -180,6 +183,19 @@ const ManagePlant = ({route}) => {
     });
   };
 
+  const renderWaterSupply = index => {
+    switch (index) {
+      case 1:
+        return <Text style={styles.infoModalText}>조금만</Text>;
+      case 2:
+        return <Text style={styles.infoModalText}>적당히</Text>;
+      case 3:
+        return <Text style={styles.infoModalText}>많이</Text>;
+      default:
+        return;
+    }
+  };
+
   const renderProfile = profile => {
     console.log('renderProfile에서: ' + JSON.stringify(profile));
     return profile ? (
@@ -189,7 +205,7 @@ const ManagePlant = ({route}) => {
             borderRadius: 15,
             borderWidth: 5,
             borderColor: '#93d07d',
-            backgroundColor:'#93d07d',
+            backgroundColor: '#93d07d',
             shadowColor: '#000',
             shadowOffset: {
               width: 0,
@@ -208,11 +224,6 @@ const ManagePlant = ({route}) => {
             }}
             source={{uri: profile.file_name}}
           />
-        </View>
-        <View style={styles.plantNameWrapper}>
-          <Text style={{fontWeight: 'bold', fontSize: 14}}>
-            {profile.plant_name}
-          </Text>
         </View>
         <View style={styles.expWrapper}>
           <Text>{profile.plant_exp}</Text>
@@ -236,7 +247,7 @@ const ManagePlant = ({route}) => {
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <TouchableOpacity
             style={[styles.backButton, {marginLeft: 15, marginTop: 5}]}
-            onPRess={() => navigation.goBack()}>
+            onPress={() => navigation.navigate('HomeScreen')}>
             <Icon name={'return-up-back'} size={40} color={'white'} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -255,26 +266,19 @@ const ManagePlant = ({route}) => {
             style={{
               width: 300,
               flexDirection: 'row',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
             }}>
-            <TouchableOpacity style={styles.plantInfoButton}>
+            <View style={styles.plantNameWrapper}>
+              <Text style={{fontWeight: 'bold', fontSize: 14}}>
+                {profile.plant_name}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.plantInfoButton}
+              onPress={() => setInfoModalVisibility(true)}
+              activeOpacity={1.0}>
               <Entypo name={'magnifying-glass'} size={30} color={'white'} />
             </TouchableOpacity>
-            {/* <Button
-              title="식물 정보 수정"
-              onPress={() =>
-                navigation.navigate('UpdatePlantProfileScreen', {
-                  profile: profile,
-                  plantId: plantId,
-                })
-              }
-            />
-            <Button
-              title="식물 정보 삭제"
-              onPress={() => {
-                deletePlantHandler();
-              }}
-            /> */}
           </View>
           {renderProfile(profile)}
         </View>
@@ -314,7 +318,30 @@ const ManagePlant = ({route}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonOutside}
-            onPress={() => setModalVisibility(true)}>
+            onPress={() => {
+              Alert.alert(
+                `질병진단에는 100포인트가 소모돼요`,
+                `질병진단을 계속 하시겠어요?`,
+                [
+                  {
+                    text: '아니오',
+                    onPress: () => {},
+                  },
+                  {
+                    text: '계속할게요',
+                    onPress: () => {
+                      if (point >= 100) {
+                        setDiagnosisModalVisibility(true);
+                      } else {
+                        alert(
+                          '갖고 계신 포인트가 모자라요!\n식물에게 물을 주거나, 식물일기를 작성하시면 포인트를 얻으실 수 있어요!\n',
+                        );
+                      }
+                    },
+                  },
+                ],
+              );
+            }}>
             <View
               style={{
                 flex: 1.5,
@@ -372,29 +399,123 @@ const ManagePlant = ({route}) => {
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              height: screenHeight * 0.1,
+              height: screenHeight * 0.2,
             }}>
             <TouchableOpacity
-              style={{margin: 10}}
+              style={styles.imageButton}
               onPress={() => diagnosisHandler('pick')}>
-              <Text>갤러리에서 이미지 선택</Text>
+              <Text style={styles.imageModalText}>갤러리에서 이미지 선택</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{margin: 10}}
+              style={styles.imageButton}
               onPress={() => diagnosisHandler('take')}>
-              <Text>카메라로 이미지 촬영</Text>
+              <Text style={styles.imageModalText}>카메라로 이미지 촬영</Text>
             </TouchableOpacity>
           </View>
 
-          <Button
-            title="close"
-            onPress={() => setDiagnosisModalVisibility(false)}
-            style={{margin: 10}}
-          />
+          <TouchableOpacity
+            style={styles.infoModalButton}
+            onPress={() => {
+              setDiagnosisModalVisibility(false);
+            }}>
+            <FontAwesome name={'close'} size={35} color={'#222222'} />
+          </TouchableOpacity>
         </View>
       </Modal>
-      <Modal>
-        isVisible = {}
+      <Modal
+        isVisible={isInfoModalVisible}
+        onBackButtonPress={() => setInfoModalVisibility(false)}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            width: screenWidth * 0.7,
+            height: screenHeight * 0.7,
+            backgroundColor: 'white',
+            justifyContent: 'space-between',
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 19,
+              color: '#222222',
+            }}>
+            식물 상세정보
+          </Text>
+          <View style={{flex: 10, alignItems: 'flex-start', padding: 10}}>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>이름: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_name}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>식물 종: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_species}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>키우기 시작한 날짜: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_birth}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>최근에 물 준 날짜: </Text>
+              <Text style={styles.infoModalText}>
+                {profile.recent_watering}
+              </Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>물 주는 정도: </Text>
+              {renderWaterSupply(profile.water_supply)}
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>식물 레벨: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_name}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>현재 보유 경험치: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>
+                레벨업 까지 필요한 경험치:{' '}
+              </Text>
+              <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity
+              style={styles.infoModalButton}
+              onPress={() => {
+                setInfoModalVisibility(false);
+                navigation.navigate('UpdatePlantProfileScreen', {
+                  profile: profile,
+                  plantId: plantId,
+                });
+              }}>
+              <FontAwesome name={'pencil'} size={35} color={'#222222'} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.infoModalButton}
+              onPress={() => {
+                setInfoModalVisibility(false);
+              }}>
+              <FontAwesome name={'close'} size={35} color={'#222222'} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.infoModalButton}
+              onPress={() => {
+                deletePlantHandler();
+              }}>
+              <FontAwesome name={'trash'} size={35} color={'#222222'} />
+            </TouchableOpacity>
+          </View>
+        </View>
       </Modal>
     </SafeAreaView>
   );
@@ -442,6 +563,7 @@ const styles = StyleSheet.create({
   plantNameWrapper: {
     alignItems: 'center',
     margin: 5,
+    marginLeft: 15,
     backgroundColor: 'white',
     borderRadius: 5,
     padding: 5,
@@ -505,7 +627,7 @@ const styles = StyleSheet.create({
   },
   plantInfoButton: {
     width: 40,
-    height: 35,
+    height: 40,
     paddingTop: 3,
     backgroundColor: '#93d07d',
     alignItems: 'center',
@@ -522,6 +644,45 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
 
     elevation: 10,
+  },
+  infoModalButton: {
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageButton: {
+    width: screenWidth * 0.5,
+    height: 50,
+    margin: 3,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  imageModalText: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'center',
+  },
+  infoModalText: {
+    fontWeight: 'bold',
+    color: '#222222',
+    fontSize: 16,
+    margin: 10,
+  },
+  infoModalTextWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 });
 

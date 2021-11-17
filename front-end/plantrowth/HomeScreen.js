@@ -82,6 +82,7 @@ HomeScreen = () => {
                 onPress={() => {
                   navigation.navigate('ManagePlantScreen', {
                     plantId: item.plant_id,
+                    point: infoList.point,
                   });
                 }}
                 key={index}>
@@ -185,10 +186,15 @@ HomeScreen = () => {
           </View>
         </View>
         <View style={styles.plantListSectionWrapper}>
-          <Text style={{fontWeight: 'bold'}}>My Plants</Text>
+          <Text style={{fontWeight: 'bold'}}>내 식물들</Text>
           <PlantList />
         </View>
-        <View style={styles.hotSectionWrapper}></View>
+        <View style={styles.advertisementSectionWrapper}>
+          <Text style={{fontWeight: 'bold', textAlign: 'center'}}>광고</Text>
+        </View>
+        <View style={styles.hotSectionWrapper}>
+          <Text style={{fontWeight: 'bold'}}>인기 게시물</Text>
+        </View>
         <Footer name={'Home'} />
       </View>
     </SafeAreaView>
@@ -232,12 +238,32 @@ const styles = StyleSheet.create({
 
     elevation: 7,
   },
+  advertisementSectionWrapper: {
+    flex: 0.8,
+    justifyContent: 'center',
+    backgroundColor: '#f7f8f9',
+    //width: screenWidth*0.4,
+    //height: screenHeight * 0.2,
+    padding: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
+  },
   hotSectionWrapper: {
-    flex: 4,
+    flex: 3.45,
     backgroundColor: '#fff',
     //width: screenWidth*0.4,
     //height: screenHeight * 0.2,
     borderRadius: 15,
+    padding: 10,
     margin: 5,
     shadowColor: '#000',
     shadowOffset: {
@@ -286,14 +312,14 @@ const styles = StyleSheet.create({
     height: screenHeight * 0.07,
     borderRadius: 5,
     padding: 5,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.20,
+    shadowOpacity: 0.2,
     shadowRadius: 1.41,
-    
+
     elevation: 2,
   },
   levelBar: {
@@ -304,14 +330,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 5,
     marginLeft: 5,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.20,
+    shadowOpacity: 0.2,
     shadowRadius: 1.41,
-    
+
     elevation: 2,
   },
   expBar: {

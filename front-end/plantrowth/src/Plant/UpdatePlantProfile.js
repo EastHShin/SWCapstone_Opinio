@@ -466,7 +466,7 @@ UpdatePlantProfile = ({route}) => {
               <Text style={{fontWeight: 'bold', fontSize: 12}}>물 주는 양</Text>
               <Text style={{fontWeight: 'bold', fontSize: 11}}>
                 {
-                  '적게                       적당히                       많이'
+                  '조금만                             적당히                                많이'
                 }
               </Text>
               <Slider
