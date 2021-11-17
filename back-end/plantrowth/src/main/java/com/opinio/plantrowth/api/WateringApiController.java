@@ -40,12 +40,16 @@ public class WateringApiController {
         private Integer point;
         private Long plant_id;
         private String plant_name;
+        private Integer plant_exp;
+        private Integer plant_level;
 
         public WateringDto(User user, Plant plant) {
             user_id = user.getId();
             point = user.getPoint();
             plant_id = plant.getId();
             plant_name = plant.getPlantName();
+            plant_exp = plant.getPlantExp();
+            plant_level = plant.getPlantLevel();
         }
     }
 
