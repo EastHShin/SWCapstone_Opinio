@@ -30,6 +30,8 @@ public class Plant {
     private String plantName;
     @Column(name = "plant_birth")
     private LocalDate plantBirth;
+    @Column(name = "plant_level")
+    private Integer plantLevel;
     @Column(name = "plant_exp")
     private Integer plantExp;
     @Column(name = "file_name")
