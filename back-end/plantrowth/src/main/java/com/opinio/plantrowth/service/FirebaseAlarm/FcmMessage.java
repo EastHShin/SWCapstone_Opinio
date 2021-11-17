@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.service.FirebaseAlarm;
 
+import com.google.firebase.messaging.AndroidNotification;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class FcmMessage {
     public static class Notification{
         private String title;
         private String body;
+        private String image;
     }
 
     @Builder
@@ -37,5 +39,7 @@ public class FcmMessage {
         private String plant_id;
         private String user_id;
     }
+
+
 
 }

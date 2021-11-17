@@ -1,11 +1,17 @@
 package com.opinio.plantrowth.service.FirebaseAlarm;
 
 import com.amazonaws.services.s3.model.JSONOutput;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.AndroidConfig;
+import com.google.firebase.messaging.AndroidNotification;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
@@ -42,8 +48,8 @@ public class FCMService {
 
     }
 
-    public void sendMessageTo(String targetToken, String title, String body, String plant_id, String user_id) throws IOException {
-        String message = makeMessage(targetToken, title, body, plant_id, user_id);
+    public void sendMessageTo(String targetToken, String title, String body, String plant_id, String user_id, String imageUrl) throws IOException {
+        String message = makeMessage(targetToken, title, body, plant_id, user_id, imageUrl);
         System.out.println(message);
 
         OkHttpClient client = new OkHttpClient();
@@ -60,13 +66,14 @@ public class FCMService {
         System.out.println(response.body().string());
     }
 
-    private String makeMessage(String targetToken, String title, String body, String plant_id, String user_id) throws JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body, String plant_id, String user_id, String imageUrl) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                     .token(targetToken)
                     .notification(FcmMessage.Notification.builder()
                         .title(title)
                         .body(body)
+                        .image(imageUrl)
                         .build())
                     .data(FcmMessage.Data.builder()
                         .plant_id(plant_id)
@@ -77,6 +84,9 @@ public class FCMService {
                 .build();
 
         return objectMapper.writeValueAsString(fcmMessage);
+//        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+//        return objectMapper.writeValueAsString(fcmMessage2);
 
     }
 

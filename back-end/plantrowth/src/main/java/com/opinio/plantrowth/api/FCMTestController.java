@@ -23,7 +23,8 @@ public class FCMTestController {
 
     @GetMapping("/api/fcmtest")
     public ResponseEntity fcmTest() throws IOException {
-        fcmService.sendMessageTo(emulToken, "테스트푸쉬", "안녕하세요", "22", "7");
+//        fcmService.sendMessageTo(yebinToken, "테스트푸쉬", "안녕하세요", "22", "7", "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/0580423c-679a-4494-afe1-3f5cf0532379.jpg");
+        fcmService.sendMessageTo(yebinToken, "테스트푸쉬", "안녕하세요", "22", "7", "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/1eb84772-b77a-425d-9033-d608e9783459.jpg");
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -33,9 +34,9 @@ public class FCMTestController {
         Plant plant = plantService.findOnePlant(plant_id);
         String fcmAccessToken = plant.getUser().getFCMAccessToken();
         String plant_name = plant.getPlantName();
+        String imageUrl = plant.getFileName();
         fcmService.sendMessageTo(fcmAccessToken, "물을 줄 시간이에요", plant_name + "에게 물을 주세요!",
-                plant.getId().toString(), plant.getUser().getId().toString());
-
+                plant.getId().toString(), plant.getUser().getId().toString(), imageUrl);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
