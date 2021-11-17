@@ -27,6 +27,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-modal": "^13.0.0",
     "react-native-modal-datetime-picker": "^12.0.0",
+    "react-native-progress-circle": "^2.1.0",
     "react-native-reanimated": "^2.2.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",

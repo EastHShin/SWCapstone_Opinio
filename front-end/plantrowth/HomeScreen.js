@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -11,13 +11,13 @@ import {
   Pressable,
   SafeAreaView,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { useIsFocused, useNavigation } from '@react-navigation/core';
+import {useSelector, useDispatch} from 'react-redux';
+import {useIsFocused, useNavigation} from '@react-navigation/core';
 import Footer from './src/component/Footer';
 import Loader from './src/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getHomeInfo } from './src/actions/HomeActions';
-import { logoutUser } from './src/actions/userActions';
+import {getHomeInfo} from './src/actions/HomeActions';
+import {logoutUser} from './src/actions/userActions';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 
 const screenHeight = Dimensions.get('window').height;
@@ -73,39 +73,42 @@ HomeScreen = () => {
     if (PlantList !== null && PlantList !== undefined) {
       return PlantList
         ? PlantList.map((item, index) => {
-          console.log('hi:' + item);
-          plantNumber++;
-          return (
-            <TouchableOpacity
-              style={styles.profileContainer}
-              key={index}
-              onPress={() => {
-                navigation.navigate('ManagePlantScreen', {
-                  plantId: item.plant_id,
-                });
-              }}
-              key={index}>
-              <Image
-                source={{ uri: item.file_name }}
-                style={styles.profileImage}
-              />
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold' }}>LV.6</Text>
-                <View style={styles.levelBar}>
-                  <View style={styles.expBar}>
+            console.log('hi:' + item);
+            plantNumber++;
+            return (
+              <TouchableOpacity
+                style={styles.profileContainer}
+                key={index}
+                onPress={() => {
+                  navigation.navigate('ManagePlantScreen', {
+                    plantId: item.plant_id,
+                  });
+                }}
+                key={index}>
+                <Image
+                  source={{uri: item.file_name}}
+                  style={styles.profileImage}
+                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{fontWeight: 'bold'}}>LV.6</Text>
+                  <View style={styles.levelBar}>
+                    <View style={styles.expBar}></View>
                   </View>
                 </View>
-              </View>
 
-
-              <View style={styles.nameWrapper}>
-                <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{item.plant_name}</Text>
-              </View>
-
-
-            </TouchableOpacity>
-          );
-        })
+                <View style={styles.nameWrapper}>
+                  <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+                    {item.plant_name}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })
         : null;
     }
   };
@@ -120,17 +123,17 @@ HomeScreen = () => {
     console.log('renderProfileAddslot arr: ' + arr);
     return arr
       ? arr.map((value, index) => {
-        return (
-          <TouchableOpacity
-            style={[styles.profileContainer, { justifyContent: 'center' }]}
-            onPress={() =>
-              navigation.navigate('AddProfileScreen', { userId: userId })
-            }
-            key={index}>
-            <Icon name={'add'} color={'white'} size={60} />
-          </TouchableOpacity>
-        );
-      })
+          return (
+            <TouchableOpacity
+              style={[styles.profileContainer, {justifyContent: 'center'}]}
+              onPress={() =>
+                navigation.navigate('AddProfileScreen', {userId: userId})
+              }
+              key={index}>
+              <Icon name={'add'} color={'white'} size={60} />
+            </TouchableOpacity>
+          );
+        })
       : null;
   };
   const PlantList = () => {
@@ -149,12 +152,13 @@ HomeScreen = () => {
           }}>
           {renderPlantList(infoList.plants)}
           {renderProfileAddSlot(infoList.max_plant_num)}
-          {plantNumber == infoList.max_plant_num ?
+          {plantNumber == infoList.max_plant_num ? (
             <TouchableOpacity
-              style={[styles.profileContainer, { justifyContent: 'center' }]}
+              style={[styles.profileContainer, {justifyContent: 'center'}]}
               onPress={() => navigation.navigate('ShopScreen')}>
               <Text style={{fontWeight: 'bold'}}>프로필 슬롯 추가</Text>
-            </TouchableOpacity> : null}
+            </TouchableOpacity>
+          ) : null}
         </ScrollView>
       </View>
     );
@@ -170,15 +174,18 @@ HomeScreen = () => {
           justifyContent: 'space-between',
         }}>
         <View style={styles.memberInfoSectionWrapper}>
-          <Icon name={'person-circle-outline'} size={50} color={'gray'}/>
+          <Icon name={'person-circle-outline'} size={50} color={'gray'} />
           <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={{fontWeight: 'bold', fontSize: 16}}>환영합니다! {infoList.user_name}님</Text>
-            <Text style={{fontWeight: 'bold', fontSize: 16}}>보유 포인트: {infoList.point}</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 16}}>
+              환영합니다! {infoList.user_name}님
+            </Text>
+            <Text style={{fontWeight: 'bold', fontSize: 16}}>
+              보유 포인트: {infoList.point}
+            </Text>
           </View>
-
         </View>
         <View style={styles.plantListSectionWrapper}>
-          <Text style={{ fontWeight: 'bold' }}>My Plants</Text>
+          <Text style={{fontWeight: 'bold'}}>My Plants</Text>
           <PlantList />
         </View>
         <View style={styles.hotSectionWrapper}></View>
@@ -198,6 +205,15 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 5,
     padding: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
   },
   plantListSectionWrapper: {
     backgroundColor: '#fff',
@@ -206,6 +222,15 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 5,
     padding: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
   },
   hotSectionWrapper: {
     flex: 4,
@@ -214,6 +239,15 @@ const styles = StyleSheet.create({
     //height: screenHeight * 0.2,
     borderRadius: 15,
     margin: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
   },
   plantListWrapper: {
     flex: 1,
@@ -227,16 +261,21 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     margin: 5,
-    shadowColor: '#cccccc',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
     borderRadius: 10,
   },
   profileImage: {
     width: screenWidth * 0.26,
     height: screenWidth * 0.26,
-    borderRadius: screenWidth * 0.26 / 2,
+    borderRadius: (screenWidth * 0.26) / 2,
     backgroundColor: '#93d07d',
     borderWidth: 3,
     borderColor: '#93d07d',
@@ -247,6 +286,15 @@ const styles = StyleSheet.create({
     height: screenHeight * 0.07,
     borderRadius: 5,
     padding: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 1.41,
+    
+    elevation: 2,
   },
   levelBar: {
     backgroundColor: 'white',
@@ -256,6 +304,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 5,
     marginLeft: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 1.41,
+    
+    elevation: 2,
   },
   expBar: {
     backgroundColor: '#f1c40f',
@@ -263,7 +320,7 @@ const styles = StyleSheet.create({
     //width: screenWidth * 0.26 * ((50) - infoList.plant_exp)/
     height: screenHeight * 0.03,
     borderRadius: 5,
-  }
+  },
 });
 
 export default HomeScreen;

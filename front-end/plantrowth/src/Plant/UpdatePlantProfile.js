@@ -23,6 +23,7 @@ import Modal from 'react-native-modal';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Slider from '@react-native-community/slider';
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -134,11 +135,14 @@ UpdatePlantProfile = ({route}) => {
               if (plantSpecies) fd.append('plant_species', plantSpecies);
               if (plantName) fd.append('plant_name', plantName);
               if (plantBirth) {
-                console.log('update할 때'+plantBirth)
+                console.log('update할 때' + plantBirth);
                 fd.append('plant_birth', plantBirth);
                 fd.append('recent_watering', plantBirth);
               } else {
-                console.log('update할 때 not plantBirth'+route.params.profile.plant_birth)
+                console.log(
+                  'update할 때 not plantBirth' +
+                    route.params.profile.plant_birth,
+                );
                 fd.append('recent_watering', route.params.profile.plant_birth);
               }
 
@@ -268,12 +272,15 @@ UpdatePlantProfile = ({route}) => {
   const renderImage = () => {
     if (plantImage) {
       return (
-        <Image style={{width: 100, height: 100}} source={{uri: plantImage}} />
+        <Image
+          style={{width: screenWidth * 0.3, height: screenWidth * 0.3}}
+          source={{uri: plantImage}}
+        />
       );
     } else {
       return (
         <Image
-          style={{width: 100, height: 100}}
+          style={{width: screenWidth * 0.3, height: screenWidth * 0.3}}
           source={{uri: route.params.profile.file_name}}
         />
       );
@@ -288,18 +295,16 @@ UpdatePlantProfile = ({route}) => {
         padding: 5,
         backgroundColor: '#BEE9B4',
       }}>
-      <KeyboardAwareScrollView>
-        <Loader loading={loading} />
-        <View style={{alignItems: 'flex-start'}}>
-          <Button
-            title="Back"
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </View>
-        <View style={styles.sectionWrapper}>
-          <Text style={{fontWeight: 'bold', color: '#556951'}}>
+      <Loader loading={loading} />
+      <View style={styles.sectionWrapper}>
+        <KeyboardAwareScrollView>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: '#556951',
+              marginBottom: 10,
+              textAlign: 'center',
+            }}>
             식물 프로필 수정
           </Text>
           <View
@@ -309,49 +314,55 @@ UpdatePlantProfile = ({route}) => {
               justifyContent: 'center',
             }}>
             <TouchableOpacity
-              style={{margin: 20}}
+              style={styles.photoButton}
               activeOpacity={0.5}
               onPress={() => photoUpload('pick')}>
               <Icon name="image" size={35} color="#556951" />
             </TouchableOpacity>
             <View style={styles.imageWrapper}>{renderImage()}</View>
             <TouchableOpacity
-              style={{margin: 20}}
+              style={styles.photoButton}
               activeOpacity={0.5}
               onPress={() => photoUpload('take')}>
               <Icon name="camera" size={35} color="#556951" />
             </TouchableOpacity>
           </View>
           <View style={styles.section}>
-            <Icon name="pencil" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <FontAwesome name="pencil" size={30} color="#93d07d" />
+            </View>
             <TextInput
               style={styles.input}
               onChangeText={PlantName => {
                 setPlantName(PlantName);
                 setUpdateSomething(true);
               }}
-              underlineColorAndroid="#f000"
+              underlineColorAndroid="#000"
               placeholder={route.params.profile.plant_name}
               placeholderTextColor="#808080"
               onSubmitEditing={Keyboard.dismiss}
             />
           </View>
           <View style={styles.section}>
-            <Icon name="md-rose" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <Icon name="md-rose" size={30} color="#93d07d" />
+            </View>
             <TextInput
               style={styles.input}
               onChangeText={PlantSpecies => {
                 setPlantSpecies(PlantSpecies);
                 setUpdateSomething(true);
               }}
-              underlineColorAndroid="#f000"
+              underlineColorAndroid="#000"
               placeholder={route.params.profile.plant_species}
               placeholderTextColor="#808080"
               onSubmitEditing={Keyboard.dismiss}
             />
           </View>
           <View style={styles.section}>
-            <Icon name="md-calendar" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <Icon name="md-calendar" size={30} color="#93d07d" />
+            </View>
             <TouchableOpacity
               style={{backgroundColor: '#fff'}}
               onPress={() => showDatePicker('plantBirth')}>
@@ -360,7 +371,7 @@ UpdatePlantProfile = ({route}) => {
                 style={styles.input}
                 placeholder={route.params.profile.plant_birth}
                 placeholderTextColor="#808080"
-                underlineColorAndroid="transparent"
+                underlineColorAndroid="#000"
                 editable={false}
                 value={plantTextBirth}
                 onSubmitEditing={Keyboard.dismiss}
@@ -382,13 +393,15 @@ UpdatePlantProfile = ({route}) => {
             />
           </View>
           <View style={styles.section}>
-            <Icon name="notifications" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <Icon name="notifications" size={30} color="#93d07d" />
+            </View>
             <TouchableOpacity
               style={{backgroundColor: '#fff'}}
               onPress={() => setDayPickerVisibility(true)}>
               <TextInput
                 style={styles.input}
-                underlineColorAndroid="#f000"
+                underlineColorAndroid="#000"
                 placeholder={`물을 ${route.params.profile.alarm_cycle}일마다 줘요`}
                 placeholderTextColor="#808080"
                 editable={false}
@@ -418,10 +431,9 @@ UpdatePlantProfile = ({route}) => {
                   flex: 1,
                   flexDirection: 'row',
                   alignItems: 'center',
-                  backgroundColor: 'RED',
                 }}>
                 <Text> </Text>
-                <View style={{width: 150, height: 250, backgroundColor: 'RED'}}>
+                <View style={{width: 150, height: 250}}>
                   <ScrollPicker
                     dataSource={dayArray}
                     selectedIndex={route.params.profile.alarm_cycle}
@@ -432,7 +444,7 @@ UpdatePlantProfile = ({route}) => {
                     wrapperHeight={250}
                     wrapperWidth={50}
                     itemHeight={50}
-                    highlightColor="#BEE9B4"
+                    highlightColor="#93d07d"
                   />
                 </View>
                 <Text style={{fontWeight: 'bold'}}> Days</Text>
@@ -447,16 +459,18 @@ UpdatePlantProfile = ({route}) => {
             </View>
           </Modal>
           <View style={styles.section}>
-            <Icon name="water" size={30} color="#BEE9B4" />
-            <View style={{alignItems: 'center'}}>
+            <View style={styles.iconWrapper}>
+              <Icon name="water" size={30} color="#93d07d" />
+            </View>
+            <View style={{alignItems: 'center',width: screenWidth * 0.6}}>
               <Text style={{fontWeight: 'bold', fontSize: 12}}>물 주는 양</Text>
               <Text style={{fontWeight: 'bold', fontSize: 11}}>
                 {
-                  '적게                            적당히                            많이'
+                  '적게                       적당히                       많이'
                 }
               </Text>
               <Slider
-                style={{width: screenWidth * 0.6, height: 20, marginLeft: 5}}
+                style={{width: screenWidth * 0.66, height: 20, marginLeft: 11}}
                 minimumValue={1}
                 maximumValue={3}
                 step={1}
@@ -473,7 +487,9 @@ UpdatePlantProfile = ({route}) => {
             </View>
           </View>
           <View style={styles.section}>
-            <Icon name="md-calendar" size={30} color="#BEE9B4" />
+            <View style={styles.iconWrapper}>
+              <Icon name="md-calendar" size={30} color="#93d07d" />
+            </View>
             <TouchableOpacity
               style={{backgroundColor: '#fff'}}
               onPress={() => showDatePicker('watering')}>
@@ -486,7 +502,7 @@ UpdatePlantProfile = ({route}) => {
                     : '마지막으로 물 준 날짜'
                 }
                 placeholderTextColor="#808080"
-                underlineColorAndroid="transparent"
+                underlineColorAndroid="#000"
                 editable={false}
                 value={textLastWatering}
                 onSubmitEditing={Keyboard.dismiss}
@@ -508,9 +524,25 @@ UpdatePlantProfile = ({route}) => {
               }
             />
           </View>
+        </KeyboardAwareScrollView>
+        <View
+          style={{
+            width: 400,
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginTop: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <FontAwesome name={'close'} size={40} color={'#e3242b'} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onPressHandler()}>
+            <FontAwesome name={'check'} size={40} color={'#93d07d'} />
+          </TouchableOpacity>
         </View>
-        <Button title="프로필 수정" onPress={onPressHandler} />
-      </KeyboardAwareScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -518,34 +550,79 @@ export default UpdatePlantProfile;
 
 const styles = StyleSheet.create({
   imageWrapper: {
-    width: screenWidth * 0.25,
-    height: screenWidth * 0.25,
+    width: screenWidth * 0.3,
+    height: screenWidth * 0.3,
     backgroundColor: '#f1f3f5',
-    marginBottom: 5,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.30,
+    shadowRadius: 4.65,
+    
+    elevation: 8,
   },
   sectionWrapper: {
+    flex: 1,
     backgroundColor: '#FFFFFF',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: screenHeight * 0.78,
     width: screenWidth * 0.9,
+    //height: screenHeight * 0.78,
     padding: 10,
     margin: 10,
     borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+
+    elevation: 9,
   },
   section: {
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
-    height: screenHeight * 0.07,
+    justifyContent: 'flex-start',
+    //backgroundColor: 'red',
+    width: screenWidth * 0.66,
+    height: screenHeight * 0.09,
   },
   input: {
-    color: '#000000',
-    borderWidth: 2,
-    borderColor: '#BEE9B4',
+    color: '#222222',
     width: screenWidth * 0.6,
     marginLeft: 5,
     borderRadius: 10,
+    padding: 5,
+  },
+  photoButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    margin: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+
+    elevation: 9,
+  },
+  iconWrapper: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
