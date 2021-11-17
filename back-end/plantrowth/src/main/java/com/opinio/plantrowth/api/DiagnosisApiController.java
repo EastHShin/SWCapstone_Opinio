@@ -38,6 +38,7 @@ public class DiagnosisApiController {
     private final String filePath = "diagnosis";
     private final OkHttpClient client = new OkHttpClient();
     private static final String RequestURL = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:5000/predict";
+    private final Integer decreasingPoint = 30;
 
     @PostMapping(value = "/api/plants/diagnosis/{plant-id}")
     public ResponseEntity diagnosis(@PathVariable("plant-id") Long id,
@@ -46,7 +47,11 @@ public class DiagnosisApiController {
             throw new FileIsEmptyException("파일을 업로드 하세요");
         }
 
-
+        Plant plant = plantService.findOnePlant(id);
+        User user = plant.getUser();
+        if (user.getPoint() < decreasingPoint) {
+            return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(user, plant, false), HttpStatus.OK);
+        }
         String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
         String json = "{ \"file_name\" : \"" + uploadImageName + "\" }";
         RequestBody requestBody = RequestBody.create(MediaType.get("application/json; charset=utf-8"), json);
@@ -70,33 +75,51 @@ public class DiagnosisApiController {
         /*
         질병진단 구독이 들어온다면 포인트를 소비 할지 안할지 정하는 로직 추가해야됨
          */
-        Plant plant = plantService.findOnePlant(id);
-        User user = userPointService.decreasePoint(plant.getUser().getId());
+
+        User updatedUser = userPointService.decreasePoint(plant.getUser().getId());
+
         Long updatedId = plantExpService.increaseExp(plant.getId());
         Plant updatedPlant = plantService.findOnePlant(updatedId);
 
-        return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(user, updatedPlant, jsonObj), HttpStatus.OK);
+        return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(updatedUser, updatedPlant, true, jsonObj), HttpStatus.OK);
     }
 
     @Getter
     static class DiagnosisDto{
         private Long user_id;
+        private Integer point;
         private Long plant_id;
         private String plant_name;
         private String plant_species;
+        private Integer plant_exp;
+        private Integer plant_level;
+        private Boolean isEnoughPoint;
         private DiagnosisResult diagnosisResult;
 
-        public DiagnosisDto(User user, Plant plant, JSONObject jsonObject) {
+        public DiagnosisDto(User user, Plant plant, Boolean enoughPoint, JSONObject jsonObject) {
             user_id = user.getId();
+            point = user.getPoint();
             plant_id = plant.getId();
             plant_name = plant.getPlantName();
             plant_species = plant.getPlantSpecies();
+            plant_exp = plant.getPlantExp();
+            plant_level = plant.getPlantLevel();
+            isEnoughPoint = enoughPoint;
 
             diagnosisResult = new DiagnosisResult(jsonObject.get("disease_model_1").toString(),
                     jsonObject.get("percent_model_1").toString());
         }
 
+        public DiagnosisDto(User user, Plant plant, Boolean enoughPoint) {
+            user_id = user.getId();
+            plant_id = plant.getId();
+            plant_name = plant.getPlantName();
+            plant_species = plant.getPlantSpecies();
+            isEnoughPoint = enoughPoint;
+        }
+
     }
+
 
     @AllArgsConstructor
     @Getter
