@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,23 +110,22 @@ class PlantApiControllerTest {
         CreatePlantRequestDto requestDto = new CreatePlantRequestDto("장미", "토로리",
                 LocalDate.now().minusDays(5), 10, 2, LocalDate.now().minusDays(2));
         given(userService.findUser(any())).willReturn(user);
-//        String json = "{\"plant_species\":\"가시\",\"plant_name\":\"토로리\",\"plant_birth\":[2021,11,9],\"plant_exp\":5,\"water_supply\":5,\"alarm_cycle\":3}";
         //when
         when(plantService.join(any())).thenReturn(1L);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(requestDto);
-        MockMultipartFile dataFile = new MockMultipartFile("data", "", "application/json", json.getBytes(StandardCharsets.UTF_8));
+//        MockMultipartFile dataFile = new MockMultipartFile("data", "", "application/json", json.getBytes(StandardCharsets.UTF_8));
         //then
-//        mockMvc.perform(post("/api/plants/profiles/{user-id}", 1L)
-//                .contentType(MediaType.MULTIPART_FORM_DATA)
-//                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
-//                .andExpect(status().isOk())
-//                .andExpect(content().string("{\"id\":1}"))
-//                .andDo(print());
-//
+
         mockMvc.perform(multipart("/api/plants/profiles/{user-id}", 1L)
-                .file(dataFile))
+//                .file(dataFile))
 //                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
+                .param("plant_species", requestDto.getPlant_species())
+                .param("plant_name", requestDto.getPlant_name())
+                .param("plant_birth", requestDto.getPlant_birth().toString())
+                .param("water_supply", requestDto.getWater_supply().toString())
+                .param("alarm_cycle", requestDto.getAlarm_cycle().toString())
+                .param("recent_watering", requestDto.getRecent_watering().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"id\":1}"));
     }
