@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -44,8 +46,20 @@ public class PlantService {
             plant.setWaterSupply(requestDto.getWater_supply());
         if(!(requestDto.getAlarm_cycle() == null))
             plant.setAlarmCycle(requestDto.getAlarm_cycle());
-        if(!(requestDto.getRecent_watering() == null))
+        if(!(requestDto.getRecent_watering() == null)) {
             plant.setRecentWatering(requestDto.getRecent_watering());
+            long until = requestDto.getRecent_watering().until(LocalDate.now(), ChronoUnit.DAYS);
+            Integer remainCycle;
+            if(until > requestDto.getAlarm_cycle()){
+                remainCycle = 0;
+            }
+            else{
+                remainCycle = requestDto.getAlarm_cycle() - (int)until;
+            }
+            plant.setRemainCycle(remainCycle);
+        }
+
+
         return id;
     }
 
