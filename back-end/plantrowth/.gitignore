@@ -10,6 +10,7 @@ application-credentials.properties
 application-kakao.properties
 serviceAccountKey.json
 firebaseServiceAccountKey.json
+email.properties
 
 ### STS ###
 .apt_generated
