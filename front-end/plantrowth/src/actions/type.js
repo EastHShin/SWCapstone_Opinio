@@ -19,4 +19,6 @@ export const POST_PLANT_IMAGE = 'post_plant_image';
 export const GET_HOME_INFO = 'get_home_info';
 export const DELETE_PLANT = 'delete_plant';
 export const UPDATE_PLANT = 'update_plant';
+export const WATER_PLANT = 'water_plant';
+export const DIAGNOSIS_PLANT = 'diagnosis_plant';
 

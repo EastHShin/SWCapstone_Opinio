@@ -63,9 +63,11 @@ export const loginUser = (user) => {
                 console.log(res.headers.authorization);
                 if (res.status == 200) {
                     dispatch(setLogoutTimer(6000000));
+
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
                    
+
                     dispatch({
                         type: LOGIN_USER,
                         payload: "success"
@@ -97,6 +99,7 @@ export const kakaoLogin = (data) => {
                 if (res.status == 200) {
 
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
+
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');
 
