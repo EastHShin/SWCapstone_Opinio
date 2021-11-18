@@ -84,38 +84,51 @@ def infer_image():
 
     disease_name = ''
     if int(value) == 0:
-        disease_name = "Scab"
+        #disease_name = "Scab"
+        disease_name = "붉은 곰팡이 병"
     elif int(value) == 1 or int(value) == 11:
-        disease_name = "Black_Rot"
+        #disease_name = "Black_Rot"
+        disease_name = "흑균병"
     elif int(value) == 2 or int(value) == 8:
-        disease_name = "Rust"
+        #disease_name = "Rust"
+        disease_name = "녹병"
     elif int(value) == 5 or int(value) == 25:
-        disease_name = "Powdery_Mildew"
+        #disease_name = "Powdery_Mildew"
+        disease_name = "백분병"
     elif int(value) == 7 or int(value) == 16 or int(value) == 18 or int(value) == 28 or int(value) == 32 or int(value) == 34:
-        disease_name = "Leaf_Spot"
+        #disease_name = "Leaf_Spot"
+        disease_name = "무늬병"
     elif int(value) == 9 or int(value) == 13 or int(value) == 20 or int(value) == 21 or int(value) == 29 or int(value) == 30:
-        disease_name = "Blight"
+        #disease_name = "Blight"
+        disease_name = "잎마름병"
     elif int(value) == 12:
-        disease_name = "Black_Measles"
+        #disease_name = "Black_Measles"
+        disease_name = "갈반병"
     elif int(value) == 15:
-        disease_name = "Citrus_Greening"
+        #disease_name = "Citrus_Greening"
+        disease_name = "(감귤)녹화병"
     elif int(value) == 26:
-        disease_name = "Leaf_Scorch(Virus)"
+        #disease_name = "Leaf_Scorch(Virus)"
+        disease_name = "잎가마름병"
     elif int(value) == 31:
-        disease_name = "Mold"
+        #disease_name = "Mold"
+        disease_name = "잎공팡이병"
     elif int(value) == 33:
-        disease_name = "Mite"
+        #disease_name = "Mite"
+        disease_name = "잎응애"
     elif int(value) == 35 or int(value) == 36:
-        disease_name = "Virus"
+        #disease_name = "Virus"
+        disease_name = "바이러스"
     else:
-        disease_name = "Healthy"
+        #disease_name = "Healthy"
+        disease_name = "건강한"
 
     answer = OrderedDict()
     answer["disease_model_1"] = disease_name
     answer["disease_model_2"] = list_2[0]
     answer["percent_model_1"] = float(list_1[2][value] * 100)
     answer["percent_model_2"] = float(list_2[2][value2] * 100)
-    answer["model_1_Healthy"] = val1Healthy
+    """answer["model_1_Healthy"] = val1Healthy
     answer["model_1_Mild"] = val1Mild
     answer["model_1_Severe"] = val1Severe
     answer["Blight"] = val1Blight
@@ -124,10 +137,10 @@ def infer_image():
     answer["model_2_Healthy"] = val2Healthy
     answer["model_2_Mild"] = val2Mild
     answer["model_2_Complex"] = val2Complex
-    answer["model_2_Severe"] = val2Severe
+    answer["model_2_Severe"] = val2Severe"""
 
     print(answer)
-    return (json.dumps(answer, indent="\t"))
+    return (json.dumps(answer, indent="\t", ensure_ascii=False))
 
 
 if __name__ == '__main__':
