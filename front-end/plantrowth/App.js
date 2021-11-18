@@ -17,22 +17,17 @@ import AddProfileScreen from './src/Plant/AddPlantProfile';
 import ManagePlantScreen from './src/Plant/ManagePlant';
 import CommunityScreen from './src/Community';
 import ShopScreen from './src/Shop';
-<<<<<<< HEAD
-import MyPageScreen from './src/MyPage/MyPageScreen'
+import MyPageScreen from './src/MyPage/MyPageScreen';
 import AccountInfoScreen from './src/MyPage/AccountInfoScreen';
 import AccountDeleteScreen from './src/MyPage/AccountDelete';
 import AccountEditScreen from './src/MyPage/AccountEditScreen';
 import DiseaseDiagnosisHistoryScreen from './src/MyPage/DiseaseDiagnosisHistoryScreen';
 import PointHistoryScreen from './src/MyPage/PointHistoryScreen';
 import {Alert} from 'react-native';
-=======
-import MyPageScreen from './src/MyPage';
 import UpdatePlantProfileScreen from './src/Plant/UpdatePlantProfile';
 import DiagnosisScreen from './src/Plant/DiagnosisScreen';
->>>>>>> front
 import * as RootNavigation from './RootNavigation';
 import {navigationRef} from './RootNavigation';
-import {Alert} from 'react-native';
 const Stack = createNativeStackNavigator();
 
 function App({navigation}) {
@@ -40,26 +35,23 @@ function App({navigation}) {
   //로그인 시에만 오게
   //테스트 중
   useEffect(() => {
-
     messaging().onMessage(async remoteMessage => {
       console.log(remoteMessage.data.plant_id);
-      
-      Alert.alert(
-        "물주기 알림", "식물에게 물을 줄 시간입니다!", [
-        {
-          text: "취소",
-          onPress: () => console.log("취소")
 
+      Alert.alert('물주기 알림', '식물에게 물을 줄 시간입니다!', [
+        {
+          text: '취소',
+          onPress: () => console.log('취소'),
         },
         {
-          text: "확인",
+          text: '확인',
           onPress: () => {
-            RootNavigation.navigate("ManagePlantScreen", { plantId: remoteMessage.data.plant_id })
-            
-          }
-        }
-      ]
-      )
+            RootNavigation.navigate('ManagePlantScreen', {
+              plantId: remoteMessage.data.plant_id,
+            });
+          },
+        },
+      ]);
     });
     messaging().setBackgroundMessageHandler(async remoteMessage => {
       console.log('Message handled in the background!', remoteMessage);
@@ -69,18 +61,16 @@ function App({navigation}) {
       console.log('open!');
       console.log(remoteMessage.data.plant_id);
 
-      RootNavigation.navigate("ManagePlantScreen", { plantId: remoteMessage.data.plant_id })
-
-    })
-
+      RootNavigation.navigate('ManagePlantScreen', {
+        plantId: remoteMessage.data.plant_id,
+      });
+    });
   }, []);
-
 
   return (
     <Provider store={Store}>
       <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator
-          initialRouteName="SplashScreen">
+        <Stack.Navigator initialRouteName="SplashScreen">
           <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
@@ -176,19 +166,20 @@ function App({navigation}) {
             }}
           />
           <Stack.Screen
-<<<<<<< HEAD
             name="AccountInfoScreen"
             component={AccountInfoScreen}
-=======
-            name="UpdatePlantProfileScreen"
-            component={UpdatePlantProfileScreen}
->>>>>>> front
             options={{
               headerShown: false,
             }}
           />
           <Stack.Screen
-<<<<<<< HEAD
+            name="UpdatePlantProfileScreen"
+            component={UpdatePlantProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
             name="AccountEditScreen"
             component={AccountEditScreen}
             options={{
@@ -212,10 +203,13 @@ function App({navigation}) {
           <Stack.Screen
             name="PointHistoryScreen"
             component={PointHistoryScreen}
-=======
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
             name="DiagnosisScreen"
             component={DiagnosisScreen}
->>>>>>> front
             options={{
               headerShown: false,
             }}

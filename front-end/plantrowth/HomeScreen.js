@@ -17,7 +17,7 @@ import Footer from './src/component/Footer';
 import Loader from './src/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getHomeInfo} from './src/actions/HomeActions';
-import {logoutUser} from './src/actions/userActions';
+import {logoutUser} from './src/actions/UserActions';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 
 const screenHeight = Dimensions.get('window').height;
@@ -34,7 +34,7 @@ HomeScreen = () => {
 
   const infoList = useSelector(state => state.HomeReducer.infoList);
   const [name, setName] = useState('');
-  const isLogin = useSelector(state => state.userReducer.isLogin);
+  const isLogin = useSelector(state => state.UserReducer.isLogin);
   let plantNumber = 0;
 
 
@@ -133,7 +133,7 @@ HomeScreen = () => {
     console.log('plantNumber' + plantNumber);
     console.log('maxplantNumber' + max_plant_num);
     let arr = [];
-    for (i = 0; i < max_plant_num - plantNumber; i++) {
+    for (let i = 0; i < max_plant_num - plantNumber; i++) {
       arr.push(1);
     }
     console.log('renderProfileAddslot arr: ' + arr);

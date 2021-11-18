@@ -29,7 +29,7 @@ ShopScreen = () => {
   const buyProfileSlotState = useSelector(
     state => state.ShopReducer.buyProfileSlotResult,
   );
-  const isLogin = useSelector(state => state.userReducer.isLogin);
+  const isLogin = useSelector(state => state.UserReducer.isLogin);
 
   useEffect(() => {
     if (isLogin == 'end') {
