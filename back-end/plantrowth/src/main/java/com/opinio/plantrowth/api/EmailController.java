@@ -36,7 +36,7 @@ public class EmailController {
     @Getter
     @Setter
     @JsonAutoDetect
-    @NoArgsConstructor
+    @Data
     static class VerifyDTO{
         private String code;
     }
@@ -44,7 +44,7 @@ public class EmailController {
     @Getter
     @Setter
     @JsonAutoDetect
-    @NoArgsConstructor
+    @Data
     static class emailDTO{
         private String email;
     }
