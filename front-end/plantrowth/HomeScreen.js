@@ -42,19 +42,6 @@ HomeScreen = () => {
     }
   }, [isLogin]);
 
-  const getData = () => {
-    try {
-      AsyncStorage.getItem('userId').then(value => {
-        if (value != null) {
-          setUserId(JSON.parse(value));
-          setName(JSON.parse(value));
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     AsyncStorage.getItem('userId').then(value => {
       if (value != null) {
@@ -96,14 +83,40 @@ HomeScreen = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                  <Text style={{fontWeight: 'bold'}}>LV.6</Text>
+                  <Text style={{fontWeight: 'bold', color: '#666666'}}>
+                    LV. {item.plant_level}
+                  </Text>
                   <View style={styles.levelBar}>
-                    <View style={styles.expBar}></View>
+                    <View
+                      style={[
+                        styles.expBar,
+                        {
+                          width:
+                            (screenWidth * 0.18 * item.plant_exp) /
+                            ((item.plant_level - 1) * 10 + 30),
+                        },
+                      ]}>
+                      <Text
+                        style={{
+                          width: screenWidth * 0.18,
+                          textAlign: 'center',
+                          fontWeight: 'bold',
+                          color: '#666666',
+                        }}>
+                        {item.plant_exp} / {(item.plant_level - 1) * 10 + 30}
+                      </Text>
+                    </View>
                   </View>
                 </View>
 
                 <View style={styles.nameWrapper}>
-                  <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      fontSize: 14,
+                      color: '#666666',
+                    }}>
                     {item.plant_name}
                   </Text>
                 </View>
@@ -177,10 +190,10 @@ HomeScreen = () => {
         <View style={styles.memberInfoSectionWrapper}>
           <Icon name={'person-circle-outline'} size={50} color={'gray'} />
           <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={{fontWeight: 'bold', fontSize: 16}}>
+            <Text style={{fontWeight: 'bold', fontSize: 16, color: '#666666'}}>
               환영합니다! {infoList.user_name}님
             </Text>
-            <Text style={{fontWeight: 'bold', fontSize: 16}}>
+            <Text style={{fontWeight: 'bold', fontSize: 16, color: '#666666'}}>
               보유 포인트: {infoList.point}
             </Text>
           </View>
@@ -308,8 +321,9 @@ const styles = StyleSheet.create({
   },
   nameWrapper: {
     backgroundColor: 'white',
-    width: screenWidth * 0.26,
+    width: screenWidth * 0.24,
     height: screenHeight * 0.07,
+    justifyContent: 'center',
     borderRadius: 5,
     padding: 5,
     shadowColor: '#000',
@@ -342,8 +356,6 @@ const styles = StyleSheet.create({
   },
   expBar: {
     backgroundColor: '#f1c40f',
-    //50+LV*10
-    //width: screenWidth * 0.26 * ((50) - infoList.plant_exp)/
     height: screenHeight * 0.03,
     borderRadius: 5,
   },
