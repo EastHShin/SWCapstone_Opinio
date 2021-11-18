@@ -38,9 +38,9 @@ const Item = ({ item, onPress, style }) => {
 }
 
 
-const DiaryScreen = ({ route,navigation }) => {
-  
-  const {plantId, plantImg} = route.params; 
+const DiaryScreen = ({ route, navigation }) => {
+
+  const { plantId, plantImg } = route.params;
 
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
@@ -50,9 +50,9 @@ const DiaryScreen = ({ route,navigation }) => {
 
 
   useEffect(() => {
-    if(isFocused){
-    dispatch(fetchDiaries(plantId)); 
-  }
+    if (isFocused) {
+      dispatch(fetchDiaries(plantId));
+    }
   }, [isFocused])
 
 
@@ -63,7 +63,7 @@ const DiaryScreen = ({ route,navigation }) => {
         item={item}
         onPress={() => {
           setSelectedId(item.diary_id);
-          navigation.push("DiaryDetailScreen", {selectedId:item.diary_id,plantId:plantId,plantImg:plantImg});
+          navigation.push("DiaryDetailScreen", { selectedId: item.diary_id, plantId: plantId, plantImg: plantImg });
         }
         }
         style={{ backgroundColor: "#FFFFFF" }}
@@ -73,23 +73,24 @@ const DiaryScreen = ({ route,navigation }) => {
 
   return (
     <SafeAreaView style={styles.body}>
-      	<LevelUp />
+      <LevelUp />
       <View style={styles.top}>
         <Image
-          source={{ uri: plantImg }} 
+          source={{ uri: plantImg }}
           style={styles.image}
         />
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId, plantImg:plantImg})}>
+          onPress={() => navigation.push("DiaryCreateScreen", { plantId: plantId, plantImg: plantImg })}>
           <SimpleLineIcons name='note' size={25} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
       <View style={styles.diaryWrapper}>
         {diaries.length == 0 ? (
-          <View style={{alignItems:"center", justifyContent:"center",marginTop: Dimensions.get('window').height * 0.3 }}>
-          
-            
+          <View style={{ alignItems: "center", justifyContent: "center", marginTop: Dimensions.get('window').height * 0.3 }}>
+            <MaterialCommunityIcons name='clover' size={20} color="#FFFFFF" />
+            <Text style={{ fontSize: 15, color: "#FFFFFF", fontWeight: "bold", marginVertical: Dimensions.get('window').height * 0.02 }}>식물과의 추억을 기록해보세요</Text>
+
           </View>
         ) : null}
 
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
   diaryWrapper: {
     height: Dimensions.get('window').height * 0.83,
     width: Dimensions.get('window').width,
-    
+
   },
   item: {
     padding: 20,
