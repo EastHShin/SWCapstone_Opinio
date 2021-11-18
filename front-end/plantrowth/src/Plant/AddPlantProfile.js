@@ -263,7 +263,13 @@ AddPlantProfile = ({route}) => {
       <View style={styles.sectionWrapper}>
         <KeyboardAwareScrollView>
           <Text
-            style={{fontWeight: 'bold', color: '#556951', marginBottom: 10, textAlign: 'center'}}>
+            style={{
+              paddingTop: 10,
+              fontFamily: 'NanumGothicExtraBold',
+              color: '#556951',
+              marginBottom: 10,
+              textAlign: 'center',
+            }}>
             식물 프로필 등록
           </Text>
           <View
@@ -409,28 +415,43 @@ AddPlantProfile = ({route}) => {
                     highlightColor="#BEE9B4"
                   />
                 </View>
-                <Text style={{fontWeight: 'bold'}}> Days</Text>
+                <Text style={{fontFamily: 'NanumGothicBold'}}> Days</Text>
               </View>
 
-              <Button
-                title="close"
+              <TouchableOpacity
+                style={styles.ModalButton}
                 onPress={() => {
                   setDayPickerVisibility(false);
-                }}
-              />
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'NanumGothicBold',
+                    textAlign: 'center',
+                  }}>
+                  닫기
+                </Text>
+              </TouchableOpacity>
             </View>
           </Modal>
           <View style={styles.section}>
-          <View style={styles.iconWrapper}>
+            <View style={styles.iconWrapper}>
               <Icon name="water" size={30} color="#93d07d" />
             </View>
-            <View style={{alignItems: 'center',width: screenWidth * 0.6}}>
-              <Text style={{fontWeight: 'bold', fontSize: 12}}>물 주는 양</Text>
-              <Text style={{fontWeight: 'bold', fontSize: 11}}>
-              {
-                  '조금만                             적당히                                많이'
-                }
+            <View style={{alignItems: 'center', width: screenWidth * 0.6}}>
+              <Text style={{fontFamily: 'NanumGothicBold', fontSize: 12, marginBottom: 3}}>
+                {'   물 주는 양'}
               </Text>
+              <View style={{width: screenWidth* 0.6,flexDirection: 'row', justifyContent: 'space-between', alignItems: 'space-between'}}>
+                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 11}}>
+                  조금만
+                </Text>
+                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 11}}>
+                  적당히
+                </Text>
+                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 11}}>
+                  많이
+                </Text>
+              </View>
               <Slider
                 style={{width: screenWidth * 0.66, height: 20, marginLeft: 11}}
                 minimumValue={1}
@@ -485,7 +506,13 @@ AddPlantProfile = ({route}) => {
             />
           </View>
         </KeyboardAwareScrollView>
-        <View style={{width: 400, flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20}}>
+        <View
+          style={{
+            width: 400,
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginTop: 20,
+          }}>
           <TouchableOpacity
             onPress={() => {
               navigation.goBack();
@@ -493,7 +520,7 @@ AddPlantProfile = ({route}) => {
             <FontAwesome name={'close'} size={40} color={'#e3242b'} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onPressHandler()}>
-            <FontAwesome name={'check'} size={40} color={'#93d07d'}/>
+            <FontAwesome name={'check'} size={40} color={'#93d07d'} />
           </TouchableOpacity>
         </View>
       </View>
@@ -507,14 +534,14 @@ const styles = StyleSheet.create({
     height: screenWidth * 0.3,
     backgroundColor: '#f1f3f5',
     marginBottom: 15,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.30,
+    shadowOpacity: 0.3,
     shadowRadius: 4.65,
-    
+
     elevation: 8,
   },
   sectionWrapper: {
@@ -553,6 +580,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     borderRadius: 10,
     padding: 5,
+    fontFamily: 'NanumGothic',
   },
   photoButton: {
     width: 50,
@@ -577,6 +605,22 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  ModalButton: {
+    width: 50,
+    height: 35,
+    backgroundColor: '#93d07d',
+    borderRadius: 3,
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
   },
 });
 

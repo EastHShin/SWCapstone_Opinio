@@ -5,7 +5,7 @@ export const buyProfileSlot = userId => {
   return async dispatch => {
     console.log('buy userId: ' + userId);
     return await axios
-      .put(
+      .post(
         `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/users/profiles/${userId}`,
       )
       .then(function (response) {

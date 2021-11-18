@@ -63,11 +63,12 @@ const styles = StyleSheet.create({
   tabLabel: {
     textAlign: 'center',
     color: '#C9E7BE',
-    fontWeight: 'bold',
+    fontFamily: 'NanumGothicBold',
   },
   tabButton: {
     paddingTop: 5,
     alignItems: 'center',
+    justifyContent: 'space-between',
     width: screenWidth * 0.25,
     height: 60,
     backgroundColor: '#82B594',

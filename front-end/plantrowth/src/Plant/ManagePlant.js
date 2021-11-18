@@ -45,6 +45,7 @@ const ManagePlant = ({route}) => {
   const [isInfoModalVisible, setInfoModalVisibility] = useState(false);
   const [isEarnModalVisible, setEarnModalVisibility] = useState(false);
   const [isDoingDiagnosis, setDoingDiagnosis] = useState(false);
+  const [imagePath, setImagePath] = useState('');
 
   const profile = useSelector(state => state.PlantReducer.profile);
   const deletePlantState = useSelector(
@@ -67,7 +68,7 @@ const ManagePlant = ({route}) => {
     dispatch(getProfile(plantId)); //plantId 추가
     console.log('Profile in use Effect: ' + JSON.stringify(profile));
     setLoading(false);
-  }, [isFocused]);
+  }, [isFocused, selectedImage]);
 
   useEffect(() => {
     console.log(
@@ -111,10 +112,12 @@ const ManagePlant = ({route}) => {
       setLoading(false);
       dispatch(setDiagnosisState(''));
       setDoingDiagnosis(true);
+      setSelectedImage(false);
       setEarnModalVisibility(true);
     } else if (diagnosisState == 'failure' && isFocused) {
       console.log('useEffect에서 diagnosis failure');
       setLoading(false);
+      setSelectedImage(false);
       dispatch(setDiagnosisState(''));
     }
   }, [diagnosisState]);
@@ -148,13 +151,8 @@ const ManagePlant = ({route}) => {
     console.log('wateringHandler 호출');
     dispatch(waterPlant(plantId));
   };
-  
-  const diagnosisHandler = async choice => {
-    if (choice === 'take') {
-      await takePicture();
-    } else if (choice === 'pick') {
-      await selectImage();
-    }
+
+  const diagnosisHandler = () => {
     setDiagnosisModalVisibility(false);
     if (selectedImage) {
       console.log('selectedImage' + selectedImage);
@@ -165,19 +163,20 @@ const ManagePlant = ({route}) => {
         type: selectedImage.assets[0].type,
       });
       console.log(fd);
+      setImagePath(selectedImage.assets[0].uri);
       setLoading(true);
       setDoingDiagnosis(true);
       dispatch(diagnosisPlant(plantId, fd));
     }
   };
 
-  // const photoUpload = async choice => {
-  //   if (choice === 'take') {
-  //     await takePicture();
-  //   } else if (choice === 'pick') {
-  //     await selectImage();
-  //   }
-  // };
+  const photoUpload = async choice => {
+    if (choice === 'take') {
+      await takePicture();
+    } else if (choice === 'pick') {
+      await selectImage();
+    }
+  };
 
   const takePicture = () => {
     return new Promise((resolve, reject) => {
@@ -235,7 +234,15 @@ const ManagePlant = ({route}) => {
               justifyContent: 'center',
             }}>
             <Text style={[styles.earnText, {fontSize: 16}]}>보유 포인트:</Text>
-            <Text style={[styles.earnText, {fontSize: 16, color: '#7e57c2'}]}>
+            <Text
+              style={[
+                styles.earnText,
+                {
+                  fontSize: 16,
+                  fontFamily: 'NanumGothicExtraBold',
+                  color: '#7e57c2',
+                },
+              ]}>
               {' '}
               {point}
             </Text>
@@ -243,6 +250,79 @@ const ManagePlant = ({route}) => {
           </View>
         </View>
       );
+  };
+
+  const renderDiagnosisModal = () => {
+    if (selectedImage) {
+      return (
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: 'white',
+            width: screenWidth * 0.6,
+            padding: 10,
+          }}>
+          <View>
+            <Image
+              source={{uri: selectedImage.assets[0].uri}}
+              style={{width: screenWidth * 0.55, height: screenWidth * 0.55}}
+            />
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              style={styles.infoModalButton}
+              onPress={() => {
+                setDiagnosisModalVisibility(false);
+              }}>
+              <FontAwesome name={'close'} size={35} color={'#222222'} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.infoModalButton}
+              onPress={() => diagnosisHandler()}>
+              <FontAwesome name={'check'} size={35} color={'#222222'} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: 'white',
+            width: screenWidth * 0.6,
+            padding: 10,
+          }}>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: screenHeight * 0.2,
+            }}>
+            <TouchableOpacity
+              style={styles.imageButton}
+              onPress={() => photoUpload('pick')}>
+              <Text style={styles.imageModalText}>갤러리에서 이미지 선택</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.imageButton}
+              onPress={() => photoUpload('take')}>
+              <Text style={styles.imageModalText}>카메라로 이미지 촬영</Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            style={styles.infoModalButton}
+            onPress={() => {
+              setDiagnosisModalVisibility(false);
+            }}>
+            <FontAwesome name={'close'} size={35} color={'#222222'} />
+          </TouchableOpacity>
+        </View>
+      );
+    }
   };
   const renderProfile = profile => {
     console.log('renderProfile에서: ' + JSON.stringify(profile));
@@ -288,7 +368,8 @@ const ManagePlant = ({route}) => {
                 style={{
                   width: screenWidth * 0.6,
                   textAlign: 'center',
-                  fontWeight: 'bold',
+                  fontFamily: 'NanumGothicExtraBold',
+                  color: '#363636',
                 }}>
                 {`LV. ${profile.plant_level} ( ${
                   profile.plant_exp
@@ -335,7 +416,12 @@ const ManagePlant = ({route}) => {
               justifyContent: 'space-between',
             }}>
             <View style={styles.plantNameWrapper}>
-              <Text style={{fontWeight: 'bold', fontSize: 14}}>
+              <Text
+                style={{
+                  fontFamily: 'NanumGothicBold',
+                  fontSize: 14,
+                  color: '#363636',
+                }}>
                 {profile.plant_name}
               </Text>
             </View>
@@ -361,7 +447,7 @@ const ManagePlant = ({route}) => {
                     profile.alarm_cycle) *
                   100,
               )}
-              radius={(screenWidth * 0.27) / 2}
+              radius={(screenWidth * 0.29) / 2}
               borderWidth={8}
               color="#5d9cec"
               shadowColor="#e8ebed"
@@ -375,8 +461,11 @@ const ManagePlant = ({route}) => {
                 <Icon name={'water'} size={40} color={'#5d9cec'} />
               </View>
               <View style={{flex: 1, alignItems: 'center'}}>
-                <Text style={{fontSize: 13, fontWeight: 'bold'}}>물 주기</Text>
-                <Text style={{fontSize: 12, fontWeight: 'bold'}}>
+                <Text
+                  style={{fontSize: 13, fontFamily: 'NanumGothicExtraBold'}}>
+                  물 주기
+                </Text>
+                <Text style={{fontSize: 12, fontFamily: 'NanumGothicBold'}}>
                   {profile.remain_cycle}일 후
                 </Text>
               </View>
@@ -417,7 +506,12 @@ const ManagePlant = ({route}) => {
               <FontAwesome name={'plus-square'} size={40} color={'#8ab833'} />
             </View>
             <View style={{flex: 1, alignItems: 'center'}}>
-              <Text style={{fontSize: 14, fontWeight: 'bold', margin: 3}}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontFamily: 'NanumGothicExtraBold',
+                  margin: 3,
+                }}>
                 질병진단
               </Text>
             </View>
@@ -439,7 +533,12 @@ const ManagePlant = ({route}) => {
               <Entypo name={'book'} size={40} color={'#a07e63'} />
             </View>
             <View style={{flex: 1, alignItems: 'center'}}>
-              <Text style={{fontSize: 14, fontWeight: 'bold', margin: 3}}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontFamily: 'NanumGothicExtraBold',
+                  margin: 3,
+                }}>
                 식물일기
               </Text>
             </View>
@@ -453,40 +552,7 @@ const ManagePlant = ({route}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            backgroundColor: 'white',
-            width: screenWidth * 0.6,
-            padding: 10,
-          }}>
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: screenHeight * 0.2,
-            }}>
-            <TouchableOpacity
-              style={styles.imageButton}
-              onPress={() => diagnosisHandler('pick')}>
-              <Text style={styles.imageModalText}>갤러리에서 이미지 선택</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.imageButton}
-              onPress={() => diagnosisHandler('take')}>
-              <Text style={styles.imageModalText}>카메라로 이미지 촬영</Text>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity
-            style={styles.infoModalButton}
-            onPress={() => {
-              setDiagnosisModalVisibility(false);
-            }}>
-            <FontAwesome name={'close'} size={35} color={'#222222'} />
-          </TouchableOpacity>
-        </View>
+        {renderDiagnosisModal()}
       </Modal>
       <Modal
         isVisible={isInfoModalVisible}
@@ -505,7 +571,7 @@ const ManagePlant = ({route}) => {
           <Text
             style={{
               textAlign: 'center',
-              fontWeight: 'bold',
+              fontFamily: 'NanumGothicBold',
               fontSize: 19,
               color: '#222222',
             }}>
@@ -597,13 +663,15 @@ const ManagePlant = ({route}) => {
             backgroundColor: 'white',
             justifyContent: 'space-between',
             alignItems: 'center',
+            paddingTop: 5,
+            paddingBottom: 10
           }}>
           {/* <EarnModal point={point}/> */}
           <View
             style={{
               marginTop: 5,
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'space-between',
             }}>
             <Text style={[styles.earnText, {fontSize: 18}]}>축하드려요!</Text>
             {renderEarnPoint(isDoingDiagnosis)}
@@ -623,7 +691,8 @@ const ManagePlant = ({route}) => {
                     style={{
                       width: screenWidth * 0.5,
                       textAlign: 'center',
-                      fontWeight: 'bold',
+                      fontFamily: 'NanumGothicBold',
+                      color: '#363636',
                     }}>
                     {`LV. ${profile.plant_level} ( ${
                       profile.plant_exp
@@ -633,18 +702,25 @@ const ManagePlant = ({route}) => {
               </View>
             </View>
           </View>
-
-          <Button
-            title="확인"
+          <TouchableOpacity
             onPress={() => {
               if (isDoingDiagnosis) {
                 setEarnModalVisibility(false);
-                navigation.navigate('DiagnosisScreen', {chart: diagnosisChart, image: selectedImage.assets[0].uri});
+                navigation.navigate('DiagnosisScreen', {
+                  chart: diagnosisChart,
+                  image: imagePath,
+                });
               } else {
                 setEarnModalVisibility(false);
               }
-            }}
-          />
+            }}>
+            <View style={styles.earnModalButton}>
+              <Text
+                style={{fontFamily: 'NanumGothicBold', textAlign: 'center'}}>
+                확인
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </Modal>
     </SafeAreaView>
@@ -666,16 +742,16 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width: '100%',
-    height: screenWidth * 0.27,
+    height: screenWidth * 0.29,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
     margin: 10,
   },
   buttonOutside: {
-    width: screenWidth * 0.27,
-    height: screenWidth * 0.27,
-    borderRadius: (screenWidth * 0.27) / 2,
+    width: screenWidth * 0.29,
+    height: screenWidth * 0.29,
+    borderRadius: (screenWidth * 0.29) / 2,
     borderWidth: 8,
     borderColor: '#8ab833',
     backgroundColor: 'white',
@@ -736,6 +812,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f1c40f',
     height: screenHeight * 0.03,
     borderRadius: 5,
+    justifyContent: 'center',
   },
   backButton: {
     width: 50,
@@ -796,15 +873,15 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   imageModalText: {
-    fontWeight: 'bold',
+    fontFamily: 'NanumGothicBold',
     fontSize: 15,
     color: 'black',
     textAlign: 'center',
   },
   infoModalText: {
-    fontWeight: 'bold',
-    color: '#222222',
-    fontSize: 16,
+    fontFamily: 'NanumGothicBold',
+    color: '#363636',
+    fontSize: 13,
     margin: 10,
   },
   infoModalTextWrapper: {
@@ -813,9 +890,27 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   earnText: {
-    fontWeight: 'bold',
-    marginTop: 5,
+    fontFamily: 'NanumGothicBold',
+    marginTop: 10,
     marginBottom: 5,
+    color: '#363636',
+    fontSize: 13,
+  },
+  earnModalButton: {
+    width: 50,
+    height: 35,
+    backgroundColor: '#93d07d',
+    borderRadius: 3,
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
   },
 });
 
