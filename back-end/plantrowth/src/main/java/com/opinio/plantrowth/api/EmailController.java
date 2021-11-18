@@ -33,18 +33,18 @@ public class EmailController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Getter
-    @Setter
+
     @JsonAutoDetect
     @Data
+    @AllArgsConstructor
     static class VerifyDTO{
         private String code;
     }
 
-    @Getter
-    @Setter
+
     @JsonAutoDetect
     @Data
+    @AllArgsConstructor
     static class emailDTO{
         private String email;
     }
