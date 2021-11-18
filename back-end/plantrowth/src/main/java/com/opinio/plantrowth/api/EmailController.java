@@ -3,10 +3,7 @@ package com.opinio.plantrowth.api;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.opinio.plantrowth.domain.ConfirmationToken;
 import com.opinio.plantrowth.service.EmailAuth.EmailService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +36,7 @@ public class EmailController {
     @Getter
     @Setter
     @JsonAutoDetect
+    @NoArgsConstructor
     static class VerifyDTO{
         private String code;
     }
@@ -46,6 +44,7 @@ public class EmailController {
     @Getter
     @Setter
     @JsonAutoDetect
+    @NoArgsConstructor
     static class emailDTO{
         private String email;
     }
