@@ -5,6 +5,7 @@ import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.UserRepository;
 import com.opinio.plantrowth.service.*;
+import com.opinio.plantrowth.service.EmailAuth.EmailService;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,6 +57,8 @@ class WateringApiControllerTest {
     private WateringService wateringService;
     @MockBean
     private PlantExpService plantExpService;
+    @MockBean
+    private EmailService emailService;
 
     private User user;
     private Plant plant;

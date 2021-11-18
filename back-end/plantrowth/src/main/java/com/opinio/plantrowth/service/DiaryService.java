@@ -44,12 +44,17 @@ public class DiaryService {
         return plantDiaryRepository.findAllByPlantId(plantId);
     }
     @Transactional
-    public void updateDiary(Long id, CreateDiaryDTO dto){
-        PlantDiary diary = findDiary(id);
-        diary.setTitle(dto.getTitle());
-        diary.setContent(dto.getContent());
-        diary.setDate(dto.getDate());
-        plantDiaryRepository.save(diary);
+    public Long updateDiary(Long id, CreateDiaryDTO dto){
+        PlantDiary diary = plantDiaryRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 식물일기 입니다."));
+        if(!(dto.getTitle()==null))
+            diary.setTitle(dto.getTitle());
+        if(!(dto.getContent()==null))
+            diary.setContent(dto.getContent());
+        if(!(dto.getDate()==null))
+            diary.setDate(dto.getDate());
+
+        return diary.getId();
     }
 
     @Transactional
@@ -58,6 +63,15 @@ public class DiaryService {
                 orElseThrow(()->new IllegalArgumentException("해당 식물일기가 존재하지 않습니다"));
         plantDiaryRepository.delete(diary);
         return id;
+    }
+
+    @Transactional
+    public Long updateImage(Long id, String imageName){
+        PlantDiary diary = plantDiaryRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 식물일기 입니다."));
+        diary.setFilename(imageName);
+
+        return diary.getId();
     }
 
 }

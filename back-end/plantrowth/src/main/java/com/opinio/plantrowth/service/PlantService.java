@@ -50,11 +50,11 @@ public class PlantService {
             plant.setRecentWatering(requestDto.getRecent_watering());
             long until = requestDto.getRecent_watering().until(LocalDate.now(), ChronoUnit.DAYS);
             Integer remainCycle;
-            if(until > requestDto.getAlarm_cycle()){
+            if(until > plant.getAlarmCycle()){
                 remainCycle = 0;
             }
             else{
-                remainCycle = requestDto.getAlarm_cycle() - (int)until;
+                remainCycle = plant.getAlarmCycle() - (int)until;
             }
             plant.setRemainCycle(remainCycle);
         }

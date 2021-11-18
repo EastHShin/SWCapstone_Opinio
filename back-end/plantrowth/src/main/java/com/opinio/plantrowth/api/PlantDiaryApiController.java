@@ -102,15 +102,21 @@ public class PlantDiaryApiController {
     }
 
     @PutMapping("/api/plants/diary/{diary-id}")
-    public ResponseEntity<?> updateDiary(@PathVariable("diary-id") Long id, @RequestBody CreateDiaryDTO dto){
-        diaryService.updateDiary(id, dto);
+    public ResponseEntity<?> updateDiary(@PathVariable("diary-id") Long id,
+                                         @ModelAttribute CreateDiaryDTO dto,
+                                         @RequestPart(name = "file_name", required = false) Optional<MultipartFile> file){
+        Long updatedId = diaryService.updateDiary(id, dto);
+        if(file.isPresent()) {
+            String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
+            diaryService.updateImage(updatedId, uploadImageName);
+        }
+        PlantDiary diary = diaryService.findDiary(updatedId);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         message.setStatus(Message.StatusEnum.OK);
         message.setMessage("식물일기가 수정되었습니다.");
-        message.setData(dto);
-
+        message.setData(diary);
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 

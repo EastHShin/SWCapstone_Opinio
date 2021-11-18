@@ -43,33 +43,29 @@ public class UserApiController {
         String token = jwtTokenProvider.createToken(member.getName(), member.getRoles());
         response.setHeader("Authorization", token);
         message.setStatus(Message.StatusEnum.OK);
-        message.setMessage("카카오 로그인 성공");
+        message.setMessage("로그인 성공");
         message.setData(member.getId());
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
     @PostMapping("/api/auth/kakao") //소셜 로그인
-    public ResponseEntity<?> kakaoLogin(@RequestBody KakaoDTO user) {
-        Long result = userService.kakaoLogin(user);
+    public ResponseEntity<?> kakaoLogin(HttpServletResponse response,
+                                        @RequestBody KakaoDTO user) {
+        User member = userService.kakaoLogin(user);
+        String token = jwtTokenProvider.createToken(member.getName(), member.getRoles());
+        response.setHeader("Authorization", token);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         message.setStatus(Message.StatusEnum.OK);
         message.setMessage("카카오 로그인 성공");
-        message.setData(result);
+        message.setData(member.getId());
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
     @GetMapping("/api/user/{user-id}")
     public ResponseEntity<?> lookUpUser(@PathVariable("user-id") Long id) {
-        User member = userService.findUser(id);
-        UserLookUpDTO user = new UserLookUpDTO();
-        user.setUser_name(member.getName());
-        user.setUser_birth(member.getBirth());
-        user.setEmail(member.getEmail());
-        user.setPoint(member.getPoint());
-        user.setPlantNum(member.getPlantNum());
-        user.setMaxPlantNum(member.getMaxPlantNum());
+        UserLookUpDTO user = userService.lookup(id);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -99,6 +95,25 @@ public class UserApiController {
         return result != null ?
                 ResponseEntity.ok().body("회원 탈퇴 성공") :
                 ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/api/auth/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response){
+        response.setHeader("Authorization", null);
+        return ResponseEntity.ok().body("로그아웃 성공");
+    }
+
+    @PostMapping("/api/users/profiles/{user-id}")
+    public ResponseEntity<?> addPlant(@PathVariable("user-id") Long id){
+        addPlantDTO dto = userService.addPlant(id);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("프로필 개수 추가");
+        message.setData(dto);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
     @PostMapping("/user/test")
