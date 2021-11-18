@@ -73,6 +73,9 @@ public class PlantApiController {
         }
 
         User user = userService.findUser(userId);
+
+        userService.addPlantNum(userId);
+
         plant.setUser(user);
 
         Long id = plantService.join(plant);

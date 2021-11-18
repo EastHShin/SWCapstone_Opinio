@@ -111,6 +111,15 @@ public class UserService implements UserDetailsService {
         return  dto;
     }
 
+    @Transactional
+    public void addPlantNum(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 사용자입니다."));
+        Integer curPlantNum = user.getPlantNum();
+        user.setPlantNum(curPlantNum + 1);
+
+        return;
+    }
 
 
     @Override
