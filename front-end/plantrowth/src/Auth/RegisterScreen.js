@@ -12,15 +12,17 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Modal,
+  Alert
 } from 'react-native'
 
 import Loader from '../Loader';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useDispatch,useSelector } from 'react-redux';
-import { registerUser,setRegisterState } from '../actions/UserActions';
+import { registerUser,setRegisterState, emailAuthentication, codeVerification, setEmialTransState, setCodeVerificationState } from '../actions/UserActions';
 import messaging from '@react-native-firebase/messaging';
 
 function RegisterScreen({ navigation }) {
@@ -33,9 +35,12 @@ function RegisterScreen({ navigation }) {
   const [userPassword, setUserPassword] = useState('');
   const [userBirth, setUserBirth] = useState('');
   const [fcmToken, setFcmToken] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [checkEmail, setCheckEmail] = useState(true);
   const [checkPassword, setCheckPassword] = useState(true);
+  const [checkEmailCode, setCheckEmailCode] = useState(false);
 
+  const [inputAuthCode, setInputAuthCode] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
 
@@ -44,6 +49,8 @@ function RegisterScreen({ navigation }) {
 
   const registerState = useSelector(state => state.UserReducer.registerState);
   const registerText = useSelector(state => state.UserReducer.registerText);
+  const emailTrans = useSelector(state => state.UserReducer.emailTrans);
+  const codeVerificationState = useSelector(state=> state.UserReducer.codeVerificationState);
   const passwordInputRef = createRef();
 
   const maximumDate = new Date();
@@ -53,11 +60,13 @@ function RegisterScreen({ navigation }) {
       setLoading(false);
       setIsRegistraionSuccess(true);
       dispatch(setRegisterState(''));
+      setCheckEmailCode(false);
     }
-    else if(!registerState == 'success' && isFocused){
+    else if(registerState == 'failure' && isFocused){
       setLoading(false);
       setErrortext(registerText); 
       dispatch(setRegisterState(''));
+      setCheckEmailCode(false);
     }
   }, [registerState])
 
@@ -69,6 +78,36 @@ function RegisterScreen({ navigation }) {
   useEffect(() => {
     getFcmToken();
   }, [])
+
+  useEffect(()=>{
+
+    if(emailTrans=="success" && isFocused){
+      setLoading(false);
+      setIsModalVisible(true);
+      dispatch(setEmialTransState(''));
+    }
+    else if(emailTrans=="failure" && isFocused){
+      setLoading(false);
+      alert('이메일 전송에 실패하였습니다!');
+      dispatch(setEmialTransState(''));
+    }
+
+  },[emailTrans])
+
+  useEffect(() => {
+    if(codeVerificationState == 'success' && isFocused){
+      setLoading(false);
+      setCheckEmailCode(true);
+      alert('인증성공 !!!');
+      dispatch(setCodeVerificationState(""));
+      setIsModalVisible(false);
+    }
+    else if(codeVerificationState == 'failure' && isFocused){
+      setLoading(false);
+      alert('인증코드를 다시 확인해주세요.');
+      dispatch(setCodeVerificationState(""));
+    }
+  }, [codeVerificationState])
   
 
   const onPressHandler = () => {
@@ -91,6 +130,10 @@ function RegisterScreen({ navigation }) {
       alert('비밀번호를 입력해주세요.');
       return;
     }
+    if(!checkEmailCode){
+      alert('이메일을 인증해주세요!');
+      return;
+    }
 
     setLoading(true);
 
@@ -110,6 +153,9 @@ function RegisterScreen({ navigation }) {
     dispatch(registerUser(user));
  
   }
+
+
+
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -260,6 +306,75 @@ function RegisterScreen({ navigation }) {
                 }
                 blurOnSubmit={false}
               />
+              <TouchableOpacity
+              style={styles.smallButton}
+              activeOpacity={0.5}
+              onPress={()=> {
+                dispatch(emailAuthentication(userEmail))
+                setLoading(true);  
+              }
+                }>
+                <Text style={{
+                  color: '#FFFFFF',
+                  paddingVertical: 10, fontSize: 10
+                }}>인증</Text>
+            </TouchableOpacity>
+            
+              <Modal
+                transparent={true}
+                animationType={'none'}
+                onRequestClose={() => {
+                  console.log("close");
+                  setIsModalVisible(false);
+                }}
+                visible={isModalVisible}
+              >
+                <View style={styles.modal}>
+                  <View style={styles.modalSectionWrapper}>
+                    <Text>이메일이 전송되었습니다!</Text>
+                    <Text>인증번호를 입력해주세요.</Text>
+                    <View style={styles.section}>
+                      <Ionicons name='ios-mail-open-outline' size={20} color="#8EB695" style={styles.icon} />
+                      <TextInput
+                        style={styles.input}
+                        onChangeText={(code) => setInputAuthCode(code)}
+                        underlineColorAndroid="#f000"
+                        placeholder="verification code"
+                        placeholderTextColor="#808080"
+                        onSubmitEditing={
+                          Keyboard.dismiss
+                        }
+                        blurOnSubmit={false}
+                      />
+            </View>
+<View style={{flexDirection:"row"}}>
+            <TouchableOpacity
+              style={styles.smallButton}
+              activeOpacity={0.5}
+              onPress={()=>
+              { setLoading(true);
+                dispatch(codeVerification(inputAuthCode));
+                }
+                }>
+              <Text style={{color: '#FFFFFF',
+                  paddingVertical: 10, fontSize: 10}}>확인</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.smallButton}
+              activeOpacity={0.5}
+              onPress={()=> {
+                alert('인증을 취소합니다.')
+                setIsModalVisible(false);
+                }}>
+              <Text style={{color: '#FFFFFF',
+                  paddingVertical: 10, fontSize: 10}}>취소</Text>
+            </TouchableOpacity>
+      </View>
+          </View>
+        </View>
+      </Modal>
+
+
             </View>
             {checkEmail == false ? (
               <Text style={styles.errorText}>
@@ -391,5 +506,31 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginRight: 10,
     marginLeft: -5
-  }
+  },
+  smallButton:{
+    backgroundColor: '#BEE9B4',
+    height:35,
+    marginLeft:Dimensions.get('window').width*0.02,
+    width:"20%",
+    alignItems: 'center',
+    borderRadius: 30, 
+
+  },
+  modal: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#00000040',
+  },
+  modalSectionWrapper:
+  {
+    backgroundColor: '#FFFFFF',
+    height: Dimensions.get('window').height * 0.35,
+    width: Dimensions.get('window').width * 0.85,
+    borderRadius: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems:'center'
+  },
+  
 });

@@ -1,10 +1,12 @@
-import {REGISTER_USER,LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK,LOGOUT_USER} from "../actions/type";
+import {REGISTER_USER,LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK,LOGOUT_USER, CODE_VERIFICATION, SEND_EMAIL} from "../actions/type";
 
 const initialState = {
     kakaoRegisterState:'',
     isLogin:'',
     registerState:'',
-    registerText:''
+    registerText:'',
+    emailTrans:'',
+    codeVerificationState:'',
 };
 
 function UserReducer(state=initialState, action){
@@ -19,6 +21,10 @@ function UserReducer(state=initialState, action){
             return state;
         case LOGOUT_USER:
             return { ...state, isLogin:action.payload};
+        case SEND_EMAIL:
+            return { ...state, emailTrans: action.payload };
+        case CODE_VERIFICATION:
+            return { ...state, codeVerificationState: action.payload };
         default:
             return state;
     }

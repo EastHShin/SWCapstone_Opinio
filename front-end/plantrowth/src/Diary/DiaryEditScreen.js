@@ -81,22 +81,15 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
         const Data = new FormData();
 
-        if(diary.title == title){
-            Data.append('title', null);
-        }
-        else{
+        if(diary.title != title){
             Data.append('title', title);
         }
 
-        if(diary.content == content){
-            Data.append('content', null);
-        }
-        else{
+        if(diary.content != content){
             Data.append('content', content);
+           
         }
-
-        Data.append('date', null);
-  
+     
         if (fileName) {
             console.log("새로운 사진");
             Data.append('file_name', {
@@ -108,11 +101,8 @@ const DiaryEditScreen = ({ route, navigation }) => {
         else if(!imageUri){
             Data.append('file_status','delete');
         }
-        else{
-            Data.append('file_name', null);
-        }
           
-        dispatch(editDiary(Data, diary.diary_id));
+        dispatch(editDiary(Data, selectedId));
         
     }
 

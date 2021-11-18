@@ -11,8 +11,8 @@ import {
   Dimensions
 } from 'react-native';
 
-import Evillcons from 'react-native-vector-icons/EvilIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchDiaries } from '../actions/DiaryActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native'
@@ -87,11 +87,10 @@ const DiaryScreen = ({ route,navigation }) => {
       </View>
       <View style={styles.diaryWrapper}>
         {diaries.length == 0 ? (
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId, plantImg:plantImg})}>
-            <Evillcons name='plus' size={80} color="#DCDCDC" style={styles.icon} />
-          </TouchableOpacity>
+          <View style={{alignItems:"center", justifyContent:"center",marginTop: Dimensions.get('window').height * 0.3 }}>
+          
+            
+          </View>
         ) : null}
 
         <FlatList
@@ -121,6 +120,7 @@ const styles = StyleSheet.create({
   diaryWrapper: {
     height: Dimensions.get('window').height * 0.83,
     width: Dimensions.get('window').width,
+    
   },
   item: {
     padding: 20,
