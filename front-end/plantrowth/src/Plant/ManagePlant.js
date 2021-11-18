@@ -309,6 +309,7 @@ const ManagePlant = ({route}) => {
         justifyContent: 'space-between',
       }}>
       <Loader loading={loading} />
+      <LevelUp />
       <View style={{justifyContent: 'space-between'}}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <TouchableOpacity

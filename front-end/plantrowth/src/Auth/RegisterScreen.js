@@ -59,6 +59,7 @@ function RegisterScreen({ navigation }) {
     if(registerState == 'success' && isFocused){
       setLoading(false);
       setIsRegistraionSuccess(true);
+      setErrortext('');
       dispatch(setRegisterState(''));
       setCheckEmailCode(false);
     }
@@ -339,6 +340,7 @@ function RegisterScreen({ navigation }) {
                         style={styles.input}
                         onChangeText={(code) => setInputAuthCode(code)}
                         underlineColorAndroid="#f000"
+                        keyboardType = "number-pad"
                         placeholder="verification code"
                         placeholderTextColor="#808080"
                         onSubmitEditing={

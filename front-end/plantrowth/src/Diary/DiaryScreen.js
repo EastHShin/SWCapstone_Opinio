@@ -48,7 +48,6 @@ const DiaryScreen = ({ route, navigation }) => {
   const isFocused = useIsFocused();
 
 
-
   useEffect(() => {
     if (isFocused) {
       dispatch(fetchDiaries(plantId));

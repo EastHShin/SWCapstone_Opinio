@@ -200,7 +200,7 @@ export const logoutUser = (email) => {
 
 
     return async dispatch => {
-        return await axios.post('https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/logout', email, {
+        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout', email, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
