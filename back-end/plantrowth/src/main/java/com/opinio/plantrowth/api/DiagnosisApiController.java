@@ -33,7 +33,6 @@ public class DiagnosisApiController {
     private final PlantService plantService;
     private final FileUploadService fileUploadService;
     private final UserPointService userPointService;
-    private final UserService userService;
     private final PlantExpService plantExpService;
     private final String filePath = "diagnosis";
     private final OkHttpClient client = new OkHttpClient();
