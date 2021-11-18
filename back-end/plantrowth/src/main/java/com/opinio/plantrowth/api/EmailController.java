@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.api;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.opinio.plantrowth.domain.ConfirmationToken;
 import com.opinio.plantrowth.service.EmailAuth.EmailService;
 import lombok.AllArgsConstructor;
@@ -37,12 +38,14 @@ public class EmailController {
 
     @Getter
     @Setter
+    @JsonAutoDetect
     static class VerifyDTO{
         private String code;
     }
 
     @Getter
     @Setter
+    @JsonAutoDetect
     static class emailDTO{
         private String email;
     }
