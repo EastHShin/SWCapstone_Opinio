@@ -148,6 +148,7 @@ const ManagePlant = ({route}) => {
     console.log('wateringHandler 호출');
     dispatch(waterPlant(plantId));
   };
+  
   const diagnosisHandler = async choice => {
     if (choice === 'take') {
       await takePicture();

@@ -56,13 +56,6 @@ export const setResultState = state => dispatch => {
   });
 };
 
-export const setResultState = state => dispatch => {
-    dispatch({
-        type: RESULT_STATE,
-        payload: state
-    })
-}
-
 export const saveDiary = (diary, plantId) => {
 
     return async dispatch => {
