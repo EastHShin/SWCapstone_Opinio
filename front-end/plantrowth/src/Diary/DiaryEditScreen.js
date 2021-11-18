@@ -20,14 +20,17 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { editDiary, setResultState } from '../actions/diaryActions';
+import { editDiary, setResultState } from '../actions/DiaryActions';
 import { useIsFocused } from '@react-navigation/native'
 
+
+
+//edit 할 때 카메라 다녀오면 modal이 켜지는거 변경하기 
 const DiaryEditScreen = ({ route, navigation }) => {
 
-    const {selectedId} = route.params;
+    const {selectedId, plantId, plantImg} = route.params;
 
-    const diary = useSelector(state => state.diaryReducer.diary);
+    const diary = useSelector(state => state.DiaryReducer.diary);
 
     const [title, setTitle] = useState(diary.title);
     const [content, setContent] = useState(diary.content);
@@ -41,13 +44,13 @@ const DiaryEditScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
     
-    const result = useSelector(state => state.diaryReducer.result);
+    const result = useSelector(state => state.DiaryReducer.result);
  
    useEffect(() => {
       if(result == "success" && isFocused){
           setLoading(false);
           dispatch(setResultState(''));
-          navigation.navigate('DiaryDetailScreen',{selectedId: selectedId});
+          navigation.navigate('DiaryDetailScreen',{selectedId: selectedId, plantId: plantId, plantImg:plantImg});
       }
       else if(result == "failure" && isFocused){
           setLoading(false);
@@ -76,11 +79,23 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
         setLoading(true);
 
-          const Data = new FormData();
+        const Data = new FormData();
 
-          Data.append('title', title);
-          Data.append('content', content);
-          Data.append('date', diary.date); 
+        if(diary.title == title){
+            Data.append('title', null);
+        }
+        else{
+            Data.append('title', title);
+        }
+
+        if(diary.content == content){
+            Data.append('content', null);
+        }
+        else{
+            Data.append('content', content);
+        }
+
+        Data.append('date', null);
   
         if (fileName) {
             console.log("새로운 사진");
@@ -92,6 +107,9 @@ const DiaryEditScreen = ({ route, navigation }) => {
         }
         else if(!imageUri){
             Data.append('file_status','delete');
+        }
+        else{
+            Data.append('file_name', null);
         }
           
         dispatch(editDiary(Data, diary.diary_id));

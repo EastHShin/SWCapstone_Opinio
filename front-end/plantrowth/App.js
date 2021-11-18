@@ -17,9 +17,19 @@ import AddProfileScreen from './src/Plant/AddPlantProfile';
 import ManagePlantScreen from './src/Plant/ManagePlant';
 import CommunityScreen from './src/Community';
 import ShopScreen from './src/Shop';
+<<<<<<< HEAD
+import MyPageScreen from './src/MyPage/MyPageScreen'
+import AccountInfoScreen from './src/MyPage/AccountInfoScreen';
+import AccountDeleteScreen from './src/MyPage/AccountDelete';
+import AccountEditScreen from './src/MyPage/AccountEditScreen';
+import DiseaseDiagnosisHistoryScreen from './src/MyPage/DiseaseDiagnosisHistoryScreen';
+import PointHistoryScreen from './src/MyPage/PointHistoryScreen';
+import {Alert} from 'react-native';
+=======
 import MyPageScreen from './src/MyPage';
 import UpdatePlantProfileScreen from './src/Plant/UpdatePlantProfile';
 import DiagnosisScreen from './src/Plant/DiagnosisScreen';
+>>>>>>> front
 import * as RootNavigation from './RootNavigation';
 import {navigationRef} from './RootNavigation';
 import {Alert} from 'react-native';
@@ -33,7 +43,7 @@ function App({navigation}) {
 
     messaging().onMessage(async remoteMessage => {
       console.log(remoteMessage.data.plant_id);
-
+      
       Alert.alert(
         "물주기 알림", "식물에게 물을 줄 시간입니다!", [
         {
@@ -45,6 +55,7 @@ function App({navigation}) {
           text: "확인",
           onPress: () => {
             RootNavigation.navigate("ManagePlantScreen", { plantId: remoteMessage.data.plant_id })
+            
           }
         }
       ]
@@ -165,15 +176,46 @@ function App({navigation}) {
             }}
           />
           <Stack.Screen
+<<<<<<< HEAD
+            name="AccountInfoScreen"
+            component={AccountInfoScreen}
+=======
             name="UpdatePlantProfileScreen"
             component={UpdatePlantProfileScreen}
+>>>>>>> front
             options={{
               headerShown: false,
             }}
           />
           <Stack.Screen
+<<<<<<< HEAD
+            name="AccountEditScreen"
+            component={AccountEditScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AccountDeleteScreen"
+            component={AccountDeleteScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DiseaseDiagnosisHistoryScreen"
+            component={DiseaseDiagnosisHistoryScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PointHistoryScreen"
+            component={PointHistoryScreen}
+=======
             name="DiagnosisScreen"
             component={DiagnosisScreen}
+>>>>>>> front
             options={{
               headerShown: false,
             }}

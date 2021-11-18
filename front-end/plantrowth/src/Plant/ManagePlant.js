@@ -14,6 +14,7 @@ import Loader from '../Loader';
 import {useSelector, useDispatch} from 'react-redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
+
 import {
   getProfile,
   deletePlant,
@@ -28,6 +29,7 @@ import ProgressCircle from 'react-native-progress-circle';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import Entypo from 'react-native-vector-icons/dist/Entypo';
+import LevelUp from '../LevelUp';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;

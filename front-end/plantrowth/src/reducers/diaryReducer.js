@@ -3,16 +3,15 @@ import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY ,DELET
 const initialState = {
     diaries:[],
     diary:{},
-    result:''
+    result:'',
 };
 
-
-function diaryReducer(state=initialState, action){
+function DiaryReducer(state=initialState, action){
     switch (action.type){
         case RESULT_STATE : 
             return {...state, result:action.payload};
         case FETCH_DIARIES :
-            return {...state, diaries:action.payload};
+            return {...state, diaries:action.payload.reverse()};
         case FETCH_DIARY :
             return {...state, diary:action.payload};
         case SAVE_DIARY :
@@ -27,4 +26,4 @@ function diaryReducer(state=initialState, action){
 
 }
 
-export default diaryReducer;
+export default DiaryReducer;

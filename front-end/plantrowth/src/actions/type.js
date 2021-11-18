@@ -10,6 +10,7 @@ export const FETCH_DIARY = 'FETCH_DIARY';
 export const SAVE_DIARY = 'SAVE_DIARY';
 export const EDIT_DIARY = 'EDIT_DIARY';
 export const DELETE_DIARY = 'DELETE_DIARY';
+export const LEVEL_UP  = 'LEVEL_UP';
 export const ADD_PLANT = 'add_plant';
 export const GET_PLANT_LIST = 'get_plant_list';
 export const GET_PLANT_PROFILE = 'get_plant_profile';
@@ -20,3 +21,4 @@ export const DELETE_PLANT = 'delete_plant';
 export const UPDATE_PLANT = 'update_plant';
 export const WATER_PLANT = 'water_plant';
 export const DIAGNOSIS_PLANT = 'diagnosis_plant';
+
