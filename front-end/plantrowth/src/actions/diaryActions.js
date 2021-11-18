@@ -1,4 +1,4 @@
-import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY, DELETE_DIARY } from "./type";
+import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY, DELETE_DIARY,  GET_EXP, GET_POINT } from "./type";
 import { setLevelUpState } from "./PlantActions";
 
 import axios from "axios";
@@ -47,8 +47,14 @@ export const fetchDiary = (diaryId) => {
                 console.log(error);
             })
     }
-
 }
+
+export const setResultState = state => dispatch => {
+  dispatch({
+    type: RESULT_STATE,
+    payload: state,
+  });
+};
 
 export const setResultState = state => dispatch => {
     dispatch({

@@ -21,4 +21,8 @@ export const DELETE_PLANT = 'delete_plant';
 export const UPDATE_PLANT = 'update_plant';
 export const WATER_PLANT = 'water_plant';
 export const DIAGNOSIS_PLANT = 'diagnosis_plant';
-
+export const BUY_PROFILE_SLOT = 'buy_profile_slot';
+export const GET_POINT = 'get_point';
+export const GET_EXP = 'get_exp';
+export const GET_MAX_PLANT_NUM = 'get_max_plant_num';
+export const SAVE_DIAGNOSIS_CHART = 'save_diagnosis_chart';

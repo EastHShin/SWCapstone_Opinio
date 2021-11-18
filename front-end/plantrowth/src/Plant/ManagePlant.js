@@ -37,12 +37,14 @@ const screenWidth = Dimensions.get('window').width;
 const ManagePlant = ({route}) => {
   console.log('manage Plant에서 plant_id: ' + JSON.stringify(route.params));
   const plantId = route.params.plantId;
-  const point = route.params.point;
+  const [testPoint, setTestPoint] = useState(route.params.point);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isDiagnosisModalVisible, setDiagnosisModalVisibility] =
     useState(false);
   const [isInfoModalVisible, setInfoModalVisibility] = useState(false);
+  const [isEarnModalVisible, setEarnModalVisibility] = useState(false);
+  const [isDoingDiagnosis, setDoingDiagnosis] = useState(false);
 
   const profile = useSelector(state => state.PlantReducer.profile);
   const deletePlantState = useSelector(
@@ -51,6 +53,11 @@ const ManagePlant = ({route}) => {
   const wateringState = useSelector(state => state.PlantReducer.wateringResult);
   const diagnosisState = useSelector(
     state => state.PlantReducer.diagnosisResult,
+  );
+  const point = useSelector(state => state.PlantReducer.point);
+  const exp = useSelector(state => state.PlantReducer.exp);
+  const diagnosisChart = useSelector(
+    state => state.PlantReducer.diagnosisChart,
   );
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
@@ -82,10 +89,12 @@ const ManagePlant = ({route}) => {
     console.log('wateringState: ' + wateringState + ' isFocused: ' + isFocused);
     if (wateringState == 'success' && isFocused) {
       console.log('useEffect에서 watering success');
+      setTestPoint(testPoint + 10);
       setLoading(false);
-      alert('물 줬음');
       dispatch(getProfile(plantId));
       dispatch(setWateringState(''));
+      setDoingDiagnosis(false);
+      setEarnModalVisibility(true);
     } else if (wateringState == 'failure' && isFocused) {
       console.log('useEffect에서 watering failure');
       setLoading(false);
@@ -99,10 +108,10 @@ const ManagePlant = ({route}) => {
     );
     if (diagnosisState == 'success' && isFocused) {
       console.log('useEffect에서 diagnosis success');
-      alert('질병진단 성공');
       setLoading(false);
       dispatch(setDiagnosisState(''));
-      navigation.navigate('DiagnosisScreen');
+      setDoingDiagnosis(true);
+      setEarnModalVisibility(true);
     } else if (diagnosisState == 'failure' && isFocused) {
       console.log('useEffect에서 diagnosis failure');
       setLoading(false);
@@ -139,8 +148,12 @@ const ManagePlant = ({route}) => {
     console.log('wateringHandler 호출');
     dispatch(waterPlant(plantId));
   };
-  const diagnosisHandler = choice => {
-    photoUpload(choice);
+  const diagnosisHandler = async choice => {
+    if (choice === 'take') {
+      await takePicture();
+    } else if (choice === 'pick') {
+      await selectImage();
+    }
     setDiagnosisModalVisibility(false);
     if (selectedImage) {
       console.log('selectedImage' + selectedImage);
@@ -152,17 +165,18 @@ const ManagePlant = ({route}) => {
       });
       console.log(fd);
       setLoading(true);
+      setDoingDiagnosis(true);
       dispatch(diagnosisPlant(plantId, fd));
     }
   };
 
-  const photoUpload = async choice => {
-    if (choice === 'take') {
-      await takePicture();
-    } else if (choice === 'pick') {
-      await selectImage();
-    }
-  };
+  // const photoUpload = async choice => {
+  //   if (choice === 'take') {
+  //     await takePicture();
+  //   } else if (choice === 'pick') {
+  //     await selectImage();
+  //   }
+  // };
 
   const takePicture = () => {
     return new Promise((resolve, reject) => {
@@ -198,6 +212,37 @@ const ManagePlant = ({route}) => {
     }
   };
 
+  const renderExp = () => {
+    console.log('plant_exp: ' + profile.plant_exp);
+    console.log('plant_level: ' + profile.plant_level);
+    if (profile.plant_level) {
+      if (profile.plant_level == 1) return 30;
+      else return 30 + (profile.plant_level - 1) * 10;
+    } else return 0;
+  };
+
+  const renderEarnPoint = isDoingDiagnosis => {
+    if (!isDoingDiagnosis)
+      return (
+        <View>
+          <Text style={styles.earnText}>포인트를 10만큼 획득하셨어요!</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginBottom: 20,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text style={[styles.earnText, {fontSize: 16}]}>보유 포인트:</Text>
+            <Text style={[styles.earnText, {fontSize: 16, color: '#7e57c2'}]}>
+              {' '}
+              {point}
+            </Text>
+            <Entypo name={'arrow-up'} size={20} color={'#93d07d'} />
+          </View>
+        </View>
+      );
+  };
   const renderProfile = profile => {
     console.log('renderProfile에서: ' + JSON.stringify(profile));
     return profile ? (
@@ -228,9 +273,27 @@ const ManagePlant = ({route}) => {
           />
         </View>
         <View style={styles.expWrapper}>
-          <Text>{profile.plant_exp}</Text>
           <View style={styles.levelBar}>
-            <View style={styles.expBar}></View>
+            <View
+              style={[
+                styles.expBar,
+                {
+                  width: profile.plant_exp
+                    ? (screenWidth * 0.6 * profile.plant_exp) / renderExp()
+                    : 0,
+                },
+              ]}>
+              <Text
+                style={{
+                  width: screenWidth * 0.6,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                }}>
+                {`LV. ${profile.plant_level} ( ${
+                  profile.plant_exp
+                } / ${renderExp()} )`}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -254,7 +317,7 @@ const ManagePlant = ({route}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.backButton, {marginRight: 15, marginTop: 5}]}
-            onPress={() => navigation.navigate('ShopScreen')}>
+            onPress={() => navigation.navigate('ShopScreen', {point: point})}>
             <Entypo name={'shop'} size={40} color={'white'} />
           </TouchableOpacity>
         </View>
@@ -322,7 +385,7 @@ const ManagePlant = ({route}) => {
             style={styles.buttonOutside}
             onPress={() => {
               Alert.alert(
-                `질병진단에는 100포인트가 소모돼요`,
+                `질병진단에는 30포인트가 소모돼요`,
                 `질병진단을 계속 하시겠어요?`,
                 [
                   {
@@ -332,7 +395,7 @@ const ManagePlant = ({route}) => {
                   {
                     text: '계속할게요',
                     onPress: () => {
-                      if (point >= 100) {
+                      if (testPoint >= 30) {
                         setDiagnosisModalVisibility(true);
                       } else {
                         alert(
@@ -519,6 +582,70 @@ const ManagePlant = ({route}) => {
           </View>
         </View>
       </Modal>
+      <Modal
+        isVisible={isEarnModalVisible}
+        onBackButtonPress={() => setEarnModalVisibility(false)}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            width: screenWidth * 0.6,
+            height: screenHeight * 0.4,
+            backgroundColor: 'white',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          {/* <EarnModal point={point}/> */}
+          <View
+            style={{
+              marginTop: 5,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text style={[styles.earnText, {fontSize: 18}]}>축하드려요!</Text>
+            {renderEarnPoint(isDoingDiagnosis)}
+            <Text style={styles.earnText}>경험치를 10만큼 획득하셨어요!</Text>
+            <View style={styles.expWrapper}>
+              <View style={[styles.levelBar, {width: screenWidth * 0.5}]}>
+                <View
+                  style={[
+                    styles.expBar,
+                    {
+                      width: profile.plant_exp
+                        ? (screenWidth * 0.5 * profile.plant_exp) / renderExp()
+                        : 0,
+                    },
+                  ]}>
+                  <Text
+                    style={{
+                      width: screenWidth * 0.5,
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                    }}>
+                    {`LV. ${profile.plant_level} ( ${
+                      profile.plant_exp
+                    } / ${renderExp()} )`}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          <Button
+            title="확인"
+            onPress={() => {
+              if (isDoingDiagnosis) {
+                setEarnModalVisibility(false);
+                navigation.navigate('DiagnosisScreen', {chart: diagnosisChart, image: selectedImage.assets[0].uri});
+              } else {
+                setEarnModalVisibility(false);
+              }
+            }}
+          />
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -606,8 +733,6 @@ const styles = StyleSheet.create({
   },
   expBar: {
     backgroundColor: '#f1c40f',
-    //50+LV*10
-    //width: screenWidth * 0.6 * ((50) - infoList.plant_exp)/
     height: screenHeight * 0.03,
     borderRadius: 5,
   },
@@ -685,6 +810,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+  },
+  earnText: {
+    fontWeight: 'bold',
+    marginTop: 5,
+    marginBottom: 5,
   },
 });
 

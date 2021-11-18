@@ -4,8 +4,10 @@ import UserReducer from './reducers/UserReducer';
 import DiaryReducer from './reducers/DiaryReducer';
 import PlantReducer from './reducers/PlantReducer';
 import HomeReducer from './reducers/HomeReducer';
+import ShopReducer from './reducers/ShopReducer';
 
-const rootReducer = combineReducers({ UserReducer, DiaryReducer, PlantReducer, HomeReducer });
+const rootReducer = combineReducers({ userReducer, diaryReducer, PlantReducer, HomeReducer, ShopReducer });
+
 
 const Store = createStore(rootReducer, applyMiddleware(thunk));
 
