@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,16 +14,16 @@ import {
     Alert
 } from 'react-native';
 
-import { fetchDiary } from '../actions/diaryActions';
+import { fetchDiary } from '../actions/DiaryActions';
 import { useIsFocused } from '@react-navigation/native'
 import Loader from '../Loader';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { deleteDiary, setResultState } from '../actions/diaryActions';
+import { deleteDiary, setResultState } from '../actions/DiaryActions';
 
 const DiaryDetailScreen = ({ route, navigation }) => {
 
-    const {selectedId, plantId} = route.params;
+    const { selectedId, plantId, plantImg } = route.params;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -32,38 +31,42 @@ const DiaryDetailScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
 
-    const diary = useSelector(state => state.diaryReducer.diary);
-    const result = useSelector(state => state.diaryReducer.result);
+    const diary = useSelector(state => state.DiaryReducer.diary);
+    const result = useSelector(state => state.DiaryReducer.result);
 
     useEffect(() => {
-        dispatch(fetchDiary(selectedId));
+        if (isFocused) {
+            dispatch(fetchDiary(selectedId));
+        }
     }, [isFocused])
 
-    useEffect(()=>{
-        if(result=='success'&&isFocused){
+    useEffect(() => {
+        if (result == 'success' && isFocused) {
             setLoading(false);
             dispatch(setResultState(''));
-            navigation.navigate('DiaryScreen',{plantId:plantId});
+            setIsModalVisible(false);
+            navigation.navigate('DiaryScreen', { plantId: plantId, plantImg: plantImg });
         }
-        else if(result == 'failure' && isFocused){
+        else if (result == 'failure' && isFocused) {
             setLoading(false);
             dispatch(setResultState(''));
+            setIsModalVisible(false);
             alert('삭제 실패');
         }
-        
-    },[result])
+
+    }, [result])
 
     const deleteMode = () => {
         Alert.alert(
-            "삭제", "식물일기를 삭제하시겠습니까?",[
-                {
-                    text:"취소",
-                    onPress : () => console.log("취소")
+            "삭제", "식물일기를 삭제하시겠습니까?", [
+            {
+                text: "취소",
+                onPress: () => console.log("취소")
 
             },
             {
-                text:"확인",
-                onPress : () => {
+                text: "확인",
+                onPress: () => {
                     setLoading(true);
                     dispatch(deleteDiary(selectedId))
                 }
@@ -75,7 +78,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.body}>
-             <Loader loading={loading} />
+            <Loader loading={loading} />
             <View style={{ marginVertical: "5%", marginEnd: "-80%" }}>
                 <TouchableOpacity
                     activeOpacity={0.5}
@@ -88,7 +91,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                     visible={isModalVisible}
                     onRequestClose={() => {
                         console.log("close");
-                        setIsModalVisible(!isModalVisible);
+                        setIsModalVisible(false);
                     }}
                 >
                     <View style={{ flex: 1, justifyContent: "flex-end" }}>
@@ -106,7 +109,11 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                             <View style={styles.wrapper}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={() => navigation.navigate('DiaryEditScreen',{selectedId:selectedId})}
+                                    onPress={() => {
+                                        setIsModalVisible(false);
+                                        navigation.navigate('DiaryEditScreen', { selectedId: selectedId, plnatId: plantId, plantImg: plantImg })
+                                    }
+                                    }
                                     style={{ flexDirection: "row" }}>
                                     <FontAwesome5 name='pen' size={25} color="#000000" style={styles.icon} />
                                     <Text style={styles.text}>수정</Text>
@@ -129,20 +136,20 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                     </View>
 
                     {diary.file_name ? (
-                             <View>
-                             <Image
-                                 source={{ uri: diary.file_name }}
-                                 style={{
-                                     width: Dimensions.get('window').width * 0.8,
-                                     height: Dimensions.get('window').height * 0.4,
-                                     resizeMode: 'contain',
-                                 }}
-                             />
-                         </View>
-                        ) : null}
+                        <View>
+                            <Image
+                                source={{ uri: diary.file_name }}
+                                style={{
+                                    width: Dimensions.get('window').width * 0.8,
+                                    height: Dimensions.get('window').height * 0.4,
+                                    resizeMode: 'contain',
+                                }}
+                            />
+                        </View>
+                    ) : null}
 
 
-                  
+
 
                     <View style={styles.content}>
                         <Text style={{ color: "#000000" }}>

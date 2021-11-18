@@ -19,12 +19,12 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { saveDiary, setResultState } from '../actions/diaryActions';
+import { saveDiary, setResultState } from '../actions/DiaryActions';
 import { useIsFocused } from '@react-navigation/native'
 
 const DiaryCreateScreen = ({ route,navigation }) => {
 
-    const {plantId} = route.params;
+    const {plantId, plantImg} = route.params;
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -38,17 +38,13 @@ const DiaryCreateScreen = ({ route,navigation }) => {
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
 
-    const result = useSelector(state => state.diaryReducer.result);
+    const result = useSelector(state => state.DiaryReducer.result);
 
-    useEffect(()=>{
-        console.log(plantId + " " +"here is plantid! createscrren");
-    }, [])
-    
    useEffect(() => {
        if(result == "success" && isFocused){
            setLoading(false);
            dispatch(setResultState(''));
-           navigation.navigate("DiaryScreen", {plantId:plantId});
+           navigation.navigate("DiaryScreen", {plantId:plantId, plantImg:plantImg});
        }
        
        else if(result == "failure" && isFocused){
@@ -77,7 +73,18 @@ const DiaryCreateScreen = ({ route,navigation }) => {
     
     const onPressHandler = () => {
 
+        if(!title){
+            alert('제목을 입력해주세요!');
+            return;
+        }
+        if(!content){
+            alert('내용을 입력해주세요!');
+            return;
+        }
+
         setLoading(true);
+
+        
         const date = new Date();
     
         const year = date.getFullYear();
@@ -99,8 +106,6 @@ const DiaryCreateScreen = ({ route,navigation }) => {
             });
         }
 
-        console.log(Data);
-        
         dispatch(saveDiary(Data, plantId));
     }
 

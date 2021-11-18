@@ -1,4 +1,4 @@
-import {ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE, WATER_PLANT, DIAGNOSIS_PLANT, SAVE_DIAGNOSIS_CHART, GET_POINT, GET_EXP} from './type';
+import {ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE, WATER_PLANT, DIAGNOSIS_PLANT, SAVE_DIAGNOSIS_CHART, GET_POINT, GET_EXP, LEVEL_UP} from './type';
 import axios from 'axios';
 
 export const addPlant = (profile, userId) => {
@@ -146,6 +146,13 @@ export const setDeletePlantState = state => dispatch => {
     payload: state,
   });
 };
+
+export const setLevelUpState = state => dispatch => {
+  dispatch({
+    type: LEVEL_UP,
+    payload:state
+  })
+}
 
 export const setUpdatePlantState = state => dispatch => {
   dispatch({

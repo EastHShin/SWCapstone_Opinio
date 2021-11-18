@@ -22,8 +22,7 @@ import EntypoIcons from 'react-native-vector-icons/Entypo';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loader from '../Loader';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink,setRegisterState } from '../actions/userActions';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink,setRegisterState } from '../actions/UserActions';
 import messaging from '@react-native-firebase/messaging';
 
 const LoginScreen = ({ navigation }) => {
@@ -49,9 +48,9 @@ const LoginScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  const isLogin = useSelector(state => state.userReducer.isLogin);
-  const kakaoRegisterState = useSelector(state => state.userReducer.kakaoRegisterState);
-  const registerState = useSelector(state => state.userReducer.registerState);
+  const isLogin = useSelector(state => state.UserReducer.isLogin);
+  const kakaoRegisterState = useSelector(state => state.UserReducer.kakaoRegisterState);
+  const registerState = useSelector(state => state.UserReducer.registerState);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -113,10 +112,10 @@ const LoginScreen = ({ navigation }) => {
       if (result) {
         const profile = await KakaoLogins.getProfile();
         setUserEmail(profile.email);
-        setUserPassword(' '); //협의 후 작성 
+        setUserPassword(' ');  
         setAccessToken(result.accessToken);
         setRefreshToken(result.refreshToken);
-        //삭제
+     
         
         const kakaoLoginData = JSON.stringify({
           email: profile.email,

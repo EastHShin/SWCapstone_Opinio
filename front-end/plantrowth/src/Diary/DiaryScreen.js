@@ -13,9 +13,10 @@ import {
 
 import Evillcons from 'react-native-vector-icons/EvilIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { fetchDiaries } from '../actions/diaryActions';
+import { fetchDiaries } from '../actions/DiaryActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native'
+import LevelUp from '../LevelUp';
 
 const Item = ({ item, onPress, style }) => {
 
@@ -26,7 +27,7 @@ const Item = ({ item, onPress, style }) => {
       </View>
       <View>
         <Text style={styles.content}>
-          {/* {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content} */}
+          {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content}
         </Text>
       </View>
       <View style={{ alignItems: "flex-end" }}>
@@ -39,11 +40,11 @@ const Item = ({ item, onPress, style }) => {
 
 const DiaryScreen = ({ route,navigation }) => {
   
-  const {plantId} = route.params; 
+  const {plantId, plantImg} = route.params; 
 
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
-  const diaries = useSelector(state => state.diaryReducer.diaries);
+  const diaries = useSelector(state => state.DiaryReducer.diaries);
   const isFocused = useIsFocused();
 
 
@@ -62,7 +63,7 @@ const DiaryScreen = ({ route,navigation }) => {
         item={item}
         onPress={() => {
           setSelectedId(item.diary_id);
-          navigation.push("DiaryDetailScreen", {selectedId:item.diary_id,plantId:plantId});
+          navigation.push("DiaryDetailScreen", {selectedId:item.diary_id,plantId:plantId,plantImg:plantImg});
         }
         }
         style={{ backgroundColor: "#FFFFFF" }}
@@ -72,14 +73,15 @@ const DiaryScreen = ({ route,navigation }) => {
 
   return (
     <SafeAreaView style={styles.body}>
+      	<LevelUp />
       <View style={styles.top}>
         <Image
-          source={{ uri: "https://img.marieclairekorea.com/2021/04/mck_60657bd4d3c01.jpg" }}
+          source={{ uri: plantImg }} 
           style={styles.image}
         />
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId})}>
+          onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId, plantImg:plantImg})}>
           <SimpleLineIcons name='note' size={25} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
@@ -87,7 +89,7 @@ const DiaryScreen = ({ route,navigation }) => {
         {diaries.length == 0 ? (
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId})}>
+            onPress={() => navigation.push("DiaryCreateScreen", {plantId:plantId, plantImg:plantImg})}>
             <Evillcons name='plus' size={80} color="#DCDCDC" style={styles.icon} />
           </TouchableOpacity>
         ) : null}
@@ -114,8 +116,7 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: "row",
     justifyContent: "center",
-    height: 40,
-
+    height: Dimensions.get('window').height * 0.05,
   },
   diaryWrapper: {
     height: Dimensions.get('window').height * 0.83,

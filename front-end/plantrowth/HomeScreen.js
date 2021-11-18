@@ -31,10 +31,12 @@ HomeScreen = () => {
 
   const [userId, setUserId] = useState('');
 
+
   const infoList = useSelector(state => state.HomeReducer.infoList);
   const [name, setName] = useState('');
   const isLogin = useSelector(state => state.userReducer.isLogin);
   let plantNumber = 0;
+
 
   useEffect(() => {
     if (isLogin == 'end') {
