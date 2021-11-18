@@ -2,8 +2,7 @@ import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER } 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
-//email, 닉네임 존재여부 서버에서 message로 받아서 
-//실패 시 해당 text 뜨도록 
+
 let timer;
 
 const clearLogoutTimer = () => {
@@ -31,6 +30,7 @@ export const registerUser = (user) => {
                     dispatch({
                         type: REGISTER_USER,
                         payload: "success",
+                        text: ""
                     })
                 }
             })
@@ -38,9 +38,10 @@ export const registerUser = (user) => {
                 console.log(error);
                 dispatch({
                     type: REGISTER_USER,
-                    payload: "failure", //여기 왜 실패했는지 
+                    payload: "failure",
+                    text: "" //여기 
                 })
-                //에러 메시지 어떻게 오는지 확인
+                //메시지 어떻게 오는지 체크 
             })
     }
 }

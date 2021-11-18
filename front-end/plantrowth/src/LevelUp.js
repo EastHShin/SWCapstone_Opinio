@@ -1,19 +1,22 @@
-import React, {useState, useRef,useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
-  StyleSheet, 
-  View, 
-  Modal, 
-  ActivityIndicator,
-  TouchableOpacity,
-  Dimensions,
-  Animated,
-  Text,
-  Easing
+    StyleSheet,
+    View,
+    Modal,
+    TouchableOpacity,
+    Dimensions,
+    Animated,
+    Text,
+    Easing
 } from 'react-native';
 
+import { setLevelUpState } from './actions/PlantActions';
+
 const LevelUp = () => {
+
+    const dispatch = useDispatch();
 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -23,31 +26,31 @@ const LevelUp = () => {
 
     const levelAnimation = useRef(new Animated.Value(0)).current;
     const shakeAnimation = useRef(new Animated.Value(0)).current;
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         setIsModalVisible(isLevelUp);
-    },[isLevelUp])
+    }, [isLevelUp])
 
     useEffect(() => {
         if (isModalVisible) {
             rotateX();
 
             Animated.loop(
-            Animated.timing(shakeAnimation, {
-                toValue: 3,
-                duration: 1000,
-                ease:Easing.bounce,
-                useNativeDriver: true,
-              }),{
-                  iterations:4
-              }).start()
+                Animated.timing(shakeAnimation, {
+                    toValue: 3,
+                    duration: 1000,
+                    ease: Easing.bounce,
+                    useNativeDriver: true,
+                }), {
+                iterations: 4
+            }).start()
 
             setTimeout(() => {
                 setTimeOut(true);
                 rotateX();
             }, 2000);
         }
-       
+
 
     }, [isModalVisible])
 
@@ -71,7 +74,7 @@ const LevelUp = () => {
 
     const shakeStyles = {
         transform: [
-            { translateX: interplated}
+            { translateX: interplated }
         ]
     }
 
@@ -95,6 +98,7 @@ const LevelUp = () => {
                 console.log('close');
                 setTimeOut(false);
                 setIsModalVisible(false);
+                dispatch(setLevelUpState(false));
             }}
             visible={isModalVisible}
         >
@@ -106,7 +110,7 @@ const LevelUp = () => {
                 <View style={styles.modalSectionWrapper}>
                     <View style={styles.section}>
                         <Animated.Text style={[
-                            { fontSize: 20, color: "#BEE9B4", fontWeight:"bold" },
+                            { fontSize: 20, color: "#BEE9B4", fontWeight: "bold" },
                             shakeStyles]}>
                             LEVEL UP !!
                         </Animated.Text>
@@ -118,7 +122,7 @@ const LevelUp = () => {
 
                             style={[
                                 levelUpStyles,
-                                { fontSize: 35, color:"#000000" }
+                                { fontSize: 35, color: "#000000" }
                             ]}
                         >
                             {!timeOut ? 1 : 2}
@@ -128,7 +132,11 @@ const LevelUp = () => {
                     <TouchableOpacity
                         style={styles.button}
                         activeOpacity={0.5}
-                        onPress={() => setIsModalVisible(false)}>
+                        onPress={() => {
+                            setIsModalVisible(false)
+                            dispatch(setLevelUpState(false));
+                        }
+                        }>
                         <Text style={{ color: "#000000" }}>OK</Text>
                     </TouchableOpacity>
 
@@ -145,27 +153,27 @@ const styles = StyleSheet.create({
 
     modalSectionWrapper:
     {
-      backgroundColor: '#FFFFFF',
-      height: Dimensions.get('window').height * 0.35,
-      width: Dimensions.get('window').width * 0.80,
-      borderRadius: 20,
-      justifyContent: 'center',
-      alignItems:'center',
-      
+        backgroundColor: '#FFFFFF',
+        height: Dimensions.get('window').height * 0.35,
+        width: Dimensions.get('window').width * 0.80,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+
     },
-    section:{
+    section: {
         flexDirection: "row",
         height: 40,
         margin: 10,
     },
-    button:{
+    button: {
         backgroundColor: '#BEE9B4',
         borderWidth: 0,
-        height: Dimensions.get('window').height*0.05,
-        width: Dimensions.get('window').width*0.25,
-        marginTop: Dimensions.get('window').height*0.09, 
-        alignItems:"center",
-        justifyContent:"center",
+        height: Dimensions.get('window').height * 0.05,
+        width: Dimensions.get('window').width * 0.25,
+        marginTop: Dimensions.get('window').height * 0.09,
+        alignItems: "center",
+        justifyContent: "center",
         borderRadius: 30,
         shadowColor: '#000000',
         shadowOffset: {

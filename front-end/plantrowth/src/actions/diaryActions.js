@@ -1,4 +1,6 @@
 import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY, DELETE_DIARY } from "./type";
+import { setLevelUpState } from "./PlantActions";
+
 import axios from "axios";
 
 export const fetchDiaries = (plantId) => {

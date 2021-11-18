@@ -43,6 +43,7 @@ function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const registerState = useSelector(state => state.UserReducer.registerState);
+  const registerText = useSelector(state => state.UserReducer.registerText);
   const passwordInputRef = createRef();
 
   const maximumDate = new Date();
@@ -55,7 +56,7 @@ function RegisterScreen({ navigation }) {
     }
     else if(!registerState == 'success' && isFocused){
       setLoading(false);
-      setErrortext('회원가입 실패'); //registerState를 여기 
+      setErrortext(registerText); 
       dispatch(setRegisterState(''));
     }
   }, [registerState])

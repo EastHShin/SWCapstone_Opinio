@@ -12,6 +12,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {getProfile} from '../actions/PlantActions';
+import LevelUp from '../LevelUp';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -138,6 +139,7 @@ const ManagePlant = ({route}) => {
   return (
     <View
       style={{flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+        <LevelUp />
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text>Manage Plant Screen</Text>
         <Text>plant ID: {plantId}</Text>

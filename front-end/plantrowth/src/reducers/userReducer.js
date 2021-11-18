@@ -10,7 +10,7 @@ const initialState = {
 function UserReducer(state=initialState, action){
     switch (action.type){
         case REGISTER_USER :
-            return {...state, registerState:action.payload};
+            return {...state, registerState:action.payload, registerText:action.text};
         case LOGIN_USER:
             return { ...state, isLogin:action.payload};
         case KAKAO_REGISTER:

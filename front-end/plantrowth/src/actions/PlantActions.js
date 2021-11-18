@@ -4,6 +4,7 @@ import {
   UPDATE_PLANT,
   GET_PLANT_LIST,
   GET_PLANT_PROFILE,
+  LEVEL_UP
 } from './type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -110,6 +111,13 @@ export const setDeletePlantState = state => dispatch => {
     payload: state,
   });
 };
+
+export const setLevelUpState = state => dispatch => {
+  dispatch({
+    type: LEVEL_UP,
+    payload:state
+  })
+}
 
 export const setUpdatePlantState = state => dispatch => {
   dispatch({

@@ -16,7 +16,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { fetchDiaries } from '../actions/DiaryActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native'
-import LevelUp from '../../LevelUp';
+import LevelUp from '../LevelUp';
 
 const Item = ({ item, onPress, style }) => {
 
@@ -76,7 +76,7 @@ const DiaryScreen = ({ route,navigation }) => {
       	<LevelUp />
       <View style={styles.top}>
         <Image
-          source={{ uri: "https://img.marieclairekorea.com/2021/04/mck_60657bd4d3c01.jpg" }} //merge 할ㄸ plantImg로 변경 
+          source={{ uri: plantImg }} 
           style={styles.image}
         />
         <TouchableOpacity
