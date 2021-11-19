@@ -18,52 +18,38 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 const dataList = [
   {
     "id":1,
-    "title":"안녕하세요",
-    "content":"안녕하세여!!!! ~~~",
-    "good":23,
-    "comment":50,
-    "date":"2021-11-10"
+    "title":"안녕하세요!",
+    "content":"반갑습니다~",
+    "good":10,
+    "comment":2,
+    "date":"2021-11-05"
   },
   {
     "id":2,
-    "title":"안녕",
-    "content":"안녕하세요",
-    "good":13,
-    "comment":20,
-    "date":"2021-11-12"
+    "title":"질문이 있습니다!",
+    "content":"다육이는 물을 얼마나 줘야 할까요?",
+    "good":3,
+    "comment":10,
+    "date":"2021-11-06"
   },
   {
     "id":3,
-    "title":"박수박수",
-    "content":"박수",
-    "good":5,
-    "comment":10,
-    "date":"2021-11-13"
+    "title":"식물 자랑합니다~",
+    "content":"다들 제 식물 보고 가세요 !",
+    "good":30,
+    "comment":50,
+    "date":"2021-11-07"
   },
   {
     "id":4,
-    "title":"안녕하세요",
-    "content":"안녕하세여!!!! ~~~",
-    "good":23,
-    "comment":50,
-    "date":"2021-11-14"
+    "title":"이 식물 아시는 분 ...",
+    "content":"사진 속 식물 이름 아시는 분 있나요? 너무 궁금해요!",
+    "good":5,
+    "comment":8,
+    "date":"2021-11-11"
   },
-  {
-    "id":5,
-    "title":"안녕하세요",
-    "content":"안녕하세여!!!! ~~~",
-    "good":23,
-    "comment":50,
-    "date":"2021-11-15"
-  },
-  {
-    "id":6,
-    "title":"안녕하세요",
-    "content":"안녕하세여!!!! ~~~",
-    "good":23,
-    "comment":50,
-    "date":"2021-11-16"
-  },
+
+ 
 ]
 
 const Item = ({ item, onPress, style }) => {
@@ -102,7 +88,7 @@ const CommunityMainScreen = ({ navigation }) => {
       <Item
         item={item}
         onPress={() => {
-          setSelectedId(item.id);
+
           console.log(item.id);
         }
         }

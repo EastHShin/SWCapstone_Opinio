@@ -30,7 +30,7 @@ const Item = ({ item, onPress, style }) => {
       </View>
       <View>
         <Text style={styles.content}>
-          {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content}
+          {item.content.length > 24 ? (item.content.substring(0, 22) + "···") : item.content}
         </Text>
       </View>
       <View style={{ alignItems: "flex-end" }}>
@@ -123,7 +123,7 @@ const DiaryScreen = ({ route, navigation }) => {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => navigation.push("DiaryCreateScreen", { plantId: plantId, plantImg: plantImg })}>
-          <SimpleLineIcons name='note' size={25} color="#FFFFFF" />
+          <SimpleLineIcons name='note' size={25}  color="#FFFFFF" />
         </TouchableOpacity>
       </View>
       <View style={styles.diaryWrapper}>
@@ -221,8 +221,9 @@ const styles = StyleSheet.create({
   },
   top: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     height: Dimensions.get('window').height * 0.05,
+    marginStart:Dimensions.get('window').width*0.1
   },
   diaryWrapper: {
     height: Dimensions.get('window').height * 0.83,
@@ -246,15 +247,17 @@ const styles = StyleSheet.create({
     color: "#DCDCDC",
     fontSize: 10,
   },
-  icon: {
-    marginTop: Dimensions.get('window').height / 3,
-    marginStart: Dimensions.get('window').width * 0.4
-  },
+ 
   image: {
-    width: '40%',
+
+    width: Dimensions.get('window').width * 0.2,
     height: Dimensions.get('window').height * 0.1,
+    borderRadius: (screenWidth * 0.4) / 3,
+    backgroundColor: '#93d07d',
+    borderWidth: 2,
+    borderColor: '#93d07d',
     marginTop: Dimensions.get('window').height * -0.045,
-    marginRight: Dimensions.get('window').width * 0.15,
+    marginRight: Dimensions.get('window').width * 0.21,
     marginLeft: Dimensions.get('window').width * 0.23,
     resizeMode: 'contain',
   },
