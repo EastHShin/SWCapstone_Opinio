@@ -43,6 +43,10 @@ public class User implements UserDetails {
     @Builder.Default
     List<Plant> plants = new ArrayList<>();
 
+    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "user")
+    @Builder.Default
+    List<Board> boards = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
         return this.roles.stream()
