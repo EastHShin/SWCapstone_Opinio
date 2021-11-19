@@ -565,61 +565,63 @@ const ManagePlant = ({ route }) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-
-          <View
+        <View
+          style={{
+            width: screenWidth * 0.9,
+            height: screenHeight * 0.7,
+            backgroundColor: 'white',
+            justifyContent: 'space-between',
+            borderRadius:30
+          }}>
+          <Text
             style={{
-              width: screenWidth * 0.7,
-              height: screenHeight * 0.7,
-              backgroundColor: 'white',
-              justifyContent: 'space-between',
+              textAlign: 'center',
+              fontFamily: 'NanumGothicBold',
+              fontSize: 19,
+              color: '#222222',
+              marginTop:screenHeight*0.06,
+              marginBottom:screenHeight*0.02
             }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontFamily: 'NanumGothicBold',
-                fontSize: 19,
-                color: '#222222',
-              }}>
-              식물 상세정보
-            </Text>
-            <View style={{ flex: 10, alignItems: 'flex-start', padding: 10 }}>
-              <View style={styles.infoModalTextWrapper}>
-                <Text style={styles.infoModalText}>이름: </Text>
-                <Text style={styles.infoModalText}>{profile.plant_name}</Text>
-              </View>
-              <View style={styles.infoModalTextWrapper}>
-                <Text style={styles.infoModalText}>식물 종: </Text>
-                <Text style={styles.infoModalText}>{profile.plant_species}</Text>
-              </View>
-              <View style={styles.infoModalTextWrapper}>
-                <Text style={styles.infoModalText}>키우기 시작한 날짜: </Text>
-                <Text style={styles.infoModalText}>{profile.plant_birth}</Text>
-              </View>
-              <View style={styles.infoModalTextWrapper}>
-                <Text style={styles.infoModalText}>최근에 물 준 날짜: </Text>
-                <Text style={styles.infoModalText}>
-                  {profile.recent_watering}
-                </Text>
-              </View>
-              <View style={styles.infoModalTextWrapper}>
-                <Text style={styles.infoModalText}>물 주는 정도: </Text>
-                {renderWaterSupply(profile.water_supply)}
-              </View>
-              <View style={styles.infoModalTextWrapper}>
-                <Text style={styles.infoModalText}>식물 레벨: </Text>
-                <Text style={styles.infoModalText}>{profile.plant_name}</Text>
-              </View>
-              <View style={styles.infoModalTextWrapper}>
-                <Text style={styles.infoModalText}>현재 보유 경험치: </Text>
-                <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
-              </View>
-              <View style={styles.infoModalTextWrapper}>
-                <Text style={styles.infoModalText}>
-                  레벨업 까지 필요한 경험치:{' '}
-                </Text>
-                <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
-              </View>
+            식물 상세정보
+          </Text>
+          <View style={{flex: 10, alignItems: 'flex-start', padding: 10}}>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>이름: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_name}</Text>
             </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>식물 종: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_species}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>키우기 시작한 날짜: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_birth}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>최근에 물 준 날짜: </Text>
+              <Text style={styles.infoModalText}>
+                {profile.recent_watering}
+              </Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>물 주는 정도: </Text>
+              {renderWaterSupply(profile.water_supply)}
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>식물 레벨: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_level}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>현재 보유 경험치: </Text>
+              <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
+            </View>
+            <View style={styles.infoModalTextWrapper}>
+              <Text style={styles.infoModalText}>
+                레벨업 까지 필요한 경험치:{' '}
+              </Text>
+              <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
+            </View>
+          </View>
             <View
               style={{
                 flexDirection: 'row',
