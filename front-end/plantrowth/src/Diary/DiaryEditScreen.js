@@ -23,9 +23,6 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { editDiary, setResultState } from '../actions/DiaryActions';
 import { useIsFocused } from '@react-navigation/native'
 
-
-
-//edit 할 때 카메라 다녀오면 modal이 켜지는거 변경하기 
 const DiaryEditScreen = ({ route, navigation }) => {
 
     const {selectedId, plantId, plantImg} = route.params;
@@ -81,6 +78,10 @@ const DiaryEditScreen = ({ route, navigation }) => {
     }
     
     const onPressHandler = () => {
+        if(diary.title == title && diary.content == content && originalImageUri == imageUri){
+            alert('아직 식물일기를 수정하지 않으셨어요!');
+            return;
+        }
 
         setLoading(true);
 
@@ -94,18 +95,39 @@ const DiaryEditScreen = ({ route, navigation }) => {
             Data.append('content', content);
            
         }
-        if (imageUri!=originalImageUri) {
-            console.log("새로운 사진");
-            Data.append('file_name', {
-                name: fileName,
-                type: imageType,
-                uri: imageUri
-            });
+
+      
+        if (originalImageUri) {
+            if (!imageUri) {
+                console.log("사진 없어짐");
+                Data.append('file_name', 'delete');
+            }
+            else if (imageUri != originalImageUri) {
+                console.log("새로운 사진");
+                Data.append('file_name', {
+                    name: fileName,
+                    type: imageType,
+                    uri: imageUri
+                });
+
+            }
         }
-        else if(!imageUri){
-            console.log("사진 없어짐");
-            Data.append('file_name','delete');
+        else{
+            if(imageUri){
+                console.log("원래 사진 없는데 생김")
+                Data.append('file_name', {
+                    name: fileName,
+                    type: imageType,
+                    uri: imageUri
+                });
+            }
+            else{
+                console.log('원래 없어');
+                
+            }
+            
         }
+
         dispatch(editDiary(Data, selectedId));
         
     }
@@ -165,8 +187,9 @@ const DiaryEditScreen = ({ route, navigation }) => {
                             />
                         </View>
 
+                        <View style = {{marginBottom:Dimensions.get('window').width * 0.06,height: Dimensions.get('window').height * 0.4,}}>
                         {imageUri != '' ? (
-                            <View style = {{marginBottom:Dimensions.get('window').width * 0.06,}}>
+                           
                                 <Image source={{ uri: imageUri }}
                                     style={{
                                         width: Dimensions.get('window').width * 0.8,
@@ -174,8 +197,9 @@ const DiaryEditScreen = ({ route, navigation }) => {
                                         resizeMode: 'contain',
                                     }}
                                 />
-                            </View>
+                            
                         ) : null}
+                        </View>
 
                         <View style={{ flexDirection: "row" }}>
                             <View style={styles.imageButton}>
@@ -231,7 +255,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     diaryWrapper: {
-        height : Dimensions.get('window').height*1.2,
+        height : Dimensions.get('window').height*0.9,
         width: Dimensions.get("window").width,
         borderRadius: 20,
         backgroundColor: "#FFFFFF",
@@ -242,7 +266,7 @@ const styles = StyleSheet.create({
         width:Dimensions.get('window').width*0.8
     },
     content: {
-        marginBottom: Dimensions.get("window").height * 0.09,
+        marginBottom: Dimensions.get("window").height * 0.13,
         width: Dimensions.get('window').width * 0.8
     },
     titleInput:{

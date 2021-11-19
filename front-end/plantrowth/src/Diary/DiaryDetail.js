@@ -132,7 +132,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                 }}>
                 <View style={styles.diaryWrapper}>
                     <View style={styles.title}>
-                        <Text style={{ color: "#000000", fontWeight: "bold" }}>{diary.title}</Text>
+                        <Text style={{ color: "#000000", fontWeight: "bold",fontSize:14 }}>{diary.title}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width*0.7,marginBottom:Dimensions.get('window').height*0.02 }}>
                         <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
@@ -151,11 +151,8 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                         </View>
                     ) : null}
 
-
-
-
                     <View style={styles.content}>
-                        <Text style={{ color: "#000000" }}>
+                        <Text style={{ color: "#000000",fontSize:14 }}>
                             {diary.content}
                         </Text>
                     </View>
@@ -194,11 +191,7 @@ const styles = StyleSheet.create({
         marginRight: Dimensions.get("window").width * 0.05,
 
     },
-    text: {
-        fontSize: 15,
-        color: "#000000"
-
-    },
+   
     diaryWrapper: {
         height: Dimensions.get("window").height,
         width: Dimensions.get("window").width,
