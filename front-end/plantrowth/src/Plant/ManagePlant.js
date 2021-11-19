@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,12 +9,12 @@ import {
   Image,
   SafeAreaView,
   Alert,
+  Modal
 } from 'react-native';
 import Loader from '../Loader';
-import {useSelector, useDispatch} from 'react-redux';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import {
   getProfile,
   deletePlant,
@@ -23,8 +23,8 @@ import {
   setWateringState,
   diagnosisPlant,
   setDiagnosisState,
+  setEarnState,
 } from '../actions/PlantActions';
-import Modal from 'react-native-modal';
 import ProgressCircle from 'react-native-progress-circle';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
@@ -34,8 +34,7 @@ import LevelUp from '../LevelUp';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const ManagePlant = ({route}) => {
-  console.log('manage Plant에서 plant_id: ' + JSON.stringify(route.params));
+const ManagePlant = ({ route }) => {
   const plantId = route.params.plantId;
   const [testPoint, setTestPoint] = useState(route.params.point);
   const [loading, setLoading] = useState(false);
@@ -60,6 +59,10 @@ const ManagePlant = ({route}) => {
   const diagnosisChart = useSelector(
     state => state.PlantReducer.diagnosisChart,
   );
+  const earnState = useSelector(
+    state => state.PlantReducer.earn
+  )
+
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -180,7 +183,7 @@ const ManagePlant = ({route}) => {
 
   const takePicture = () => {
     return new Promise((resolve, reject) => {
-      launchCamera({mediaType: 'photo'}, response => {
+      launchCamera({ mediaType: 'photo' }, response => {
         if (!response.didCancel) {
           setSelectedImage(response);
           resolve(response);
@@ -190,7 +193,7 @@ const ManagePlant = ({route}) => {
   };
   const selectImage = () => {
     return new Promise((resolve, reject) => {
-      launchImageLibrary({mediaType: 'photo'}, response => {
+      launchImageLibrary({ mediaType: 'photo' }, response => {
         if (!response.didCancel) {
           setSelectedImage(response);
           resolve(response);
@@ -213,8 +216,6 @@ const ManagePlant = ({route}) => {
   };
 
   const renderExp = () => {
-    console.log('plant_exp: ' + exp);
-    console.log('plant_level: ' + profile.plant_level);
     if (profile.plant_level) {
       if (profile.plant_level == 1) return 30;
       else return 30 + (profile.plant_level - 1) * 10;
@@ -233,7 +234,7 @@ const ManagePlant = ({route}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Text style={[styles.earnText, {fontSize: 16}]}>보유 포인트:</Text>
+            <Text style={[styles.earnText, { fontSize: 16 }]}>보유 포인트:</Text>
             <Text
               style={[
                 styles.earnText,
@@ -265,11 +266,11 @@ const ManagePlant = ({route}) => {
           }}>
           <View>
             <Image
-              source={{uri: selectedImage.assets[0].uri}}
-              style={{width: screenWidth * 0.55, height: screenWidth * 0.55}}
+              source={{ uri: selectedImage.assets[0].uri }}
+              style={{ width: screenWidth * 0.55, height: screenWidth * 0.55 }}
             />
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity
               style={styles.infoModalButton}
               onPress={() => {
@@ -324,10 +325,10 @@ const ManagePlant = ({route}) => {
       );
     }
   };
+
   const renderProfile = profile => {
-    console.log('renderProfile에서: ' + JSON.stringify(profile));
     return profile ? (
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <View
           style={{
             borderRadius: 15,
@@ -350,7 +351,7 @@ const ManagePlant = ({route}) => {
               height: 300,
               borderRadius: 10,
             }}
-            source={{uri: profile.file_name}}
+            source={{ uri: profile.file_name }}
           />
         </View>
         <View style={styles.expWrapper}>
@@ -371,9 +372,8 @@ const ManagePlant = ({route}) => {
                   fontFamily: 'NanumGothicExtraBold',
                   color: '#363636',
                 }}>
-                {`LV. ${profile.plant_level} ( ${
-                  profile.plant_exp
-                } / ${renderExp()} )`}
+                {`LV. ${profile.plant_level} ( ${profile.plant_exp
+                  } / ${renderExp()} )`}
               </Text>
             </View>
           </View>
@@ -390,17 +390,17 @@ const ManagePlant = ({route}) => {
         justifyContent: 'space-between',
       }}>
       <Loader loading={loading} />
-      <LevelUp />
-      <View style={{justifyContent: 'space-between'}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <LevelUp plant_level = {profile.plant_level}/>
+      <View style={{ justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <TouchableOpacity
-            style={[styles.backButton, {marginLeft: 15, marginTop: 5}]}
+            style={[styles.backButton, { marginLeft: 15, marginTop: 5 }]}
             onPress={() => navigation.navigate('HomeScreen')}>
             <Icon name={'return-up-back'} size={40} color={'white'} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.backButton, {marginRight: 15, marginTop: 5}]}
-            onPress={() => navigation.navigate('ShopScreen', {point: point})}>
+            style={[styles.backButton, { marginRight: 15, marginTop: 5 }]}
+            onPress={() => navigation.navigate('ShopScreen', { point: point })}>
             <Entypo name={'shop'} size={40} color={'white'} />
           </TouchableOpacity>
         </View>
@@ -445,8 +445,8 @@ const ManagePlant = ({route}) => {
               percent={Math.floor(
                 (1 -
                   (profile.alarm_cycle - profile.remain_cycle) /
-                    profile.alarm_cycle) *
-                  100,
+                  profile.alarm_cycle) *
+                100,
               )}
               radius={(screenWidth * 0.29) / 2}
               borderWidth={8}
@@ -461,12 +461,12 @@ const ManagePlant = ({route}) => {
                 }}>
                 <Icon name={'water'} size={40} color={'#5d9cec'} />
               </View>
-              <View style={{flex: 1, alignItems: 'center'}}>
+              <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text
-                  style={{fontSize: 13, fontFamily: 'NanumGothicExtraBold'}}>
+                  style={{ fontSize: 13, fontFamily: 'NanumGothicExtraBold' }}>
                   물 주기
                 </Text>
-                <Text style={{fontSize: 12, fontFamily: 'NanumGothicBold'}}>
+                <Text style={{ fontSize: 12, fontFamily: 'NanumGothicBold' }}>
                   {profile.remain_cycle}일 후
                 </Text>
               </View>
@@ -481,7 +481,7 @@ const ManagePlant = ({route}) => {
                 [
                   {
                     text: '아니오',
-                    onPress: () => {},
+                    onPress: () => { },
                   },
                   {
                     text: '계속할게요',
@@ -506,7 +506,7 @@ const ManagePlant = ({route}) => {
               }}>
               <FontAwesome name={'plus-square'} size={40} color={'#8ab833'} />
             </View>
-            <View style={{flex: 1, alignItems: 'center'}}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
               <Text
                 style={{
                   fontSize: 14,
@@ -518,7 +518,7 @@ const ManagePlant = ({route}) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.buttonOutside, {borderColor: '#a07e63'}]}
+            style={[styles.buttonOutside, { borderColor: '#a07e63' }]}
             onPress={() =>
               navigation.navigate('DiaryScreen', {
                 plantId: plantId,
@@ -533,7 +533,7 @@ const ManagePlant = ({route}) => {
               }}>
               <Entypo name={'book'} size={40} color={'#a07e63'} />
             </View>
-            <View style={{flex: 1, alignItems: 'center'}}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
               <Text
                 style={{
                   fontSize: 14,
@@ -547,18 +547,21 @@ const ManagePlant = ({route}) => {
         </View>
       </View>
       <Modal
-        isVisible={isDiagnosisModalVisible}
-        onBackButtonPress={() => setDiagnosisModalVisibility(false)}
-        style={{
+        visible={isDiagnosisModalVisible}
+        onRequestClose={() => setDiagnosisModalVisibility(false)}>
+        <View style={{
+          flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        {renderDiagnosisModal()}
+          {renderDiagnosisModal()}
+        </View>
       </Modal>
       <Modal
-        isVisible={isInfoModalVisible}
-        onBackButtonPress={() => setInfoModalVisibility(false)}
-        style={{
+        visible={isInfoModalVisible}
+        onRequestClose={() => setInfoModalVisibility(false)}>
+        <View style={{
+          flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
         }}>
@@ -619,113 +622,114 @@ const ManagePlant = ({route}) => {
               <Text style={styles.infoModalText}>{profile.plant_exp}</Text>
             </View>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-            }}>
-            <TouchableOpacity
-              style={styles.infoModalButton}
-              onPress={() => {
-                setInfoModalVisibility(false);
-                navigation.navigate('UpdatePlantProfileScreen', {
-                  profile: profile,
-                  plantId: plantId,
-                });
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
               }}>
-              <FontAwesome name={'pencil'} size={35} color={'#222222'} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.infoModalButton}
-              onPress={() => {
-                setInfoModalVisibility(false);
-              }}>
-              <FontAwesome name={'close'} size={35} color={'#222222'} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.infoModalButton}
-              onPress={() => {
-                deletePlantHandler();
-              }}>
-              <FontAwesome name={'trash'} size={35} color={'#222222'} />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.infoModalButton}
+                onPress={() => {
+                  setInfoModalVisibility(false);
+                  navigation.navigate('UpdatePlantProfileScreen', {
+                    profile: profile,
+                    plantId: plantId,
+                  });
+                }}>
+                <FontAwesome name={'pencil'} size={35} color={'#222222'} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.infoModalButton}
+                onPress={() => {
+                  setInfoModalVisibility(false);
+                }}>
+                <FontAwesome name={'close'} size={35} color={'#222222'} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.infoModalButton}
+                onPress={() => {
+                  deletePlantHandler();
+                }}>
+                <FontAwesome name={'trash'} size={35} color={'#222222'} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
       <Modal
-        isVisible={isEarnModalVisible}
-        onBackButtonPress={() => setEarnModalVisibility(false)}
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            width: screenWidth * 0.6,
-            height: screenHeight * 0.4,
-            backgroundColor: 'white',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: 5,
-            paddingBottom: 10
-          }}>
-          {/* <EarnModal point={point}/> */}
+        visible={(earnState && isEarnModalVisible)}
+        transparent={true}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View
             style={{
-              marginTop: 5,
-              alignItems: 'center',
+              width: screenWidth * 0.65,
+              height: screenHeight * 0.5,
+              backgroundColor: 'white',
               justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingTop: 5,
+              paddingBottom: 10
             }}>
-            <Text style={[styles.earnText, {fontSize: 18}]}>축하드려요!</Text>
-            {renderEarnPoint(isDoingDiagnosis)}
-            <Text style={styles.earnText}>경험치를 10만큼 획득하셨어요!</Text>
-            <View style={styles.expWrapper}>
-              <View style={[styles.levelBar, {width: screenWidth * 0.5}]}>
-                <View
-                  style={[
-                    styles.expBar,
-                    {
-                      width: exp
-                        ? (screenWidth * 0.5 * exp) / renderExp()
-                        : 0,
-                    },
-                  ]}>
-                  <Text
-                    style={{
-                      width: screenWidth * 0.5,
-                      textAlign: 'center',
-                      fontFamily: 'NanumGothicBold',
-                      color: '#363636',
-                    }}>
-                    {`LV. ${profile.plant_level} ( ${
-                      exp
-                    } / ${renderExp()} )`}
-                  </Text>
+            {/* <EarnModal point={point}/> */}
+            <View
+              style={{
+                marginTop: 5,
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={[styles.earnText, { fontSize: 18 }]}>축하드려요!</Text>
+              {renderEarnPoint(isDoingDiagnosis)}
+              <Text style={styles.earnText}>경험치를 10만큼 획득하셨어요!</Text>
+              <View style={styles.expWrapper}>
+                <View style={[styles.levelBar, { width: screenWidth * 0.5 }]}>
+                  <View
+                    style={[
+                      styles.expBar,
+                      {
+                        width: exp
+                          ? (screenWidth * 0.5 * exp) / renderExp()
+                          : 0,
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        width: screenWidth * 0.5,
+                        textAlign: 'center',
+                        fontFamily: 'NanumGothicBold',
+                        color: '#363636',
+                      }}>
+                      {`LV. ${profile.plant_level} ( ${exp
+                        } / ${renderExp()} )`}
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
+            <TouchableOpacity
+              onPress={() => {
+                if (isDoingDiagnosis) {
+                  dispatch(setEarnState(false));
+                  setEarnModalVisibility(false);
+                  navigation.navigate('DiagnosisScreen', {
+                    chart: diagnosisChart,
+                    image: imagePath,
+                  });
+                } else {
+                  dispatch(setEarnState(false));
+                  setEarnModalVisibility(false);
+                }
+              }}>
+              <View style={styles.earnModalButton}>
+                <Text
+                  style={{ fontFamily: 'NanumGothicBold', textAlign: 'center' }}>
+                  확인
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              if (isDoingDiagnosis) {
-                setEarnModalVisibility(false);
-                navigation.navigate('DiagnosisScreen', {
-                  chart: diagnosisChart,
-                  image: imagePath,
-                });
-              } else {
-                setEarnModalVisibility(false);
-              }
-            }}>
-            <View style={styles.earnModalButton}>
-              <Text
-                style={{fontFamily: 'NanumGothicBold', textAlign: 'center'}}>
-                확인
-              </Text>
-            </View>
-          </TouchableOpacity>
         </View>
+
       </Modal>
     </SafeAreaView>
   );

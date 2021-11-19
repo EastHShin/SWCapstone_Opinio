@@ -1,5 +1,5 @@
-import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY, DELETE_DIARY,  GET_EXP, GET_POINT } from "./type";
-import { setLevelUpState } from "./PlantActions";
+import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY, DELETE_DIARY,  GET_EXP, GET_POINT, GET_LEVEL } from "./type";
+import { setLevelUpState, setEarnState } from "./PlantActions";
 
 import axios from "axios";
 
@@ -67,13 +67,16 @@ export const saveDiary = (diary, plantId) => {
         })
             .then(function (res) {
                 if (res.status == 200) {
+                    console.log(JSON.stringify(res))
                     dispatch({
                         type: SAVE_DIARY,
                         payload: "success"
                     })
                     dispatch({type: GET_POINT, payload: res.data.data.point})
-                    dispatch({type:GET_EXP, payload: res.data.data.plantExp})       
+                    dispatch({type: GET_EXP, payload: res.data.data.plantExp})
+                    dispatch({type: GET_LEVEL, payload: res.data.data.plant_level})
                     dispatch(setLevelUpState(res.data.data.isLevelUp));
+                    if (!res.data.data.isLevelUp) dispatch(setEarnState(true));
                 }
 
             })
