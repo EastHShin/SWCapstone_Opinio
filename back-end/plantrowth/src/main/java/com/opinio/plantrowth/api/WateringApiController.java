@@ -42,7 +42,7 @@ public class WateringApiController {
 
 
     @Getter
-    static class WateringDto{
+    static class WateringDto {
         private Long user_id;
         private Integer point;
         private Long plant_id;
