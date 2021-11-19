@@ -140,12 +140,13 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                                 }
                                 placeholder="Enter Title"
                                 placeholderTextColor="#808080"
+                               
                                 returnKeyType="next"
                                 onSubmitEditing={() =>
                                     contentInputRef.current &&
                                     contentInputRef.current.focus()
                                 }
-                                underlineColorAndroid="#f000"
+                                underlineColorAndroid="#A9A9A9"
                                 blurOnSubmit={false}
                             />
                         </View>
@@ -235,6 +236,7 @@ const styles = StyleSheet.create({
     },
     title: {
         marginVertical: Dimensions.get("window").height * 0.02,
+        width:Dimensions.get('window').width*0.8
     },
     content: {
         marginBottom: Dimensions.get("window").height * 0.5,

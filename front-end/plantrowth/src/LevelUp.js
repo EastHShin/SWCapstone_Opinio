@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     modalSectionWrapper:
     {
         backgroundColor: '#FFFFFF',
-        height: Dimensions.get('window').height * 0.35,
+        height: Dimensions.get('window').height * 0.43,
         width: Dimensions.get('window').width * 0.80,
         borderRadius: 20,
         justifyContent: 'center',

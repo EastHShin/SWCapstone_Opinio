@@ -143,7 +143,7 @@ const DiaryEditScreen = ({ route, navigation }) => {
                                     contentInputRef.current.focus()
                                 }
                                 value = {title}
-                                underlineColorAndroid="#f000"
+                                underlineColorAndroid="#A9A9A9"
                                 blurOnSubmit={false}
                             />
                         </View>
@@ -239,9 +239,10 @@ const styles = StyleSheet.create({
     },
     title: {
         marginVertical: Dimensions.get("window").height * 0.02,
+        width:Dimensions.get('window').width*0.8
     },
     content: {
-        marginBottom: Dimensions.get("window").height * 0.5,
+        marginBottom: Dimensions.get("window").height * 0.09,
         width: Dimensions.get('window').width * 0.8
     },
     titleInput:{

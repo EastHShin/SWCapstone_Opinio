@@ -134,6 +134,9 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                     <View style={styles.title}>
                         <Text style={{ color: "#000000", fontWeight: "bold" }}>{diary.title}</Text>
                     </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width*0.7,marginBottom:Dimensions.get('window').height*0.02 }}>
+                        <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
+                    </View>
 
                     {diary.file_name ? (
                         <View>
@@ -204,7 +207,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     title: {
-        marginVertical: Dimensions.get("window").height * 0.03,
+        marginVertical: Dimensions.get("window").height * 0.028,
     },
     content: {
         marginVertical: Dimensions.get("window").height * 0.04,
