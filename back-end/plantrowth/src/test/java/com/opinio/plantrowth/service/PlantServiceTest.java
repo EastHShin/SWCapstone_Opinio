@@ -42,7 +42,7 @@ class PlantServiceTest {
     public void setUpTest() {
         user = User.builder()
                 .email("fff")
-                .name("east")
+                .Nickname("east")
                 .password("orort")
                 .build();
 

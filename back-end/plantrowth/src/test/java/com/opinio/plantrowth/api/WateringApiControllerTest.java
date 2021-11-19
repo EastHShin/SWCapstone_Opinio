@@ -18,13 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -66,7 +62,7 @@ class WateringApiControllerTest {
     public void setUpTest() {
         user = User.builder()
                 .email("fff")
-                .name("east")
+                .Nickname("east")
                 .password("orort")
                 .point(0)
                 .build();
@@ -92,7 +88,7 @@ class WateringApiControllerTest {
         User updatedUser = User.builder()
                 .id(1L)
                 .email("fff")
-                .name("east")
+                .Nickname("east")
                 .password("orort")
                 .point(10)
                 .build();

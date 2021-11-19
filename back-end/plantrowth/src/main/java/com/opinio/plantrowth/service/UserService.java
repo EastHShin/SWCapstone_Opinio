@@ -139,7 +139,7 @@ public class UserService implements UserDetailsService {
         return userRepository.existsByEmail(email);
     }
     public boolean existName(String name){
-        return userRepository.existsByName(name);
+       return userRepository.existsByName(name);
     }
 
 }

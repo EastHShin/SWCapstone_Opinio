@@ -12,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @DataJpaTest
 class PlantRepositoryTest {
 
@@ -31,7 +29,7 @@ class PlantRepositoryTest {
     public void setUpTest() {
         user = User.builder()
                 .email("fff")
-                .name("east")
+                .Nickname("east")
                 .password("orort")
                 .build();
 

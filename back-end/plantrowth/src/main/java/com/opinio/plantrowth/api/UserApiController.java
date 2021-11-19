@@ -40,7 +40,7 @@ public class UserApiController {
         if(userService.existName(user.getUser_name())){
             message.setStatus(Message.StatusEnum.NOT_ACCEPTABLE);
             message.setMessage("이미 존재하는 닉네임입니다.");
-            new ResponseEntity<>(message, headers, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(message, headers, HttpStatus.NOT_ACCEPTABLE);
         }
         Long result = userService.join(user);
 

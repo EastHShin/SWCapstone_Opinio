@@ -6,7 +6,6 @@ import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Plant;
 import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.PlantRepository;
 import com.opinio.plantrowth.repository.UserRepository;
 import com.opinio.plantrowth.service.*;
 import com.opinio.plantrowth.service.EmailAuth.EmailService;
@@ -18,15 +17,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +72,7 @@ class PlantApiControllerTest {
     public void setUpTest() {
         user = User.builder()
                 .email("fff")
-                .name("east")
+                .Nickname("east")
                 .password("orort")
                 .build();
 

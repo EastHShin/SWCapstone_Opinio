@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +34,7 @@ class WateringServiceTest {
     public void setUpTest() {
         user = User.builder()
                 .email("fff")
-                .name("east")
+                .Nickname("east")
                 .password("orort")
                 .build();
 
