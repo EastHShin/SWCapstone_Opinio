@@ -53,6 +53,7 @@ const MyPageScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.body}>
+     
       <View style={styles.top}>
         <TouchableOpacity
           style={{marginStart: Dimensions.get('window').width * 0.03}}
@@ -69,6 +70,9 @@ const MyPageScreen = ({navigation}) => {
           My Page
         </Text>
       </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width,}}>
+                        <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
+                    </View>
       <View style={{flex: 1,justifyContent: 'space-between'}}>
         <View style={styles.wrapper}>
           <TouchableOpacity
@@ -149,7 +153,7 @@ const MyPageScreen = ({navigation}) => {
           <TouchableOpacity
             style={{flexDirection: 'row'}}
             activeOpacity={0.5}
-            onPress={() => navigation.push('AccountDeleteScreen')}>
+            onPress={() => navigation.push('AccountDeleteNoticeScreen')}>
             <View style={styles.section}>
               <Text style={styles.text}>회원탈퇴</Text>
               <Ionicons

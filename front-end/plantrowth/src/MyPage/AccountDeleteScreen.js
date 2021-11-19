@@ -175,7 +175,8 @@ const styles = StyleSheet.create({
     body: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        backgroundColor:"#C9E7BE"
     },
     top: {
         backgroundColor: "#FFFFFF",

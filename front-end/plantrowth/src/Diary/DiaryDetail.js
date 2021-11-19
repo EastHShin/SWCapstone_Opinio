@@ -205,6 +205,10 @@ const styles = StyleSheet.create({
     content: {
         marginVertical: Dimensions.get("window").height * 0.04,
         width: Dimensions.get('window').width * 0.8
+    },
+    text:{
+        color:"#000000",
+        fontWeight:"bold"
     }
 
 })

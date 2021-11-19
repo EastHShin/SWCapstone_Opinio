@@ -30,6 +30,7 @@ const AccountDeleteNoticeScreen = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={{ marginEnd: Dimensions.get('window').width * 0.42, fontWeight: "bold", color: "#000000" }}>회원탈퇴</Text>
       </View>
+ 
       <View style={styles.wrapper}>
       <View style={styles.section}>
             <Text style={styles.bigText}>회원탈퇴 안내</Text>
@@ -69,7 +70,8 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor:"#C9E7BE"
   },
   top: {
     backgroundColor: "#FFFFFF",
