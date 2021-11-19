@@ -1,15 +1,21 @@
 package com.opinio.plantrowth.api;
 
+import com.opinio.plantrowth.api.controller.MainPageApiController;
 import com.opinio.plantrowth.config.WebSecurityConfig;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
-import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.UserRepository;
-import com.opinio.plantrowth.service.*;
+import com.opinio.plantrowth.repository.user.UserRepository;
 
 import com.opinio.plantrowth.service.EmailAuth.EmailService;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
+import com.opinio.plantrowth.service.user.UserPointService;
+import com.opinio.plantrowth.service.user.UserService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
+import com.opinio.plantrowth.service.plant.DiaryService;
+import com.opinio.plantrowth.service.plant.PlantExpService;
+import com.opinio.plantrowth.service.plant.PlantService;
+import com.opinio.plantrowth.service.plant.WateringService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

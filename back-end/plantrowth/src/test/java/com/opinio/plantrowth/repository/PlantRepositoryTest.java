@@ -1,7 +1,9 @@
 package com.opinio.plantrowth.repository;
 
-import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.User;
+import com.opinio.plantrowth.repository.plant.PlantRepository;
+import com.opinio.plantrowth.repository.user.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

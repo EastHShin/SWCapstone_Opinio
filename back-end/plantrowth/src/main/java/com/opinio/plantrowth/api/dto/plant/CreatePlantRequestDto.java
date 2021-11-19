@@ -1,6 +1,6 @@
 package com.opinio.plantrowth.api.dto.plant;
 
-import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.plant.Plant;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;

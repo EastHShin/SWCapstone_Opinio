@@ -1,10 +1,11 @@
 package com.opinio.plantrowth.service;
 
 import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
-import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.PlantRepository;
-import com.opinio.plantrowth.repository.UserRepository;
+import com.opinio.plantrowth.repository.plant.PlantRepository;
+import com.opinio.plantrowth.repository.user.UserRepository;
+import com.opinio.plantrowth.service.plant.PlantService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

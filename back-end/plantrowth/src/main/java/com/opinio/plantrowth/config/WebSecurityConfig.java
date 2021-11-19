@@ -1,8 +1,6 @@
 package com.opinio.plantrowth.config;
 
 
-import com.opinio.plantrowth.component.JwtAccessDeniedHandler;
-import com.opinio.plantrowth.component.JwtAuthenticationEntryPoint;
 import com.opinio.plantrowth.config.security.JwtAuthenticationFilter;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             .authorizeRequests()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/user/**").hasRole("USER")
-            .antMatchers("/api/auth/**", "/api/community").permitAll()
+            .antMatchers("/api/auth/**", "/api/community", "/api/community/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),

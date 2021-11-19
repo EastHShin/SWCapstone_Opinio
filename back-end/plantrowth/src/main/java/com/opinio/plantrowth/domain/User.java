@@ -1,5 +1,8 @@
 package com.opinio.plantrowth.domain;
 
+import com.opinio.plantrowth.domain.community.Board;
+import com.opinio.plantrowth.domain.community.Comment;
+import com.opinio.plantrowth.domain.plant.Plant;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
