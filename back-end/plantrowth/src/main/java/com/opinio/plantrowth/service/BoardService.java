@@ -23,7 +23,7 @@ public class BoardService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long createComment(Board board){
+    public Long createBoard(Board board){
 
         Board createdBoard = boardRepository.save(board);
         return createdBoard.getId();
@@ -46,6 +46,7 @@ public class BoardService {
     public List<Board> findBoardsByUserId(Long userId){
         return boardRepository.findAllByUserId(userId);
     }
+    public List<Board> BoardList(){return boardRepository.findAll();}
     @Transactional
     public Long updateBoard(Long id, BoardCreateRequest dto){
         Board board = boardRepository.findById(id)

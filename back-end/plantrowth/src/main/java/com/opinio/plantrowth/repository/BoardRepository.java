@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findById(Long id);
     List<Board> findAllByUserId(Long id);
+    List<Board> findAll();
 }

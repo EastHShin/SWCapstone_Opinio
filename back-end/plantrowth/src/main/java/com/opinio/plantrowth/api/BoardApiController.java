@@ -38,6 +38,15 @@ public class BoardApiController {
 
         return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
     }
+    @GetMapping("/api/community/") // 게시글 조회
+    public ResponseEntity<BoardResult> boardList(){
+        List<Board> boards = boardService.BoardList();
+        List<BoardDTO> collect = boards.stream()
+                .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getDate(),m.getFilename(), m.getId()))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
+    }
 
     @PostMapping(value = "/api/community/{user-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createBoard(
@@ -56,7 +65,7 @@ public class BoardApiController {
             String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
             board.setFilename(uploadImageName);
         }
-        Long result = boardService.createComment(board);
+        Long result = boardService.createBoard(board);
         Message message= new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
