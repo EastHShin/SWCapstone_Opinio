@@ -564,10 +564,11 @@ const ManagePlant = ({route}) => {
         }}>
         <View
           style={{
-            width: screenWidth * 0.7,
+            width: screenWidth * 0.9,
             height: screenHeight * 0.7,
             backgroundColor: 'white',
             justifyContent: 'space-between',
+            borderRadius:30
           }}>
           <Text
             style={{
@@ -575,6 +576,8 @@ const ManagePlant = ({route}) => {
               fontFamily: 'NanumGothicBold',
               fontSize: 19,
               color: '#222222',
+              marginTop:screenHeight*0.06,
+              marginBottom:screenHeight*0.02
             }}>
             식물 상세정보
           </Text>
@@ -603,7 +606,7 @@ const ManagePlant = ({route}) => {
             </View>
             <View style={styles.infoModalTextWrapper}>
               <Text style={styles.infoModalText}>식물 레벨: </Text>
-              <Text style={styles.infoModalText}>{profile.plant_name}</Text>
+              <Text style={styles.infoModalText}>{profile.plant_level}</Text>
             </View>
             <View style={styles.infoModalTextWrapper}>
               <Text style={styles.infoModalText}>현재 보유 경험치: </Text>
