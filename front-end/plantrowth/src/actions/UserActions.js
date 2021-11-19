@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION } from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -26,6 +26,7 @@ export const registerUser = (user) => {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
+        
                 if (res.status == 200) {
                     dispatch({
                         type: REGISTER_USER,
@@ -33,15 +34,21 @@ export const registerUser = (user) => {
                         text: ""
                     })
                 }
+                if(res.status == "NOT_ACCEPTABLE"){
+                    dispatch({
+                        type: REGISTER_USER,
+                        payload: "failure",
+                        text: res.data.message
+                    })
+                }
             })
             .catch(function (error) {
-                console.log(error);
+               console.log(error);
                 dispatch({
                     type: REGISTER_USER,
                     payload: "failure",
-                    text: "" //여기 
+                    text: ""  
                 })
-                //메시지 어떻게 오는지 체크 
             })
     }
 }
@@ -49,7 +56,66 @@ export const registerUser = (user) => {
 export const setRegisterState = state => dispatch => {
     dispatch({
         type: REGISTER_USER,
-        payload: state
+        payload: state        
+    })   
+}
+
+export const emailAuthentication = (email) =>{
+    return async dispatch => {
+        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/email', email, {
+            headers: { "Content-Type": `application/json` }
+        }).then(function(res){
+            console.log(res);
+            if(res.status==200){
+            dispatch({
+                type:SEND_EMAIL,
+                payload:"success"
+            })
+        }
+        }).catch(function(err){
+            dispatch({
+                type:SEND_EMAIL,
+                payload:"failure"
+            })
+            console.log(err);
+        })
+    }
+
+}
+
+export const codeVerification = (code) => {
+    return async dispatch => {
+        console.log(code);
+        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/verify',JSON.stringify(code), {
+            headers: { "Content-Type": `application/json` }
+        }).then(function(res){
+            if(res.status==200){
+            dispatch({
+                type:CODE_VERIFICATION,
+                payload:"success"
+            })
+        }
+        }).catch(function(err){
+            dispatch({
+                type:CODE_VERIFICATION,
+                payload:"failure"
+            })
+            console.log(err);
+        })
+    }
+}
+
+export const setEmialTransState = state => dispatch => {
+    dispatch({
+        type:SEND_EMAIL,
+        payload:state
+    })
+}
+
+export const setCodeVerificationState = state => dispatch =>{
+    dispatch({
+        type:CODE_VERIFICATION,
+        payload:state
     })
 }
 
@@ -134,7 +200,7 @@ export const logoutUser = (email) => {
 
 
     return async dispatch => {
-        return await axios.post('https://74082338-1633-4d47-ae4e-cdf8a285f9f2.mock.pstmn.io/logout', email, {
+        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout', email, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {

@@ -1,6 +1,7 @@
 import {ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE, WATER_PLANT, DIAGNOSIS_PLANT, SAVE_DIAGNOSIS_CHART, GET_POINT, GET_EXP, LEVEL_UP} from './type';
 import axios from 'axios';
 
+
 export const addPlant = (profile, userId) => {
   console.log('axios 안');
   console.log('add profile: '+JSON.stringify(profile));
@@ -92,6 +93,7 @@ export const waterPlant = plantId => {
       .then(function (response) {
         console.log('watering response :', response);
         if (response.status === 200) {
+          dispatch(setLevelUpState(response.data.isLevelUp));
           dispatch({type: GET_POINT, payload: response.data.point})
           dispatch({type: GET_EXP, payload: response.data.plant_exp})
           dispatch({type: WATER_PLANT, payload: 'success'});
@@ -121,6 +123,7 @@ export const diagnosisPlant = (plantId, image) => {
       .then(function (response) {
         console.log('diagnosis response :', response);
         if (response.status === 200) {
+          dispatch(setLevelUpState(response.data.isLevelUp));
           dispatch({type: SAVE_DIAGNOSIS_CHART, payload: response.data})
           dispatch({type: DIAGNOSIS_PLANT, payload: 'success'});
         }

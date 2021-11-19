@@ -30,7 +30,7 @@ const Footer = (route) => {
     {
       iconName: 'newspaper-outline',
       name: 'Community',
-      link: 'CommunityScreen',
+      link: 'CommunityMainScreen',
     },
     {
       iconName: 'basket-outline',
