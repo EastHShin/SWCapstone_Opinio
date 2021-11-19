@@ -69,13 +69,20 @@ public class PlantDiaryApiController {
             diary.setFilename(uploadImageName);
         }
         Long result = diaryService.createDiary(diary);
-        Long updatedPlantId = plantExpService.increaseExp(plant.getId());
+        Integer curLevel = plant.getPlantLevel();
+        plantExpService.increaseExp(plant.getId());
+        Integer updatedLevel = plant.getPlantLevel();
+        Boolean isLevelUp = false;
+        if (curLevel < updatedLevel) {
+            isLevelUp = true;
+        }
         User user = userPointService.increasePoint(plant.getUser().getId());
-        Plant updatedPlant = plantService.findOnePlant(updatedPlantId);
+        Plant updatedPlant = plantService.findOnePlant(plant.getId());
 
         DiaryResponseDTO responseDTO = new DiaryResponseDTO();
         responseDTO.setPlantExp(updatedPlant.getPlantExp());
         responseDTO.setPoint(user.getPoint());
+        responseDTO.setIsLevelUp(isLevelUp);
         Message message= new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

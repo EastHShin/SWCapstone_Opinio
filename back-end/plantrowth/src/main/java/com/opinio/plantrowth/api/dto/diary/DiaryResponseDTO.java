@@ -9,4 +9,5 @@ import lombok.Setter;
 public class DiaryResponseDTO {
     private Integer point;
     private Integer plantExp;
+    private Boolean isLevelUp;
 }

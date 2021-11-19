@@ -76,11 +76,17 @@ public class DiagnosisApiController {
          */
 
         User updatedUser = userPointService.decreasePoint(plant.getUser().getId());
+        Integer curLevel = plant.getPlantLevel();
+        plantExpService.increaseExp(plant.getId());
+        Integer updatedLevel = plant.getPlantLevel();
+        Boolean isLevelUp = false;
+        if (curLevel < updatedLevel) {
+            isLevelUp = true;
+        }
+        plantExpService.increaseExp(plant.getId());
+        Plant updatedPlant = plantService.findOnePlant(plant.getId());
 
-        Long updatedId = plantExpService.increaseExp(plant.getId());
-        Plant updatedPlant = plantService.findOnePlant(updatedId);
-
-        return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(updatedUser, updatedPlant, true, jsonObj), HttpStatus.OK);
+        return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(updatedUser, updatedPlant, true, jsonObj, isLevelUp), HttpStatus.OK);
     }
 
     @Getter
@@ -94,8 +100,9 @@ public class DiagnosisApiController {
         private Integer plant_level;
         private Boolean isEnoughPoint;
         private DiagnosisResult diagnosisResult;
+        private Boolean isLevelUp;
 
-        public DiagnosisDto(User user, Plant plant, Boolean enoughPoint, JSONObject jsonObject) {
+        public DiagnosisDto(User user, Plant plant, Boolean enoughPoint, JSONObject jsonObject, Boolean IsLevelUp) {
             user_id = user.getId();
             point = user.getPoint();
             plant_id = plant.getId();
@@ -104,6 +111,7 @@ public class DiagnosisApiController {
             plant_exp = plant.getPlantExp();
             plant_level = plant.getPlantLevel();
             isEnoughPoint = enoughPoint;
+            isLevelUp = IsLevelUp;
 
             diagnosisResult = new DiagnosisResult(jsonObject.get("disease_model_1").toString(),
                     jsonObject.get("percent_model_1").toString());
