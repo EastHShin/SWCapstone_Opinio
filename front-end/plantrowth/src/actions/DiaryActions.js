@@ -67,14 +67,13 @@ export const saveDiary = (diary, plantId) => {
         })
             .then(function (res) {
                 if (res.status == 200) {
-    
                     dispatch({
                         type: SAVE_DIARY,
                         payload: "success"
                     })
-              
+                    dispatch({type: GET_POINT, payload: res.data.data.point})
+                    dispatch({type:GET_EXP, payload: res.data.data.plantExp})       
                     dispatch(setLevelUpState(res.data.data.isLevelUp));
-
                 }
 
             })
@@ -90,6 +89,8 @@ export const saveDiary = (diary, plantId) => {
 
 export const editDiary = (diary, diaryId) => {
     return async dispatch => {
+        console.log('diary'+diary);
+        console.log('id'+diaryId);
         return await axios.put(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`, diary, {
             headers: { "Content-Type": `multipart/form-data` }
         })

@@ -46,7 +46,7 @@ const DiaryScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const diaries = useSelector(state => state.DiaryReducer.diaries);
   const isFocused = useIsFocused();
-
+  const [isEarnModalVisible, setEarnModalVisibility] = useState(false);
 
   useEffect(() => {
     if (isFocused) {

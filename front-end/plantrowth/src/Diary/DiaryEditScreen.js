@@ -94,7 +94,6 @@ const DiaryEditScreen = ({ route, navigation }) => {
             Data.append('content', content);
            
         }
-     
         if (imageUri!=originalImageUri) {
             console.log("새로운 사진");
             Data.append('file_name', {
@@ -107,7 +106,6 @@ const DiaryEditScreen = ({ route, navigation }) => {
             console.log("사진 없어짐");
             Data.append('file_name','delete');
         }
-          
         dispatch(editDiary(Data, selectedId));
         
     }

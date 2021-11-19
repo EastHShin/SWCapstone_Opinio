@@ -85,8 +85,8 @@ HomeScreen = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                  <Text style={{fontWeight: 'bold', color: '#666666'}}>
-                    LV. {item.plant_level}
+                  <Text style={{fontFamily:'NanumGothicExtraBold', color: '#363636'}}>
+                    {`LV.${item.plant_level}`}
                   </Text>
                   <View style={styles.levelBar}>
                     <View
@@ -94,16 +94,16 @@ HomeScreen = () => {
                         styles.expBar,
                         {
                           width:
-                            (screenWidth * 0.18 * item.plant_exp) /
+                            (screenWidth * 0.17 * item.plant_exp) /
                             ((item.plant_level - 1) * 10 + 30),
                         },
                       ]}>
                       <Text
                         style={{
-                          width: screenWidth * 0.18,
+                          width: screenWidth * 0.17,
                           textAlign: 'center',
-                          fontWeight: 'bold',
-                          color: '#666666',
+                          fontFamily:'NanumGothicExtraBold',
+                          color: '#363636',
                         }}>
                         {item.plant_exp} / {(item.plant_level - 1) * 10 + 30}
                       </Text>
@@ -114,10 +114,10 @@ HomeScreen = () => {
                 <View style={styles.nameWrapper}>
                   <Text
                     style={{
-                      fontWeight: 'bold',
+                      fontFamily:'NanumGothicBold',
                       textAlign: 'center',
-                      fontSize: 14,
-                      color: '#666666',
+                      fontSize: 12,
+                      color: '#363636',
                     }}>
                     {item.plant_name}
                   </Text>
@@ -172,7 +172,7 @@ HomeScreen = () => {
             <TouchableOpacity
               style={[styles.profileContainer, {justifyContent: 'center'}]}
               onPress={() => navigation.navigate('ShopScreen')}>
-              <Text style={{fontWeight: 'bold'}}>프로필 슬롯 추가</Text>
+              <Text style={{fontFamily:'NanumGothicBold'}}>프로필 슬롯 추가</Text>
             </TouchableOpacity>
           ) : null}
         </ScrollView>
@@ -190,25 +190,25 @@ HomeScreen = () => {
           justifyContent: 'space-between',
         }}>
         <View style={styles.memberInfoSectionWrapper}>
-          <Icon name={'person-circle-outline'} size={50} color={'gray'} />
+          <Icon name={'person-circle-outline'} size={45} color={'gray'} />
           <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={{fontWeight: 'bold', fontSize: 16, color: '#666666'}}>
+            <Text style={{fontSize: 16, color: '#666666', fontFamily:'NanumGothic'}}>
               환영합니다! {infoList.user_name}님
             </Text>
-            <Text style={{fontWeight: 'bold', fontSize: 16, color: '#666666'}}>
+            <Text style={{fontSize: 16, color: '#666666', fontFamily:'NanumGothic'}}>
               보유 포인트: {infoList.point}
             </Text>
           </View>
         </View>
         <View style={styles.plantListSectionWrapper}>
-          <Text style={{fontWeight: 'bold'}}>내 식물들</Text>
+          <Text style={{color: '#666666',fontFamily:'NanumGothicBold'}}>내 식물들</Text>
           <PlantList />
         </View>
         <View style={styles.advertisementSectionWrapper}>
-          <Text style={{fontWeight: 'bold', textAlign: 'center'}}>광고</Text>
+          <Text style={{color: '#666666',textAlign: 'center', fontFamily:'NanumGothicBold'}}>광고</Text>
         </View>
         <View style={styles.hotSectionWrapper}>
-          <Text style={{fontWeight: 'bold'}}>인기 게시물</Text>
+          <Text style={{color: '#666666',fontFamily:'NanumGothicBold'}}>인기 게시물</Text>
         </View>
         <Footer name={'Home'} />
       </View>
@@ -223,9 +223,10 @@ const styles = StyleSheet.create({
     //width: screenWidth*0.4,
     //height: screenHeight * 0.2,
     flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 15,
     margin: 5,
-    padding: 5,
+    padding: 3,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
   },
   nameWrapper: {
     backgroundColor: 'white',
-    width: screenWidth * 0.24,
+    width: screenWidth * 0.26,
     height: screenHeight * 0.07,
     justifyContent: 'center',
     borderRadius: 5,
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
   },
   levelBar: {
     backgroundColor: 'white',
-    width: screenWidth * 0.18,
+    width: screenWidth * 0.17,
     height: screenHeight * 0.03,
     borderRadius: 5,
     marginBottom: 5,
@@ -360,6 +361,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f1c40f',
     height: screenHeight * 0.03,
     borderRadius: 5,
+    justifyContent: 'center'
   },
 });
 

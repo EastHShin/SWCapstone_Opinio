@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,12 +6,15 @@ import {
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
+  Modal,
+  Button,
+
 } from 'react-native';
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import Loader from '../Loader';
-import {buyProfileSlot, setBuyProfileSlotState} from '../actions/ShopActions';
-import {useSelector, useDispatch} from 'react-redux';
+import { buyProfileSlot, setBuyProfileSlotState } from '../actions/ShopActions';
+import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 
@@ -24,6 +27,7 @@ ShopScreen = () => {
   const navigation = useNavigation();
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isBuySlotModalVisible, setBuySlotModalVisibility] = useState(false);
   const point = useSelector(state => state.ShopReducer.point);
   const maxPlantNumber = useSelector(state => state.ShopReducer.maxPlantNumber);
   const buyProfileSlotState = useSelector(
@@ -48,16 +52,16 @@ ShopScreen = () => {
     });
   }, [isFocused]);
 
-  useEffect(()=> {
-    if (buyProfileSlotState == 'success' && isFocused) 
-    {
-    console.log('프로필 슬롯 구매 성공! '+maxPlantNumber);
-    setLoading(false);
-    setBuyProfileSlotState('');
-    } else if(buyProfileSlotState == 'failure' && isFocused) {
+  useEffect(() => {
+    if (buyProfileSlotState == 'success' && isFocused) {
+      console.log('프로필 슬롯 구매 성공! ' + maxPlantNumber);
+      setLoading(false);
+      setBuySlotModalVisibility(true);
+      dispatch(setBuyProfileSlotState(''));
+    } else if (buyProfileSlotState == 'failure' && isFocused) {
       console.log('프로필 슬롯 구매 실패! ');
       setLoading(false);
-      setBuyProfileSlotState('');
+      dispatch(setBuyProfileSlotState(''));
     }
   }, [buyProfileSlotState]);
 
@@ -68,62 +72,80 @@ ShopScreen = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+    <SafeAreaView style={{flex: 1, alignItems: 'center', }}>
       <Loader loading={loading} />
-      <View style={styles.sectionWrapper}>
-        <Text>ShopScreen</Text>
-        <View style={styles.goodsWrapper}>
-          <View
-            style={{
-              width: screenWidth * 0.6,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-              {'프로필 슬롯 1개 구매'}
-            </Text>
-            <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-              {'100포인트'}
-            </Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
+        <View style={styles.sectionWrapper}>
+          <Text>ShopScreen</Text>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View style={styles.goodsWrapper}>
+              <View
+                style={{
+                  width: screenWidth * 0.6,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
+                <Text style={styles.goodsText}>{'100포인트'}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.buyButton}
+                onPress={() => buySlotHandler()}>
+                <Ionicons name={'cash-outline'} size={30} color={'white'} />
+              </TouchableOpacity>
+            </View>
+            {/* <View style={styles.goodsWrapper}>
+            <View
+              style={{
+                width: screenWidth * 0.6,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={styles.goodsText}>
+                {'프로필 슬롯 1개 구매'}
+              </Text>
+              <Text style={styles.goodsText}>
+                {'100원'}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.buyButton}
+              onPress={() => buySlotHandler()}>
+              <Ionicons name={'cash-outline'} size={30} color={'white'} />
+            </TouchableOpacity>
+          </View> */}
           </View>
-          <TouchableOpacity
-            style={styles.buyButton}
-            onPress={() => buySlotHandler()}>
-            <Ionicons name={'cash-outline'} size={30} color={'white'} />
-          </TouchableOpacity>
         </View>
-        <View style={styles.goodsWrapper}>
-          <View
-            style={{
-              width: screenWidth * 0.6,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-              {'프로필 슬롯 1개 구매'}
-            </Text>
-            <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-              {'100원'}
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={styles.buyButton}
-            onPress={() => buySlotHandler()}>
-            <Ionicons name={'cash-outline'} size={30} color={'white'} />
-          </TouchableOpacity>
-        </View>
+        <Footer name={'Shop'} />
       </View>
-      <Footer name={'Shop'} />
+
+      <Modal visible={isBuySlotModalVisible}
+        transparent={true}
+        onRequestClose={() => {
+          setBuySlotModalVisibility(false);
+        }}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ width: 300, height: 300, backgroundColor: 'red', justifyContent: 'space-between'}}>
+            <Text>슬롯 구매 성공</Text>
+            <Text>50포인트를 소모하여 보유하고 계신 포인트가</Text>
+            <Text> {point}포인트가 되었어요!</Text>
+            <Text>식물을 {maxPlantNumber}개 저장할 수 있게 되셨어요!</Text>
+            <Button title='확인' onPress={() => { setBuySlotModalVisibility(false) }} />
+          </View>
+
+        </View>
+      </Modal>
+
+
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   sectionWrapper: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     width: screenWidth * 0.92,
     height: screenHeight * 0.83,
     backgroundColor: 'white',
@@ -176,6 +198,12 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
 
     elevation: 2,
+  },
+  goodsText: {
+    fontSize: 12,
+    color: '#363636',
+    fontFamily: 'NanumGothicBold',
+    textAlign: 'center',
   },
 });
 

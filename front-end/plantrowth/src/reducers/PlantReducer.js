@@ -10,7 +10,6 @@ let initialState = {
     levelUp : false,
     wateringResult: '',
     diagnosisResult: '',
-
 };
 
 function PlantReducer(state = initialState, action) {
