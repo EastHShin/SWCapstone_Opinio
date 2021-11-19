@@ -24,7 +24,7 @@ public class JwtTokenProvider {
     private String secretKey = "plantrowth";
 
     //토큰 유효시간
-    private long tokenVaildTime = 30 * 60 * 1000L;
+    private long tokenVaildTime = 300 * 60 * 1000L;
 
     private final UserDetailsService userDetailsService;
 
@@ -60,7 +60,7 @@ public class JwtTokenProvider {
 
     //Request header에서 token 값 불러옴. "X-AUTH* : toekn값"
     public String resolveToken(HttpServletRequest request){
-        return request.getHeader("X-AUTH-TOKEN");
+        return request.getHeader("Authorization");
     }
 
     //토큰 유효 확인
