@@ -1,0 +1,22 @@
+# appspec.yml
+
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/plantrowth
+    overwrite: yes
+    
+permissions:
+  - object: /home/ec2-user/plantrowth/
+    pattern: "**"
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+
+hooks:
+  AfterInstall:
+    - location: deploy.sh
+      timeout: 60
+      runas: root
+
