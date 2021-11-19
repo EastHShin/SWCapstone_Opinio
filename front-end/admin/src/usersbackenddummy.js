@@ -4,6 +4,8 @@ import * as ReactBootStrap from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import './users.css';
 
+import {Link} from "react-router-dom";
+
 const Table = () => {
     const [posts, setPosts] = useState({user: []})
 
@@ -36,7 +38,9 @@ const Table = () => {
                             <td class="table-light" valign="middle">{item.body}</td>
                             <td class="table-warning" valign="middle">
                                 <Button variant="info" className="mar">Info</Button>
-                                <Button variant="warning" className="mar">Update</Button>
+                                <Link to="/administrator/user/update">
+                                    <Button variant="warning" className="mar">Update</Button>
+                                </Link>
                                 <Button variant="danger">Delete</Button>
                             </td>
                         </tr>

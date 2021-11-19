@@ -6,6 +6,7 @@ import Login from "./login";
 import Front from './front.js';
 import Advertisement from "./advertisement";
 import Users from "./users";
+import Update from "./userUpdate"
 import React from "react";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
                         <Route path="/administrator/front" element={<Front />} />
                         <Route path="/administrator/ad" element={<Advertisement />} />
                         <Route path="/administrator/user" element={<Users />} />
+                        <Route path="/administrator/user/update" element={<Update />} />
                     </Routes>
                 </BrowserRouter>
             </div>
