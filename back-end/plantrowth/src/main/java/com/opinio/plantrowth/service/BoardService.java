@@ -1,11 +1,10 @@
 package com.opinio.plantrowth.service;
 
 
-import com.opinio.plantrowth.api.dto.board.BoardCreateRequest;
-import com.opinio.plantrowth.api.dto.board.BoardLookUpDTO;
+import com.opinio.plantrowth.api.dto.community.board.BoardCreateRequest;
+import com.opinio.plantrowth.api.dto.community.board.BoardLookUpDTO;
 import com.opinio.plantrowth.domain.Board;
 import com.opinio.plantrowth.domain.BoardLike;
-import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.BoardLikeRepository;
 import com.opinio.plantrowth.repository.BoardRepository;
 import com.opinio.plantrowth.repository.UserRepository;
@@ -24,7 +23,7 @@ public class BoardService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long createDiary(Board board){
+    public Long createComment(Board board){
 
         Board createdBoard = boardRepository.save(board);
         return createdBoard.getId();
@@ -77,6 +76,12 @@ public class BoardService {
 
         return board.getId();
     }
+
+    /**
+     * 좋아요 기능
+     * @param userId
+     * @param boardId
+     */
 
     public void addLike(Long userId, Long boardId){
         boardLike.findByUserIdAndBoardId(userId, boardId).ifPresent(none -> { throw new RuntimeException(); });

@@ -1,4 +1,4 @@
-package com.opinio.plantrowth.api.dto.board;
+package com.opinio.plantrowth.api.dto.community.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,11 +1,10 @@
 package com.opinio.plantrowth.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,10 +12,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Board {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
+    @Column(name = "comment_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -24,17 +23,11 @@ public class Board {
     @JsonIgnore
     private User user;
 
-    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "board")
-    @Builder.Default
-    List<Comment> comments = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "board_id")
+    @JsonIgnore
+    private Board board;
 
-    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "board")
-    @Builder.Default
-    List<BoardLike> boardLikes = new ArrayList<>();
-
-    private String title;
     private String content;
     private LocalDate date;
-    private String filename;
-    private String noticeYn;
 }

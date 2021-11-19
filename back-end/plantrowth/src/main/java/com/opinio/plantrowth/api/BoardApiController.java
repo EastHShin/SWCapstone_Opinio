@@ -1,10 +1,9 @@
 package com.opinio.plantrowth.api;
 
-import com.opinio.plantrowth.api.dto.board.BoardCreateRequest;
-import com.opinio.plantrowth.api.dto.board.BoardDTO;
-import com.opinio.plantrowth.api.dto.board.BoardLookUpDTO;
-import com.opinio.plantrowth.api.dto.board.BoardResult;
-import com.opinio.plantrowth.api.dto.diary.*;
+import com.opinio.plantrowth.api.dto.community.board.BoardCreateRequest;
+import com.opinio.plantrowth.api.dto.community.board.BoardDTO;
+import com.opinio.plantrowth.api.dto.community.board.BoardLookUpDTO;
+import com.opinio.plantrowth.api.dto.community.board.BoardResult;
 import com.opinio.plantrowth.domain.*;
 import com.opinio.plantrowth.service.*;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
@@ -57,7 +56,7 @@ public class BoardApiController {
             String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
             board.setFilename(uploadImageName);
         }
-        Long result = boardService.createDiary(board);
+        Long result = boardService.createComment(board);
         Message message= new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

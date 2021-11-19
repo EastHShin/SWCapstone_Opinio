@@ -1,8 +1,6 @@
 package com.opinio.plantrowth.repository;
 
-import com.opinio.plantrowth.domain.Board;
 import com.opinio.plantrowth.domain.BoardLike;
-import com.opinio.plantrowth.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
