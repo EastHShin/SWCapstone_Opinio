@@ -27,10 +27,17 @@ public class WateringApiController {
     @PostMapping("/api/plants/watering/{plant-id}")
     public ResponseEntity<WateringDto> watering(@PathVariable("plant-id") Long id) {
         Long plant_id = wateringService.watering(id);
-        plantExpService.increaseExp(id);
         Plant plant = plantService.findOnePlant(plant_id);
+        Integer curLevel = plant.getPlantLevel();
+        plantExpService.increaseExp(id);
+        Integer updatedLevel = plant.getPlantLevel();
+        Boolean isLevelUp = false;
+        if (curLevel < updatedLevel) {
+            isLevelUp = true;
+        }
+        Plant updatedPlant = plantService.findOnePlant(plant_id);
         User user = userPointService.increasePoint(plant.getUser().getId());
-        return new ResponseEntity<WateringDto>(new WateringDto(user, plant), HttpStatus.OK);
+        return new ResponseEntity<WateringDto>(new WateringDto(user, updatedPlant, isLevelUp), HttpStatus.OK);
     }
 
 
@@ -42,14 +49,16 @@ public class WateringApiController {
         private String plant_name;
         private Integer plant_exp;
         private Integer plant_level;
+        private Boolean isLevelUp;
 
-        public WateringDto(User user, Plant plant) {
+        public WateringDto(User user, Plant plant, Boolean isLevelUp) {
             user_id = user.getId();
             point = user.getPoint();
             plant_id = plant.getId();
             plant_name = plant.getPlantName();
             plant_exp = plant.getPlantExp();
             plant_level = plant.getPlantLevel();
+            this.isLevelUp = isLevelUp;
         }
     }
 
