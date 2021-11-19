@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
@@ -109,5 +110,36 @@ public class BoardApiController {
         return result !=null?
                 ResponseEntity.ok().body("게시글 삭제 완료"):
                 ResponseEntity.badRequest().build();
+    }
+    /**
+     * 게시글 좋아요 부분
+     */
+    @PostMapping("/api/community/{board-id}/like")
+    public ResponseEntity<?> addLike(HttpServletRequest request, @PathVariable ("board-id") Long id){
+        String userIdStr = request.getHeader("userId");
+        Long userId = Long.parseLong(userIdStr);
+        boardService.addLike(userId, id);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("좋아요");
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+    @DeleteMapping("/api/community/{board-id}/like/{like-id}")
+    public ResponseEntity<?> deleteLike(HttpServletRequest request,
+                           @PathVariable("board-id") Long boardId,
+                           @PathVariable("like-id") Long likeId){
+        String userIdStr = request.getHeader("userId");
+        Long userId = Long.parseLong(userIdStr);
+        boardService.deleteLike(userId, likeId, boardId);
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        message.setStatus(Message.StatusEnum.OK);
+        message.setMessage("좋아요 취소");
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 }

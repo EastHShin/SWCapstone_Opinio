@@ -4,7 +4,11 @@ package com.opinio.plantrowth.service;
 import com.opinio.plantrowth.api.dto.board.BoardCreateRequest;
 import com.opinio.plantrowth.api.dto.board.BoardLookUpDTO;
 import com.opinio.plantrowth.domain.Board;
+import com.opinio.plantrowth.domain.BoardLike;
+import com.opinio.plantrowth.domain.User;
+import com.opinio.plantrowth.repository.BoardLikeRepository;
 import com.opinio.plantrowth.repository.BoardRepository;
+import com.opinio.plantrowth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final BoardLikeRepository boardLike;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long createDiary(Board board){
@@ -70,5 +76,20 @@ public class BoardService {
         board.setFilename(imageName);
 
         return board.getId();
+    }
+
+    public void addLike(Long userId, Long boardId){
+        boardLike.findByUserIdAndBoardId(userId, boardId).ifPresent(none -> { throw new RuntimeException(); });
+        boardLike.save(
+                BoardLike.builder()
+                        .board(boardRepository.getById(boardId))
+                        .user(userRepository.getById(userId))
+                        .build()
+        );
+    }
+
+    public void deleteLike(Long userId, Long likeId, Long boardId){
+        boardLike.findByUserIdAndBoardId(userId, boardId).orElseThrow(() -> new RuntimeException());
+        boardLike.deleteById(likeId);
     }
 }

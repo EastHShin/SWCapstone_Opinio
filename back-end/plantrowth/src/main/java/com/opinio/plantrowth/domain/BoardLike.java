@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @Getter
 @Setter
@@ -26,5 +23,11 @@ public class BoardLike {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    @Builder
+    public BoardLike(Board board, User user){
+        this.board = board;
+        this.user = user;
+    }
 
 }
