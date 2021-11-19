@@ -1,4 +1,4 @@
-import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY ,DELETE_DIARY, GET_POINT, GET_EXP } from "../actions/type";
+import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY ,DELETE_DIARY, GET_POINT, GET_EXP, GET_LEVEL } from "../actions/type";
 
 const initialState = {
     diaries:[],
@@ -6,6 +6,7 @@ const initialState = {
     result:'',
     point: '',
     exp: '',
+    level: '',
 };
 
 function DiaryReducer(state=initialState, action){
@@ -26,6 +27,8 @@ function DiaryReducer(state=initialState, action){
             return {...state, point: action.payload};
         case GET_EXP:
             return {...state, exp: action.payload};
+        case GET_LEVEL:
+            return {...state, level: action.payload};
         default:
             return state;
     }

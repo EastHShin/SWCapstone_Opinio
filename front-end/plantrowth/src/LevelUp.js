@@ -12,17 +12,17 @@ import {
     Easing
 } from 'react-native';
 
-import { setLevelUpState } from './actions/PlantActions';
+import { setLevelUpState, setEarnState } from './actions/PlantActions';
 
-const LevelUp = () => {
-
+const LevelUp = (props) => {
+    const {plant_level} = props
     const dispatch = useDispatch();
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-
     const [timeOut, setTimeOut] = useState(false);
 
     const isLevelUp = useSelector(state => state.PlantReducer.levelUp);
+
 
     const levelAnimation = useRef(new Animated.Value(0)).current;
     const shakeAnimation = useRef(new Animated.Value(0)).current;
@@ -37,7 +37,6 @@ const LevelUp = () => {
             endNumberLevelUp();
             setTimeOut(false);
         } 
-    
     }, [isLevelUp])
 
     useEffect(() => {
@@ -76,13 +75,13 @@ const LevelUp = () => {
     };
 
     const endTextLevelUp = () => {
-        
+
         Animated.timing(shakeAnimation, {
-          toValue: 0,
-          duration: 3000,
-          useNativeDriver:true
+            toValue: 0,
+            duration: 3000,
+            useNativeDriver: true
         }).start();
-      };
+    };
 
     const endNumberLevelUp = () => {
 
@@ -115,60 +114,60 @@ const LevelUp = () => {
             }
         ]
     };
-
-
+    
     return (
-        <Modal
-            transparent={true}
-            animationType={'none'}
-            onRequestClose={() => {
-                console.log('close');
-                setTimeOut(false);
-                setIsModalVisible(false);
-                dispatch(setLevelUpState(false));
-            }}
-            visible={isModalVisible}
-        >
-            <View style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}>
-                <View style={styles.modalSectionWrapper}>
-                    <View style={styles.section}>
-                        <Animated.Text style={[
-                            { fontSize: 20, color: "#BEE9B4", fontWeight: "bold" },
-                            shakeStyles]}>
-                            LEVEL UP !!
-                        </Animated.Text>
-                    </ View>
-                    <View style={styles.section}>
-                        <Text style={{ fontSize: 35, color: "#000000" }}>Lv. </Text>
+            <Modal
+                transparent={true}
+                animationType={'none'}
+                onRequestClose={() => {
+                    console.log('close');
+                    setTimeOut(false);
+                    setIsModalVisible(false);
+                    dispatch(setLevelUpState(false));
+                }}
+                visible={isModalVisible}
+            >
+                <View style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <View style={styles.modalSectionWrapper}>
+                        <View style={styles.section}>
+                            <Animated.Text style={[
+                                { fontSize: 20, color: "#BEE9B4", fontWeight: "bold" },
+                                shakeStyles]}>
+                                LEVEL UP !!
+                            </Animated.Text>
+                        </ View>
+                        <View style={styles.section}>
+                            <Text style={{ fontSize: 35, color: "#000000" }}>Lv. </Text>
 
-                        <Animated.Text
+                            <Animated.Text
 
-                            style={[
-                                levelUpStyles,
-                                { fontSize: 35, color: "#000000" }
-                            ]}
-                        >
-                            {!timeOut ? 1 : 2}
-                        </Animated.Text>
+                                style={[
+                                    levelUpStyles,
+                                    { fontSize: 35, color: "#000000" }
+                                ]}
+                            >
+                                {!timeOut ? plant_level-1 : plant_level}
+                            </Animated.Text>
+                        </View>
+
+                        <TouchableOpacity
+                            style={styles.button}
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                setIsModalVisible(false)
+                                dispatch(setLevelUpState(false));
+                                dispatch(setEarnState(true));
+                            }
+                            }>
+                            <Text style={{ color: "#000000" }}>OK</Text>
+                        </TouchableOpacity>
                     </View>
-
-                    <TouchableOpacity
-                        style={styles.button}
-                        activeOpacity={0.5}
-                        onPress={() => {
-                            setIsModalVisible(false)
-                            dispatch(setLevelUpState(false));
-                        }
-                        }>
-                        <Text style={{ color: "#000000" }}>OK</Text>
-                    </TouchableOpacity>
                 </View>
-            </View>
-        </Modal>
+            </Modal>
     );
 };
 

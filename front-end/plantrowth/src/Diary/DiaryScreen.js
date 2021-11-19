@@ -8,15 +8,18 @@ import {
   SafeAreaView,
   FlatList,
   Text,
-  Dimensions
+  Dimensions,
+  Modal
 } from 'react-native';
 
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchDiaries } from '../actions/DiaryActions';
+import { setEarnState } from '../actions/PlantActions';
 import { useSelector, useDispatch } from 'react-redux';
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native';
 import LevelUp from '../LevelUp';
+import Entypo from 'react-native-vector-icons/dist/Entypo';
 
 const Item = ({ item, onPress, style }) => {
 
@@ -37,24 +40,63 @@ const Item = ({ item, onPress, style }) => {
   );
 }
 
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const DiaryScreen = ({ route, navigation }) => {
 
   const { plantId, plantImg } = route.params;
-
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
   const diaries = useSelector(state => state.DiaryReducer.diaries);
   const isFocused = useIsFocused();
   const [isEarnModalVisible, setEarnModalVisibility] = useState(false);
-
+  const earnState = useSelector(state => state.PlantReducer.earn);
+  const exp = useSelector(state=>state.DiaryReducer.exp);
+  const point = useSelector(state=>state.DiaryReducer.point);
+  const plant_level = useSelector(state=>state.DiaryReducer.level);
   useEffect(() => {
     if (isFocused) {
       dispatch(fetchDiaries(plantId));
     }
   }, [isFocused])
 
+  const renderExp = () => {
+    if (plant_level) {
+      if (plant_level == 1) return 30;
+      else return 30 + (plant_level - 1) * 10;
+    } else return 0;
+  };
 
+  const renderEarnPoint = () => {
+      return (
+        <View>
+          <Text style={styles.earnText}>포인트를 10만큼 획득하셨어요!</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginBottom: 20,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text style={[styles.earnText, { fontSize: 16 }]}>보유 포인트:</Text>
+            <Text
+              style={[
+                styles.earnText,
+                {
+                  fontSize: 16,
+                  fontFamily: 'NanumGothicExtraBold',
+                  color: '#7e57c2',
+                },
+              ]}>
+              {' '}
+              {point}
+            </Text>
+            <Entypo name={'arrow-up'} size={20} color={'#93d07d'} />
+          </View>
+        </View>
+      );
+  };
   const renderItem = ({ item }) => {
 
     return (
@@ -72,7 +114,7 @@ const DiaryScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.body}>
-      <LevelUp />
+      <LevelUp plant_level = {plant_level} />
       <View style={styles.top}>
         <Image
           source={{ uri: plantImg }}
@@ -100,6 +142,71 @@ const DiaryScreen = ({ route, navigation }) => {
           extraData={selectedId}
         />
       </View>
+      <Modal
+        visible={earnState}
+        transparent={true}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View
+            style={{
+              width: screenWidth * 0.65,
+              height: screenHeight * 0.5,
+              backgroundColor: 'white',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingTop: 5,
+              paddingBottom: 10
+            }}>
+            {/* <EarnModal point={point}/> */}
+            <View
+              style={{
+                marginTop: 5,
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={[styles.earnText, { fontSize: 18 }]}>축하드려요!</Text>
+              {renderEarnPoint()}
+              <Text style={styles.earnText}>경험치를 10만큼 획득하셨어요!</Text>
+              <View style={styles.expWrapper}>
+                <View style={[styles.levelBar, { width: screenWidth * 0.5 }]}>
+                  <View
+                    style={[
+                      styles.expBar,
+                      {
+                        width: exp
+                          ? (screenWidth * 0.5 * exp) / renderExp()
+                          : 0,
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        width: screenWidth * 0.5,
+                        textAlign: 'center',
+                        fontFamily: 'NanumGothicBold',
+                        color: '#363636',
+                      }}>
+                      {`LV. ${plant_level} ( ${exp
+                        } / ${renderExp()} )`}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                  dispatch(setEarnState(false));
+                  setEarnModalVisibility(false);
+              }}>
+              <View style={styles.earnModalButton}>
+                <Text
+                  style={{ fontFamily: 'NanumGothicBold', textAlign: 'center' }}>
+                  확인
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+      </Modal>
     </SafeAreaView>
   )
 }
@@ -151,5 +258,59 @@ const styles = StyleSheet.create({
     marginLeft: Dimensions.get('window').width * 0.23,
     resizeMode: 'contain',
   },
+  expWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 5,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  levelBar: {
+    backgroundColor: 'white',
+    width: screenWidth * 0.6,
+    height: screenHeight * 0.03,
+    borderRadius: 5,
+    marginBottom: 5,
+    marginTop: 5,
+    marginLeft: 5,
+  },
+  expBar: {
+    backgroundColor: '#f1c40f',
+    height: screenHeight * 0.03,
+    borderRadius: 5,
+    justifyContent: 'center',
+  },
+  earnModalButton: {
+    width: 50,
+    height: 35,
+    backgroundColor: '#93d07d',
+    borderRadius: 3,
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
 
+    elevation: 2,
+  },
+  earnText: {
+    fontFamily: 'NanumGothicBold',
+    marginTop: 10,
+    marginBottom: 5,
+    color: '#363636',
+    fontSize: 13,
+  },
 })
