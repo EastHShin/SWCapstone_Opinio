@@ -46,6 +46,7 @@ const MyPageScreen = ({ navigation }) => {
       {
         text: "확인",
         onPress: () => {
+          // unlinkKakao();
           dispatch(logoutUser());
         }
       }

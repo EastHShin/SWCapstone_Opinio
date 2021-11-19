@@ -34,6 +34,7 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
     const [title, setTitle] = useState(diary.title);
     const [content, setContent] = useState(diary.content);
+    const originalImageUri = diary.file_name;
     const [imageUri, setImageUri] = useState(diary.file_name);
     const [fileName, setFileName] = useState("");
     const [imageType, setImageType] = useState("");
@@ -61,17 +62,21 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
     const addGalleryImage = () => {
         launchImageLibrary({mediaType:'photo' }, response =>{
-            setImageType(response.assets[0].type);
-            setFileName(response.assets[0].fileName);
-            setImageUri(response.assets[0].uri);
+            if(!response.didCancel){
+                setImageType(response.assets[0].type);
+                setFileName(response.assets[0].fileName);
+                setImageUri(response.assets[0].uri);
+                }
         })
     }
 
     const addCameraImage = () => {
         launchCamera({mediaType:'photo'}, response => {
-            setImageType(response.assets[0].type);
-            setFileName(response.assets[0].fileName);
-            setImageUri(response.assets[0].uri);
+            if(!response.didCancel){
+                setImageType(response.assets[0].type);
+                setFileName(response.assets[0].fileName);
+                setImageUri(response.assets[0].uri);
+                }
         })
     }
     
@@ -81,23 +86,16 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
         const Data = new FormData();
 
-        if(diary.title == title){
-            Data.append('title', null);
-        }
-        else{
+        if(diary.title != title){
             Data.append('title', title);
         }
 
-        if(diary.content == content){
-            Data.append('content', null);
-        }
-        else{
+        if(diary.content != content){
             Data.append('content', content);
+           
         }
-
-        Data.append('date', null);
-  
-        if (fileName) {
+     
+        if (imageUri!=originalImageUri) {
             console.log("새로운 사진");
             Data.append('file_name', {
                 name: fileName,
@@ -106,13 +104,11 @@ const DiaryEditScreen = ({ route, navigation }) => {
             });
         }
         else if(!imageUri){
-            Data.append('file_status','delete');
-        }
-        else{
-            Data.append('file_name', null);
+            console.log("사진 없어짐");
+            Data.append('file_name','delete');
         }
           
-        dispatch(editDiary(Data, diary.diary_id));
+        dispatch(editDiary(Data, selectedId));
         
     }
 

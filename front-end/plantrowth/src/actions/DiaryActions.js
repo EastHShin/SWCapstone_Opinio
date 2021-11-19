@@ -13,6 +13,7 @@ export const fetchDiaries = (plantId) => {
                         type: FETCH_DIARIES,
                         payload: res.data.data,
                     })
+                    
                 }
             })
             .catch(function (error) {
@@ -66,11 +67,14 @@ export const saveDiary = (diary, plantId) => {
         })
             .then(function (res) {
                 if (res.status == 200) {
-                    //경험치, 포인트 얻어오는거 dispatch 
+    
                     dispatch({
                         type: SAVE_DIARY,
                         payload: "success"
                     })
+              
+                    dispatch(setLevelUpState(res.data.data.isLevelUp));
+
                 }
 
             })

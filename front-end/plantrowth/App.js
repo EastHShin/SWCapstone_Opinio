@@ -15,7 +15,7 @@ import {Provider} from 'react-redux';
 import Store from './src/store';
 import AddProfileScreen from './src/Plant/AddPlantProfile';
 import ManagePlantScreen from './src/Plant/ManagePlant';
-import CommunityScreen from './src/Community';
+import CommunityMainScreen from './src/Community/CommunityMainScreen';
 import ShopScreen from './src/Shop';
 import MyPageScreen from './src/MyPage/MyPageScreen';
 import AccountInfoScreen from './src/MyPage/AccountInfoScreen';
@@ -145,8 +145,8 @@ function App({navigation}) {
             }}
           />
           <Stack.Screen
-            name="CommunityScreen"
-            component={CommunityScreen}
+            name="CommunityMainScreen"
+            component={CommunityMainScreen}
             options={{
               headerShown: false,
             }}

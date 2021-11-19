@@ -57,17 +57,21 @@ const DiaryCreateScreen = ({ route,navigation }) => {
     
     const addGalleryImage = () => {
         launchImageLibrary({mediaType:'photo' }, response =>{
+            if(!response.didCancel){
             setImageType(response.assets[0].type);
             setFileName(response.assets[0].fileName);
             setImageUri(response.assets[0].uri);
+            }
         })
     }
 
     const addCameraImage = () => {
-        launchCamera({mediaType:'photo'}, response => {   
+        launchCamera({mediaType:'photo'}, response => { 
+            if(!response.didCancel){  
             setImageType(response.assets[0].type);
             setFileName(response.assets[0].fileName);
             setImageUri(response.assets[0].uri);
+            }
         })
     }
     
@@ -97,7 +101,7 @@ const DiaryCreateScreen = ({ route,navigation }) => {
         Data.append('content', content);
         Data.append('date', year+ '-' + month + '-' + day)
 
-        if (fileName) {
+        if (imageUri) {
             console.log("사진 있음");
             Data.append('file_name', {
                 name: fileName,
@@ -185,7 +189,7 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                             <View style={styles.imageButton}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={() => setImage('')}>
+                                    onPress={() => setImageUri('')}>
                                     <MaterialIcons name='cancel' size={43} color="#FF0000" />
                                 </TouchableOpacity>
                             </View>

@@ -28,7 +28,16 @@ const LevelUp = () => {
     const shakeAnimation = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-        setIsModalVisible(isLevelUp);
+        if(isLevelUp){
+            setIsModalVisible(true);
+        }
+        else{
+            setIsModalVisible(false);
+            endTextLevelUp();
+            endNumberLevelUp();
+            setTimeOut(false);
+        } 
+    
     }, [isLevelUp])
 
     useEffect(() => {
@@ -64,6 +73,24 @@ const LevelUp = () => {
                 useNativeDriver: true
             }
         ).start()
+    };
+
+    const endTextLevelUp = () => {
+        
+        Animated.timing(shakeAnimation, {
+          toValue: 0,
+          duration: 3000,
+          useNativeDriver:true
+        }).start();
+      };
+
+    const endNumberLevelUp = () => {
+
+        Animated.timing(levelAnimation, {
+            toValue: 0,
+            duration: 3000,
+            useNativeDriver: true
+        }).start();
     };
 
 
@@ -139,9 +166,7 @@ const LevelUp = () => {
                         }>
                         <Text style={{ color: "#000000" }}>OK</Text>
                     </TouchableOpacity>
-
                 </View>
-
             </View>
         </Modal>
     );
