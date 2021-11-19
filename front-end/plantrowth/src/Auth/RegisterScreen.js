@@ -1,4 +1,4 @@
-import React, { useEffect,useState, createRef, useCallback } from 'react';
+import React, { useEffect, useState, createRef, useCallback } from 'react';
 
 import {
   StyleSheet,
@@ -21,8 +21,8 @@ import EntypoIcons from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useDispatch,useSelector } from 'react-redux';
-import { registerUser,setRegisterState, emailAuthentication, codeVerification, setEmialTransState, setCodeVerificationState } from '../actions/UserActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser, setRegisterState, emailAuthentication, codeVerification, setEmialTransState, setCodeVerificationState } from '../actions/UserActions';
 import messaging from '@react-native-firebase/messaging';
 
 function RegisterScreen({ navigation }) {
@@ -50,22 +50,22 @@ function RegisterScreen({ navigation }) {
   const registerState = useSelector(state => state.UserReducer.registerState);
   const registerText = useSelector(state => state.UserReducer.registerText);
   const emailTrans = useSelector(state => state.UserReducer.emailTrans);
-  const codeVerificationState = useSelector(state=> state.UserReducer.codeVerificationState);
+  const codeVerificationState = useSelector(state => state.UserReducer.codeVerificationState);
   const passwordInputRef = createRef();
 
   const maximumDate = new Date();
 
   useEffect(() => {
-    if(registerState == 'success' && isFocused){
+    if (registerState == 'success' && isFocused) {
       setLoading(false);
       setIsRegistraionSuccess(true);
       setErrortext('');
       dispatch(setRegisterState(''));
       setCheckEmailCode(false);
     }
-    else if(registerState == 'failure' && isFocused){
+    else if (registerState == 'failure' && isFocused) {
       setLoading(false);
-      setErrortext(registerText); 
+      setErrortext(registerText);
       dispatch(setRegisterState(''));
       setCheckEmailCode(false);
     }
@@ -80,36 +80,36 @@ function RegisterScreen({ navigation }) {
     getFcmToken();
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    if(emailTrans=="success" && isFocused){
+    if (emailTrans == "success" && isFocused) {
       setLoading(false);
       setIsModalVisible(true);
       dispatch(setEmialTransState(''));
     }
-    else if(emailTrans=="failure" && isFocused){
+    else if (emailTrans == "failure" && isFocused) {
       setLoading(false);
       alert('이메일 전송에 실패하였습니다!');
       dispatch(setEmialTransState(''));
     }
 
-  },[emailTrans])
+  }, [emailTrans])
 
   useEffect(() => {
-    if(codeVerificationState == 'success' && isFocused){
+    if (codeVerificationState == 'success' && isFocused) {
       setLoading(false);
       setCheckEmailCode(true);
       alert('인증성공 !!!');
       dispatch(setCodeVerificationState(""));
       setIsModalVisible(false);
     }
-    else if(codeVerificationState == 'failure' && isFocused){
+    else if (codeVerificationState == 'failure' && isFocused) {
       setLoading(false);
       alert('인증코드를 다시 확인해주세요.');
       dispatch(setCodeVerificationState(""));
     }
   }, [codeVerificationState])
-  
+
 
   const onPressHandler = () => {
     setErrortext('');
@@ -131,7 +131,7 @@ function RegisterScreen({ navigation }) {
       alert('비밀번호를 입력해주세요.');
       return;
     }
-    if(!checkEmailCode){
+    if (!checkEmailCode) {
       alert('이메일을 인증해주세요!');
       return;
     }
@@ -141,7 +141,7 @@ function RegisterScreen({ navigation }) {
     console.log(fcmToken);
 
     const user = JSON.stringify({
-      user_name : userNickName,
+      user_name: userNickName,
       user_birth: userBirth,
       email: userEmail,
       password: userPassword,
@@ -152,7 +152,7 @@ function RegisterScreen({ navigation }) {
     console.log(user);
 
     dispatch(registerUser(user));
- 
+
   }
 
 
@@ -164,12 +164,12 @@ function RegisterScreen({ navigation }) {
 
   const handleConfirm = (date) => {
     setDatePickerVisibility(false);
-    
+
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
 
-    setUserBirth(year+ '-' + month + '-' + day);
+    setUserBirth(year + '-' + month + '-' + day);
 
   }
 
@@ -199,7 +199,7 @@ function RegisterScreen({ navigation }) {
   if (isRegistraionSuccess) {
     return (
       <SafeAreaView style={{
-        flex: 1, 
+        flex: 1,
         backgroundColor: '#8EB695',
         justifyContent: 'center'
       }}>
@@ -226,7 +226,7 @@ function RegisterScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#8EB695',alignItems:'center' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#8EB695', alignItems: 'center' }}>
       <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -254,7 +254,7 @@ function RegisterScreen({ navigation }) {
                 style={styles.input}
                 onChangeText={(UserNickName) => setUserNickName(UserNickName)}
                 underlineColorAndroid="#f000"
-                placeholder="NickName"
+                placeholder="Nickname"
                 placeholderTextColor="#808080"
                 onSubmitEditing={
                   Keyboard.dismiss
@@ -280,8 +280,8 @@ function RegisterScreen({ navigation }) {
                   isVisible={isDatePickerVisible}
                   mode="date"
                   onConfirm={handleConfirm}
-                  minimumDate={new Date(1921, 0, 1)} 
-                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate()-1)}
+                  minimumDate={new Date(1921, 0, 1)}
+                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate() - 1)}
                   onCancel={() => {
                     setDatePickerVisibility(false);
                   }} />
@@ -308,19 +308,19 @@ function RegisterScreen({ navigation }) {
                 blurOnSubmit={false}
               />
               <TouchableOpacity
-              style={styles.smallButton}
-              activeOpacity={0.5}
-              onPress={()=> {
-                dispatch(emailAuthentication(userEmail))
-                setLoading(true);  
-              }
+                style={styles.smallButton}
+                activeOpacity={0.5}
+                onPress={() => {
+                  dispatch(emailAuthentication(userEmail))
+                  setLoading(true);
+                }
                 }>
                 <Text style={{
                   color: '#FFFFFF',
                   paddingVertical: 10, fontSize: 10
                 }}>인증</Text>
-            </TouchableOpacity>
-            
+              </TouchableOpacity>
+
               <Modal
                 transparent={true}
                 animationType={'none'}
@@ -340,7 +340,7 @@ function RegisterScreen({ navigation }) {
                         style={styles.input}
                         onChangeText={(code) => setInputAuthCode(code)}
                         underlineColorAndroid="#f000"
-                        keyboardType = "number-pad"
+                        keyboardType="number-pad"
                         placeholder="verification code"
                         placeholderTextColor="#808080"
                         onSubmitEditing={
@@ -348,33 +348,37 @@ function RegisterScreen({ navigation }) {
                         }
                         blurOnSubmit={false}
                       />
-            </View>
-<View style={{flexDirection:"row"}}>
-            <TouchableOpacity
-              style={styles.smallButton}
-              activeOpacity={0.5}
-              onPress={()=>
-              { setLoading(true);
-                dispatch(codeVerification(inputAuthCode));
-                }
-                }>
-              <Text style={{color: '#FFFFFF',
-                  paddingVertical: 10, fontSize: 10}}>확인</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.smallButton}
-              activeOpacity={0.5}
-              onPress={()=> {
-                alert('인증을 취소합니다.')
-                setIsModalVisible(false);
-                }}>
-              <Text style={{color: '#FFFFFF',
-                  paddingVertical: 10, fontSize: 10}}>취소</Text>
-            </TouchableOpacity>
-      </View>
-          </View>
-        </View>
-      </Modal>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <TouchableOpacity
+                        style={styles.smallButton}
+                        activeOpacity={0.5}
+                        onPress={() => {
+                          setLoading(true);
+                          dispatch(codeVerification(inputAuthCode));
+                        }
+                        }>
+                        <Text style={{
+                          color: '#FFFFFF',
+                          paddingVertical: 10, fontSize: 10
+                        }}>확인</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.smallButton}
+                        activeOpacity={0.5}
+                        onPress={() => {
+                          alert('인증을 취소합니다.')
+                          setIsModalVisible(false);
+                        }}>
+                        <Text style={{
+                          color: '#FFFFFF',
+                          paddingVertical: 10, fontSize: 10
+                        }}>취소</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
 
 
             </View>
@@ -438,8 +442,8 @@ export default RegisterScreen;
 const styles = StyleSheet.create({
   sectionWrapper: {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('window').height*0.6,
-    width: Dimensions.get('window').width*0.85,
+    height: Dimensions.get('window').height * 0.6,
+    width: Dimensions.get('window').width * 0.85,
     borderRadius: 20,
     display: 'flex',
     justifyContent: 'center',
@@ -509,13 +513,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginLeft: -5
   },
-  smallButton:{
+  smallButton: {
     backgroundColor: '#BEE9B4',
-    height:35,
-    marginLeft:Dimensions.get('window').width*0.02,
-    width:"20%",
+    height: 35,
+    marginLeft: Dimensions.get('window').width * 0.02,
+    width: "20%",
     alignItems: 'center',
-    borderRadius: 30, 
+    borderRadius: 30,
 
   },
   modal: {
@@ -532,7 +536,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     display: 'flex',
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center'
   },
-  
+
 });
