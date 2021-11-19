@@ -213,7 +213,7 @@ const ManagePlant = ({route}) => {
   };
 
   const renderExp = () => {
-    console.log('plant_exp: ' + profile.plant_exp);
+    console.log('plant_exp: ' + exp);
     console.log('plant_level: ' + profile.plant_level);
     if (profile.plant_level) {
       if (profile.plant_level == 1) return 30;
@@ -682,8 +682,8 @@ const ManagePlant = ({route}) => {
                   style={[
                     styles.expBar,
                     {
-                      width: profile.plant_exp
-                        ? (screenWidth * 0.5 * profile.plant_exp) / renderExp()
+                      width: exp
+                        ? (screenWidth * 0.5 * exp) / renderExp()
                         : 0,
                     },
                   ]}>
@@ -695,7 +695,7 @@ const ManagePlant = ({route}) => {
                       color: '#363636',
                     }}>
                     {`LV. ${profile.plant_level} ( ${
-                      profile.plant_exp
+                      exp
                     } / ${renderExp()} )`}
                   </Text>
                 </View>

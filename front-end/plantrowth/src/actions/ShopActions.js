@@ -11,9 +11,10 @@ export const buyProfileSlot = userId => {
       .then(function (response) {
         console.log('slot 구매 response :', response);
         if (response.status === 200) {
+          dispatch({type: GET_POINT, payload: response.data.data.point});
+          dispatch({type: GET_MAX_PLANT_NUM, payload: response.data.data.max_plant_num});
           dispatch({type: BUY_PROFILE_SLOT, payload: 'success'});
-          dispatch({type: GET_POINT, payload: response.data.point});
-          dispatch({type: GET_MAX_PLANT_NUM, payload: response.data.max_plant_num});
+
         }
       })
       .catch(function (error) {
