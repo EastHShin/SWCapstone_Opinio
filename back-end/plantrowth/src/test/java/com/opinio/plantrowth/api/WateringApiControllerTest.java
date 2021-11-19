@@ -79,6 +79,7 @@ class WateringApiControllerTest {
                 .alarmCycle(2)
                 .waterSupply(3)
                 .plantExp(0)
+                .plantLevel(1)
                 .remainCycle(2)
                 .fileName("ffff")
                 .user(user)

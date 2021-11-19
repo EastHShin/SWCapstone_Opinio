@@ -82,7 +82,9 @@ public class PlantDiaryApiController {
         DiaryResponseDTO responseDTO = new DiaryResponseDTO();
         responseDTO.setPlantExp(updatedPlant.getPlantExp());
         responseDTO.setPoint(user.getPoint());
+        responseDTO.setPlant_level(updatedPlant.getPlantLevel());
         responseDTO.setIsLevelUp(isLevelUp);
+
         Message message= new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
