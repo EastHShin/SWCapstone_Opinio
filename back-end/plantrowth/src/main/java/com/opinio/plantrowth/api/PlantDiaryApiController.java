@@ -117,6 +117,9 @@ public class PlantDiaryApiController {
         Long updatedId = diaryService.updateDiary(id, dto);
         if(file.isPresent()) {
             String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
+            if(uploadImageName.equals("delete")){
+                diaryService.updateImage(updatedId, null);
+            }
             diaryService.updateImage(updatedId, uploadImageName);
         }
         PlantDiary diary = diaryService.findDiary(updatedId);
