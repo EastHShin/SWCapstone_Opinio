@@ -118,7 +118,7 @@ const CommunityMainScreen = ({ navigation }) => {
           data={dataList.reverse()}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-          extraData={selectedId}
+         
         />
       </View>
       <Footer name={'Community'} />

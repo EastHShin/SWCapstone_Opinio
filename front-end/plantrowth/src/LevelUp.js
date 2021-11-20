@@ -10,13 +10,13 @@ import {
   Easing,
 } from 'react-native';
 import Modal from 'react-native-modal';
-
+import { useIsFocused } from '@react-navigation/native'
 import {setLevelUpState, setEarnState} from './actions/PlantActions';
 
 const LevelUp = props => {
   const {plant_level} = props;
   const dispatch = useDispatch();
-
+  const isFocused = useIsFocused();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [timeOut, setTimeOut] = useState(false);
 
@@ -26,13 +26,13 @@ const LevelUp = props => {
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (isLevelUp) {
+    if (isLevelUp && isFocused) {
       setIsModalVisible(true);
-    } else {
-      setIsModalVisible(false);
+
+    } else if(!isLevelUp & isFocused) {
+      setTimeOut(false);
       endTextLevelUp();
       endNumberLevelUp();
-      setTimeOut(false);
     }
   }, [isLevelUp]);
 
@@ -141,8 +141,11 @@ const LevelUp = props => {
             activeOpacity={0.5}
             onPress={() => {
               setIsModalVisible(false);
-              dispatch(setLevelUpState(false));
               dispatch(setEarnState(true));
+              setTimeout(() => {
+                dispatch(setLevelUpState(false));
+              }, 1000);
+              
             }}>
             <Text style={{color: '#000000'}}>OK</Text>
           </TouchableOpacity>

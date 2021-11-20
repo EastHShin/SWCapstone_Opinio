@@ -258,7 +258,7 @@ export const kakaoUnlink = () => dispatch => {
 export const deleteUser = (userId, password) =>{
     return async dispatch => {
         console.log(userId + "    "+ password);
-        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/users/${userId}`,password,
+        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/users/${userId}`,
         {
             headers: { "Content-Type": `application/json` }
         })
