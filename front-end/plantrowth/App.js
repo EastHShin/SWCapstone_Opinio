@@ -19,7 +19,8 @@ import CommunityMainScreen from './src/Community/CommunityMainScreen';
 import ShopScreen from './src/Shop';
 import MyPageScreen from './src/MyPage/MyPageScreen';
 import AccountInfoScreen from './src/MyPage/AccountInfoScreen';
-import AccountDeleteScreen from './src/MyPage/AccountDelete';
+import AccountDeleteNoticeScreen from './src/MyPage/AccountDeleteNoticeScreen';
+import AccountDeleteScreen from './src/MyPage/AccountDeleteScreen';
 import AccountEditScreen from './src/MyPage/AccountEditScreen';
 import DiseaseDiagnosisHistoryScreen from './src/MyPage/DiseaseDiagnosisHistoryScreen';
 import PointHistoryScreen from './src/MyPage/PointHistoryScreen';
@@ -182,6 +183,13 @@ function App({navigation}) {
           <Stack.Screen
             name="AccountEditScreen"
             component={AccountEditScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AccountDeleteNoticeScreen"
+            component={AccountDeleteNoticeScreen}
             options={{
               headerShown: false,
             }}

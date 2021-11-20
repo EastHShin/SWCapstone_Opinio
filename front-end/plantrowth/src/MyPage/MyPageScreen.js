@@ -120,7 +120,7 @@ const MyPageScreen = ({ navigation }) => {
         <TouchableOpacity
           style={{ flexDirection: "row" }}
           activeOpacity={0.5}
-          onPress={() => navigation.push('AccountDeleteScreen')}>
+          onPress={() => navigation.push('AccountDeleteNoticeScreen')}>
           <View style={styles.section}>
             <Text style={styles.text}>회원탈퇴</Text>
             <Ionicons name='chevron-forward-sharp' size={23} color="#000000" style={styles.icon} />
