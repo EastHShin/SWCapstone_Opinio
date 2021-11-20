@@ -45,7 +45,7 @@ public class Plant {
     @Column(name = "remain_cycle")
     private Integer remainCycle;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, mappedBy = "plant")
+    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "plant")
     @Builder.Default
     private List<PlantDiary> diaries = new ArrayList<>();
 
