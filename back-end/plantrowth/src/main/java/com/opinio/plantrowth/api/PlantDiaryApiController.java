@@ -115,11 +115,12 @@ public class PlantDiaryApiController {
                                          @ModelAttribute CreateDiaryDTO dto,
                                          @RequestPart(name = "file_name", required = false) Optional<MultipartFile> file){
         Long updatedId = diaryService.updateDiary(id, dto);
+        Boolean isFileDelete = dto.getFile_delete();
+        if (isFileDelete) {
+            diaryService.updateImage(updatedId, null);
+        }
         if(file.isPresent()) {
             String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
-            if(uploadImageName.equals("delete")){
-                diaryService.updateImage(updatedId, null);
-            }
             diaryService.updateImage(updatedId, uploadImageName);
         }
         PlantDiary diary = diaryService.findDiary(updatedId);

@@ -16,10 +16,18 @@ public class CreateDiaryDTO {
     private String content;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    public CreateDiaryDTO(String title, String content, LocalDate date) {
+    private Boolean file_delete;
+//    public CreateDiaryDTO(String title, String content, LocalDate date) {
+//        this.title = title;
+//        this.content = content;
+//        this.date = date;
+//    }
+
+    public CreateDiaryDTO(String title, String content, LocalDate date, Boolean file_delete) {
         this.title = title;
         this.content = content;
         this.date = date;
+        this.file_delete = file_delete;
     }
 
     public PlantDiary toEntity() {
