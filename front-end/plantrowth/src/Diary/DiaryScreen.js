@@ -9,7 +9,6 @@ import {
   FlatList,
   Text,
   Dimensions,
-  Modal
 } from 'react-native';
 
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -20,6 +19,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import LevelUp from '../LevelUp';
 import Entypo from 'react-native-vector-icons/dist/Entypo';
+import Modal from 'react-native-modal';
 
 const Item = ({ item, onPress, style }) => {
 
@@ -143,8 +143,8 @@ const DiaryScreen = ({ route, navigation }) => {
         />
       </View>
       <Modal
-        visible={earnState}
-        transparent={true}>
+        isVisible={earnState}
+        onBackButtonPress={()=>dispatch(setEarnState(false))}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View
             style={{
@@ -154,7 +154,8 @@ const DiaryScreen = ({ route, navigation }) => {
               justifyContent: 'space-between',
               alignItems: 'center',
               paddingTop: 5,
-              paddingBottom: 10
+              paddingBottom: 10,
+              borderRadius: 10,
             }}>
             {/* <EarnModal point={point}/> */}
             <View
