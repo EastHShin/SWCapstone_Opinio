@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class CommentCreateRequest {
+public class CommentCUDto {
     private String content;
     private LocalDate date;
 }

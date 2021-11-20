@@ -121,6 +121,7 @@ public class BoardApiController {
                 ResponseEntity.ok().body("게시글 삭제 완료"):
                 ResponseEntity.badRequest().build();
     }
+//    @PostMapping("/api/community/report/{board-id}")//게시글 신고
     /**
      * 게시글 좋아요 부분
      */

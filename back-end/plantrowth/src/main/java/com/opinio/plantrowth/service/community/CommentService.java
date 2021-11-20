@@ -1,6 +1,6 @@
 package com.opinio.plantrowth.service.community;
 
-import com.opinio.plantrowth.api.dto.community.comment.CommentCreateRequest;
+import com.opinio.plantrowth.api.dto.community.comment.CommentCUDto;
 import com.opinio.plantrowth.api.dto.community.comment.CommentLookUpDTO;
 import com.opinio.plantrowth.domain.community.Comment;
 import com.opinio.plantrowth.repository.community.CommentRepository;
@@ -40,7 +40,7 @@ public class CommentService {
         return commentRepository.findAllByUserId(userId);
     }
     @Transactional
-    public Long updateComment(Long id, CommentCreateRequest dto){
+    public Long updateComment(Long id, CommentCUDto dto){
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 댓글 입니다."));
         if(!(dto.getContent()==null))
