@@ -40,7 +40,7 @@ HomeScreen = () => {
 
   useEffect(() => {
     if (isLogin == 'end') {
-      navigation.replace('LoginScreen');
+      navigation.reset({routes: [{name: "LoginScreen"}]});
     }
   }, [isLogin]);
 
@@ -296,8 +296,8 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   profileContainer: {
-    width: screenWidth * 0.281,
-    height: screenHeight * 0.283,
+    width: screenWidth * 0.274,
+    height: screenHeight * 0.25,
     padding: 5,
     backgroundColor: '#C9E7BE',
     flexDirection: 'column',

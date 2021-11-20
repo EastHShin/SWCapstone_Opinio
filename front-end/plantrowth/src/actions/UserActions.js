@@ -205,6 +205,7 @@ export const logoutUser = (email) => {
         })
             .then(function (res) {
                 if (res.status == 200) {
+                    console.log("tq");
                     axios.defaults.headers.common['Authorization'] = undefined
                     AsyncStorage.getItem('kakaoLogin').then((value) => {
                         clearLogoutTimer();
@@ -238,6 +239,7 @@ export const kakaoUnlink = () => dispatch => {
     try {
 
         KakaoLogins.unlink().then(result => {
+            console.log("카카오 탈퇴 결과"+result);
             if (result) {
                 dispatch({
                     type: KAKAO_UNLINK,
@@ -291,6 +293,13 @@ export const deleteUser = (userId, password) =>{
         })
     }
 
+}
+
+export const setUserDeleteState = state => dispatch =>{
+    dispatch({
+        type:USER_DELETE,
+        payload:state
+    })
 }
 
 

@@ -19,7 +19,7 @@ import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteUser } from '../actions/UserActions';
+import { deleteUser, setUserDeleteState } from '../actions/UserActions';
 import Loader from '../Loader';
 
 //UI 수정 필요!
@@ -45,12 +45,15 @@ const AccountDeleteScreen = ({ navigation }) => {
     }, [isFocused])
 
     useEffect(() => {
+        
         if (userDeleteState == "success" && isFocused) {
             setLoading(false);
+            dispatch(setUserDeleteState(''));
             setIsModalVisible(true);
         }
         else if (userDeleteState == "failure" && isFocused) {
             setLoading(false);
+            dispatch(setUserDeleteState(''));
             alert('회원탈퇴 실패! 비밀번호를 다시 확인해주세요.');
         }
     }, [userDeleteState])
@@ -202,7 +205,7 @@ const styles = StyleSheet.create({
     },
 
     smallButton: {
-        backgroundColor: '#BEE9B4',
+        backgroundColor: '#82B594',
         height: Dimensions.get('window').height * 0.05,
         marginTop: Dimensions.get('window').height * 0.01,
         marginStart: Dimensions.get('window').width * 0.75,

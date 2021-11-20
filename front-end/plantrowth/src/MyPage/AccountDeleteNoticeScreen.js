@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     fontWeight:"bold"
   },
   smallButton:{
-    backgroundColor: '#BEE9B4',
+    backgroundColor: '#82B594',
     height:Dimensions.get('window').height*0.05,
     marginTop:Dimensions.get('window').height*0.01,
     marginStart:Dimensions.get('window').width*0.75,
