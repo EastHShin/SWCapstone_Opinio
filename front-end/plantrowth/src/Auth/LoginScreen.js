@@ -282,11 +282,15 @@ const LoginScreen = ({ navigation }) => {
                   style={styles.kakaoImage} />
               </TouchableOpacity>
             </View>
-            <Text
-              style={styles.registerText}
-              onPress={() => navigation.navigate('RegisterScreen')}>
-              New Here ? Register
+            <View style={{flexDirection:"row", justifyContent:"center", marginTop:Dimensions.get('window').height*0.01}}>
+            <Text style={styles.registerText}>
+              New Here ? 
             </Text>
+            <Text
+              style={styles.registerTextButton}
+              onPress={() => navigation.navigate('RegisterScreen')}>Register
+            </Text>
+            </View>
           </KeyboardAvoidingView>
         </View>
       </ScrollView>
@@ -332,7 +336,7 @@ const LoginScreen = ({ navigation }) => {
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
                   mode="date"
-                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate()-1)} //
+                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate()-1)} 
                   minimumDate = {new Date(1921, 0, 1)}
                   onConfirm={handleConfirm}
                   onCancel={() => {
@@ -424,7 +428,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     alignSelf: 'center',
-    padding: 10,
+    marginRight:Dimensions.get('window').width*0.02
+  },
+  registerTextButton: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    textDecorationLine:'underline',
+    fontSize: 14,
+    padding:1,
+    alignSelf: 'center',
+
   },
   errorText: {
     color: 'red',
@@ -432,11 +446,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   kakaoImage: {
-    width: '78%',
+  
+    width:Dimensions.get('window').width*0.66,
     resizeMode: 'contain',
-    height: 40,
+    height: Dimensions.get('window').height*0.05,
     alignItems: 'center',
-    borderRadius: 40,
+    borderRadius: 10,
     marginLeft: 35,
     marginRight: 35,
     marginBottom: 25,

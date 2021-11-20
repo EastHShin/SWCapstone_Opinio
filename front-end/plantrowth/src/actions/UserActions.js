@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE } from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -128,7 +128,7 @@ export const loginUser = (user) => {
             .then(function (res) {
                 console.log(res.headers.authorization);
                 if (res.status == 200) {
-                    dispatch(setLogoutTimer(6000000));
+                    dispatch(setLogoutTimer(3600000));
 
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
@@ -165,7 +165,7 @@ export const kakaoLogin = (data) => {
                 if (res.status == 200) {
 
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
-
+                    dispatch(setLogoutTimer(3600000));
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');
 
@@ -236,7 +236,7 @@ export const logoutUser = (email) => {
 
 export const kakaoUnlink = () => dispatch => {
     try {
-        AsyncStorage.clear();
+
         KakaoLogins.unlink().then(result => {
             if (result) {
                 dispatch({
@@ -254,6 +254,44 @@ export const kakaoUnlink = () => dispatch => {
         })
     }
 };
+
+export const deleteUser = (userId, password) =>{
+    return async dispatch => {
+        console.log(userId + "    "+ password);
+        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/users/${userId}`,password,
+        {
+            headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if(res.status==200){
+                axios.defaults.headers.common['Authorization'] = undefined
+                    AsyncStorage.getItem('kakaoLogin').then((value) => {
+                        clearLogoutTimer();
+                        
+                        dispatch({
+                            type:USER_DELETE,
+                            payload:"success"
+                        })
+
+                        if (value) {
+                            dispatch(kakaoUnlink());
+                        }
+                    });
+                
+
+            }
+
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:USER_DELETE,
+                payload:"failure"
+            })
+        })
+    }
+
+}
 
 
 

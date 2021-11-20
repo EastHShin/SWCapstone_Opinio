@@ -140,12 +140,13 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                                 }
                                 placeholder="Enter Title"
                                 placeholderTextColor="#808080"
+                               
                                 returnKeyType="next"
                                 onSubmitEditing={() =>
                                     contentInputRef.current &&
                                     contentInputRef.current.focus()
                                 }
-                                underlineColorAndroid="#f000"
+                                underlineColorAndroid="#A9A9A9"
                                 blurOnSubmit={false}
                             />
                         </View>
@@ -166,8 +167,9 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                             />
                         </View>
 
+                        <View style = {{marginBottom:Dimensions.get('window').width * 0.06,height: Dimensions.get('window').height * 0.4,}}>
                         {imageUri != '' ? (
-                            <View style = {{marginBottom:Dimensions.get('window').width * 0.06,}}>
+                           
                                 <Image source={{ uri: imageUri }}
                                     style={{
                                         width: Dimensions.get('window').width * 0.8,
@@ -175,8 +177,9 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                                         resizeMode: 'contain',
                                     }}
                                 />
-                            </View>
+                            
                         ) : null}
+                        </View>
 
                         <View style={{ flexDirection: "row" }}>
                             <View style={styles.imageButton}>
@@ -227,7 +230,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     diaryWrapper: {
-        height : Dimensions.get('window').height*1.2,
+        height : Dimensions.get('window').height*0.9,
         width: Dimensions.get("window").width,
         borderRadius: 20,
         backgroundColor: "#FFFFFF",
@@ -235,9 +238,10 @@ const styles = StyleSheet.create({
     },
     title: {
         marginVertical: Dimensions.get("window").height * 0.02,
+        width:Dimensions.get('window').width*0.8
     },
     content: {
-        marginBottom: Dimensions.get("window").height * 0.5,
+        marginBottom: Dimensions.get("window").height * 0.13,
         width: Dimensions.get('window').width * 0.8
     },
     titleInput:{
