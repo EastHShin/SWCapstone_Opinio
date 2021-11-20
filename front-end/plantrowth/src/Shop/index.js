@@ -44,8 +44,6 @@ ShopScreen = () => {
     AsyncStorage.getItem('userId').then(value => {
       if (value != null) {
         setUserId(JSON.parse(value));
-
-        console.log('샵스크린 userId: ' + userId);
         setLoading(false);
       }
     });
@@ -78,9 +76,10 @@ ShopScreen = () => {
           flex: 1,
           alignItems: 'center',
           justifyContent: 'space-between',
+          backgroundColor: '#C9E7BE',
         }}>
         <View style={styles.sectionWrapper}>
-          <Text>ShopScreen</Text>
+          <Text style={{fontFamily: 'NanumGothicBold'}}>Shop</Text>
           <View style={{flex: 1, justifyContent: 'center'}}>
             <View style={styles.goodsWrapper}>
               <View
@@ -99,26 +98,6 @@ ShopScreen = () => {
                 <Ionicons name={'cash-outline'} size={30} color={'white'} />
               </TouchableOpacity>
             </View>
-            {/* <View style={styles.goodsWrapper}>
-            <View
-              style={{
-                width: screenWidth * 0.6,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <Text style={styles.goodsText}>
-                {'프로필 슬롯 1개 구매'}
-              </Text>
-              <Text style={styles.goodsText}>
-                {'100원'}
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={styles.buyButton}
-              onPress={() => buySlotHandler()}>
-              <Ionicons name={'cash-outline'} size={30} color={'white'} />
-            </TouchableOpacity>
-          </View> */}
           </View>
         </View>
         <Footer name={'Shop'} />

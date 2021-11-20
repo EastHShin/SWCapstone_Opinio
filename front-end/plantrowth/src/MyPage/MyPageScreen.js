@@ -63,7 +63,7 @@ const MyPageScreen = ({navigation}) => {
         <Text
           style={{
             marginEnd: Dimensions.get('window').width * 0.42,
-            fontWeight: 'bold',
+            fontFamily: 'NanumGothicBold',
             color: '#000000',
           }}>
           My Page
@@ -161,7 +161,7 @@ const MyPageScreen = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <Footer />
+        <Footer name={'My Page'}/>
       </View>
     </SafeAreaView>
   );
@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: '#C9E7BE'
   },
   top: {
     backgroundColor: '#FFFFFF',
@@ -184,6 +185,7 @@ const styles = StyleSheet.create({
   wrapper: {
     //height: Dimensions.get('window').height * 0.82,
     width: Dimensions.get('window').width,
+    backgroundColor: '#e8ebed'
   },
   section: {
     marginBottom: Dimensions.get('window').height * 0.0009,
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#000000',
-    fontWeight: 'bold',
+    fontFamily: 'NanumGothicBold',
     marginStart: Dimensions.get('window').width * 0.05,
   },
   icon: {
