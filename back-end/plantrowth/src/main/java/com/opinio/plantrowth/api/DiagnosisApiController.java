@@ -83,7 +83,6 @@ public class DiagnosisApiController {
         if (curLevel < updatedLevel) {
             isLevelUp = true;
         }
-        plantExpService.increaseExp(plant.getId());
         Plant updatedPlant = plantService.findOnePlant(plant.getId());
 
         return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(updatedUser, updatedPlant, true, jsonObj, isLevelUp), HttpStatus.OK);
