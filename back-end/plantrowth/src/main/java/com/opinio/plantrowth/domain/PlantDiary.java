@@ -23,7 +23,7 @@ public class PlantDiary {
     private User user;
 */
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "plant_id")
     @JsonIgnore
     private Plant plant;
