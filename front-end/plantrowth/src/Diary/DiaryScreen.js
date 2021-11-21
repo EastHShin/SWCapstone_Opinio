@@ -26,7 +26,9 @@ const Item = ({ item, onPress, style }) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
       <View>
-        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.title}>
+        {item.title.length > 20 ? (item.title.substring(0, 18) + "···") : item.title}
+        </Text>
       </View>
       <View>
         <Text style={styles.content}>
@@ -58,7 +60,6 @@ const DiaryScreen = ({ route, navigation }) => {
   useEffect(() => {
   
     if (isFocused) {
-      console.log("목록 조회에소 + " +  plantId);
       dispatch(fetchDiaries(plantId));
     }
   }, [isFocused])

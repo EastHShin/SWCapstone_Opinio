@@ -330,6 +330,7 @@ export const infoUser = (userId) => {
 }
 
 export const editUser = (userId, data) => {
+    console.log(userId + "   " + data);
     return async dispatch => {
         return await axios.put(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,data,
         {
@@ -378,7 +379,27 @@ export const setUserInfoState = state => dispatch => {
 }
 
 export const getDiagnosisList = (plantId) => {
-    
+
+    return async dispatch => {
+        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diagnosis/${plantId}`)
+        .then(function(res){
+            if (res.status == 200) {
+                dispatch({
+                    type: DIAGNOSIS_LIST,
+                    payload: res.data.data
+                })
+            }
+
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:DIAGNOSIS_LIST,
+                payload:[]
+            })
+        })
+    }
+  
 }
 
 

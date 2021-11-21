@@ -405,7 +405,7 @@ function RegisterScreen({ navigation }) {
                   validationPassword
                 }
                 onSubmitEditing={
-                  Keyboard.dismiss()
+                  Keyboard.dismiss
                 }
                 blurOnSubmit={false}
               />

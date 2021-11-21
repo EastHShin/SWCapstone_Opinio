@@ -24,6 +24,7 @@ import AccountDeleteScreen from './src/MyPage/AccountDeleteScreen';
 import AccountEditScreen from './src/MyPage/AccountEditScreen';
 import DiseaseDiagnosisHistoryScreen from './src/MyPage/DiseaseDiagnosisHistoryScreen';
 import PointHistoryScreen from './src/MyPage/PointHistoryScreen';
+import PlantDiagnosisScreen from './src/MyPage/PlantDiagonosisScreen';
 import {Alert} from 'react-native';
 import UpdatePlantProfileScreen from './src/Plant/UpdatePlantProfile';
 import DiagnosisScreen from './src/Plant/DiagnosisScreen';
@@ -219,6 +220,13 @@ function App() {
           <Stack.Screen
             name="DiagnosisScreen"
             component={DiagnosisScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+           <Stack.Screen
+            name="PlantDiagnosisScreen"
+            component={PlantDiagnosisScreen}
             options={{
               headerShown: false,
             }}

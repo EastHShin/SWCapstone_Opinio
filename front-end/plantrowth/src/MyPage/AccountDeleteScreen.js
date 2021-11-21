@@ -84,7 +84,7 @@ const AccountDeleteScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.body}>
             <Loader loading={loading} />
-            <KeyboardAvoidingView enabled>
+           
                 <View style={styles.top}>
                     <TouchableOpacity
                         style={{ marginStart: Dimensions.get('window').width * 0.03 }}
@@ -98,17 +98,17 @@ const AccountDeleteScreen = ({ navigation }) => {
                         <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
                     </View>
                     <View style={{flex: 1,justifyContent: 'space-between'}}>
+                    <KeyboardAvoidingView enabled>
                 <View style={styles.wrapper}>
-
                     <View style={styles.section}>
-                        <View style={{ flexDirection: "row", width: Dimensions.get('window').width * 0.65, marginStart: Dimensions.get('window').width * 0.04, }}>
-                            <Text style={{ marginTop: Dimensions.get('window').height * 0.01, color:"#000000"}}> 비밀번호  :    </Text>
+                        <View style={{ flexDirection: "row", width: Dimensions.get('window').width * 0.65, marginStart: Dimensions.get('window').width * 0.04, alignItems:"center"}}>
+                            <Text style={{ color: "#000000", fontSize: 15}}> 비밀번호   :    </Text>
                             <TextInput
-                                style={styles.input}
+                                style={styles.passwordInput}
                                 onChangeText={(UserPassword) =>
                                     setUserPassword(UserPassword)
                                 }
-                                underlineColorAndroid="#f000"
+                                underlineColorAndroid="#A9A9A9"
                                 placeholder="Enter Password"
                                 placeholderTextColor="#808080"
                                 secureTextEntry={true}
@@ -118,6 +118,7 @@ const AccountDeleteScreen = ({ navigation }) => {
                                 blurOnSubmit={false}
                             />
                         </View>
+                        
                     </View>
 
 
@@ -131,9 +132,10 @@ const AccountDeleteScreen = ({ navigation }) => {
                             paddingVertical: 10, fontSize: 10, fontWeight: "bold"
                         }}>탈퇴</Text>
                     </TouchableOpacity>
-
+                    
                 </View>
-
+                </KeyboardAvoidingView>
+               
                 <Modal
                     transparent={true}
                     animationType={'none'}
@@ -168,11 +170,11 @@ const AccountDeleteScreen = ({ navigation }) => {
                         </View>
                     </View>
                 </Modal>
-
+               
                 <Footer />
+              
                 </View>
-            </KeyboardAvoidingView>
-            
+                
         </SafeAreaView>
     )
 };
@@ -218,14 +220,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
 
     },
-    input: {
-        flex: 1,
-        color: '#000000',
-        height: Dimensions.get('window').height * 0.049,
-        borderWidth: 1,
-        borderRadius: 30,
-        borderColor: '#BEE9B4',
-    },
+    passwordInput: {
+        width: Dimensions.get('window').width * 0.5,
+      },
     modalSectionWrapper:
     {
         backgroundColor: '#FFFFFF',
