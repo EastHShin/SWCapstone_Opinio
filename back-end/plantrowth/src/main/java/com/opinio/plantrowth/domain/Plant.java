@@ -42,6 +42,8 @@ public class Plant {
     private Integer alarmCycle;
     @Column(name = "recent_watering")
     private LocalDate recentWatering;
+
+    @Version    //스케줄러를 실행할 때 동시성 처리를 위해 Optimistic Lock 사용
     @Column(name = "remain_cycle")
     private Integer remainCycle;
 
