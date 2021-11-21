@@ -90,7 +90,7 @@ ShopScreen = () => {
                   alignItems: 'center',
                 }}>
                 <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
-                <Text style={styles.goodsText}>{'100포인트'}</Text>
+                <Text style={styles.goodsText}>{'50포인트'}</Text>
               </View>
               <TouchableOpacity
                 style={styles.buyButton}

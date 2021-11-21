@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {logoutUser} from '../actions/UserActions';
 
-import * as KakaoLogins from '@react-native-seoul/kakao-login';
 import {
   SafeAreaView,
   View,
@@ -21,21 +20,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const MyPageScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
-  const unlinkKakao = async () => {
-    try {
-      let result = await KakaoLogins.unlink();
-
-      if (result) {
-        console.log('unlink');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const onPressHandler = () => {
-    // unlinkKakao();
-    // 카카오 세션 끊기 테스트
+   
     Alert.alert('로그아웃', '로그아웃 하시겠습니까?', [
       {
         text: '취소',
@@ -44,7 +31,7 @@ const MyPageScreen = ({navigation}) => {
       {
         text: '확인',
         onPress: () => {
-          // unlinkKakao();
+        
           dispatch(logoutUser());
         },
       },
@@ -90,7 +77,7 @@ const MyPageScreen = ({navigation}) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{flexDirection: 'row'}}
             activeOpacity={0.5}
             onPress={() => navigation.push('AccountEditScreen')}>
@@ -103,7 +90,7 @@ const MyPageScreen = ({navigation}) => {
                 style={styles.icon}
               />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={{flexDirection: 'row'}}
@@ -209,13 +196,7 @@ const styles = StyleSheet.create({
     marginEnd: Dimensions.get('window').width * 0.05,
   },
 
-  button: {
-    width: 150,
-    height: 50,
-    alignItems: 'center',
-    borderRadius: 5,
-    margin: 10,
-  },
+
 });
 
 export default MyPageScreen;

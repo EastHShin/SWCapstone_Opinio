@@ -17,7 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const AccountDeleteNoticeScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
+  
 
   return (
     <SafeAreaView style={styles.body}>
@@ -30,7 +30,10 @@ const AccountDeleteNoticeScreen = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={{ marginEnd: Dimensions.get('window').width * 0.42, fontWeight: "bold", color: "#000000" }}>회원탈퇴</Text>
       </View>
- 
+      <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
+      </View>
+       <View style={{flex: 1,justifyContent: 'space-between'}}>
       <View style={styles.wrapper}>
       <View style={styles.section}>
             <Text style={styles.bigText}>회원탈퇴 안내</Text>
@@ -59,6 +62,7 @@ const AccountDeleteNoticeScreen = ({ navigation }) => {
             </TouchableOpacity>
       </View>
       <Footer />
+      </View>
     </SafeAreaView>
   )
 };
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width
   },
   wrapper: {
-    height: Dimensions.get('window').height * 0.82,
+   
     width: Dimensions.get('window').width,
   },
   section: {
@@ -90,7 +94,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height * 0.3,
-    marginTop:Dimensions.get('window').height * 0.015,
   
   },
   bigText:{
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
     fontWeight:"bold"
   },
   smallButton:{
-    backgroundColor: '#BEE9B4',
+    backgroundColor: '#82B594',
     height:Dimensions.get('window').height*0.05,
     marginTop:Dimensions.get('window').height*0.01,
     marginStart:Dimensions.get('window').width*0.75,
