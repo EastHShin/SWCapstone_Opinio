@@ -56,7 +56,9 @@ const DiaryScreen = ({ route, navigation }) => {
   const point = useSelector(state=>state.DiaryReducer.point);
   const plant_level = useSelector(state=>state.DiaryReducer.level);
   useEffect(() => {
+  
     if (isFocused) {
+      console.log("목록 조회에소 + " +  plantId);
       dispatch(fetchDiaries(plantId));
     }
   }, [isFocused])

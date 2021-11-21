@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST } from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -234,6 +234,14 @@ export const logoutUser = (email) => {
 
 };
 
+export const setLogoutState = state => dispatch =>{
+
+    dispatch({
+        type:LOGOUT_USER,
+        payload:state
+    })
+}
+
 
 export const kakaoUnlink = () => dispatch => {
     try {
@@ -260,7 +268,7 @@ export const kakaoUnlink = () => dispatch => {
 export const deleteUser = (userId, password) =>{
     return async dispatch => {
         console.log(userId + "    "+ password);
-        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/users/${userId}`,
+        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,
         {
             headers: { "Content-Type": `application/json` }
         })
@@ -274,6 +282,7 @@ export const deleteUser = (userId, password) =>{
                             type:USER_DELETE,
                             payload:"success"
                         })
+
 
                         if (value) {
                             dispatch(kakaoUnlink());
@@ -295,12 +304,84 @@ export const deleteUser = (userId, password) =>{
 
 }
 
+export const infoUser = (userId) => {
+    return async dispatch => {
+        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`)
+        .then(function(res){
+            if(res.status==200){
+                console.log(res.data.data);
+                        dispatch({
+                            type:USER_INFO,
+                            payload:"success",
+                            data:res.data.data
+                        })
+            }
+
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:USER_INFO,
+                payload:"failure",
+                data:{}
+            })
+        })
+    }
+}
+
+export const editUser = (userId, data) => {
+    return async dispatch => {
+        return await axios.put(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,data,
+        {
+            headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if (res.status == 200) {
+
+                dispatch({
+                    type: USER_EDIT,
+                    payload: "success"
+                })
+            }
+
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:USER_EDIT,
+                payload:"failure"
+            })
+        })
+    }
+
+}
+
 export const setUserDeleteState = state => dispatch =>{
     dispatch({
         type:USER_DELETE,
         payload:state
     })
 }
+
+export const setUserEditState = state => dispatch => {
+    dispatch({
+        type:USER_EDIT,
+        payload : state
+    })
+}
+
+export const setUserInfoState = state => dispatch => {
+    dispatch({
+        type:USER_INFO,
+        payload : state
+    })
+}
+
+export const getDiagnosisList = (plantId) => {
+    
+}
+
+
 
 
 

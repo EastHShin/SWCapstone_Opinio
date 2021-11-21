@@ -31,3 +31,6 @@ export const GET_MAX_PLANT_NUM = 'get_max_plant_num';
 export const SAVE_DIAGNOSIS_CHART = 'save_diagnosis_chart';
 export const EARN = 'earn';
 export const USER_DELETE = 'USER_DELETE';
+export const USER_INFO = 'USER_INFO';
+export const USER_EDIT = 'USER_EDIT';
+export const DIAGNOSIS_LIST = 'DIAGNOSIS_LIST';
