@@ -2,6 +2,7 @@ package com.opinio.plantrowth.service;
 
 import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,9 @@ public class PlantService {
     @Transactional
     public Long delete(Long id) {
         Plant plant = plantRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        User user = plant.getUser();
+        Integer curPlantNum = user.getPlantNum();
+        user.setPlantNum(curPlantNum-1);
         plantRepository.delete(plant);
         return id;
     }
