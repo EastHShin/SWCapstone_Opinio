@@ -89,7 +89,7 @@ public class UserApiController {
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
-    @DeleteMapping("api/user/{user-id}")
+    @DeleteMapping("/api/user/{user-id}")
     public ResponseEntity<?> deleteUser(@PathVariable("user-id") Long id) {
         Long result = userService.deleteUser(id);
         return result != null ?
