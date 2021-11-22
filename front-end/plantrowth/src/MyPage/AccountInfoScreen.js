@@ -27,11 +27,13 @@ const AccountInfoScreen = ({ navigation }) => {
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
     const userInfo = useSelector(state=>state.UserReducer.userInfo);
+    const [userId, setUserId] = useState('');
 
     useEffect(() => {
         if (isFocused) {
             AsyncStorage.getItem('userId').then(value => {
                 if (value != null) {
+                    setUserId(JSON.stringify(value));  //
                     dispatch(infoUser(JSON.parse(value)));
                 }
             }
@@ -97,7 +99,8 @@ const AccountInfoScreen = ({ navigation }) => {
               style={styles.smallButton}
               activeOpacity={0.5}
               onPress={()=> {
-                navigation.push('AccountEditScreen',{userInfo:userInfo});
+                navigation.push('PasswordCheckScreen',{userId :userId, userInfo:userInfo});
+                // navigation.goBack();
               }
                 }>
                 <Text style={{

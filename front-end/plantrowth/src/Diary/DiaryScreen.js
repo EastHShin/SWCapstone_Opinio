@@ -239,6 +239,13 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 30,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 5
   },
   title: {
     fontSize: 15,
@@ -256,14 +263,14 @@ const styles = StyleSheet.create({
 
     width: Dimensions.get('window').width * 0.2,
     height: Dimensions.get('window').height * 0.1,
-    borderRadius: (screenWidth * 0.4) / 3,
+    borderRadius: 10,
     backgroundColor: '#93d07d',
     borderWidth: 2,
     borderColor: '#93d07d',
     marginTop: Dimensions.get('window').height * -0.045,
     marginRight: Dimensions.get('window').width * 0.21,
     marginLeft: Dimensions.get('window').width * 0.23,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   expWrapper: {
     flexDirection: 'row',

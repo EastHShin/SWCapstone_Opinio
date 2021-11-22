@@ -1,4 +1,4 @@
-import {REGISTER_USER,LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK,LOGOUT_USER, CODE_VERIFICATION, SEND_EMAIL,USER_DELETE, USER_EDIT, USER_INFO, DIAGNOSIS_LIST} from "../actions/type";
+import {REGISTER_USER,LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK,LOGOUT_USER, CODE_VERIFICATION, SEND_EMAIL,USER_DELETE, USER_EDIT, USER_INFO, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD} from "../actions/type";
 
 const initialState = {
     kakaoRegisterState:'',
@@ -11,7 +11,9 @@ const initialState = {
     userInfoState:'',
     userEditState:'',
     userInfo :{},
-    diagnosisList: []
+    diagnosisList: [],
+    findPasswordState : '',
+    checkPasswordState:''
 };
 
 function UserReducer(state=initialState, action){
@@ -38,6 +40,10 @@ function UserReducer(state=initialState, action){
             return { ...state, userDeleteState: action.payload };
         case DIAGNOSIS_LIST:
             return { ...state, diagnosisList: action.payload };
+        case FIND_PASSWORD:
+            return {...state, findPasswordState: action.payload};
+        case CHECK_PASSWORD:
+            return {...state, checkPasswordState: action.payload};
         default:
             return state;
     }

@@ -16,15 +16,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getDiagnosisList } from '../actions/UserActions';
 import { useIsFocused } from '@react-navigation/core';
 
+
+
 const PlantDiagnosisScreen = ({ route,navigation }) => {
-   const {selectedId} = route.params;
+  const {selectedId} = route.params;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const diagnosisList =  useSelector(state => state.UserReducer.diagnosisList);
 
   useEffect(() => {
       if(isFocused){
-          dispatch(diagnosisList(selectedId));
+          dispatch(getDiagnosisList(selectedId));
       }
   }, [isFocused])
   

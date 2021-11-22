@@ -23,9 +23,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AccountEditScreen = ({ route, navigation }) => {
 
-  const { userInfo } = route.params;
+  const { userId, userInfo } = route.params;
 
-  const [userId, setUserId] = useState('');
+  // const [userId, setUserId] = useState('');
   const [birth, setUserBirth] = useState(userInfo.user_birth);
   const [password, setUserPassword] = useState('');
   const [checkPassword, setCheckPassword] = useState('');
@@ -43,16 +43,16 @@ const AccountEditScreen = ({ route, navigation }) => {
   const userEditState = useSelector(state => state.UserReducer.userEditState);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if(isFocused){
-      AsyncStorage.getItem('userId').then(value => {
-        if (value != null) {
-          setUserId(JSON.parse(value));
-        }
-    }
-    )
-    }
-  }, [isFocused])
+  // useEffect(() => {
+  //   if(isFocused){
+  //     AsyncStorage.getItem('userId').then(value => {
+  //       if (value != null) {
+  //         setUserId(JSON.parse(value));
+  //       }
+  //   }
+  //   )
+  //   }
+  // }, [isFocused])
 
   useEffect(() => {
     if(isFocused && userEditState == 'success'){
@@ -176,7 +176,6 @@ const AccountEditScreen = ({ route, navigation }) => {
         <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.wrapper}>
-
             <View style={styles.section}>
               <View style={styles.lineWrapper}>
                 <Text style={styles.text}>       닉네임       :   </Text>
@@ -286,7 +285,7 @@ const AccountEditScreen = ({ route, navigation }) => {
          
          
           
-          <Text style={{fontSize:12,marginStart:Dimensions.get('window').width*0.05, marginTop:Dimensions.get('window').height*0.02}}>수정이 완료되면 '확인' 버튼을 눌러 비밀번호를 인증해주세요.</Text>
+          <Text style={{fontSize:12,marginStart:Dimensions.get('window').width*0.05, marginTop:Dimensions.get('window').height*0.02}}>수정이 완료되면 '확인' 버튼을 눌러주세요.</Text>
 
           <TouchableOpacity
             style={styles.smallButton}

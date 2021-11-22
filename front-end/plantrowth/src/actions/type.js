@@ -34,3 +34,5 @@ export const USER_DELETE = 'USER_DELETE';
 export const USER_INFO = 'USER_INFO';
 export const USER_EDIT = 'USER_EDIT';
 export const DIAGNOSIS_LIST = 'DIAGNOSIS_LIST';
+export const FIND_PASSWORD = 'FIND_PASSWORD';
+export const CHECK_PASSWORD = 'CHECK_PASSWORD';

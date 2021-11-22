@@ -28,6 +28,7 @@ import PlantDiagnosisScreen from './src/MyPage/PlantDiagonosisScreen';
 import {Alert} from 'react-native';
 import UpdatePlantProfileScreen from './src/Plant/UpdatePlantProfile';
 import DiagnosisScreen from './src/Plant/DiagnosisScreen';
+import PasswordCheckScreen from './src/MyPage/PasswordCheckScreen';
 import * as RootNavigation from './RootNavigation';
 import {navigationRef} from './RootNavigation';
 const Stack = createNativeStackNavigator();
@@ -227,6 +228,13 @@ function App() {
            <Stack.Screen
             name="PlantDiagnosisScreen"
             component={PlantDiagnosisScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+           <Stack.Screen
+            name="PasswordCheckScreen"
+            component={PasswordCheckScreen}
             options={{
               headerShown: false,
             }}

@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD } from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -183,6 +183,13 @@ export const kakaoLogin = (data) => {
             })
     }
 
+}
+
+export const setLoginState = state => dispatch => {
+    dispatch({
+        type:LOGIN_USER,
+        payload:state
+    })
 }
 
 export const kakaoRegister = (register) => dispatch => {
@@ -400,6 +407,69 @@ export const getDiagnosisList = (plantId) => {
         })
     }
   
+}
+
+export const findPassword = (user) => {
+
+    return async dispatch => {
+        return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/diagnosis/${plantId}`, user,
+        {
+            headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if(res.status == 200){
+                dispatch({
+                    type:FIND_PASSWORD,
+                    payload:'success'
+                })
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:FIND_PASSWORD,
+                payload : 'failure'
+            })
+        })
+    }
+}
+
+export const setFindPasswordState = state => dispatch =>{
+    dispatch({
+        type:FIND_PASSWORD,
+        payload:state
+    })
+}
+
+export const checkPassword = (userId, password) => {
+    return async dispatch =>{
+        return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/cp/${userId}`,password,
+        {
+            headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if(res.status == 200){
+                dispatch({
+                    type:CHECK_PASSWORD,
+                    payload:'success'
+                })
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:CHECK_PASSWORD,
+                payload:'failure'
+            })
+        })
+    }
+}
+
+export const setCheckPasswordState = state => dispatch =>{
+    dispatch({
+        type:CHECK_PASSWORD,
+        payload:state
+    })
 }
 
 
