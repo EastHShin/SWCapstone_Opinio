@@ -4,6 +4,7 @@ package com.opinio.plantrowth.service.user;
 import com.opinio.plantrowth.api.dto.auth.JoinDTO;
 import com.opinio.plantrowth.api.dto.auth.KakaoDTO;
 import com.opinio.plantrowth.api.dto.auth.LoginDTO;
+import com.opinio.plantrowth.api.dto.auth.checkPasswordDTO;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,16 @@ public class AuthService implements UserDetailsService {
                 .orElseThrow(()->new IllegalArgumentException("가입되지 않은 아이디입니다."));
         Long userId = member.getId();
         return member;
+    }
+
+    @Transactional
+    public boolean checkPassword(Long id, checkPasswordDTO pw){
+        User user = userRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("잘못된 회원ID입니다."));
+        if (!passwordEncoder.matches(user.getPassword(), user.getPassword())){
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+        return true;
     }
 
     @Override

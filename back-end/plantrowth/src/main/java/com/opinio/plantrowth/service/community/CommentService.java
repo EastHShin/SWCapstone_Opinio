@@ -39,6 +39,7 @@ public class CommentService {
     public List<Comment> findCommentsByUserId(Long userId){
         return commentRepository.findAllByUserId(userId);
     }
+    public List<Comment> findCommentsByBoardID(Long boardId) {return commentRepository.findAllByBoardId(boardId);}
     @Transactional
     public Long updateComment(Long id, CommentCUDto dto){
         Comment comment = commentRepository.findById(id)

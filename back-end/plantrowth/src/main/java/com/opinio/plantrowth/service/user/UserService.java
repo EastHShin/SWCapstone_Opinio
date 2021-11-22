@@ -25,15 +25,21 @@ public class UserService {
     @Transactional
     public void updateUser(Long id, UserUpdateDTO user){
         User member = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
-        member.setName(user.getUser_name());
-        member.setBirth(user.getUser_birth());
-        member.setEmail(user.getEmail());
+        if(!(user.getUser_name()==null))
+            member.setName(user.getUser_name());
+        if(!(user.getUser_birth()==null))
+            member.setBirth(user.getUser_birth());
 //        String rawPassword = user.getPassword();
 //        String encPassword =passwordEncoder.encode(rawPassword);
 //        member.setPassword(encPassword);
         userRepository.save(member);
     }
 
+//    @Transactional
+//    public boolean changePassword(Long id){
+//
+//    }
+//
     @Transactional
     public UserLookUpDTO lookup(Long id){
         User member = userRepository.findById(id)

@@ -4,6 +4,7 @@ package com.opinio.plantrowth.api.controller.user;
 import com.opinio.plantrowth.api.dto.auth.JoinDTO;
 import com.opinio.plantrowth.api.dto.auth.KakaoDTO;
 import com.opinio.plantrowth.api.dto.auth.LoginDTO;
+import com.opinio.plantrowth.api.dto.auth.checkPasswordDTO;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.User;
@@ -90,6 +91,15 @@ public class AuthApiContorller {
         Object details = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (details != null && !(details instanceof String)) return ResponseEntity.ok().build();
         return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/api/auth/pw/{user-id}")
+    public ResponseEntity<?> checkPassword(@PathVariable("user-id") Long id,
+                                           @RequestBody checkPasswordDTO dto){
+        boolean result = authService.checkPassword(id, dto);
+        return result == true?
+                ResponseEntity.ok().build():
+                ResponseEntity.badRequest().build();
     }
 
 }

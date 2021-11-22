@@ -47,7 +47,7 @@ public class UserApiController {
     public ResponseEntity<?> updateUser(@PathVariable("user-id") Long id, @RequestBody UserUpdateDTO user) {
         userService.updateUser(id, user);
         Message message = new Message();
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new   HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         message.setStatus(Message.StatusEnum.OK);
         message.setMessage("회원 정보가 수정되었습니다.");
