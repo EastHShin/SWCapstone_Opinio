@@ -8,6 +8,7 @@ import com.opinio.plantrowth.api.dto.user.addPlantDTO;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.User;
+import com.opinio.plantrowth.service.user.AuthService;
 import com.opinio.plantrowth.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserApiController {
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("/api/user/{user-id}")
     public ResponseEntity<?> lookUpUser(@PathVariable("user-id") Long id) {
@@ -57,7 +59,11 @@ public class UserApiController {
     }
 
     @DeleteMapping("/api/user/{user-id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("user-id") Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable("user-id") Long id,
+                                        @RequestBody checkPasswordDTO dto) {
+        if(!(authService.checkPassword(id, dto))){
+            return ResponseEntity.badRequest().build();
+        }
         Long result = userService.deleteUser(id);
         return result != null ?
                 ResponseEntity.ok().body("회원 탈퇴 성공") :
