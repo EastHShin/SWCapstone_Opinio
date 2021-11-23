@@ -23,14 +23,19 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void updateUser(Long id, UserUpdateDTO user){
+    public UserUpdateDTO updateUser(Long id, UserUpdateDTO user){
         User member = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
-        if(!(user.getUser_name()==null))
+        if(!(user.getUser_name()==null)){
             member.setName(user.getUser_name());
-        if(!(user.getUser_birth()==null))
+        }
+        if(!(user.getUser_birth()==null)) {
             member.setBirth(user.getUser_birth());
-
+        }
         userRepository.save(member);
+        UserUpdateDTO updateUser = new UserUpdateDTO();
+        updateUser.setUser_name(member.getName());
+        updateUser.setUser_birth(member.getBirth());
+        return updateUser;
     }
 
 //    @Transactional

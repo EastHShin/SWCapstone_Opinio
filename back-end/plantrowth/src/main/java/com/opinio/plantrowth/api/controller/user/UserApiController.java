@@ -47,13 +47,13 @@ public class UserApiController {
 
     @PutMapping("/api/user/{user-id}")
     public ResponseEntity<?> updateUser(@PathVariable("user-id") Long id, @RequestBody UserUpdateDTO user) {
-        userService.updateUser(id, user);
+        UserUpdateDTO updatedUser = userService.updateUser(id, user);
         Message message = new Message();
         HttpHeaders headers = new   HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         message.setStatus(Message.StatusEnum.OK);
         message.setMessage("회원 정보가 수정되었습니다.");
-        message.setData(user);
+        message.setData(updatedUser);
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }

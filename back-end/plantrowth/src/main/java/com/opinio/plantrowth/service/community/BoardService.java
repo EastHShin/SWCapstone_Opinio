@@ -51,12 +51,15 @@ public class BoardService {
     public Long updateBoard(Long id, BoardCreateRequest dto){
         Board board = boardRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글 입니다."));
-        if(!(dto.getTitle()==null))
+        if(!(dto.getTitle()==null)) {
             board.setTitle(dto.getTitle());
-        if(!(dto.getContent()==null))
+        }
+        if(!(dto.getContent()==null)) {
             board.setContent(dto.getContent());
-        if(!(dto.getDate()==null))
+        }
+        if(!(dto.getDate()==null)) {
             board.setDate(dto.getDate());
+        }
 
         return board.getId();
     }

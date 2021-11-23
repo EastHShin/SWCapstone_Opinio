@@ -42,15 +42,15 @@ public class User implements UserDetails {
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
-    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "user")
+    @OneToMany(fetch=FetchType.LAZY, cascade ={CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "user")
     @Builder.Default
     List<Plant> plants = new ArrayList<>();
 
-    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "user")
+    @OneToMany(fetch=FetchType.LAZY, cascade ={CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "user")
     @Builder.Default
     List<Board> boards = new ArrayList<>();
 
-    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "user")
+    @OneToMany(fetch=FetchType.LAZY, cascade ={CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "user")
     @Builder.Default
     List<Comment> comments = new ArrayList<>();
 
