@@ -65,7 +65,7 @@ public class AuthService implements UserDetailsService {
     public boolean checkPassword(Long id, checkPasswordDTO pw){
         User user = userRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("잘못된 회원ID입니다."));
-        if (!passwordEncoder.matches(user.getPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(user.getPassword(), pw.getPassword())){
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
         return true;

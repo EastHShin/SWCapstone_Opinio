@@ -1,10 +1,7 @@
 package com.opinio.plantrowth.api.controller.user;
 
 
-import com.opinio.plantrowth.api.dto.auth.JoinDTO;
-import com.opinio.plantrowth.api.dto.auth.KakaoDTO;
-import com.opinio.plantrowth.api.dto.auth.LoginDTO;
-import com.opinio.plantrowth.api.dto.auth.checkPasswordDTO;
+import com.opinio.plantrowth.api.dto.auth.*;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.User;
@@ -69,7 +66,7 @@ public class AuthApiContorller {
     public ResponseEntity<?> kakaoLogin(HttpServletResponse response,
                                         @RequestBody KakaoDTO user) {
         User member = authService.kakaoLogin(user);
-        String token = jwtTokenProvider.createToken(member.getName(), member.getRoles());
+        String token = jwtTokenProvider.createToken(member.getEmail(), member.getRoles());
         response.setHeader("Authorization", token);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
@@ -93,7 +90,7 @@ public class AuthApiContorller {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/api/auth/pw/{user-id}")
+    @PostMapping("/api/auth/cp/{user-id}")
     public ResponseEntity<?> checkPassword(@PathVariable("user-id") Long id,
                                            @RequestBody checkPasswordDTO dto){
         boolean result = authService.checkPassword(id, dto);
@@ -101,5 +98,12 @@ public class AuthApiContorller {
                 ResponseEntity.ok().build():
                 ResponseEntity.badRequest().build();
     }
+    @PostMapping("/api/auth/cu")
+    public ResponseEntity<?> checkUser(@RequestBody checkUserDTO dto){
+        boolean result = authService.existName(dto.getUser_name());
 
+        return !(result ==true)?
+                ResponseEntity.ok().build():
+                ResponseEntity.badRequest().build();
+    }
 }

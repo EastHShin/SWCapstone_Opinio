@@ -29,15 +29,15 @@ public class UserService {
             member.setName(user.getUser_name());
         if(!(user.getUser_birth()==null))
             member.setBirth(user.getUser_birth());
-//        String rawPassword = user.getPassword();
-//        String encPassword =passwordEncoder.encode(rawPassword);
-//        member.setPassword(encPassword);
+
         userRepository.save(member);
     }
 
 //    @Transactional
 //    public boolean changePassword(Long id){
-//
+////        String rawPassword = user.getPassword();
+////        String encPassword =passwordEncoder.encode(rawPassword);
+////        member.setPassword(encPassword);
 //    }
 //
     @Transactional
