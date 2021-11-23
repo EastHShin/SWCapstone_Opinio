@@ -579,10 +579,10 @@ const styles = StyleSheet.create({
   kakaoImage: {
   
     width:Dimensions.get('window').width*0.66,
-    resizeMode: 'contain',
+    resizeMode:'cover',
     height: Dimensions.get('window').height*0.05,
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 20,
     marginLeft: 35,
     marginRight: 35,
     marginBottom: 25,

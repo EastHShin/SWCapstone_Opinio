@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,7 +13,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { Button } from 'react-native-vector-icons/dist/Ionicons';
+import { getBoardList } from '../actions/CommunityActions';
+import { useIsFocused } from '@react-navigation/core';
+import { useDispatch, useSelector } from 'react-redux';
 
 const dataList = [
   {
@@ -105,7 +107,17 @@ const CommunityMainScreen = ({ navigation }) => {
 
   const [selectedId, setSelectedId] = useState("");
   const [isFetching, setIsFetching] = useState(false);
+  
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const boardList = useSelector(state => state.CommunityReducer.boardList);
 
+  // useEffect(() => {
+  //   if(isFocused){
+  //     dispatch(getBoardList());
+  //   }
+    
+  // }, [isFocused])
 
   
   // const refreshList = () => {
@@ -139,7 +151,7 @@ const CommunityMainScreen = ({ navigation }) => {
         </TouchableOpacity>
         <Text
             style={{
-              marginEnd: Dimensions.get('window').width * 0.03,
+              marginEnd: Dimensions.get('window').width * 0.01,
               fontFamily: 'NanumGothicBold',
               
               color: '#000000',
@@ -148,20 +160,22 @@ const CommunityMainScreen = ({ navigation }) => {
           </Text>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => console.log("ddd")}>
+          onPress={() => console.log("ddd")}
+          style={{marginEnd:Dimensions.get('window').width*0.02}}>
           <Entypo name='dots-three-vertical' size={22} color="#000000" />
         </TouchableOpacity>
       </View>
-      <View style={styles.diaryWrapper} >
+      <View style={styles.boardWrapper} >
 
         <FlatList
           data={dataList.reverse()}
           renderItem={renderItem}
           keyExtractor={item => item.id}
+          // extraData={selectedId}
         // onRefresh = {refreshList}
         />
     
-          <TouchableOpacity onPress={() => navigation.push('CreatePostScreen')} style={styles.fab}>
+          <TouchableOpacity onPress={() => navigation.push('PostCreateScreen')} style={styles.fab}>
           <Text style={styles.fabIcon}>+</Text>
         </TouchableOpacity>
 
@@ -206,7 +220,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 10,
   },
-  diaryWrapper: {
+  boardWrapper: {
     flex: 1,
     padding: 2,
     

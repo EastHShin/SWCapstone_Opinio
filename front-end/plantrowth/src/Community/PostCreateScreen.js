@@ -22,8 +22,9 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Loader from '../Loader';
 import { useIsFocused } from '@react-navigation/native'
 import { createPost, setResultState } from '../actions/CommunityActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const CreatePostScreen = ({ navigation }) => {
+const PostCreateScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -55,7 +56,7 @@ const CreatePostScreen = ({ navigation }) => {
             dispatch(setResultState(''));
             navigation.navigate('CommunityMainScreen');
         }
-        else if (result == 'failure' && isFocued) {
+        else if (result == 'failure' && isFocused) {
             setLoading(false);
             dispatch(setResultState(''));
             alert('게시글 생성 실패!');
@@ -84,6 +85,7 @@ const CreatePostScreen = ({ navigation }) => {
     }
 
     const onPressHandler = () => {
+        navigation.navigate('EditPostScreen');
         if (!title) {
             alert('제목을 입력해주세요!');
             return;
@@ -133,7 +135,7 @@ const CreatePostScreen = ({ navigation }) => {
                     onPress={() => navigation.goBack()}>
                     <Feather name='x' size={27} color="#000000" />
                 </TouchableOpacity>
-                <Text style={{ marginLeft: Dimensions.get('window').width * 0.08, fontWeight: "bold", color: "#000000", fontSize: 15 }}>글 쓰기</Text>
+                <Text style={{ marginLeft: Dimensions.get('window').width * 0.08, fontWeight: "bold", color: "#000000", fontSize: 15 }}>게시글 작성</Text>
                 <TouchableOpacity
                     style={styles.smallButton}
                     activeOpacity={0.5}
@@ -288,4 +290,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CreatePostScreen;
+export default PostCreateScreen;

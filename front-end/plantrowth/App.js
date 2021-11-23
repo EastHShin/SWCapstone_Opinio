@@ -31,7 +31,9 @@ import DiagnosisScreen from './src/Plant/DiagnosisScreen';
 import PasswordCheckScreen from './src/MyPage/PasswordCheckScreen';
 import * as RootNavigation from './RootNavigation';
 import {navigationRef} from './RootNavigation';
-import CreatePostScreen from './src/Community/CreatePostScreen';
+import PostCreateScreen from './src/Community/PostCreateScreen';
+import PostEditScreen from './src/Community/PostEditScreen';
+
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -241,8 +243,15 @@ function App() {
             }}
           />
            <Stack.Screen
-            name="CreatePostScreen"
-            component={CreatePostScreen}
+            name="PostCreateScreen"
+            component={PostCreateScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+           <Stack.Screen
+            name="PostEditScreen"
+            component={PostEditScreen}
             options={{
               headerShown: false,
             }}

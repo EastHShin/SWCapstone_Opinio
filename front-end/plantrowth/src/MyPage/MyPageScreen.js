@@ -77,7 +77,7 @@ const MyPageScreen = ({navigation}) => {
             </View>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={{flexDirection: 'row'}}
             activeOpacity={0.5}
             onPress={() => navigation.push('AccountEditScreen')}>
@@ -90,7 +90,7 @@ const MyPageScreen = ({navigation}) => {
                 style={styles.icon}
               />
             </View>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={{flexDirection: 'row'}}

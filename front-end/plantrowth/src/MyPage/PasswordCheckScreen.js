@@ -30,20 +30,11 @@ const PasswordCheckScreen = ({ route, navigation }) => {
     // const [userId, setUserId] = useState("");
     const [loading, setLoading] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
+   
 
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
     const checkPasswordState = useSelector(state => state.UserReducer.checkPasswordState);
-
-    // useEffect(() => {
-    //     if (isFocused) {
-    //         AsyncStorage.getItem('userId').then(value => {
-    //             if (value != null) {
-    //                 setUserId(JSON.parse(value));
-    //             }
-    //         });
-    //     }
-    // }, [isFocused])
 
     useEffect(() => {
         
@@ -81,14 +72,14 @@ const PasswordCheckScreen = ({ route, navigation }) => {
                         onPress={() => navigation.goBack()}>
                         <Ionicons name='chevron-back-sharp' size={23} color="#000000" />
                     </TouchableOpacity>
-                    <Text
-          style={{
-            marginEnd: Dimensions.get('window').width * 0.39,
-            fontFamily: 'NanumGothicBold',
-            color: '#000000',
-          }}>
-          회원정보 수정
-        </Text>
+                <Text
+                    style={{
+                        marginEnd: Dimensions.get('window').width * 0.39,
+                        fontFamily: 'NanumGothicBold',
+                        color: '#000000',
+                    }}>
+                    회원정보 수정
+                </Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width,}}>
                         <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
