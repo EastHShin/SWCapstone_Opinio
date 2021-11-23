@@ -24,7 +24,12 @@ public class Board {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-
+    private String title;
+    private String content;
+    private LocalDate date;
+    private String filename;
+    private String noticeYn;
+    private String writer;
     @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "board")
     @Builder.Default
     List<Comment> comments = new ArrayList<>();
@@ -33,10 +38,4 @@ public class Board {
     @Builder.Default
     List<BoardLike> boardLikes = new ArrayList<>();
 
-    private String title;
-    private String content;
-    private LocalDate date;
-    private String filename;
-    private String writer;
-    private String noticeYn;
 }

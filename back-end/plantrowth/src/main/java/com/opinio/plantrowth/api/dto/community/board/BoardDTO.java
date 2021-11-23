@@ -13,4 +13,5 @@ public class BoardDTO {
     private LocalDate date;
     private String filename;
     private Long board_id;
+    private String writer;
 }

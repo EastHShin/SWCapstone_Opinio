@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,11 +33,12 @@ public class BoardApiController {
     private final UserService userService;
     private final String filePath = "board";
 
+    @Transactional
     @GetMapping("/api/community/{user-id}/all") // 유저가 자신이 작성한 게시글 조회
     public ResponseEntity<BoardResult> boards(@PathVariable("user-id") Long id){
         List<Board> boards = boardService.findBoardsByUserId(id);
         List<BoardDTO> collect = boards.stream()
-                .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getDate(),m.getFilename(), m.getId()))
+                .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getDate(),m.getFilename(), m.getId(), m.getWriter()))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
@@ -45,7 +47,8 @@ public class BoardApiController {
     public ResponseEntity<BoardResult> boardList(){
         List<Board> boards = boardService.BoardList();
         List<BoardDTO> collect = boards.stream()
-                .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getDate(),m.getFilename(), m.getId()))
+                .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getDate(),
+                        m.getFilename(), m.getId(), m.getUser().getName()))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
@@ -63,7 +66,7 @@ public class BoardApiController {
                 .build();
         User user = userService.findUser(userId);
         board.setUser(user);
-
+        board.setWriter(user.getName());
         if(file.isPresent()) {
             String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
             board.setFilename(uploadImageName);
