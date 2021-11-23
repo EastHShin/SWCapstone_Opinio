@@ -35,6 +35,7 @@ const LoginScreen = ({ navigation }) => {
   const [refreshToken, setRefreshToken] = useState('');
   const [fcmToken, setFcmToken] = useState('');
   const [email, setEmail] = useState('');
+  const [checkEmail, setCheckEmail] = useState('');
 
 
   const [loading, setLoading] = useState(false);
@@ -84,7 +85,7 @@ const LoginScreen = ({ navigation }) => {
       dispatch(kakaoRegister(''));
     }
     else if (kakaoRegisterState == 'failure') {
-      setErrortext('회원가입 실패');
+      setErrortext('카카오 회원가입 실패');
     }
   }, [kakaoRegisterState])
 
@@ -210,6 +211,10 @@ const LoginScreen = ({ navigation }) => {
       alert('생년월일을 입력해주세요');
       return;
     }
+    if(!checkEmail){
+      alert('올바른 이메일 형식을 입력해주세요!');
+      return;
+    }
 
     setLoading(true);
 
@@ -240,6 +245,18 @@ const LoginScreen = ({ navigation }) => {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     setUserBirth(year + '-' + month + '-' + day);
+  }
+
+  const validationEmail = (e) => {
+    console.log('ddd');
+
+    var emailExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    if (!emailExp.test(e.nativeEvent.text)) {
+      setCheckEmail(false);
+    }
+    else {
+      setCheckEmail(true);
+    }
   }
 
   return (
@@ -358,6 +375,9 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={(email) =>
                   setEmail(email)
                 }
+                onEndEditing={
+                  validationEmail
+                }
                 placeholder="Enter Email"
                 underlineColorAndroid="#f000"
                 placeholderTextColor="#808080"
@@ -413,6 +433,9 @@ const LoginScreen = ({ navigation }) => {
       >
         <View style={styles.modal}>
           <View style={styles.modalSectionWrapper}>
+          <View style={styles.textWrapper}>
+            <Text style={{fontSize:15, fontWeight:'bold', color:'#000000'}}>Register</Text>
+            </View>
             <View style={styles.section}>
               <EntypoIcons name='user' size={20} color="#8EB695" style={styles.icon} />
               <TextInput

@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME } from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -412,7 +412,7 @@ export const getDiagnosisList = (plantId) => {
 export const findPassword = (user) => {
 
     return async dispatch => {
-        return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/diagnosis/${plantId}`, user,
+        return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/find`, user,
         {
             headers: { "Content-Type": `application/json` }
         })
@@ -472,7 +472,36 @@ export const setCheckPasswordState = state => dispatch =>{
     })
 }
 
+export const checkNickname = (nickName) =>{
+    return async dispatch => {
+        return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/cu`,nickName,
+        {
+            headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if(res.status==200){
+                dispatch({
+                    type:CHECK_NICKNAME,
+                    payload: 'success'
+                })
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:CHECK_NICKNAME,
+                payload: 'failure'
+            })
+        })
+    }
+}
 
+export const checkNicknameState = state => dispatch =>{
+    dispatch({
+        type:CHECK_NICKNAME,
+        payload:state
+    })
+}
 
 
 

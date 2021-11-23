@@ -28,6 +28,7 @@ const AccountInfoScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const userInfo = useSelector(state=>state.UserReducer.userInfo);
     const [userId, setUserId] = useState('');
+    const [kakaoLoginUser, setKakaoLoginUser] = useState(false);
 
     useEffect(() => {
         if (isFocused) {
@@ -38,8 +39,13 @@ const AccountInfoScreen = ({ navigation }) => {
                 }
             }
             )
-        }
-        
+            AsyncStorage.getItem('kakaoLogin').then((value) => {
+              if (value) {
+                    setKakaoLoginUser(true);
+                  }
+                })
+            }
+              
     }, [isFocused])
 
     return (
@@ -99,8 +105,12 @@ const AccountInfoScreen = ({ navigation }) => {
               style={styles.smallButton}
               activeOpacity={0.5}
               onPress={()=> {
+                if(!kakaoLoginUser){
                 navigation.push('PasswordCheckScreen',{userId :userId, userInfo:userInfo});
-                // navigation.goBack();
+                }
+                else{
+                  navigation.push('AccountEditScreen',{userId :userId, userInfo:userInfo})
+                }
               }
                 }>
                 <Text style={{

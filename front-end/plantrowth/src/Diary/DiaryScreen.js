@@ -53,10 +53,12 @@ const DiaryScreen = ({ route, navigation }) => {
   const diaries = useSelector(state => state.DiaryReducer.diaries);
   const isFocused = useIsFocused();
   const [isEarnModalVisible, setEarnModalVisibility] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const earnState = useSelector(state => state.PlantReducer.earn);
   const exp = useSelector(state=>state.DiaryReducer.exp);
   const point = useSelector(state=>state.DiaryReducer.point);
   const plant_level = useSelector(state=>state.DiaryReducer.level);
+
   useEffect(() => {
   
     if (isFocused) {
@@ -64,12 +66,21 @@ const DiaryScreen = ({ route, navigation }) => {
     }
   }, [isFocused])
 
+  useEffect(() => {
+    setIsFetching(false);
+  }, [diaries])
+
   const renderExp = () => {
     if (plant_level) {
       if (plant_level == 1) return 30;
       else return 30 + (plant_level - 1) * 10;
     } else return 0;
   };
+
+  const refreshList = () => {
+    setIsFetching(true);
+    dispatch(fetchDiaries(plantId));
+  }
 
   const renderEarnPoint = () => {
       return (
@@ -142,6 +153,8 @@ const DiaryScreen = ({ route, navigation }) => {
           data={diaries}
           renderItem={renderItem}
           keyExtractor={item => item.diary_id}
+          // onRefresh= {refreshList}
+          // refreshing={isFetching}
           extraData={selectedId}
         />
       </View>

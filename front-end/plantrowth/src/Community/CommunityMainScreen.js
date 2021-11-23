@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-
+import { Button } from 'react-native-vector-icons/dist/Ionicons';
 
 const dataList = [
   {
@@ -42,6 +42,30 @@ const dataList = [
   },
   {
     "id":4,
+    "title":"이 식물 아시는 분 ...",
+    "content":"사진 속 식물 이름 아시는 분 있나요? 너무 궁금해요!",
+    "good":5,
+    "comment":8,
+    "date":"2021-11-11"
+  },
+  {
+    "id":5,
+    "title":"이 식물 아시는 분 ...",
+    "content":"사진 속 식물 이름 아시는 분 있나요? 너무 궁금해요!",
+    "good":5,
+    "comment":8,
+    "date":"2021-11-11"
+  },
+  {
+    "id":6,
+    "title":"이 식물 아시는 분 ...",
+    "content":"사진 속 식물 이름 아시는 분 있나요? 너무 궁금해요!",
+    "good":5,
+    "comment":8,
+    "date":"2021-11-11"
+  },
+  {
+    "id":7,
     "title":"이 식물 아시는 분 ...",
     "content":"사진 속 식물 이름 아시는 분 있나요? 너무 궁금해요!",
     "good":5,
@@ -80,7 +104,14 @@ const Item = ({ item, onPress, style }) => {
 const CommunityMainScreen = ({ navigation }) => {
 
   const [selectedId, setSelectedId] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
+
+  
+  // const refreshList = () => {
+  //   setIsFetching(true);
+  //   dispatch(fetchDiaries(plantId));
+  // }
 
   const renderItem = ({ item }) => {
 
@@ -106,27 +137,50 @@ const CommunityMainScreen = ({ navigation }) => {
           onPress={() => navigation.goBack()}>
           <Ionicons name='chevron-back-sharp' size={23} color="#000000" />
         </TouchableOpacity>
+        <Text
+            style={{
+              marginEnd: Dimensions.get('window').width * 0.03,
+              fontFamily: 'NanumGothicBold',
+              
+              color: '#000000',
+            }}>
+            커뮤니티
+          </Text>
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => console.log("ddd")}>
           <Entypo name='dots-three-vertical' size={22} color="#000000" />
         </TouchableOpacity>
       </View>
-      <View style={styles.diaryWrapper}>
+      <View style={styles.diaryWrapper} >
 
-      <FlatList
+        <FlatList
           data={dataList.reverse()}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-         
+        // onRefresh = {refreshList}
         />
+    
+          <TouchableOpacity onPress={() => navigation.push('CreatePostScreen')} style={styles.fab}>
+          <Text style={styles.fabIcon}>+</Text>
+        </TouchableOpacity>
+
       </View>
+     
+     
+      
       <Footer name={'Community'} />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor:"#C9E7BE"
+  },
   top: {
     backgroundColor: "#FFFFFF",
     flexDirection: "row",
@@ -135,19 +189,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.06,
     width: Dimensions.get('window').width
   },
-  wrapper: {
-    height: Dimensions.get('window').height * 0.82,
-    width: Dimensions.get('window').width,
-  },
-  section: {
-    marginBottom: Dimensions.get('window').height * 0.0009,
-    backgroundColor: "#FFFFFF",
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height * 0.07,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
+ 
   text: {
     color: '#000000',
     fontWeight: "bold",
@@ -165,9 +207,9 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   diaryWrapper: {
-    height: Dimensions.get('window').height * 0.83,
-    width: Dimensions.get('window').width,
-
+    flex: 1,
+    padding: 2,
+    
   },
   item: {
     padding: 20,
@@ -187,6 +229,28 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginRight: Dimensions.get('window').width*0.55
   },
+  buttonText: {
+    color: '#FFFFFF',
+    paddingVertical: 10,
+    fontSize: 16,
+
+  },
+  fab: { 
+    position: 'absolute', 
+    width: 56, 
+    height: 56, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    right: 20, 
+    bottom: 20, 
+    backgroundColor: '#03A9F4', 
+    borderRadius: 30, 
+    elevation: 8 
+    }, 
+    fabIcon: { 
+      fontSize: 40, 
+      color: 'white' 
+    }
 
 
 

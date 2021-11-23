@@ -8,7 +8,8 @@ import {
   Alert,
   Pressable,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  SafeAreaView
 } from 'react-native';
 
 import Footer from '../component/Footer';
@@ -31,10 +32,10 @@ const PlantDiagnosisScreen = ({ route,navigation }) => {
   }, [isFocused])
   
   return (
-    <View style={styles.body}>
+    <SafeAreaView style={styles.body}>
      <Text>포인트 조회 스크린</Text>
       <Footer />
-    </View>
+    </SafeAreaView>
   )
 };
 
