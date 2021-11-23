@@ -14,7 +14,6 @@ public class UserPointService {
     private final UserRepository userRepository;
 
     private static final Integer increasingPoint = 10;
-    private static final Integer decreasingPoint = 30;
 
     @Transactional
     public User increasePoint(Long id) {
@@ -26,7 +25,7 @@ public class UserPointService {
     }
 
     @Transactional
-    public User decreasePoint(Long id){
+    public User decreasePoint(Long id, Integer decreasingPoint){
         User user = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
         Integer curPoint = user.getPoint();
         user.setPoint(curPoint - decreasingPoint);

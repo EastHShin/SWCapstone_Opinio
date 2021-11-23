@@ -29,7 +29,7 @@ public class Board {
     @Builder.Default
     List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "board")
+    @OneToMany(fetch=FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "board")
     @Builder.Default
     List<BoardLike> boardLikes = new ArrayList<>();
 

@@ -73,7 +73,7 @@ public class DiagnosisApiController {
         질병진단 구독이 들어온다면 포인트를 소비 할지 안할지 정하는 로직 추가해야됨
          */
 
-        User updatedUser = userPointService.decreasePoint(plant.getUser().getId());
+        User updatedUser = userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint);
 
         Long updatedId = plantExpService.increaseExp(plant.getId());
         Plant updatedPlant = plantService.findOnePlant(updatedId);

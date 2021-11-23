@@ -126,25 +126,40 @@ public class BoardApiController {
      * 게시글 좋아요 부분
      */
     @PostMapping("/api/community/{board-id}/like")
-    public ResponseEntity<?> addLike(HttpServletRequest request, @PathVariable ("board-id") Long id){
+    public ResponseEntity<?> boardLike(HttpServletRequest request, @PathVariable ("board-id") Long id){
         String userIdStr = request.getHeader("userId");
         Long userId = Long.parseLong(userIdStr);
-        boardService.addLike(userId, id);
+        Integer result = boardService.boardLike(userId, id);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         message.setStatus(Message.StatusEnum.OK);
-        message.setMessage("좋아요");
+        if (result == 1) message.setMessage("좋아요");
+        else if (result ==0) message.setMessage("좋아요 취소");
+        else message.setMessage("좋아요 기능 고장");
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
-    @DeleteMapping("/api/community/{board-id}/like/{like-id}")
+
+//    @PostMapping("/api/community/{board-id}/like")
+//    public ResponseEntity<?> addLike(HttpServletRequest request, @PathVariable ("board-id") Long id){
+//        String userIdStr = request.getHeader("userId");
+//        Long userId = Long.parseLong(userIdStr);
+//        boardService.addLike(userId, id);
+//        Message message = new Message();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+//        message.setStatus(Message.StatusEnum.OK);
+//        message.setMessage("좋아요");
+//
+//        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+//    }
+    @DeleteMapping("/api/community/{board-id}/like")
     public ResponseEntity<?> deleteLike(HttpServletRequest request,
-                           @PathVariable("board-id") Long boardId,
-                           @PathVariable("like-id") Long likeId){
+                           @PathVariable("board-id") Long boardId){
         String userIdStr = request.getHeader("userId");
         Long userId = Long.parseLong(userIdStr);
-        boardService.deleteLike(userId, likeId, boardId);
+        boardService.deleteLike(userId, boardId);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

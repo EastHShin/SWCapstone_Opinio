@@ -71,10 +71,6 @@ public class UserService {
     public addPlantDTO addPlant(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("찾을 수 없는 사용자입니다."));
-        if(user.getPoint()<50) {
-            throw new IllegalArgumentException("포인트가 부족합니다.");
-        }
-        user.setPoint(user.getPoint()-50);
         user.setMaxPlantNum(user.getMaxPlantNum()+1);
         addPlantDTO dto = new addPlantDTO();
         dto.setPoint(user.getPoint());

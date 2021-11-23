@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final BoardLikeRepository boardLike;
+    private final BoardLikeRepository boardLikeRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -87,9 +87,30 @@ public class BoardService {
      * @param boardId
      */
 
+    public Integer boardLike(Long userId, Long boardId){
+        if(boardLikeRepository.existsByUserIdAndBoardId(userId, boardId)){
+            System.out.println("존재하구 인식함");
+            BoardLike boardLike =boardLikeRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(() -> new RuntimeException());
+            System.out.println(boardLike.getId());
+            System.out.println(boardLike.getBoard());
+            System.out.println(boardLike.getUser());
+            boardLikeRepository.deleteById(boardLike.getId());
+            return 0;
+        }
+        else{
+            boardLikeRepository.save(
+                    BoardLike.builder()
+                            .board(boardRepository.getById(boardId))
+                            .user(userRepository.getById(userId))
+                            .build());
+            return 1;
+        }
+    }
     public void addLike(Long userId, Long boardId){
-        boardLike.findByUserIdAndBoardId(userId, boardId).ifPresent(none -> { throw new RuntimeException(); });
-        boardLike.save(
+
+        boardLikeRepository.findByUserIdAndBoardId(userId, boardId).ifPresent(none -> {
+            throw new RuntimeException(); });
+        boardLikeRepository.save(
                 BoardLike.builder()
                         .board(boardRepository.getById(boardId))
                         .user(userRepository.getById(userId))
@@ -97,8 +118,8 @@ public class BoardService {
         );
     }
 
-    public void deleteLike(Long userId, Long likeId, Long boardId){
-        boardLike.findByUserIdAndBoardId(userId, boardId).orElseThrow(() -> new RuntimeException());
-        boardLike.deleteById(likeId);
+    public void deleteLike(Long userId, Long boardId){
+        BoardLike boardLike =boardLikeRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(() -> new RuntimeException());
+        boardLikeRepository.deleteById(boardLike.getId());
     }
 }

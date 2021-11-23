@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     //구문 에러 발생시, userId, boardId를 user,board로
-    Optional<BoardLike> findByUserIdAndBoardId(Long userId, Long boardId);
+    boolean existsByUserIdAndBoardId(Long userId, Long boardId);
+    Optional<BoardLike> deleteByUserIdAndBoardId(Long userId, Long boardId);
     Integer countByBoardId(Long boardId);
+    Optional<BoardLike> findByUserIdAndBoardId(Long userId, Long boardId);
 }

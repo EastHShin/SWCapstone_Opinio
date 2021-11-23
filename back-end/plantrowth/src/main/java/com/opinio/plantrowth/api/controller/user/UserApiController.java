@@ -9,6 +9,7 @@ import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.domain.Message;
 import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.service.user.AuthService;
+import com.opinio.plantrowth.service.user.UserPointService;
 import com.opinio.plantrowth.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +32,8 @@ import java.util.Map;
 public class UserApiController {
     private final UserService userService;
     private final AuthService authService;
+    private final UserPointService userPointService;
+    private final Integer decreasingPoint = 50;
 
     @GetMapping("/api/user/{user-id}")
     public ResponseEntity<?> lookUpUser(@PathVariable("user-id") Long id) {
@@ -73,7 +76,7 @@ public class UserApiController {
 
     @PostMapping("/api/users/profiles/{user-id}")
     public ResponseEntity<?> addPlant(@PathVariable("user-id") Long id){
-        addPlantDTO dto = userService.addPlant(id);
+        addPlantDTO dto = userService.addPlant(userPointService.decreasePoint(id, decreasingPoint).getId());
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
