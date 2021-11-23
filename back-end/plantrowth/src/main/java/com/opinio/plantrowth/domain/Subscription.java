@@ -1,14 +1,12 @@
 package com.opinio.plantrowth.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@AllArgsConstructor
 @Getter
 @Setter
 @Builder
