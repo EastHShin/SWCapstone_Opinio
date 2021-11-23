@@ -10,8 +10,6 @@ application-credentials.properties
 application-kakao.properties
 serviceAccountKey.json
 
-BillingApiController.java
-BillingDTO.java
 ### STS ###
 .apt_generated
 .classpath
