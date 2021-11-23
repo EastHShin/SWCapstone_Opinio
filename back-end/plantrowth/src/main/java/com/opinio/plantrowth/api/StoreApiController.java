@@ -27,11 +27,13 @@ public class StoreApiController {
         private Long user_id;
         private String user_name;
         private Integer point;
+        private String email;
 
         public StoreDTO(User user) {
             user_id = user.getId();
             user_name = user.getName();
             point = user.getPoint();
+            email = user.getEmail();
         }
     }
 }
