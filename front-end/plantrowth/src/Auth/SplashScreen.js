@@ -28,7 +28,7 @@ const SplashScreen =({navigation}) =>{
             <Image 
             source={require('../assets/plantrowth.png')}
             style = {{flex:1,width:'90%', resizeMode:'contain',margin:30}}/>
-            <Text style={{color:"#FFFFFF", fontSize:30, fontStyle:"italic"}}>Plantrowth</Text>
+            <Text style={{color:"#FFFFFF", fontSize:30, fontFamily: 'NanumGothicBold'}}>Plantrowth</Text>
             
             <ActivityIndicator 
             style={styles.activityIndicator} 

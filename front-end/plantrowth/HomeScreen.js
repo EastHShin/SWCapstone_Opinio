@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,13 +11,13 @@ import {
   Pressable,
   SafeAreaView,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {useIsFocused, useNavigation} from '@react-navigation/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { useIsFocused, useNavigation } from '@react-navigation/core';
 import Footer from './src/component/Footer';
 import Loader from './src/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getHomeInfo} from './src/actions/HomeActions';
-import {logoutUser} from './src/actions/UserActions';
+import { getHomeInfo } from './src/actions/HomeActions';
+import { logoutUser } from './src/actions/UserActions';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 
 const screenHeight = Dimensions.get('window').height;
@@ -48,12 +48,11 @@ HomeScreen = () => {
     AsyncStorage.getItem('userId').then(value => {
       if (value != null) {
         setUserId(JSON.parse(value));
-        setName(JSON.parse(value));
-
         console.log('홈스크린 userId: ' + userId);
-
-        dispatch(getHomeInfo(JSON.parse(value)));
-        setLoading(false);
+        if (isFocused) {
+          dispatch(getHomeInfo(JSON.parse(value)));
+          setLoading(false);
+        }
       }
     });
   }, [isFocused]);
@@ -62,69 +61,69 @@ HomeScreen = () => {
     if (PlantList !== null && PlantList !== undefined) {
       return PlantList
         ? PlantList.map((item, index) => {
-            console.log('hi:' + item);
-            plantNumber++;
-            return (
-              <TouchableOpacity
-                style={styles.profileContainer}
-                key={index}
-                onPress={() => {
-                  navigation.navigate('ManagePlantScreen', {
-                    plantId: item.plant_id,
-                    point: infoList.point,
-                  });
-                }}
-                key={index}>
-                <Image
-                  source={{uri: item.file_name}}
-                  style={styles.profileImage}
-                />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{fontFamily:'NanumGothicExtraBold', color: '#363636'}}>
-                    {`LV.${item.plant_level}`}
-                  </Text>
-                  <View style={styles.levelBar}>
-                    <View
-                      style={[
-                        styles.expBar,
-                        {
-                          width:
-                            (screenWidth * 0.17 * item.plant_exp) /
-                            ((item.plant_level - 1) * 10 + 30),
-                        },
-                      ]}>
-                      <Text
-                        style={{
-                          width: screenWidth * 0.17,
-                          textAlign: 'center',
-                          fontFamily:'NanumGothicExtraBold',
-                          color: '#363636',
-                        }}>
-                        {item.plant_exp} / {(item.plant_level - 1) * 10 + 30}
-                      </Text>
-                    </View>
+          console.log('hi:' + item);
+          plantNumber++;
+          return (
+            <TouchableOpacity
+              style={styles.profileContainer}
+              key={index}
+              onPress={() => {
+                navigation.navigate('ManagePlantScreen', {
+                  plantId: item.plant_id,
+                  point: infoList.point,
+                });
+              }}
+              key={index}>
+              <Image
+                source={{ uri: item.file_name }}
+                style={styles.profileImage}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text style={{ fontFamily: 'NanumGothicExtraBold', color: '#363636' }}>
+                  {`LV.${item.plant_level}`}
+                </Text>
+                <View style={styles.levelBar}>
+                  <View
+                    style={[
+                      styles.expBar,
+                      {
+                        width:
+                          (screenWidth * 0.17 * item.plant_exp) /
+                          ((item.plant_level - 1) * 10 + 30),
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        width: screenWidth * 0.17,
+                        textAlign: 'center',
+                        fontFamily: 'NanumGothicExtraBold',
+                        color: '#363636',
+                      }}>
+                      {item.plant_exp} / {(item.plant_level - 1) * 10 + 30}
+                    </Text>
                   </View>
                 </View>
+              </View>
 
-                <View style={styles.nameWrapper}>
-                  <Text
-                    style={{
-                      fontFamily:'NanumGothicBold',
-                      textAlign: 'center',
-                      fontSize: 12,
-                      color: '#363636',
-                    }}>
-                    {item.plant_name}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })
+              <View style={styles.nameWrapper}>
+                <Text
+                  style={{
+                    fontFamily: 'NanumGothicBold',
+                    textAlign: 'center',
+                    fontSize: 12,
+                    color: '#363636',
+                  }}>
+                  {item.plant_name}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })
         : null;
     }
   };
@@ -139,17 +138,17 @@ HomeScreen = () => {
     console.log('renderProfileAddslot arr: ' + arr);
     return arr
       ? arr.map((value, index) => {
-          return (
-            <TouchableOpacity
-              style={[styles.profileContainer, {justifyContent: 'center'}]}
-              onPress={() =>
-                navigation.navigate('AddProfileScreen', {userId: userId})
-              }
-              key={index}>
-              <Icon name={'add'} color={'white'} size={60} />
-            </TouchableOpacity>
-          );
-        })
+        return (
+          <TouchableOpacity
+            style={[styles.profileContainer, { justifyContent: 'center' }]}
+            onPress={() =>
+              navigation.navigate('AddProfileScreen', { userId: userId })
+            }
+            key={index}>
+            <Icon name={'add'} color={'white'} size={60} />
+          </TouchableOpacity>
+        );
+      })
       : null;
   };
   const PlantList = () => {
@@ -170,9 +169,9 @@ HomeScreen = () => {
           {renderProfileAddSlot(infoList.max_plant_num)}
           {plantNumber == infoList.max_plant_num ? (
             <TouchableOpacity
-              style={[styles.profileContainer, {justifyContent: 'center'}]}
+              style={[styles.profileContainer, { justifyContent: 'center' }]}
               onPress={() => navigation.navigate('ShopScreen')}>
-              <Text style={{fontFamily:'NanumGothicBold'}}>프로필 슬롯 추가</Text>
+              <Text style={{ fontFamily: 'NanumGothicBold' }}>프로필 슬롯 추가</Text>
             </TouchableOpacity>
           ) : null}
         </ScrollView>
@@ -191,24 +190,24 @@ HomeScreen = () => {
         }}>
         <View style={styles.memberInfoSectionWrapper}>
           <Icon name={'person-circle-outline'} size={45} color={'gray'} />
-          <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={{fontSize: 16, color: '#666666', fontFamily:'NanumGothic'}}>
+          <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+            <Text style={{ fontSize: 16, color: '#666666', fontFamily: 'NanumGothic' }}>
               환영합니다! {infoList.user_name}님
             </Text>
-            <Text style={{fontSize: 16, color: '#666666', fontFamily:'NanumGothic'}}>
+            <Text style={{ fontSize: 16, color: '#666666', fontFamily: 'NanumGothic' }}>
               보유 포인트: {infoList.point}
             </Text>
           </View>
         </View>
         <View style={styles.plantListSectionWrapper}>
-          <Text style={{color: '#666666',fontFamily:'NanumGothicBold'}}>내 식물들</Text>
+          <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>내 식물들</Text>
           <PlantList />
         </View>
         <View style={styles.advertisementSectionWrapper}>
-          <Text style={{color: '#666666',textAlign: 'center', fontFamily:'NanumGothicBold'}}>광고</Text>
+          <Text style={{ color: '#666666', textAlign: 'center', fontFamily: 'NanumGothicBold' }}>광고</Text>
         </View>
         <View style={styles.hotSectionWrapper}>
-          <Text style={{color: '#666666',fontFamily:'NanumGothicBold'}}>인기 게시물</Text>
+          <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>인기 게시물</Text>
         </View>
         <Footer name={'Home'} />
       </View>

@@ -14,6 +14,8 @@ target 'plantrowth' do
 
   pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'plantrowthTests' do
     inherit! :complete
     # Pods for testing
