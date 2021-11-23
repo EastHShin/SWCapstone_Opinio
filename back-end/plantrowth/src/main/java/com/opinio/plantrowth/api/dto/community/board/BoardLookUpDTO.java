@@ -11,5 +11,7 @@ public class BoardLookUpDTO {
     private String title;
     private String content;
     private LocalDate date;
+    private String writer;
     private String file_name;
+    private boolean boardLike;
 }

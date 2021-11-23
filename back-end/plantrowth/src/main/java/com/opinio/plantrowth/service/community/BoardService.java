@@ -28,13 +28,15 @@ public class BoardService {
         Board createdBoard = boardRepository.save(board);
         return createdBoard.getId();
     }
-    public BoardLookUpDTO LookUpBoard(Long id){
+    public BoardLookUpDTO LookUpBoard(Long id, Long userId){
         Board board = findBoard(id);
         BoardLookUpDTO page = new BoardLookUpDTO();
         page.setTitle(board.getTitle());
         page.setContent(board.getContent());
         page.setDate(board.getDate());
         page.setFile_name(board.getFilename());
+        page.setBoardLike(boardLikeRepository.existsByUserIdAndBoardId(userId,id));
+        page.setWriter(board.getUser().getName());
 
         return page;
     }

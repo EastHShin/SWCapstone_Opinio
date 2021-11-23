@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.api.controller.community;
 
+import com.google.api.Http;
 import com.opinio.plantrowth.api.dto.community.board.BoardCreateRequest;
 import com.opinio.plantrowth.api.dto.community.board.BoardDTO;
 import com.opinio.plantrowth.api.dto.community.board.BoardLookUpDTO;
@@ -80,8 +81,12 @@ public class BoardApiController {
     }
 
     @GetMapping("/api/community/{board-id}")
-    public ResponseEntity<?> lookUpBoard(@PathVariable("board-id") Long id){
-        BoardLookUpDTO board = boardService.LookUpBoard(id);
+    public ResponseEntity<?> lookUpBoard(
+            HttpServletRequest request,
+            @PathVariable("board-id") Long id){
+        String userIdStr = request.getHeader("userId");
+        Long userId = Long.parseLong(userIdStr);
+        BoardLookUpDTO board = boardService.LookUpBoard(id, userId);
         Message message= new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

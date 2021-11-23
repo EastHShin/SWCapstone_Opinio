@@ -37,5 +37,6 @@ public class Board {
     private String content;
     private LocalDate date;
     private String filename;
+    private String writer;
     private String noticeYn;
 }
