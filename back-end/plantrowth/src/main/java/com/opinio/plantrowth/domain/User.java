@@ -35,6 +35,8 @@ public class User implements UserDetails {
     private Integer maxPlantNum;
     @Column(name = "fcm_access_token")
     private String FCMAccessToken;
+    @Column(name = "is_subscription")
+    private Boolean subscription;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
