@@ -86,15 +86,17 @@ public class BoardService {
      * @param userId
      * @param boardId
      */
-
+    @Transactional
     public Integer boardLike(Long userId, Long boardId){
         if(boardLikeRepository.existsByUserIdAndBoardId(userId, boardId)){
-            System.out.println("존재하구 인식함");
-            BoardLike boardLike =boardLikeRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(() -> new RuntimeException());
-            System.out.println(boardLike.getId());
-            System.out.println(boardLike.getBoard());
-            System.out.println(boardLike.getUser());
-            boardLikeRepository.deleteById(boardLike.getId());
+            System.out.println("Exist: deleteLike :)");
+            Long boardLikeId =boardLikeRepository.findByUserIdAndBoardId(userId, boardId)
+                    .orElseThrow(() -> new RuntimeException())
+                    .getId();
+            System.out.println(boardLikeId);
+
+            boardLikeRepository.deleteById(boardLikeId);
+            System.out.println("DeleteLike Sucess");
             return 0;
         }
         else{
