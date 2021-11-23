@@ -45,8 +45,6 @@ dependencies {
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 	// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
 	implementation 'org.bouncycastle:bcprov-jdk15on:1.69'
-	// https://mvnrepository.com/artifact/com.github.iamport/iamport-rest-client-java
-	implementation 'com.github.iamport:iamport-rest-client-java:0.2.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
 //	runtimeOnly 'org.postgresql:postgresql'
