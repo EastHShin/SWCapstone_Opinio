@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,11 +13,15 @@ import Modal from 'react-native-modal';
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import Loader from '../Loader';
-import { buyProfileSlot, getShopInfo, setBuyProfileSlotState } from '../actions/ShopActions';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  getShopInfo,
+  buyProfileSlot,
+  setBuyProfileSlotState,
+  setBuySubscribeState,
+} from '../actions/ShopActions';
+import {useSelector, useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -29,7 +33,10 @@ ShopScreen = () => {
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(false);
   const [isBuySlotModalVisible, setBuySlotModalVisibility] = useState(false);
+  const [isBuySubscribeModalVisible, setBuySubscribeModalVisibility] =
+    useState(false);
   const [buyByPoint, setBuyByPoint] = useState(false);
+  const [goods, setGoods] = useState('');
   const [paymentModalVisible, setPaymentModalVisibility] = useState(false);
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
@@ -41,6 +48,10 @@ ShopScreen = () => {
   const buyProfileSlotState = useSelector(
     state => state.ShopReducer.buyProfileSlotResult,
   );
+  const buySubscribeState = useSelector(
+    state => state.ShopReducer.buySubscribeResult,
+  );
+
   const isLogin = useSelector(state => state.UserReducer.isLogin);
 
   useEffect(() => {
@@ -58,12 +69,10 @@ ShopScreen = () => {
           setLoading(false);
           console.log('shopInfo: ' + shopInfo.user_name);
         }
-
       }
     });
-  }, [isFocused]);
-
-  useEffect(() => {
+    console.log('buyProfileSlotState: ' + buyProfileSlotState);
+    console.log('buySubscribeState: ' + buySubscribeState);
     if (buyProfileSlotState == 'point' && isFocused) {
       console.log('프로필 슬롯 포인트로 구매 성공! ' + maxPlantNumber);
       setLoading(false);
@@ -80,51 +89,56 @@ ShopScreen = () => {
       console.log('프로필 슬롯 구매 실패! ');
       setLoading(false);
       dispatch(setBuyProfileSlotState(''));
+    } else if (buySubscribeState == 'success' && isFocused) {
+      console.log('질병진단 구독 성공');
+      setLoading(false);
+      setBuySubscribeModalVisibility(true);
+      dispatch(setBuySubscribeState(''));
+    } else if (buySubscribeState == 'failure' && isFocused) {
+      console.log('질병진단 구독 실패');
+      setLoading(false);
+      dispatch(setBuySubscribeState(''));
     }
-  }, [buyProfileSlotState]);
+  }, [isFocused, buyProfileSlotState, buySubscribeState]);
 
-  const buySlotHandler = (choice) => {
+  const buySlotHandler = choice => {
     if (choice == 'point') {
       setLoading(true);
       console.log('buySlotHandler 호출');
       dispatch(buyProfileSlot(userId));
-    }
-    else if (choice == 'cash') {
+    } else if (choice == 'cash') {
     }
   };
 
-
-  const renderBuySlotByPoint = (byPoint) => {
+  const renderBuySlotByPoint = byPoint => {
     if (byPoint) {
       return (
         <View>
           <Text style={styles.buyResultText}>
             50포인트를 소모하여 보유하고 계신 포인트가
           </Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Text
               style={[
                 styles.buyResultText,
-                { color: '#7e57c2', fontFamily: 'NanumGothicExtraBold' },
+                {color: '#7e57c2', fontFamily: 'NanumGothicExtraBold'},
               ]}>
               {point}{' '}
             </Text>
             <Text style={styles.buyResultText}>포인트가 되었어요!</Text>
           </View>
         </View>
-      )
+      );
     } else if (!byPoint) {
       return (
         <View>
-          <Text style={styles.buyResultText}>
-            100원을 결제하셨어요
-          </Text>
+          <Text style={styles.buyResultText}>50원을 결제하셨어요</Text>
         </View>
-      )
+      );
     }
-  }
+  };
   return (
-    <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
+    <SafeAreaView style={{flex: 1, alignItems: 'center'}}>
       <Loader loading={loading} />
       <View
         style={{
@@ -134,12 +148,16 @@ ShopScreen = () => {
           backgroundColor: '#C9E7BE',
         }}>
         <View style={styles.sectionWrapper}>
-          <View style={{width: screenWidth*0.8, alignItems: 'center',}}>
-            <Text style={{ fontFamily: 'NanumGothicBold'}}>Shop</Text>
-            <Text style={{ fontFamily: 'NanumGothicBold'}}>이름: {shopInfo.user_name}</Text>
-            <Text style={{ fontFamily: 'NanumGothicBold'}}>보유 포인트: {shopInfo.point}</Text>
+          <View style={{width: screenWidth * 0.8, alignItems: 'center'}}>
+            <Text style={{fontFamily: 'NanumGothicBold'}}>Shop</Text>
+            <Text style={{fontFamily: 'NanumGothicBold'}}>
+              이름: {shopInfo.user_name}
+            </Text>
+            <Text style={{fontFamily: 'NanumGothicBold'}}>
+              보유 포인트: {shopInfo.point}
+            </Text>
           </View>
-          <View style={{ flex: 1, justifyContent: 'center' }}>
+          <View style={{flex: 1, justifyContent: 'center'}}>
             <View style={styles.goodsWrapper}>
               <View
                 style={{
@@ -166,11 +184,36 @@ ShopScreen = () => {
                   alignItems: 'center',
                 }}>
                 <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
+                <Text style={styles.goodsText}>{'50원'}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.buyButton}
+                onPress={() => {
+                  setGoods('slot');
+                  setPaymentModalVisibility(true);
+                }}>
+                <Ionicons name={'cash-outline'} size={30} color={'white'} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.goodsWrapper}>
+              <View
+                style={{
+                  width: screenWidth * 0.6,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text style={styles.goodsText}>
+                  {'질병진단 구독 서비스 가입'}
+                </Text>
                 <Text style={styles.goodsText}>{'100원'}</Text>
               </View>
               <TouchableOpacity
                 style={styles.buyButton}
-                onPress={() => setPaymentModalVisibility(true)}>
+                onPress={() => {
+                  setGoods('subscribe');
+                  setPaymentModalVisibility(true);
+                }}>
                 <Ionicons name={'cash-outline'} size={30} color={'white'} />
               </TouchableOpacity>
             </View>
@@ -183,18 +226,18 @@ ShopScreen = () => {
         onBackButtonPress={() => {
           setBuySlotModalVisibility(false);
         }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <View style={styles.buyResultModalWrapper}>
-            <Text style={[styles.buyResultText, { fontSize: 18 }]}>
+            <Text style={[styles.buyResultText, {fontSize: 18}]}>
               슬롯 구매 성공
             </Text>
             {renderBuySlotByPoint(buyByPoint)}
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <Text style={styles.buyResultText}>식물을 </Text>
               <Text
                 style={[
                   styles.buyResultText,
-                  { color: '#93d07d', fontFamily: 'NanumGothicExtraBold' },
+                  {color: '#93d07d', fontFamily: 'NanumGothicExtraBold'},
                 ]}>
                 {maxPlantNumber}
               </Text>
@@ -207,8 +250,8 @@ ShopScreen = () => {
               onPress={() => {
                 setBuySlotModalVisibility(false);
               }}>
-              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 16}}>
                   확인
                 </Text>
               </View>
@@ -216,26 +259,57 @@ ShopScreen = () => {
           </View>
         </View>
       </Modal>
-      <Modal isVisible={paymentModalVisible}
-        onBackButtonPress={() => setPaymentModalVisibility(false)}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Modal
+        isVisible={isBuySubscribeModalVisible}
+        onBackButtonPress={() => {
+          setBuySlotModalVisibility(false);
+        }}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <View style={styles.buyResultModalWrapper}>
-            <Text style={[styles.buyResultText, { fontSize: 18 }]}>
-              휴대폰 번호 입력
+            <View
+              style={{flex: 5, alignItems: 'center', justifyContent: 'center'}}>
+              <Text style={[styles.buyResultText, {fontSize: 18}]}>
+                {`질병진단 구독 서비스\n가입 완료`}
+              </Text>
+              <Text style={[styles.buyResultText, {fontSize: 14}]}>
+                이제 질병진단을 무한으로 즐겨요
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.earnModalButton}
+              onPress={() => {
+                setBuySubscribeModalVisibility(false);
+              }}>
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 16}}>
+                  확인
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        isVisible={paymentModalVisible}
+        onBackButtonPress={() => setPaymentModalVisibility(false)}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <View style={styles.buyResultModalWrapper}>
+            <Text style={[styles.buyResultText, {fontSize: 18}]}>
+              구매자 정보 입력
             </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={number => setPhone(number)}
-              underlineColorAndroid="#000"
-              placeholder="휴대폰 번호"
-              placeholderTextColor="#808080"
-              onSubmitEditing={Keyboard.dismiss}
-            />
             <TextInput
               style={styles.input}
               onChangeText={name => setName(name)}
               underlineColorAndroid="#000"
               placeholder="구매자명"
+              placeholderTextColor="#808080"
+              onSubmitEditing={Keyboard.dismiss}
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={number => setPhone(number)}
+              underlineColorAndroid="#000"
+              placeholder="휴대폰 번호"
               placeholderTextColor="#808080"
               onSubmitEditing={Keyboard.dismiss}
             />
@@ -251,13 +325,29 @@ ShopScreen = () => {
               style={styles.earnModalButton}
               onPress={() => {
                 setPaymentModalVisibility(false);
-                if (phone != '' && name != '', email != '') {
-                  navigation.navigate('Payment', { userId: userId, phone: phone, email: email, name: name })
+                if ((phone != '' && name != '', email != '')) {
+                  if (goods == 'slot') {
+                    navigation.navigate('Payment', {
+                      userId: userId,
+                      phone: phone,
+                      email: email,
+                      name: name,
+                      amount: '50',
+                    });
+                  } else if (goods == 'subscribe') {
+                    navigation.navigate('Payment', {
+                      userId: userId,
+                      phone: phone,
+                      email: email,
+                      name: name,
+                      amount: '100',
+                    });
+                  }
                 }
               }}>
-              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
-                  확인
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 16}}>
+                  구매
                 </Text>
               </View>
             </TouchableOpacity>
@@ -352,6 +442,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#222222',
     marginTop: 15,
+    textAlign: 'center',
   },
   buyResultModalWrapper: {
     width: screenWidth * 0.8,

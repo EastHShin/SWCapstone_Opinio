@@ -32,3 +32,4 @@ export const SAVE_DIAGNOSIS_CHART = 'save_diagnosis_chart';
 export const EARN = 'earn';
 export const USER_DELETE = 'USER_DELETE';
 export const GET_SHOP_INFO = 'get_shop_info';
+export const BUY_SUBSCRIBE = 'buy_subscribe';
