@@ -25,16 +25,17 @@ public class BillingApiController {
     public ResponseEntity subscribe(@RequestBody BillingDTO request) throws ParseException, IllegalAccessException {
         String accessToken = billingService.getToken();
         System.out.println(accessToken);
-        Integer paymentData = billingService.getPaymentData(accessToken, request.getImp_uid(), request.getUser_id());
-        billingService.subscribe(paymentData, request.getUser_id());
+        Integer paymentData = billingService.getPaymentData(accessToken, request.getImp_uid());
+        billingService.subscribe(paymentData, request.getUser_id(), request.getImp_uid(), request.getMerchant_uid());
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/api/payments/complete/slot")
     public ResponseEntity<slotApiDTO> buySlot(@RequestBody BillingDTO request) throws ParseException, IllegalAccessException {
         String accessToken = billingService.getToken();
-        Integer paymentData = billingService.getPaymentData(accessToken, request.getImp_uid(), request.getUser_id());
-        User user = billingService.payForSlot(paymentData, request.getUser_id());
+        Integer paymentData = billingService.getPaymentData(accessToken, request.getImp_uid());
+        User user = billingService.payForSlot(paymentData, request.getUser_id(), request.getImp_uid(),
+            request.getMerchant_uid());
 
         return new ResponseEntity<slotApiDTO>(new slotApiDTO(user), HttpStatus.OK);
     }
