@@ -133,7 +133,6 @@ public class DiagnosisApiController {
         private String disease_model;
         private String percent_model;
 
-
     }
 
 
