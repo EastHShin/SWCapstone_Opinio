@@ -12,12 +12,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class BillingService {
@@ -27,7 +29,8 @@ public class BillingService {
 
     private final String IMP_KEY = "2028448220218951";
     private final String IMP_SECRET = "64c6c5c167fffb894c40fe19650ea7b19a6ae2fa05dd33ead0b1e168fb33285d9014e7da5ccfcbb8";
-    private final Integer amountToBePaid = 100;
+    private final Integer amountToBePaidForDiagnosis = 100;
+    private final Integer amountToBePaidForSlot = 50;
     private final Long SUBSCRIPTION_MONTH = 1L;
     public String getToken() throws ParseException {
         RestTemplate restTemplate = new RestTemplate();
@@ -54,7 +57,7 @@ public class BillingService {
         return access_token;
     }
 
-    public void getPaymentData(String accessToken, String imp_uid, Long userId) throws ParseException, IllegalAccessException {
+    public Integer getPaymentData(String accessToken, String imp_uid, Long userId) throws ParseException, IllegalAccessException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -70,8 +73,12 @@ public class BillingService {
         JSONObject jsonObject = (JSONObject) obj;
         JSONObject responseObj = (JSONObject) jsonObject.get("response");
         Integer amount = Integer.parseInt(responseObj.get("amount").toString());
-        System.out.println();
-        if (amount == amountToBePaid) {
+        return amount;
+    }
+
+    @Transactional
+    public void subscribe(Integer amount, Long userId) throws IllegalAccessException {
+        if (amount == amountToBePaidForDiagnosis) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("no User found"));
             user.setSubscription(true);
@@ -85,5 +92,19 @@ public class BillingService {
             throw new IllegalAccessException("forgery Billing");
         }
     }
+
+    @Transactional
+    public User payForSlot(Integer amount, Long userId) throws IllegalAccessException {
+        if (amount == amountToBePaidForSlot) {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("no User found"));
+            Integer maxPlantNum = user.getMaxPlantNum();
+            user.setMaxPlantNum(maxPlantNum + 1);
+            return user;
+        } else {
+            throw new IllegalAccessException("forgery Billing");
+        }
+    }
+
 
 }

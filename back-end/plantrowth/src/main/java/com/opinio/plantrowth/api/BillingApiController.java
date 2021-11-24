@@ -1,7 +1,10 @@
 package com.opinio.plantrowth.api;
 
 import com.opinio.plantrowth.api.dto.subscription.BillingDTO;
+import com.opinio.plantrowth.domain.User;
 import com.opinio.plantrowth.service.BillingService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -18,12 +21,33 @@ public class BillingApiController {
 
     private final BillingService billingService;
 
-    @PostMapping("/api/payments/complete")
+    @PostMapping("/api/payments/complete/diagnosis")
     public ResponseEntity subscribe(@RequestBody BillingDTO request) throws ParseException, IllegalAccessException {
         String accessToken = billingService.getToken();
-//        JSONObject access_token = (JSONObject)token.get("response");
         System.out.println(accessToken);
-        billingService.getPaymentData(accessToken, request.getImp_uid(), request.getUser_id());
+        Integer paymentData = billingService.getPaymentData(accessToken, request.getImp_uid(), request.getUser_id());
+        billingService.subscribe(paymentData, request.getUser_id());
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/api/payments/complete/slot")
+    public ResponseEntity<slotApiDTO> buySlot(@RequestBody BillingDTO request) throws ParseException, IllegalAccessException {
+        String accessToken = billingService.getToken();
+        Integer paymentData = billingService.getPaymentData(accessToken, request.getImp_uid(), request.getUser_id());
+        User user = billingService.payForSlot(paymentData, request.getUser_id());
+
+        return new ResponseEntity<slotApiDTO>(new slotApiDTO(user), HttpStatus.OK);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class slotApiDTO{
+        private Long user_id;
+        private Integer max_plant_num;
+
+        public slotApiDTO(User user) {
+            user_id = user.getId();
+            max_plant_num = user.getMaxPlantNum();
+        }
     }
 }
