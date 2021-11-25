@@ -113,7 +113,7 @@ const DiseaseDiagnosisScreen = ({ navigation }) => {
           extraData={selectedId}
         />
 
-        <Footer />
+        <Footer name={'My Page'}/>
       </View>
     </SafeAreaView>
   )

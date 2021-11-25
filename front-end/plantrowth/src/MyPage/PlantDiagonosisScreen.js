@@ -34,7 +34,7 @@ const PlantDiagnosisScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.body}>
       <Text>포인트 조회 스크린</Text>
-      <Footer />
+      <Footer name={'My Page'} />
     </SafeAreaView>
   )
 };

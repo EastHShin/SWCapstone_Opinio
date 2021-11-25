@@ -166,7 +166,7 @@ const PostDetailScreen = ({ route, navigation }) => {
                 >
 
                     <View style={{ flex: 1, justifyContent: "flex-start" }}>
-                        <View style={styles.modal}>
+                        <View style={userId == post.user_id ? styles.modal : styles.modalSmall}>
                             {userId == post.user_id ?
                                 <View>
                                     <View style={styles.modalWrapper}>
@@ -353,6 +353,22 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontSize: 17,
         marginLeft: Dimensions.get('window').width * 0.05,
+    },
+    modalSmall:{
+        marginTop: Dimensions.get('window').height * 0.01,
+        marginLeft: Dimensions.get('window').width * 0.5,
+        height: Dimensions.get('window').height * 0.1,
+        width: Dimensions.get('window').width * 0.47,
+        backgroundColor: "#FFFFFF",
+        flexDirection: "column",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 3.00,
+        elevation: 10
+
     }
 
 })

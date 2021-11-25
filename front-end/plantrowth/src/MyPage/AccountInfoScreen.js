@@ -119,7 +119,7 @@ const AccountInfoScreen = ({ navigation }) => {
             }}>수정</Text>
           </TouchableOpacity>
         </View>
-        <Footer />
+        <Footer name={'My Page'} />
       </View>
     </SafeAreaView>
   )
