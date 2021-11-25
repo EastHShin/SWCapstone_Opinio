@@ -2,6 +2,8 @@ package com.opinio.plantrowth.service.EmailAuth;
 
 import com.opinio.plantrowth.domain.ConfirmationToken;
 import com.opinio.plantrowth.repository.ConfirmationTokenRepository;
+import com.opinio.plantrowth.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,16 +27,18 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-//    public static final String ePw = createKey();
+
+    private static final int PASSWORD_LEN = 10;
+    private static final String SENDER_EMAIL = "plantrowth@gmail.com";
+    private static final String SENDER = "plantrowth";
 
     private MimeMessage createMessage(String to) throws Exception {
-        String ePw = createKey();
-        saveToken(to, ePw);
+        String code = createKey();
+        saveToken(to, code);
 
         logger.info("보내는 대상 : " + to);
-        logger.info("인증 번호 : " + ePw);
+        logger.info("인증 번호 : " + code);
         MimeMessage message = emailSender.createMimeMessage();
-        String code = createCode(ePw);
         message.addRecipients(Message.RecipientType.TO, to);
         message.setSubject("Plantrowth 확인 코드: " + code);
 
@@ -42,10 +46,27 @@ public class EmailService {
         msg += code;
 
         message.setText(msg, "utf-8");
-        message.setFrom(new InternetAddress("plantrowth@gmail.com", "plantrowth"));
+        message.setFrom(new InternetAddress(SENDER_EMAIL, SENDER));
 
         return message;
     }
+
+    private MimeMessage createMsgForPassword(String to, String newPassword) throws Exception {
+
+        logger.info("새 비밀번호 보내는 대상 : " + to);
+        MimeMessage message = emailSender.createMimeMessage();
+        message.addRecipients(Message.RecipientType.TO, to);
+        message.setSubject("Plantrowth 새 비밀번호 : " + newPassword);
+
+        String msg = "";
+        msg += newPassword;
+
+        message.setText(msg, "utf-8");
+        message.setFrom(new InternetAddress(SENDER_EMAIL, SENDER));
+
+        return message;
+    }
+
 
     @Transactional
     public void saveToken(String to, String ePw) {
@@ -63,6 +84,18 @@ public class EmailService {
         }
     }
 
+    public String sendMsgForPassword(String to) throws Exception {
+        String newPassword = getNewPassword();
+        MimeMessage message = createMsgForPassword(to, newPassword);
+        try {
+            emailSender.send(message);
+        } catch (MailException es) {
+            es.printStackTrace();
+            throw new IllegalArgumentException("이메일 인증 오류");
+        }
+        return newPassword;
+    }
+
     @Transactional
     public ConfirmationToken findValidToken(String code) {
         ConfirmationToken confirmationToken = confirmationTokenRepository.findByCodeAndExpirationDateAfterAndExpired(code, LocalDateTime.now(), false)
@@ -71,11 +104,22 @@ public class EmailService {
         return confirmationToken;
     }
 
+    private static String getNewPassword() {
+        int index = 0;
+        char[] charArr = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+            'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+            'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+            't', 'u', 'v', 'w', 'x', 'y', 'z' };
+        StringBuffer stringBuffer = new StringBuffer();
 
-
-    private String createCode(String ePw) {
-        return ePw.substring(0,3) + "-" + ePw.substring(3, 6);
+        for (int i = 0; i < PASSWORD_LEN; i++) {
+            index = (int)(charArr.length * Math.random());
+            stringBuffer.append(charArr[index]);
+        }
+        return stringBuffer.toString();
     }
+
 
     private static String createKey() {
         StringBuffer key = new StringBuffer();

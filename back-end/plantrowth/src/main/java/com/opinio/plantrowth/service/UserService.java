@@ -12,7 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -121,6 +123,12 @@ public class UserService implements UserDetailsService {
         return;
     }
 
+    public User findByEmailAndBirth(String email, LocalDate birth) {
+        User user = userRepository.findByEmailAndBirth(email, birth)
+            .orElseThrow(() -> new IllegalArgumentException("No User Found"));
+        return user;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
@@ -136,5 +144,12 @@ public class UserService implements UserDetailsService {
          */
         User user = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
         return user;
+    }
+
+    @Transactional
+    public void setNewPassword(Long userId, String newPassword) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("No User Found"));
+        user.setPassword(newPassword);
     }
 }
