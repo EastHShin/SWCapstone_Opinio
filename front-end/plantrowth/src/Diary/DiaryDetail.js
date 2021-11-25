@@ -35,7 +35,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
     const result = useSelector(state => state.DiaryReducer.result);
 
     useEffect(() => {
-        console.log("디테일에서 : "+ plantId);
+        
         if (isFocused) {
             dispatch(fetchDiary(selectedId));
         }
@@ -43,7 +43,6 @@ const DiaryDetailScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (result == 'success' && isFocused) {
-            console.log("성공했을 때 " + plantId);
             setLoading(false);
             dispatch(setResultState(''));
             setIsModalVisible(false);

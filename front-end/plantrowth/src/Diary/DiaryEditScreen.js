@@ -44,10 +44,6 @@ const DiaryEditScreen = ({ route, navigation }) => {
     
     const result = useSelector(state => state.DiaryReducer.result);
  
-    useEffect(() => {
-       console.log("수정때 + " + plantId);
-    
-    }, [isFocused])
    useEffect(() => {
       if(result == "success" && isFocused){
           setLoading(false);

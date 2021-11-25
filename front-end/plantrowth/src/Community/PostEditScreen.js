@@ -33,15 +33,24 @@ const PostEditScreen = ({ route, navigation }) => {
     const [title, setTitle] = useState(post.title);
     const [content, setContent] = useState(post.content);
     const originalImageUri = post.file_name;
-
+   
     const [imageType, setImageType] = useState('');
     const [fileName, setFileName] = useState('');
-    const [imageUri, setImageUri] = useState('');
+    const [imageUri, setImageUri] = useState(post.file_name);
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
 
     const contentInputRef = createRef();
+
+    useEffect(() => {
+        if(isFocused && originalImageUri){
+            Image.getSize(originalImageUri,(width, height) =>{
+                setImageHeight(height);
+                setImageWidth(width);
+            })
+        }
+    }, [isFocused])
 
 
     useEffect(() => {
@@ -219,19 +228,25 @@ const PostEditScreen = ({ route, navigation }) => {
                             />
 
                         </View>
-                        <View style={{ marginBottom: Dimensions.get('window').height * 0.04, height: Dimensions.get('window').height * 0.4, }}>
-                            {imageUri != '' ? (
 
+                        {imageUri != '' ? (
+                            <View style={{ marginBottom: Dimensions.get('window').height * 0.02 }}>
                                 <Image source={{ uri: imageUri }}
                                     style={{
-                                        width: Dimensions.get('window').width * 0.8,
-                                        height: Dimensions.get('window').height * 0.4,
-                                        resizeMode: 'cover',
+                                        marginTop: Dimensions.get('window').height * 0.01,
+                                        borderRadius: 10,
+                                        width: Dimensions.get('window').width,
+                                        height: Dimensions.get('window').height * 0.7,
+                                        resizeMode: 'contain',
                                     }}
                                 />
+                            </View>
+                        ) :
 
-                            ) : null}
-                        </View>
+                            <View style={{ marginBottom: Dimensions.get('window').height * 0.04, height: Dimensions.get('window').height * 0.4, }}>
+                            </View>}
+
+
 
                         <View style={{ flexDirection: "row" }}>
                             <View style={styles.imageButton}>
@@ -245,11 +260,9 @@ const PostEditScreen = ({ route, navigation }) => {
                                 <TouchableOpacity
                                     activeOpacity={0.5}
                                     onPress={() => {
-
                                         setImageUri('');
                                         setFileName('');
                                         setImageType('');
-
                                     }}>
                                     <MaterialIcons name='cancel' size={43} color="#FF0000" />
                                 </TouchableOpacity>

@@ -32,6 +32,7 @@ const PostCreateScreen = ({ navigation }) => {
     const [imageType, setImageType] = useState('');
     const [fileName, setFileName] = useState('');
     const [imageUri, setImageUri] = useState('');
+   
     const [userId, setUserId] = useState('');
 
     const dispatch = useDispatch();
@@ -43,12 +44,13 @@ const PostCreateScreen = ({ navigation }) => {
         if (isFocused) {
             AsyncStorage.getItem('userId').then(value => {
                 if (value != null) {
-                    setUserId(JSON.stringify(value));
+                    setUserId(JSON.parse(value));
                 }
             }
             )
         }
     }, [isFocused])
+
 
     useEffect(() => {
         if (result == 'success' && isFocused) {
@@ -85,7 +87,7 @@ const PostCreateScreen = ({ navigation }) => {
     }
 
     const onPressHandler = () => {
-        navigation.navigate('EditPostScreen');
+
         if (!title) {
             alert('제목을 입력해주세요!');
             return;
@@ -190,19 +192,23 @@ const PostCreateScreen = ({ navigation }) => {
                             />
 
                         </View>
-                        <View style={{ marginBottom: Dimensions.get('window').height * 0.04, height: Dimensions.get('window').height * 0.4, }}>
-                            {imageUri != '' ? (
-
+                        
+                        {imageUri != '' ? (
+                            <View style={{ marginBottom: Dimensions.get('window').height * 0.02 }}>
                                 <Image source={{ uri: imageUri }}
                                     style={{
-                                        width: Dimensions.get('window').width * 0.8,
-                                        height: Dimensions.get('window').height * 0.4,
-                                        resizeMode: 'cover',
+                                        marginTop: Dimensions.get('window').height * 0.01,
+                                        borderRadius: 10,
+                                        width: Dimensions.get('window').width,
+                                        height: Dimensions.get('window').height * 0.7,
+                                        resizeMode: 'contain',
                                     }}
                                 />
+                            </View>
+                        ) :
 
-                            ) : null}
-                        </View>
+                            <View style={{ marginBottom: Dimensions.get('window').height * 0.04, height: Dimensions.get('window').height * 0.4, }}>
+                            </View>}
 
                         <View style={{ flexDirection: "row" }}>
                             <View style={styles.imageButton}>

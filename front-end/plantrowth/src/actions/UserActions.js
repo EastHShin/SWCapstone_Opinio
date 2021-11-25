@@ -15,6 +15,7 @@ const setLogoutTimer = (expirationTime) => dispatch => {
 
     timer = setTimeout(() => {
         dispatch(logoutUser());
+        console.log('로그인 만료')
     }, expirationTime);
 };
 

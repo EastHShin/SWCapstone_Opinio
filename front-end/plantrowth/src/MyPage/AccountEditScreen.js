@@ -332,11 +332,9 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.06,
     width: Dimensions.get('window').width
   },
-  wrapper: {
-    width: Dimensions.get('window').width,
-  },
+  
   section: {
-
+    
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     width: Dimensions.get('window').width,

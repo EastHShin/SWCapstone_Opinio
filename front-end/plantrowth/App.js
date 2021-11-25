@@ -33,6 +33,7 @@ import * as RootNavigation from './RootNavigation';
 import {navigationRef} from './RootNavigation';
 import PostCreateScreen from './src/Community/PostCreateScreen';
 import PostEditScreen from './src/Community/PostEditScreen';
+import PostDetailScreen from './src/Community/PostDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -252,6 +253,13 @@ function App() {
            <Stack.Screen
             name="PostEditScreen"
             component={PostEditScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PostDetailScreen"
+            component={PostDetailScreen}
             options={{
               headerShown: false,
             }}
