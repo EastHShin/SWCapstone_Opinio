@@ -194,13 +194,6 @@ export const setLoginState = state => dispatch => {
 	})
 }
 
-export const setLoginState = state => dispatch => {
-    dispatch({
-        type: LOGIN_USER,
-        payload: state
-    })
-}
-
 export const kakaoRegister = (register) => dispatch => {
 
 	dispatch({
