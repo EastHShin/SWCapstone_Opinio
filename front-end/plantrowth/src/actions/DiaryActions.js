@@ -4,7 +4,6 @@ import { setLevelUpState, setEarnState } from "./PlantActions";
 import axios from "axios";
 
 export const fetchDiaries = (plantId) => {
-
     return async dispatch => {
         return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${plantId}/all`)
             .then(function (res) {
@@ -30,34 +29,37 @@ export const fetchDiaries = (plantId) => {
 
 export const fetchDiary = (diaryId) => {
 
-    return async dispatch => {
-        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`)
-            .then(function (res) {
-                if (res.status == 200) {
-                    dispatch({
-                        type: FETCH_DIARY,
-                        payload: res.data.data,
-                    })
-                }
-            })
-            .catch(function (error) {
-                dispatch({
-                    type: FETCH_DIARY,
-                    payload: {},
-                })
-                console.log(error);
-            })
-    }
+	return async dispatch => {
+		return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`)
+			.then(function (res) {
+				if (res.status == 200) {
+					dispatch({
+						type: FETCH_DIARY,
+						payload: res.data.data,
+					})
+				}
+			})
+			.catch(function (error) {
+				dispatch({
+					type: FETCH_DIARY,
+					payload: {},
+				})
+				console.log(error);
+			})
+	}
 }
 
 export const setResultState = state => dispatch => {
-    dispatch({
-        type: RESULT_STATE,
-        payload: state,
-    });
+	dispatch({
+		type: RESULT_STATE,
+		payload: state,
+	});
 };
 
 export const saveDiary = (diary, plantId) => {
+	return async dispatch => {
+		console.log(JSON.stringify(diary));
+		return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${plantId}`, diary, {
 
     return async dispatch => {
         console.log(JSON.stringify(diary));
@@ -117,22 +119,22 @@ export const editDiary = (diary, diaryId) => {
 }
 
 export const deleteDiary = (diaryId) => {
-    return async dispatch => {
-        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`)
-            .then(function (res) {
-                if (res.status == 200) {
-                    dispatch({
-                        type: DELETE_DIARY,
-                        payload: "success"
-                    })
-                }
-            })
-            .catch(function (err) {
-                console.log(err);
-                dispatch({
-                    type: DELETE_DIARY,
-                    payload: "failure"
-                })
-            })
-    }
+	return async dispatch => {
+		return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`)
+			.then(function (res) {
+				if (res.status == 200) {
+					dispatch({
+						type: DELETE_DIARY,
+						payload: "success"
+					})
+				}
+			})
+			.catch(function (err) {
+				console.log(err);
+				dispatch({
+					type: DELETE_DIARY,
+					payload: "failure"
+				})
+			})
+	}
 }

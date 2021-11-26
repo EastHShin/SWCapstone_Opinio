@@ -4,6 +4,8 @@ import {
   GET_MAX_PLANT_NUM,
   GET_SHOP_INFO,
   BUY_SUBSCRIBE,
+  GET_PAYMENT_HISTORY,
+  REFUND,
 } from './type';
 import axios from 'axios';
 
@@ -88,8 +90,8 @@ export const sendBuySlotData = (userId, imp_uid, merchant_uid) => {
 export const sendBuySubscribeData = (userId, imp_uid, merchant_uid) => {
   return async dispatch => {
     console.log('결제 userId: ' + userId);
-    return await axios
-      .post(
+    return await axios.
+      post(
         `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/payments/complete/diagnosis`,
         {
           user_id: userId,
@@ -115,6 +117,44 @@ export const sendBuySubscribeData = (userId, imp_uid, merchant_uid) => {
   };
 };
 
+export const refund = (merchant_uid) => {
+  return async dispatch => {
+    return await axios
+      .post(
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/payments/`,
+        {
+          merchant_uid: merchant_uid
+        },
+        {
+          headers: { 'Content-Type': 'application/json', }
+        }
+      )
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(setRefundState(true));
+        }
+      }).catch(function (error) {
+        console.warn('환불 에러요~');
+        console.log(error);
+      })
+  }
+}
+export const getPaymentHistory = (userId) => {
+  return async dispatch => {
+    return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/payments/record/${userId}`)
+      .then(function (response) {
+        if (response.status === 200) {
+          console.warn('결제 내역: ' + JSON.stringify(response.data));
+          dispatch({ type: GET_PAYMENT_HISTORY, payload: response.data.paymentInfoList });
+        }
+      })
+      .catch(function (error) {
+        console.warn('결제 내역 에러요~~~~~~~~~~~~');
+        console.log(error);
+      });
+  };
+};
+
 export const setBuySubscribeState = state => dispatch => {
   dispatch({
     type: BUY_SUBSCRIBE,
@@ -128,3 +168,10 @@ export const setBuyProfileSlotState = state => dispatch => {
     payload: state,
   });
 };
+
+export const setRefundState = state => dispatch => {
+  dispatch({
+    type: REFUND,
+    payload: state,
+  })
+}

@@ -9,6 +9,10 @@ import { getPaymentHistory, refund } from '../actions/ShopActions';
 import Loader from '../Loader';
 import { useIsFocused } from '@react-navigation/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 

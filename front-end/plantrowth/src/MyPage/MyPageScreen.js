@@ -106,7 +106,20 @@ const MyPageScreen = ({ navigation }) => {
               />
             </View>
           </TouchableOpacity>
-
+          <TouchableOpacity
+            style={{ flexDirection: 'row' }}
+            activeOpacity={0.5}
+            onPress={() => navigation.push('PaymentHistoryScreen')}>
+            <View style={styles.section}>
+              <Text style={styles.text}>결제 내역 조회</Text>
+              <Ionicons
+                name="chevron-forward-sharp"
+                size={23}
+                color="#000000"
+                style={styles.icon}
+              />
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity
             style={{ flexDirection: 'row' }}
             activeOpacity={0.5}

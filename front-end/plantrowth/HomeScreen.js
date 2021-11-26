@@ -33,10 +33,8 @@ HomeScreen = () => {
 
 
   const infoList = useSelector(state => state.HomeReducer.infoList);
-  const [name, setName] = useState('');
   const isLogin = useSelector(state => state.UserReducer.isLogin);
   let plantNumber = 0;
-
 
   useEffect(() => {
     if (isLogin == 'end') {
