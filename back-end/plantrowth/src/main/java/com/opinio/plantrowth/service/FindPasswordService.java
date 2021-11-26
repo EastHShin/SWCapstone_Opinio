@@ -16,6 +16,7 @@ public class FindPasswordService {
 
     private final UserRepository userRepository;
 
+
 //    public Long findPassword(String email, LocalDate userBirth) {
 //        User user = userRepository.findByEmailAndBirth(email, userBirth)
 //                .orElseThrow(() -> new IllegalArgumentException("There is No user information"));

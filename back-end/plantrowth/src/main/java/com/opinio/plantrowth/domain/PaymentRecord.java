@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -47,12 +49,15 @@ public class PaymentRecord {
 	@Column(name = "amount")
 	private Integer amount;
 
+	@Column(name = "cancel_amount")
+	private Integer cancelAmount;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_type")
 	private PaymentType paymentType;	//SUBSCRIPTION, SLOT
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_status")
-	private PaymentStatus paymentStatus;
+	private PaymentStatus paymentStatus;	//PAYMENT, REFUND
 
 }
