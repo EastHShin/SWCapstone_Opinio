@@ -20,7 +20,6 @@ const screenWidth = Dimensions.get('window').width;
 
 const Footer = route => {
   const navigation = useNavigation();
-  console.log('footer:' + route.name);
   const menuList = [
     {
       iconName: 'home-outline',
@@ -57,7 +56,8 @@ const Footer = route => {
             key={index}
             onPress={() => {
               navigation.navigate(item.link);
-            }}>
+            }}
+          >
             <Icon
               name={item.iconName}
               size={item.name == route.name ? 32 : 27}
@@ -68,7 +68,8 @@ const Footer = route => {
                 item.name == route.name
                   ? [styles.tabLabel, { color: 'white' }]
                   : styles.tabLabel
-              }>
+              }
+            >
               {item.name}
             </Text>
           </TouchableOpacity>

@@ -1,6 +1,17 @@
-import { ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE, WATER_PLANT, DIAGNOSIS_PLANT, SAVE_DIAGNOSIS_CHART, GET_POINT, GET_EXP, LEVEL_UP, EARN } from './type';
+import {
+  ADD_PLANT,
+  DELETE_PLANT,
+  UPDATE_PLANT,
+  GET_PLANT_PROFILE,
+  WATER_PLANT,
+  DIAGNOSIS_PLANT,
+  SAVE_DIAGNOSIS_CHART,
+  GET_POINT,
+  GET_EXP,
+  LEVEL_UP,
+  EARN,
+} from './type';
 import axios from 'axios';
-
 
 export const addPlant = (profile, userId) => {
   console.log('axios 안');
@@ -94,8 +105,8 @@ export const waterPlant = plantId => {
         console.log('watering response :', response);
         if (response.status === 200) {
           dispatch(setLevelUpState(response.data.isLevelUp));
-          dispatch({ type: GET_POINT, payload: response.data.point })
-          dispatch({ type: GET_EXP, payload: response.data.plant_exp })
+          dispatch({ type: GET_POINT, payload: response.data.point });
+          dispatch({ type: GET_EXP, payload: response.data.plant_exp });
 
           dispatch({ type: WATER_PLANT, payload: 'success' });
           if (!response.data.isLevelUp) dispatch(setEarnState(true));
@@ -126,13 +137,12 @@ export const diagnosisPlant = (plantId, image) => {
         console.log('diagnosis response :', response);
         if (response.status === 200) {
           dispatch(setLevelUpState(response.data.isLevelUp));
-          dispatch({ type: SAVE_DIAGNOSIS_CHART, payload: response.data })
+          dispatch({ type: SAVE_DIAGNOSIS_CHART, payload: response.data });
           dispatch({ type: DIAGNOSIS_PLANT, payload: 'success' });
-          dispatch({ type: GET_POINT, payload: response.data.point })
-          dispatch({ type: GET_EXP, payload: response.data.plant_exp })
+          dispatch({ type: GET_POINT, payload: response.data.point });
+          dispatch({ type: GET_EXP, payload: response.data.plant_exp });
           if (!response.data.isLevelUp) dispatch(setEarnState(true));
         }
-
       })
       .catch(function (error) {
         console.warn('diagnosis 에러요~~~~~~~~~~~~');
@@ -159,9 +169,9 @@ export const setDeletePlantState = state => dispatch => {
 export const setLevelUpState = state => dispatch => {
   dispatch({
     type: LEVEL_UP,
-    payload: state
-  })
-}
+    payload: state,
+  });
+};
 
 export const setUpdatePlantState = state => dispatch => {
   dispatch({
@@ -188,8 +198,8 @@ export const setEarnState = state => dispatch => {
   dispatch({
     type: EARN,
     payload: state,
-  })
-}
+  });
+};
 
 export const getProfile = plantId => {
   return async dispatch => {

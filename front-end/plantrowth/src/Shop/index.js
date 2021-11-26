@@ -71,8 +71,6 @@ ShopScreen = () => {
         }
       }
     });
-    console.log('buyProfileSlotState: ' + buyProfileSlotState);
-    console.log('buySubscribeState: ' + buySubscribeState);
     if (buyProfileSlotState == 'point' && isFocused) {
       console.log('프로필 슬롯 포인트로 구매 성공! ' + maxPlantNumber);
       setLoading(false);
@@ -122,7 +120,8 @@ ShopScreen = () => {
               style={[
                 styles.buyResultText,
                 { color: '#7e57c2', fontFamily: 'NanumGothicExtraBold' },
-              ]}>
+              ]}
+            >
               {point}{' '}
             </Text>
             <Text style={styles.buyResultText}>포인트가 되었어요!</Text>
@@ -146,7 +145,8 @@ ShopScreen = () => {
           alignItems: 'center',
           justifyContent: 'space-between',
           backgroundColor: '#C9E7BE',
-        }}>
+        }}
+      >
         <View style={styles.sectionWrapper}>
           <View style={{ width: screenWidth * 0.8, alignItems: 'center' }}>
             <Text style={{ fontFamily: 'NanumGothicBold' }}>Shop</Text>
@@ -165,13 +165,15 @@ ShopScreen = () => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
                 <Text style={styles.goodsText}>{'50포인트'}</Text>
               </View>
               <TouchableOpacity
                 style={styles.buyButton}
-                onPress={() => buySlotHandler('point')}>
+                onPress={() => buySlotHandler('point')}
+              >
                 <Ionicons name={'cash-outline'} size={30} color={'white'} />
               </TouchableOpacity>
             </View>
@@ -182,7 +184,8 @@ ShopScreen = () => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
                 <Text style={styles.goodsText}>{'50원'}</Text>
               </View>
@@ -191,7 +194,8 @@ ShopScreen = () => {
                 onPress={() => {
                   setGoods('slot');
                   setPaymentModalVisibility(true);
-                }}>
+                }}
+              >
                 <Ionicons name={'cash-outline'} size={30} color={'white'} />
               </TouchableOpacity>
             </View>
@@ -202,7 +206,8 @@ ShopScreen = () => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 <Text style={styles.goodsText}>
                   {'질병진단 구독 서비스 가입'}
                 </Text>
@@ -213,7 +218,8 @@ ShopScreen = () => {
                 onPress={() => {
                   setGoods('subscribe');
                   setPaymentModalVisibility(true);
-                }}>
+                }}
+              >
                 <Ionicons name={'cash-outline'} size={30} color={'white'} />
               </TouchableOpacity>
             </View>
@@ -225,8 +231,11 @@ ShopScreen = () => {
         isVisible={isBuySlotModalVisible}
         onBackButtonPress={() => {
           setBuySlotModalVisibility(false);
-        }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        }}
+      >
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
           <View style={styles.buyResultModalWrapper}>
             <Text style={[styles.buyResultText, { fontSize: 18 }]}>
               슬롯 구매 성공
@@ -238,7 +247,8 @@ ShopScreen = () => {
                 style={[
                   styles.buyResultText,
                   { color: '#93d07d', fontFamily: 'NanumGothicExtraBold' },
-                ]}>
+                ]}
+              >
                 {maxPlantNumber}
               </Text>
               <Text style={styles.buyResultText}>
@@ -249,7 +259,8 @@ ShopScreen = () => {
               style={styles.earnModalButton}
               onPress={() => {
                 setBuySlotModalVisibility(false);
-              }}>
+              }}
+            >
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
                   확인
@@ -263,11 +274,19 @@ ShopScreen = () => {
         isVisible={isBuySubscribeModalVisible}
         onBackButtonPress={() => {
           setBuySlotModalVisibility(false);
-        }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        }}
+      >
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
           <View style={styles.buyResultModalWrapper}>
             <View
-              style={{ flex: 5, alignItems: 'center', justifyContent: 'center' }}>
+              style={{
+                flex: 5,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <Text style={[styles.buyResultText, { fontSize: 18 }]}>
                 {`질병진단 구독 서비스\n가입 완료`}
               </Text>
@@ -279,7 +298,8 @@ ShopScreen = () => {
               style={styles.earnModalButton}
               onPress={() => {
                 setBuySubscribeModalVisibility(false);
-              }}>
+              }}
+            >
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
                   확인
@@ -291,8 +311,11 @@ ShopScreen = () => {
       </Modal>
       <Modal
         isVisible={paymentModalVisible}
-        onBackButtonPress={() => setPaymentModalVisibility(false)}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        onBackButtonPress={() => setPaymentModalVisibility(false)}
+      >
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
           <View style={styles.buyResultModalWrapper}>
             <Text style={[styles.buyResultText, { fontSize: 18 }]}>
               구매자 정보 입력
@@ -344,7 +367,8 @@ ShopScreen = () => {
                     });
                   }
                 }
-              }}>
+              }}
+            >
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
                   구매
