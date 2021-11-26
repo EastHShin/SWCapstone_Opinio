@@ -1,8 +1,7 @@
 package com.opinio.plantrowth.service.EmailAuth;
 
 import com.opinio.plantrowth.domain.ConfirmationToken;
-import com.opinio.plantrowth.repository.ConfirmationTokenRepository;
-import com.opinio.plantrowth.repository.UserRepository;
+import com.opinio.plantrowth.repository.user.ConfirmationTokenRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,7 +15,6 @@ import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Random;
 
 @Transactional(readOnly = true)

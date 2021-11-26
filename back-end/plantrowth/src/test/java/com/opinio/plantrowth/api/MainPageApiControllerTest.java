@@ -1,32 +1,34 @@
 package com.opinio.plantrowth.api;
 
+import com.opinio.plantrowth.api.controller.MainPageApiController;
 import com.opinio.plantrowth.config.WebSecurityConfig;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
-import com.opinio.plantrowth.domain.Plant;
-import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.UserRepository;
-import com.opinio.plantrowth.service.*;
+import com.opinio.plantrowth.domain.plant.Plant;
+import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.repository.user.UserRepository;
 import com.opinio.plantrowth.service.EmailAuth.EmailService;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
+import com.opinio.plantrowth.service.plant.DiaryService;
+import com.opinio.plantrowth.service.plant.PlantExpService;
+import com.opinio.plantrowth.service.plant.PlantService;
+import com.opinio.plantrowth.service.plant.WateringService;
+import com.opinio.plantrowth.service.user.UserPointService;
+import com.opinio.plantrowth.service.user.UserService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

@@ -42,10 +42,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             .authorizeRequests()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/user/**").hasRole("USER")
-            .antMatchers("/**", "/join", "/login").permitAll()
+            .antMatchers("/api/auth/**", "/api/community", "/api/community/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                     UsernamePasswordAuthenticationFilter.class);
+
+    http.sessionManagement()
+        .maximumSessions(1) //세션 최대 허용수
+        .maxSessionsPreventsLogin(false); // 중복 로그인하면 이전 로그인이 풀림
   }
 }

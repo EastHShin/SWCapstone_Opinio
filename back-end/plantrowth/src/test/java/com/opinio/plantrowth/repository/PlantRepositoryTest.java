@@ -1,7 +1,10 @@
 package com.opinio.plantrowth.repository;
 
-import com.opinio.plantrowth.domain.Plant;
-import com.opinio.plantrowth.domain.User;
+import com.opinio.plantrowth.domain.plant.Plant;
+import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.repository.plant.PlantRepository;
+import com.opinio.plantrowth.repository.user.UserRepository;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,8 +14,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class PlantRepositoryTest {

@@ -2,10 +2,9 @@ package com.opinio.plantrowth.api.dto.plant;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.opinio.plantrowth.domain.Plant;
+import com.opinio.plantrowth.domain.plant.Plant;
 import lombok.Getter;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 
 @Getter

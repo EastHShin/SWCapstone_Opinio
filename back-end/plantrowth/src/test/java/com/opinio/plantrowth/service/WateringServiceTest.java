@@ -1,8 +1,10 @@
 package com.opinio.plantrowth.service;
 
-import com.opinio.plantrowth.domain.Plant;
-import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.PlantRepository;
+import com.opinio.plantrowth.domain.plant.Plant;
+import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.repository.plant.PlantRepository;
+import com.opinio.plantrowth.service.plant.WateringService;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)

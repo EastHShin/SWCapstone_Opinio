@@ -1,13 +1,19 @@
 package com.opinio.plantrowth.api;
 
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
-import com.opinio.plantrowth.domain.Plant;
-import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.UserRepository;
-import com.opinio.plantrowth.service.*;
+import com.opinio.plantrowth.domain.plant.Plant;
+import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.repository.user.UserRepository;
 import com.opinio.plantrowth.service.EmailAuth.EmailService;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
+import com.opinio.plantrowth.service.plant.DiaryService;
+import com.opinio.plantrowth.service.plant.PlantExpService;
+import com.opinio.plantrowth.service.plant.PlantService;
+import com.opinio.plantrowth.service.plant.WateringService;
+import com.opinio.plantrowth.service.user.UserPointService;
+import com.opinio.plantrowth.service.user.UserService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,7 +27,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
