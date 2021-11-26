@@ -14,7 +14,7 @@ import UserInfo from "./user/userInfo"
 import Board from "./board/userBoard"
 import Post from "./board/userPost"
 import Comment from "./board/userComment"
-import Report from "./report"
+import Report from "./blame/report"
 import React from "react";
 
 function App() {
