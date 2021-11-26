@@ -219,10 +219,11 @@ const Item = ({ item, onPress, style }) => {
         <Text style={styles.date}>{item.writer}</Text>
         </View>
         <View style={{flexDirection:"row"}}>
+        
         <MaterialCommunityIcons name='heart-outline' size = {14} color="#DC143C" />
-        <Text style={{fontSize:10, color : "#DC143C", marginRight:Dimensions.get('window').width*0.02}}>{item.countedLike}</Text>
+        <Text style={{fontSize:10, color : "#DC143C", marginLeft:Dimensions.get('window').width*0.01,marginRight:Dimensions.get('window').width*0.02}}>{item.countedLike}</Text>
         <SimpleLineIcons name = 'bubble' size ={14} color="#00BFFF"  />
-        <Text style={{fontSize:10, color : "#00BFFF", marginRight:Dimensions.get('window').width*0.02}}>{item.countedComments}</Text>
+        <Text style={{fontSize:10, color : "#00BFFF", marginHorizontal:Dimensions.get('window').width*0.01}}>{item.countedComments}</Text>
       </View>
       </View>
       

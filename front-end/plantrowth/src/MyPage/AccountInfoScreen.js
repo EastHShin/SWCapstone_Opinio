@@ -34,7 +34,7 @@ const AccountInfoScreen = ({ navigation }) => {
     if (isFocused) {
       AsyncStorage.getItem('userId').then(value => {
         if (value != null) {
-          setUserId(JSON.stringify(value));  //
+          setUserId(JSON.parse(value));  //
           dispatch(infoUser(JSON.parse(value)));
         }
       }

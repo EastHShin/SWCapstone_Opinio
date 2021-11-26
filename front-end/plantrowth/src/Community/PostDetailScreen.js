@@ -1,28 +1,24 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { View, StyleSheet, Text, Dimensions, TouchableOpacity, SafeAreaView, TextInput, Modal, ScrollView, KeyboardAvoidingView, Image, Alert } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity, SafeAreaView, TextInput, Modal, ScrollView, KeyboardAvoidingView,  Alert } from 'react-native';
 
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/Entypo';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../Loader';
 import { useIsFocused } from '@react-navigation/native'
-import { getPost, deletePost } from '../actions/CommunityActions';
+import { getPost, deletePost, setResultState } from '../actions/CommunityActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { Value } from 'react-native-reanimated';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const PostDetailScreen = ({ route, navigation }) => {
 
     const { selectedId } = route.params;
 
     const [loading, setLoading] = useState(false);
-    const [imageWidth, setImageWidth] = useState('');
-    const [imageHeight, setImageHeight] = useState('');
-
+  
     const [userId, setUserId] = useState('');
     const [comment, setComment] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -35,7 +31,7 @@ const PostDetailScreen = ({ route, navigation }) => {
     useEffect(() => {        
         
         if (isFocused) {
-
+            
             AsyncStorage.getItem('userId').then(value => {
                 if (value != null) {
                     setUserId(JSON.parse(value));
@@ -48,23 +44,21 @@ const PostDetailScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         setComment(post.comments)
-        if(post.file_name){
-            Image.getSize(post.file_name, (width, height) => {
-                setImageHeight(height);
-                setImageWidth(width);
-            })
-        }
+        console.log(post)
+
     }, [post])
 
     useEffect(() => {
         if (result == 'success' && isFocused) {
             setLoading(false);
             dispatch(setResultState(''));
+            setIsModalVisible(false);
             navigation.navigate('CommunityMainScreen');
         }
         else if (result == 'failure' && isFocused) {
             setLoading(false);
             dispatch(setResultState(''));
+            setIsModalVisible(false);
             alert('게시글 삭제 실패!');
         }
 
@@ -82,7 +76,7 @@ const PostDetailScreen = ({ route, navigation }) => {
                 text: "확인",
                 onPress: () => {
                     setLoading(true);
-                    dispatch(deletePost(post.id))
+                    dispatch(deletePost(selectedId))
                 }
             }
         ]
@@ -217,7 +211,7 @@ const PostDetailScreen = ({ route, navigation }) => {
                         </View>
                         <View style={styles.date}>
                             <Text style={{ fontSize: 10 }}>최초 게시일 : {post.createDate}</Text>
-                            {post.updateDate != '' ? <Text style={{ fontSize: 10 }}>최근 수정일 : {post.updateDate}</Text> : null}
+                            {post.updateDate != null ? <Text style={{ fontSize: 10 }}>최근 수정일 : {post.updateDate}</Text> : null}
                         </View>
                     </View>
                     <View style={styles.textWrapper}>
@@ -226,15 +220,9 @@ const PostDetailScreen = ({ route, navigation }) => {
                         {post.file_name != '' ? (
 
                             <View style={{ alignItems: "center" }}>
-                                <Image source={{ uri: post.file_name }}
-                                    style={{
-                                        marginTop: Dimensions.get('window').height * 0.01,
-                                        borderRadius: 10,
-                                        width: Dimensions.get('window').width,
-                                        height: imageHeight / imageWidth >= 2 ? imageHeight / 1.6 : imageHeight / 2,
-
-                                        resizeMode: 'contain',
-                                    }}
+                                <AutoHeightImage source={{ uri: post.file_name }}
+                                width={ Dimensions.get('window').width*0.9}
+                                style ={{marginBottom:Dimensions.get('window').height*0.01, marginTop : Dimensions.get('window').height*0.01}}
                                 />
                             </View>
 
@@ -263,7 +251,8 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
+        
     },
     top: {
         backgroundColor: "#FFFFFF",
@@ -294,9 +283,16 @@ const styles = StyleSheet.create({
 
         width: Dimensions.get('window').width * 0.95,
         borderColor: '#C9E7BE',
-        borderRadius: 20,
-        borderWidth: 2,
         marginTop: Dimensions.get('window').height * 0.015,
+        marginBottom: Dimensions.get('window').height * 0.015,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 3.00,
+        elevation: 2
+
     },
     userWrapper: {
         height: Dimensions.get('window').height * 0.07,

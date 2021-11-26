@@ -71,6 +71,7 @@ const AccountEditScreen = ({ route, navigation }) => {
   }, [userEditState])
 
   const onPressHandler = () => {
+    console.log(password)
     if (nickName == userInfo.user_name && birth == userInfo.user_birth && !password) {
       alert('수정된 정보가 없습니다!');
       return;
@@ -88,6 +89,14 @@ const AccountEditScreen = ({ route, navigation }) => {
       alert('비밀번호를 다시 확인해주세요.');
       return;
     }
+    if(password && !checkPassword){
+      alert('비밀번호 확인 절차를 완료해주세요.');
+      return;
+    }
+    if(checkPassword != password){
+      alert('비밀번호를 다시 확인해주세요.');
+      return;
+    }
 
     setLoading(true);
 
@@ -100,7 +109,8 @@ const AccountEditScreen = ({ route, navigation }) => {
       user.user_birth = birth;
     }
 
-    if (!vailErrorText && !checkErrorText && password) {
+    if (password) {
+      console.log(password);
       user.password = password;
     }
     user.email = userInfo.email;
@@ -188,6 +198,9 @@ const AccountEditScreen = ({ route, navigation }) => {
                   placeholderTextColor="#808080"
                   returnKeyType="next"
                   value={nickName}
+                  onSubmitEditing={() =>
+                    Keyboard.dismiss()
+                  }
                   underlineColorAndroid="#A9A9A9"
                   blurOnSubmit={false}
                 />

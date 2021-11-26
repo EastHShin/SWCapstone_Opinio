@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deleteUser, setUserDeleteState, setLogoutState } from '../actions/UserActions';
 import Loader from '../Loader';
 
-//UI 수정 필요!
+
 const AccountDeleteScreen = ({ navigation }) => {
 
     const [userPassword, setUserPassword] = useState("");
