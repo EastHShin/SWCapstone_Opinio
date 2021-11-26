@@ -44,6 +44,10 @@ const DiaryEditScreen = ({ route, navigation }) => {
     
     const result = useSelector(state => state.DiaryReducer.result);
  
+    useEffect(() => {
+       console.log("수정때 + " + plantId);
+    
+    }, [isFocused])
    useEffect(() => {
       if(result == "success" && isFocused){
           setLoading(false);
@@ -100,10 +104,12 @@ const DiaryEditScreen = ({ route, navigation }) => {
         if (originalImageUri) {
             if (!imageUri) {
                 console.log("사진 없어짐");
-                Data.append('file_name', 'delete');
+                Data.append('file_delete',true);
             }
             else if (imageUri != originalImageUri) {
                 console.log("새로운 사진");
+                Data.append('file_delete',false);
+                
                 Data.append('file_name', {
                     name: fileName,
                     type: imageType,
@@ -111,10 +117,15 @@ const DiaryEditScreen = ({ route, navigation }) => {
                 });
 
             }
+            else{
+                console.log("dddhere");
+                Data.append('file_delete',false);
+            }
         }
         else{
             if(imageUri){
                 console.log("원래 사진 없는데 생김")
+                Data.append('file_delete',false);
                 Data.append('file_name', {
                     name: fileName,
                     type: imageType,
@@ -122,11 +133,13 @@ const DiaryEditScreen = ({ route, navigation }) => {
                 });
             }
             else{
-                console.log('원래 없어');
+                //원래없고, ㅅ새로운 사진도 없음
+                Data.append('file_delete',false);
                 
             }
             
         }
+        console.log(JSON.stringify(Data));
 
         dispatch(editDiary(Data, selectedId));
         

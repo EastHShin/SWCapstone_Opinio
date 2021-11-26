@@ -32,14 +32,25 @@ import * as RootNavigation from './RootNavigation';
 import { navigationRef } from './RootNavigation';
 const Stack = createNativeStackNavigator();
 
-function App({ navigation }) {
-  //로그인 시 오고, 유저 아이디
-  //로그인 시에만 오게
-  //테스트 중
-  useEffect(() => {
-    messaging().onMessage(async remoteMessage => {
-      console.log(remoteMessage.data.plant_id);
+function App() {
+  
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+  });
 
+  messaging().onNotificationOpenedApp(async remoteMessage => {
+    console.log('open!');
+    console.log("open : " + remoteMessage.data.plant_id);
+
+    RootNavigation.push('ManagePlantScreen', {
+      plantId: remoteMessage.data.plant_id,
+    });
+  });
+
+  useEffect(() => {
+    const foreground = messaging().onMessage(async remoteMessage => {
+      console.log("어플 안 : "+remoteMessage.data.plant_id);
+      console.log(remoteMessage);
       Alert.alert('물주기 알림', '식물에게 물을 줄 시간입니다!', [
         {
           text: '취소',
@@ -48,25 +59,15 @@ function App({ navigation }) {
         {
           text: '확인',
           onPress: () => {
-            RootNavigation.navigate('ManagePlantScreen', {
+            RootNavigation.push('ManagePlantScreen', {
               plantId: remoteMessage.data.plant_id,
             });
           },
         },
       ]);
     });
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-    });
 
-    messaging().onNotificationOpenedApp(async remoteMessage => {
-      console.log('open!');
-      console.log(remoteMessage.data.plant_id);
-
-      RootNavigation.navigate('ManagePlantScreen', {
-        plantId: remoteMessage.data.plant_id,
-      });
-    });
+    return foreground;
   }, []);
 
   return (

@@ -128,6 +128,8 @@ export const diagnosisPlant = (plantId, image) => {
           dispatch(setLevelUpState(response.data.isLevelUp));
           dispatch({ type: SAVE_DIAGNOSIS_CHART, payload: response.data })
           dispatch({ type: DIAGNOSIS_PLANT, payload: 'success' });
+          dispatch({ type: GET_POINT, payload: response.data.point })
+          dispatch({ type: GET_EXP, payload: response.data.plant_exp })
           if (!response.data.isLevelUp) dispatch(setEarnState(true));
         }
 

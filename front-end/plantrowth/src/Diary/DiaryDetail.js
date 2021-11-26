@@ -35,6 +35,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
     const result = useSelector(state => state.DiaryReducer.result);
 
     useEffect(() => {
+        console.log("디테일에서 : "+ plantId);
         if (isFocused) {
             dispatch(fetchDiary(selectedId));
         }
@@ -42,10 +43,11 @@ const DiaryDetailScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (result == 'success' && isFocused) {
+            console.log("성공했을 때 " + plantId);
             setLoading(false);
             dispatch(setResultState(''));
             setIsModalVisible(false);
-            navigation.navigate('DiaryScreen', { plantId: plantId, plantImg: plantImg });
+            navigation.navigate('DiaryScreen', { selectedId:selectedId ,plantId: plantId, plantImg: plantImg });
         }
         else if (result == 'failure' && isFocused) {
             setLoading(false);
@@ -111,7 +113,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                                     activeOpacity={0.5}
                                     onPress={() => {
                                         setIsModalVisible(false);
-                                        navigation.navigate('DiaryEditScreen', { selectedId: selectedId, plnatId: plantId, plantImg: plantImg })
+                                        navigation.navigate('DiaryEditScreen', { selectedId: selectedId, plantId: plantId, plantImg: plantImg })
                                     }
                                     }
                                     style={{ flexDirection: "row" }}>
@@ -205,6 +207,10 @@ const styles = StyleSheet.create({
     content: {
         marginVertical: Dimensions.get("window").height * 0.04,
         width: Dimensions.get('window').width * 0.8
+    },
+    text:{
+        color:"#000000",
+        fontWeight:"bold"
     }
 
 })

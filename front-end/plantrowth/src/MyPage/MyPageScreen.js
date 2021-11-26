@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {logoutUser} from '../actions/UserActions';
 
-import * as KakaoLogins from '@react-native-seoul/kakao-login';
 import {
   SafeAreaView,
   View,
@@ -21,21 +20,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const MyPageScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
-  const unlinkKakao = async () => {
-    try {
-      let result = await KakaoLogins.unlink();
-
-      if (result) {
-        console.log('unlink');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const onPressHandler = () => {
-    // unlinkKakao();
-    // 카카오 세션 끊기 테스트
+   
     Alert.alert('로그아웃', '로그아웃 하시겠습니까?', [
       {
         text: '취소',
@@ -44,7 +31,7 @@ const MyPageScreen = ({navigation}) => {
       {
         text: '확인',
         onPress: () => {
-          // unlinkKakao();
+        
           dispatch(logoutUser());
         },
       },
@@ -53,6 +40,7 @@ const MyPageScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.body}>
+     
       <View style={styles.top}>
         <TouchableOpacity
           style={{marginStart: Dimensions.get('window').width * 0.03}}
@@ -69,6 +57,9 @@ const MyPageScreen = ({navigation}) => {
           My Page
         </Text>
       </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width,}}>
+                        <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
+                    </View>
       <View style={{flex: 1,justifyContent: 'space-between'}}>
         <View style={styles.wrapper}>
           <TouchableOpacity
@@ -86,7 +77,7 @@ const MyPageScreen = ({navigation}) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{flexDirection: 'row'}}
             activeOpacity={0.5}
             onPress={() => navigation.push('AccountEditScreen')}>
@@ -99,7 +90,7 @@ const MyPageScreen = ({navigation}) => {
                 style={styles.icon}
               />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={{flexDirection: 'row'}}
@@ -149,7 +140,7 @@ const MyPageScreen = ({navigation}) => {
           <TouchableOpacity
             style={{flexDirection: 'row'}}
             activeOpacity={0.5}
-            onPress={() => navigation.push('AccountDeleteScreen')}>
+            onPress={() => navigation.push('AccountDeleteNoticeScreen')}>
             <View style={styles.section}>
               <Text style={styles.text}>회원탈퇴</Text>
               <Ionicons
@@ -205,13 +196,7 @@ const styles = StyleSheet.create({
     marginEnd: Dimensions.get('window').width * 0.05,
   },
 
-  button: {
-    width: 150,
-    height: 50,
-    alignItems: 'center',
-    borderRadius: 5,
-    margin: 10,
-  },
+
 });
 
 export default MyPageScreen;

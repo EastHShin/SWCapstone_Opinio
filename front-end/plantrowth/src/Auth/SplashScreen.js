@@ -16,8 +16,10 @@ const SplashScreen =({navigation}) =>{
     useEffect(()=>{
         setTimeout(()=>{
             setAnimating(false);
-            AsyncStorage.getItem('userId').then((value)=>
-            navigation.replace(value === null ? 'LoginScreen':'HomeScreen'),
+            AsyncStorage.getItem('userId').then((value)=>{
+            // navigation.reset(value === null ? 'LoginScreen':'HomeScreen')
+            navigation.reset({routes: [{name: (value === null ? 'LoginScreen':'HomeScreen')}]});
+        }
             );
         }, 5000);
     }, []);

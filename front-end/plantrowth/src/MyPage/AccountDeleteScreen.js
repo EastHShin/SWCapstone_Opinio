@@ -19,7 +19,7 @@ import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteUser } from '../actions/UserActions';
+import { deleteUser, setUserDeleteState, setLogoutState } from '../actions/UserActions';
 import Loader from '../Loader';
 
 //UI 수정 필요!
@@ -45,12 +45,15 @@ const AccountDeleteScreen = ({ navigation }) => {
     }, [isFocused])
 
     useEffect(() => {
+        
         if (userDeleteState == "success" && isFocused) {
             setLoading(false);
+            dispatch(setUserDeleteState(''));
             setIsModalVisible(true);
         }
         else if (userDeleteState == "failure" && isFocused) {
             setLoading(false);
+            dispatch(setUserDeleteState(''));
             alert('회원탈퇴 실패! 비밀번호를 다시 확인해주세요.');
         }
     }, [userDeleteState])
@@ -91,13 +94,15 @@ const AccountDeleteScreen = ({ navigation }) => {
                     </TouchableOpacity>
                     <Text style={{ marginEnd: Dimensions.get('window').width * 0.42, fontWeight: "bold", color: "#000000" }}>회원탈퇴</Text>
                 </View>
-
-
+                <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width,}}>
+                        <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
+                    </View>
+                    <View style={{flex: 1,justifyContent: 'space-between'}}>
                 <View style={styles.wrapper}>
 
                     <View style={styles.section}>
                         <View style={{ flexDirection: "row", width: Dimensions.get('window').width * 0.65, marginStart: Dimensions.get('window').width * 0.04, }}>
-                            <Text style={{ marginTop: Dimensions.get('window').height * 0.01, }}>비밀번호 : </Text>
+                            <Text style={{ marginTop: Dimensions.get('window').height * 0.01, color:"#000000"}}> 비밀번호  :    </Text>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={(UserPassword) =>
@@ -145,15 +150,16 @@ const AccountDeleteScreen = ({ navigation }) => {
                     }}>
                         <View style={styles.modalSectionWrapper}>
                             
-                                <Text>그동안 Plantrowth를 이용해주셔서 감사합니다.</Text>
-                                <Text>다음에 또 만나요 !</Text>
+                                <Text style={{color:"#000000"}}>그동안 Plantrowth를 이용해주셔서 감사합니다.</Text>
+                                <Text style={{color:"#000000"}}>다음에 또 만나요 !</Text>
                                
                             <TouchableOpacity
                                 style={styles.button}
                                 activeOpacity={0.5}
                                 onPress={() => {
-                                    setIsModalVisible(false);
+                                    dispatch(setLogoutState('end'));
                                     AsyncStorage.clear();
+                                    setIsModalVisible(false);
                                 }
                                 }>
                                 <Text style={{ color: "#000000" }}>OK</Text>
@@ -164,7 +170,9 @@ const AccountDeleteScreen = ({ navigation }) => {
                 </Modal>
 
                 <Footer />
+                </View>
             </KeyboardAvoidingView>
+            
         </SafeAreaView>
     )
 };
@@ -175,33 +183,33 @@ const styles = StyleSheet.create({
     body: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        backgroundColor: '#C9E7BE'
     },
     top: {
-        backgroundColor: "#FFFFFF",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         height: Dimensions.get('window').height * 0.06,
         width: Dimensions.get('window').width,
     },
     wrapper: {
-        height: Dimensions.get('window').height * 0.82,
         width: Dimensions.get('window').width,
-
     },
     section: {
-
-        justifyContent: "center",
-        backgroundColor: "#FFFFFF",
+        marginBottom: Dimensions.get('window').height * 0.0009,
+        backgroundColor: '#FFFFFF',
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height * 0.2,
-        marginTop: Dimensions.get('window').height * 0.03,
+        height: Dimensions.get('window').height * 0.15,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
 
     },
 
     smallButton: {
-        backgroundColor: '#BEE9B4',
+        backgroundColor: '#82B594',
         height: Dimensions.get('window').height * 0.05,
         marginTop: Dimensions.get('window').height * 0.01,
         marginStart: Dimensions.get('window').width * 0.75,
@@ -213,7 +221,7 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         color: '#000000',
-        height: Dimensions.get('window').height * 0.05,
+        height: Dimensions.get('window').height * 0.049,
         borderWidth: 1,
         borderRadius: 30,
         borderColor: '#BEE9B4',
@@ -247,6 +255,8 @@ const styles = StyleSheet.create({
         shadowRadius: 3.00,
         elevation: 5
     },
+
+
 
 
 })

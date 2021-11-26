@@ -33,3 +33,6 @@ export const EARN = 'earn';
 export const USER_DELETE = 'USER_DELETE';
 export const GET_SHOP_INFO = 'get_shop_info';
 export const BUY_SUBSCRIBE = 'buy_subscribe';
+export const USER_INFO = 'USER_INFO';
+export const USER_EDIT = 'USER_EDIT';
+export const DIAGNOSIS_LIST = 'DIAGNOSIS_LIST';
