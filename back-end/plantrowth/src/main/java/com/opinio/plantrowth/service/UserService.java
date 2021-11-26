@@ -150,6 +150,7 @@ public class UserService implements UserDetailsService {
     public void setNewPassword(Long userId, String newPassword) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("No User Found"));
-        user.setPassword(newPassword);
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
     }
 }

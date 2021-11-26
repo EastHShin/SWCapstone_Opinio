@@ -100,6 +100,7 @@ public class BillingService {
 				.impUid(impUid)
 				.merchantUid(merchantUid)
 				.amount(amount)
+				.cancelAmount(0)
 				.paymentType(PaymentType.SUBSCRIPTION)
 				.build();
 			paymentRecordRepository.save(paymentRecord);
@@ -121,6 +122,7 @@ public class BillingService {
 				.impUid(impUid)
 				.merchantUid(merchantUid)
 				.amount(amount)
+				.cancelAmount(0)
 				.paymentType(PaymentType.SLOT)
 				.build();
 			paymentRecordRepository.save(paymentRecord);
