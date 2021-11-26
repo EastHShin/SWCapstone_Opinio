@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME } from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -15,6 +15,7 @@ const setLogoutTimer = (expirationTime) => dispatch => {
 
     timer = setTimeout(() => {
         dispatch(logoutUser());
+        console.log('로그인 만료')
     }, expirationTime);
 };
 
@@ -185,6 +186,13 @@ export const kakaoLogin = (data) => {
 
 }
 
+export const setLoginState = state => dispatch => {
+    dispatch({
+        type:LOGIN_USER,
+        payload:state
+    })
+}
+
 export const kakaoRegister = (register) => dispatch => {
 
     dispatch({
@@ -330,6 +338,7 @@ export const infoUser = (userId) => {
 }
 
 export const editUser = (userId, data) => {
+    console.log(userId + "   " + data);
     return async dispatch => {
         return await axios.put(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,data,
         {
@@ -378,10 +387,122 @@ export const setUserInfoState = state => dispatch => {
 }
 
 export const getDiagnosisList = (plantId) => {
-    
+
+    return async dispatch => {
+        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diagnosis/${plantId}`)
+        .then(function(res){
+            if (res.status == 200) {
+                dispatch({
+                    type: DIAGNOSIS_LIST,
+                    payload: res.data.data
+                })
+            }
+
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:DIAGNOSIS_LIST,
+                payload:[]
+            })
+        })
+    }
+  
 }
 
+export const findPassword = (user) => {
 
+    return async dispatch => {
+        return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/find`, user,
+        {
+            headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if(res.status == 200){
+                dispatch({
+                    type:FIND_PASSWORD,
+                    payload:'success'
+                })
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:FIND_PASSWORD,
+                payload : 'failure'
+            })
+        })
+    }
+}
+
+export const setFindPasswordState = state => dispatch =>{
+    dispatch({
+        type:FIND_PASSWORD,
+        payload:state
+    })
+}
+
+export const checkPassword = (userId, password) => {
+    return async dispatch =>{
+        return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/cp/${userId}`,password,
+        {
+            headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if(res.status == 200){
+                dispatch({
+                    type:CHECK_PASSWORD,
+                    payload:'success'
+                })
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:CHECK_PASSWORD,
+                payload:'failure'
+            })
+        })
+    }
+}
+
+export const setCheckPasswordState = state => dispatch =>{
+    dispatch({
+        type:CHECK_PASSWORD,
+        payload:state
+    })
+}
+
+export const checkNickname = (nickName) =>{
+    return async dispatch => {
+        return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/cu`,nickName,
+        {
+            headers: { "Content-Type": `application/json` }
+        })
+        .then(function(res){
+            if(res.status==200){
+                dispatch({
+                    type:CHECK_NICKNAME,
+                    payload: 'success'
+                })
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:CHECK_NICKNAME,
+                payload: 'failure'
+            })
+        })
+    }
+}
+
+export const checkNicknameState = state => dispatch =>{
+    dispatch({
+        type:CHECK_NICKNAME,
+        payload:state
+    })
+}
 
 
 

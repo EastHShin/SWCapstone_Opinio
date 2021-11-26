@@ -36,3 +36,13 @@ export const BUY_SUBSCRIBE = 'buy_subscribe';
 export const USER_INFO = 'USER_INFO';
 export const USER_EDIT = 'USER_EDIT';
 export const DIAGNOSIS_LIST = 'DIAGNOSIS_LIST';
+export const FIND_PASSWORD = 'FIND_PASSWORD';
+export const CHECK_PASSWORD = 'CHECK_PASSWORD';
+export const CHECK_NICKNAME ='CHECK_NICKNAME';
+export const GET_BOARD_LIST = 'GET_BOARD_LIST';
+export const GET_POST = 'GET_POST';
+export const EDIT_POST = 'EDIT_POST';
+export const DELETE_POST = 'DELETE_POST';
+export const SAVE_POST = 'CREATE_POST';
+export const RESULT_STATE_POST = 'RESULT_STATE_POST';
+

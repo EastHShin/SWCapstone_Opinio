@@ -24,12 +24,18 @@ import AccountDeleteScreen from './src/MyPage/AccountDeleteScreen';
 import AccountEditScreen from './src/MyPage/AccountEditScreen';
 import DiseaseDiagnosisHistoryScreen from './src/MyPage/DiseaseDiagnosisHistoryScreen';
 import PointHistoryScreen from './src/MyPage/PointHistoryScreen';
-import { Alert } from 'react-native';
+import PlantDiagnosisScreen from './src/MyPage/PlantDiagonosisScreen';
+import {Alert} from 'react-native';
 import UpdatePlantProfileScreen from './src/Plant/UpdatePlantProfile';
 import DiagnosisScreen from './src/Plant/DiagnosisScreen';
-import Payment from './src/Shop/Payment';
+import PasswordCheckScreen from './src/MyPage/PasswordCheckScreen';
 import * as RootNavigation from './RootNavigation';
-import { navigationRef } from './RootNavigation';
+import {navigationRef} from './RootNavigation';
+import PostCreateScreen from './src/Community/PostCreateScreen';
+import PostEditScreen from './src/Community/PostEditScreen';
+import PostDetailScreen from './src/Community/PostDetailScreen';
+import Payment from './src/Shop/Payment';
+
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -224,6 +230,43 @@ function App() {
               headerShown: false,
             }}
           />
+
+           <Stack.Screen
+            name="PlantDiagnosisScreen"
+            component={PlantDiagnosisScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+           <Stack.Screen
+            name="PasswordCheckScreen"
+            component={PasswordCheckScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+           <Stack.Screen
+            name="PostCreateScreen"
+            component={PostCreateScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+           <Stack.Screen
+            name="PostEditScreen"
+            component={PostEditScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PostDetailScreen"
+            component={PostDetailScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
           <Stack.Screen
             name="Payment"
             component={Payment}

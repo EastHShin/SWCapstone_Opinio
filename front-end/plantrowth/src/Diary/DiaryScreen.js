@@ -26,7 +26,9 @@ const Item = ({ item, onPress, style }) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
       <View>
-        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.title}>
+        {item.title.length > 20 ? (item.title.substring(0, 18) + "···") : item.title}
+        </Text>
       </View>
       <View>
         <Text style={styles.content}>
@@ -51,17 +53,22 @@ const DiaryScreen = ({ route, navigation }) => {
   const diaries = useSelector(state => state.DiaryReducer.diaries);
   const isFocused = useIsFocused();
   const [isEarnModalVisible, setEarnModalVisibility] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const earnState = useSelector(state => state.PlantReducer.earn);
   const exp = useSelector(state=>state.DiaryReducer.exp);
   const point = useSelector(state=>state.DiaryReducer.point);
   const plant_level = useSelector(state=>state.DiaryReducer.level);
+
   useEffect(() => {
   
     if (isFocused) {
-      console.log("목록 조회에소 + " +  plantId);
       dispatch(fetchDiaries(plantId));
     }
   }, [isFocused])
+
+  useEffect(() => {
+    setIsFetching(false);
+  }, [diaries])
 
   const renderExp = () => {
     if (plant_level) {
@@ -69,6 +76,11 @@ const DiaryScreen = ({ route, navigation }) => {
       else return 30 + (plant_level - 1) * 10;
     } else return 0;
   };
+
+  const refreshList = () => {
+    setIsFetching(true);
+    dispatch(fetchDiaries(plantId));
+  }
 
   const renderEarnPoint = () => {
       return (
@@ -141,6 +153,8 @@ const DiaryScreen = ({ route, navigation }) => {
           data={diaries}
           renderItem={renderItem}
           keyExtractor={item => item.diary_id}
+          // onRefresh= {refreshList}
+          // refreshing={isFetching}
           extraData={selectedId}
         />
       </View>
@@ -238,6 +252,13 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 30,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 5
   },
   title: {
     fontSize: 15,
@@ -255,14 +276,14 @@ const styles = StyleSheet.create({
 
     width: Dimensions.get('window').width * 0.2,
     height: Dimensions.get('window').height * 0.1,
-    borderRadius: (screenWidth * 0.4) / 3,
+    borderRadius: 10,
     backgroundColor: '#93d07d',
     borderWidth: 2,
     borderColor: '#93d07d',
     marginTop: Dimensions.get('window').height * -0.045,
     marginRight: Dimensions.get('window').width * 0.21,
     marginLeft: Dimensions.get('window').width * 0.23,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   expWrapper: {
     flexDirection: 'row',

@@ -4,93 +4,104 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     View,
     StyleSheet,
-    Image,
+    Text,
+    Dimensions,
     TouchableOpacity,
     SafeAreaView,
-    Dimensions,
-    ScrollView,
     TextInput,
+    ScrollView,
     KeyboardAvoidingView,
-    
+    Image
 } from 'react-native';
 
-import Loader from '../Loader';
-import Foundation from 'react-native-vector-icons/Foundation';
+
+import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { saveDiary, setResultState } from '../actions/DiaryActions';
+import Loader from '../Loader';
 import { useIsFocused } from '@react-navigation/native'
+import { createPost, setResultState } from '../actions/CommunityActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DiaryCreateScreen = ({ route,navigation }) => {
-
-    const {plantId, plantImg} = route.params;
-
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [imageUri, setImageUri] = useState("");
-    const [fileName, setFileName] = useState("");
-    const [imageType, setImageType] = useState("");
+const PostCreateScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
 
-    const contentInputRef = createRef();
+    const [imageType, setImageType] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [imageUri, setImageUri] = useState('');
+   
+    const [userId, setUserId] = useState('');
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
+    const result = useSelector(state => state.CommunityReducer.result);
+    const contentInputRef = createRef();
 
-    const result = useSelector(state => state.DiaryReducer.result);
+    useEffect(() => {
+        if (isFocused) {
+            AsyncStorage.getItem('userId').then(value => {
+                if (value != null) {
+                    setUserId(JSON.parse(value));
+                }
+            }
+            )
+        }
+    }, [isFocused])
 
-   useEffect(() => {
-       if(result == "success" && isFocused){
-           setLoading(false);
-           dispatch(setResultState(''));
-           navigation.navigate("DiaryScreen", {plantId:plantId, plantImg:plantImg});
-       }
-       
-       else if(result == "failure" && isFocused){
-           setLoading(false);
-           dispatch(setResultState(''));
-           alert("식물일기 업로드 실패");
-       }
-      
-   }, [result])
-    
+
+    useEffect(() => {
+        if (result == 'success' && isFocused) {
+            setLoading(false);
+            dispatch(setResultState(''));
+            navigation.navigate('CommunityMainScreen');
+        }
+        else if (result == 'failure' && isFocused) {
+            setLoading(false);
+            dispatch(setResultState(''));
+            alert('게시글 생성 실패!');
+        }
+
+    }, [result])
+
     const addGalleryImage = () => {
-        launchImageLibrary({mediaType:'photo' }, response =>{
-            if(!response.didCancel){
-            setImageType(response.assets[0].type);
-            setFileName(response.assets[0].fileName);
-            setImageUri(response.assets[0].uri);
+        launchImageLibrary({ mediaType: 'photo' }, response => {
+            if (!response.didCancel) {
+                setImageType(response.assets[0].type);
+                setFileName(response.assets[0].fileName);
+                setImageUri(response.assets[0].uri);
             }
         })
     }
 
     const addCameraImage = () => {
-        launchCamera({mediaType:'photo'}, response => { 
-            if(!response.didCancel){  
-            setImageType(response.assets[0].type);
-            setFileName(response.assets[0].fileName);
-            setImageUri(response.assets[0].uri);
+        launchCamera({ mediaType: 'photo' }, response => {
+            if (!response.didCancel) {
+                setImageType(response.assets[0].type);
+                setFileName(response.assets[0].fileName);
+                setImageUri(response.assets[0].uri);
             }
         })
     }
-    
+
     const onPressHandler = () => {
 
-        if(!title){
+        if (!title) {
             alert('제목을 입력해주세요!');
             return;
         }
-        if(!content){
+        if (!content) {
             alert('내용을 입력해주세요!');
             return;
         }
 
         setLoading(true);
 
-        
+
         const date = new Date();
-    
+
         const year = date.getFullYear();
         const month = ('0' + (date.getMonth() + 1)).slice(-2);
         const day = ('0' + date.getDate()).slice(-2);
@@ -99,7 +110,7 @@ const DiaryCreateScreen = ({ route,navigation }) => {
 
         Data.append('title', title);
         Data.append('content', content);
-        Data.append('date', year+ '-' + month + '-' + day)
+        Data.append('date', year + '-' + month + '-' + day)
 
         if (imageUri) {
             console.log("사진 있음");
@@ -110,17 +121,32 @@ const DiaryCreateScreen = ({ route,navigation }) => {
             });
         }
 
-        dispatch(saveDiary(Data, plantId));
+        dispatch(createPost(userId, Data));
+
     }
+
 
     return (
         <SafeAreaView style={styles.body}>
             <Loader loading={loading} />
-            <View style={{ marginVertical: "5%", marginEnd: "-80%" }}>
+
+            <View style={styles.top}>
                 <TouchableOpacity
+                    style={{ marginStart: Dimensions.get('window').width * 0.03 }}
                     activeOpacity={0.5}
                     onPress={() => navigation.goBack()}>
-                    <Foundation name='x' size={22} color="#FFFFFF" />
+                    <Feather name='x' size={27} color="#000000" />
+                </TouchableOpacity>
+                <Text style={{ marginLeft: Dimensions.get('window').width * 0.08, fontWeight: "bold", color: "#000000", fontSize: 15 }}>게시글 작성</Text>
+                <TouchableOpacity
+                    style={styles.smallButton}
+                    activeOpacity={0.5}
+                    onPress={onPressHandler
+                    }>
+                    <Text style={{
+                        color: '#FFFFFF',
+                        paddingVertical: 8, fontSize: 10, fontWeight: "bold"
+                    }}>완료</Text>
                 </TouchableOpacity>
             </View>
 
@@ -131,16 +157,16 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                     alignContent: 'center',
                 }}>
                 <KeyboardAvoidingView enabled>
-                    <View style={styles.diaryWrapper}>
+                    <View style={styles.wrapper}>
                         <View style={styles.title}>
                             <TextInput
                                 style={styles.titleInput}
                                 onChangeText={(title) =>
                                     setTitle(title)
                                 }
-                                placeholder="Enter Title"
+                                placeholder="Title"
                                 placeholderTextColor="#808080"
-                               
+
                                 returnKeyType="next"
                                 onSubmitEditing={() =>
                                     contentInputRef.current &&
@@ -150,7 +176,6 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                                 blurOnSubmit={false}
                             />
                         </View>
-
                         <View style={styles.content}>
                             <TextInput
                                 style={styles.contentInput}
@@ -165,21 +190,25 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                                 blurOnSubmit={true}
                                 underlineColorAndroid="#f000"
                             />
-                        </View>
 
-                        <View style = {{marginBottom:Dimensions.get('window').height * 0.03,height: Dimensions.get('window').height * 0.4,}}>
+                        </View>
+                        
                         {imageUri != '' ? (
-                           
+                            <View style={{ marginBottom: Dimensions.get('window').height * 0.02 }}>
                                 <Image source={{ uri: imageUri }}
                                     style={{
-                                        width: Dimensions.get('window').width * 0.8,
-                                        height: Dimensions.get('window').height * 0.4,
-                                        resizeMode: 'cover',
+                                        marginTop: Dimensions.get('window').height * 0.01,
+                                        borderRadius: 10,
+                                        width: Dimensions.get('window').width,
+                                        height: Dimensions.get('window').height * 0.7,
+                                        resizeMode: 'contain',
                                     }}
                                 />
-                            
-                        ) : null}
-                        </View>
+                            </View>
+                        ) :
+
+                            <View style={{ marginBottom: Dimensions.get('window').height * 0.04, height: Dimensions.get('window').height * 0.4, }}>
+                            </View>}
 
                         <View style={{ flexDirection: "row" }}>
                             <View style={styles.imageButton}>
@@ -208,52 +237,63 @@ const DiaryCreateScreen = ({ route,navigation }) => {
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
-            <View style={{
-                marginBottom: Dimensions.get('window').height * 0.03,
-                marginTop: Dimensions.get('window').height * 0.02
-            }}>
-                 <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={onPressHandler}>
-                    <FontAwesome name='check' size={25} color="#FFFFFF" />
-                </TouchableOpacity>
-            </View>
         </SafeAreaView>
     )
-}
-export default DiaryCreateScreen;
+};
+
+
 
 const styles = StyleSheet.create({
+
     body: {
         flex: 1,
-        backgroundColor: "#8EB695",
         alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#FFFFFF'
     },
-    diaryWrapper: {
-        height : Dimensions.get('window').height*0.9,
-        width: Dimensions.get("window").width,
-        borderRadius: 20,
-        backgroundColor: "#FFFFFF",
-        alignItems: "center"
+    top: {
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: Dimensions.get('window').height * 0.08,
+        width: Dimensions.get('window').width,
+    },
+    wrapper: {
+        alignItems: "center",
+        flex: 1,
+
+
     },
     title: {
-        marginVertical: Dimensions.get("window").height * 0.02,
-        width:Dimensions.get('window').width*0.8
+        marginVertical: Dimensions.get("window").height * 0.01,
+        width: Dimensions.get('window').width * 0.9
+
+    },
+    titleInput: {
+        fontWeight: 'bold',
+        fontSize: 20
     },
     content: {
-        marginBottom: Dimensions.get("window").height * 0.13,
-        width: Dimensions.get('window').width * 0.8
-    },
-    titleInput:{
-        fontWeight:"bold"
+        marginBottom: Dimensions.get("window").height * 0.22,
+        width: Dimensions.get('window').width * 0.9
     },
     contentInput: {
         flexShrink: 1
     },
     imageButton: {
         marginBottom: Dimensions.get('window').height * 0.06,
-        marginHorizontal:Dimensions.get('window').width * 0.04
-    }
-   
+        marginHorizontal: Dimensions.get('window').width * 0.04
+    },
+    smallButton: {
+        backgroundColor: '#B22339',
+        height: Dimensions.get('window').height * 0.04,
+        width: Dimensions.get('window').width * 0.14,
+        alignItems: 'center',
+        borderRadius: 20,
+        marginEnd: Dimensions.get('window').width * 0.06
 
+    },
 })
+
+export default PostCreateScreen;
