@@ -233,8 +233,11 @@ const ManagePlant = ({ route }) => {
               marginBottom: 20,
               alignItems: 'center',
               justifyContent: 'center',
-            }}>
-            <Text style={[styles.earnText, { fontSize: 16 }]}>보유 포인트:</Text>
+            }}
+          >
+            <Text style={[styles.earnText, { fontSize: 16 }]}>
+              보유 포인트:
+            </Text>
             <Text
               style={[
                 styles.earnText,
@@ -243,7 +246,8 @@ const ManagePlant = ({ route }) => {
                   fontFamily: 'NanumGothicExtraBold',
                   color: '#7e57c2',
                 },
-              ]}>
+              ]}
+            >
               {' '}
               {point}
             </Text>
@@ -264,7 +268,8 @@ const ManagePlant = ({ route }) => {
             width: screenWidth * 0.6,
             padding: 10,
             borderRadius: 10,
-          }}>
+          }}
+        >
           <View>
             <Image
               source={{ uri: selectedImage.assets[0].uri }}
@@ -276,12 +281,14 @@ const ManagePlant = ({ route }) => {
               style={styles.infoModalButton}
               onPress={() => {
                 setDiagnosisModalVisibility(false);
-              }}>
+              }}
+            >
               <FontAwesome name={'close'} size={35} color={'#222222'} />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.infoModalButton}
-              onPress={() => diagnosisHandler()}>
+              onPress={() => diagnosisHandler()}
+            >
               <FontAwesome name={'check'} size={35} color={'#222222'} />
             </TouchableOpacity>
           </View>
@@ -297,21 +304,25 @@ const ManagePlant = ({ route }) => {
             width: screenWidth * 0.6,
             padding: 10,
             borderRadius: 10,
-          }}>
+          }}
+        >
           <View
             style={{
               alignItems: 'center',
               justifyContent: 'center',
               height: screenHeight * 0.2,
-            }}>
+            }}
+          >
             <TouchableOpacity
               style={styles.imageButton}
-              onPress={() => photoUpload('pick')}>
+              onPress={() => photoUpload('pick')}
+            >
               <Text style={styles.imageModalText}>갤러리에서 이미지 선택</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.imageButton}
-              onPress={() => photoUpload('take')}>
+              onPress={() => photoUpload('take')}
+            >
               <Text style={styles.imageModalText}>카메라로 이미지 촬영</Text>
             </TouchableOpacity>
           </View>
@@ -320,7 +331,8 @@ const ManagePlant = ({ route }) => {
             style={styles.infoModalButton}
             onPress={() => {
               setDiagnosisModalVisibility(false);
-            }}>
+            }}
+          >
             <FontAwesome name={'close'} size={35} color={'#222222'} />
           </TouchableOpacity>
         </View>
@@ -346,7 +358,8 @@ const ManagePlant = ({ route }) => {
             shadowRadius: 6.27,
 
             elevation: 10,
-          }}>
+          }}
+        >
           <Image
             style={{
               width: 300,
@@ -366,16 +379,19 @@ const ManagePlant = ({ route }) => {
                     ? (screenWidth * 0.6 * profile.plant_exp) / renderExp()
                     : 0,
                 },
-              ]}>
+              ]}
+            >
               <Text
                 style={{
                   width: screenWidth * 0.6,
                   textAlign: 'center',
                   fontFamily: 'NanumGothicExtraBold',
                   color: '#363636',
-                }}>
-                {`LV. ${profile.plant_level} ( ${profile.plant_exp
-                  } / ${renderExp()} )`}
+                }}
+              >
+                {`LV. ${profile.plant_level} ( ${
+                  profile.plant_exp
+                } / ${renderExp()} )`}
               </Text>
             </View>
           </View>
@@ -390,19 +406,22 @@ const ManagePlant = ({ route }) => {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-between',
-      }}>
+      }}
+    >
       <Loader loading={loading} />
       <LevelUp plant_level={profile.plant_level} />
       <View style={{ justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <TouchableOpacity
             style={[styles.backButton, { marginLeft: 15, marginTop: 5 }]}
-            onPress={() => navigation.navigate('HomeScreen')}>
+            onPress={() => navigation.navigate('HomeScreen')}
+          >
             <Icon name={'return-up-back'} size={40} color={'white'} />
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.backButton, { marginRight: 15, marginTop: 5 }]}
-            onPress={() => navigation.navigate('ShopScreen', { point: point })}>
+            onPress={() => navigation.navigate('ShopScreen', { point: point })}
+          >
             <Entypo name={'shop'} size={40} color={'white'} />
           </TouchableOpacity>
         </View>
@@ -411,27 +430,31 @@ const ManagePlant = ({ route }) => {
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-          }}>
+          }}
+        >
           <View
             style={{
               width: 300,
               flexDirection: 'row',
               justifyContent: 'space-between',
-            }}>
+            }}
+          >
             <View style={styles.plantNameWrapper}>
               <Text
                 style={{
                   fontFamily: 'NanumGothicBold',
                   fontSize: 14,
                   color: '#363636',
-                }}>
+                }}
+              >
                 {profile.plant_name}
               </Text>
             </View>
             <TouchableOpacity
               style={styles.plantInfoButton}
               onPress={() => setInfoModalVisibility(true)}
-              activeOpacity={1.0}>
+              activeOpacity={1.0}
+            >
               <Entypo name={'magnifying-glass'} size={30} color={'white'} />
             </TouchableOpacity>
           </View>
@@ -442,30 +465,34 @@ const ManagePlant = ({ route }) => {
             style={styles.buttonOutside}
             onPress={() => {
               wateringHandler();
-            }}>
+            }}
+          >
             <ProgressCircle
               percent={Math.floor(
                 (1 -
                   (profile.alarm_cycle - profile.remain_cycle) /
-                  profile.alarm_cycle) *
-                100,
+                    profile.alarm_cycle) *
+                  100,
               )}
               radius={(screenWidth * 0.29) / 2}
               borderWidth={8}
               color="#5d9cec"
               shadowColor="#e8ebed"
-              bgColor="#fff">
+              bgColor="#fff"
+            >
               <View
                 style={{
                   flex: 1.5,
                   alignItems: 'center',
                   justifyContent: 'flex-end',
-                }}>
+                }}
+              >
                 <Icon name={'water'} size={40} color={'#5d9cec'} />
               </View>
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text
-                  style={{ fontSize: 13, fontFamily: 'NanumGothicExtraBold' }}>
+                  style={{ fontSize: 13, fontFamily: 'NanumGothicExtraBold' }}
+                >
                   물 주기
                 </Text>
                 <Text style={{ fontSize: 12, fontFamily: 'NanumGothicBold' }}>
@@ -483,7 +510,7 @@ const ManagePlant = ({ route }) => {
                 [
                   {
                     text: '아니오',
-                    onPress: () => { },
+                    onPress: () => {},
                   },
                   {
                     text: '계속할게요',
@@ -500,13 +527,15 @@ const ManagePlant = ({ route }) => {
                   },
                 ],
               );
-            }}>
+            }}
+          >
             <View
               style={{
                 flex: 1.5,
                 alignItems: 'center',
                 justifyContent: 'flex-end',
-              }}>
+              }}
+            >
               <FontAwesome name={'plus-square'} size={40} color={'#8ab833'} />
             </View>
             <View style={{ flex: 1, alignItems: 'center' }}>
@@ -515,7 +544,8 @@ const ManagePlant = ({ route }) => {
                   fontSize: 14,
                   fontFamily: 'NanumGothicExtraBold',
                   margin: 3,
-                }}>
+                }}
+              >
                 질병진단
               </Text>
             </View>
@@ -527,13 +557,15 @@ const ManagePlant = ({ route }) => {
                 plantId: plantId,
                 plantImg: profile.file_name,
               })
-            }>
+            }
+          >
             <View
               style={{
                 flex: 1.5,
                 alignItems: 'center',
                 justifyContent: 'flex-end',
-              }}>
+              }}
+            >
               <Entypo name={'book'} size={40} color={'#a07e63'} />
             </View>
             <View style={{ flex: 1, alignItems: 'center' }}>
@@ -542,7 +574,8 @@ const ManagePlant = ({ route }) => {
                   fontSize: 14,
                   fontFamily: 'NanumGothicExtraBold',
                   margin: 3,
-                }}>
+                }}
+              >
                 식물일기
               </Text>
             </View>
@@ -551,25 +584,29 @@ const ManagePlant = ({ route }) => {
       </View>
       <Modal
         isVisible={isDiagnosisModalVisible}
-        onBackButtonPress={() => setDiagnosisModalVisibility(false)}>
+        onBackButtonPress={() => setDiagnosisModalVisibility(false)}
+      >
         <View
           style={{
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+        >
           {renderDiagnosisModal()}
         </View>
       </Modal>
       <Modal
         isVisible={isInfoModalVisible}
-        onBackButtonPress={() => setInfoModalVisibility(false)}>
+        onBackButtonPress={() => setInfoModalVisibility(false)}
+      >
         <View
           style={{
             flex: 1,
             alignItems: 'center',
             marginTop: screenHeight * 0.1,
-          }}>
+          }}
+        >
           <View
             style={{
               width: screenWidth * 0.9,
@@ -577,7 +614,8 @@ const ManagePlant = ({ route }) => {
               backgroundColor: 'white',
               justifyContent: 'space-between',
               borderRadius: 30,
-            }}>
+            }}
+          >
             <Text
               style={{
                 textAlign: 'center',
@@ -586,7 +624,8 @@ const ManagePlant = ({ route }) => {
                 color: '#222222',
                 marginTop: screenHeight * 0.06,
                 marginBottom: screenHeight * 0.02,
-              }}>
+              }}
+            >
               식물 상세정보
             </Text>
             <View style={{ flex: 10, alignItems: 'flex-start', padding: 10 }}>
@@ -626,7 +665,9 @@ const ManagePlant = ({ route }) => {
                 <Text style={styles.infoModalText}>
                   {`레벨업 까지 필요한 경험치: `}
                 </Text>
-                <Text style={styles.infoModalText}>{10 * (profile.plant_level - 1) + 30 - profile.plant_exp}</Text>
+                <Text style={styles.infoModalText}>
+                  {10 * (profile.plant_level - 1) + 30 - profile.plant_exp}
+                </Text>
               </View>
             </View>
             <View
@@ -634,7 +675,8 @@ const ManagePlant = ({ route }) => {
                 flexDirection: 'row',
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
-              }}>
+              }}
+            >
               <TouchableOpacity
                 style={styles.infoModalButton}
                 onPress={() => {
@@ -643,29 +685,37 @@ const ManagePlant = ({ route }) => {
                     profile: profile,
                     plantId: plantId,
                   });
-                }}>
+                }}
+              >
                 <FontAwesome name={'pencil'} size={35} color={'#222222'} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.infoModalButton}
                 onPress={() => {
                   setInfoModalVisibility(false);
-                }}>
+                }}
+              >
                 <FontAwesome name={'close'} size={35} color={'#222222'} />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.infoModalButton}
                 onPress={() => {
                   deletePlantHandler();
-                }}>
+                }}
+              >
                 <FontAwesome name={'trash'} size={35} color={'#222222'} />
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
-      <Modal isVisible={earnState && isEarnModalVisible} onBackButtonPress={() => setEarnModalVisibility(false)}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Modal
+        isVisible={earnState && isEarnModalVisible}
+        onBackButtonPress={() => setEarnModalVisibility(false)}
+      >
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
           <View
             style={{
               width: screenWidth * 0.65,
@@ -676,14 +726,18 @@ const ManagePlant = ({ route }) => {
               paddingTop: 5,
               paddingBottom: 10,
               borderRadius: 10,
-            }}>
+            }}
+          >
             <View
               style={{
                 marginTop: 5,
                 alignItems: 'center',
                 justifyContent: 'space-between',
-              }}>
-              <Text style={[styles.earnText, { fontSize: 18 }]}>축하드려요!</Text>
+              }}
+            >
+              <Text style={[styles.earnText, { fontSize: 18 }]}>
+                축하드려요!
+              </Text>
               {renderEarnPoint(isDoingDiagnosis)}
               <Text style={styles.earnText}>경험치를 10만큼 획득하셨어요!</Text>
               <View style={styles.expWrapper}>
@@ -696,14 +750,16 @@ const ManagePlant = ({ route }) => {
                           ? (screenWidth * 0.5 * exp) / renderExp()
                           : 0,
                       },
-                    ]}>
+                    ]}
+                  >
                     <Text
                       style={{
                         width: screenWidth * 0.5,
                         textAlign: 'center',
                         fontFamily: 'NanumGothicBold',
                         color: '#363636',
-                      }}>
+                      }}
+                    >
                       {`LV. ${profile.plant_level} ( ${exp} / ${renderExp()} )`}
                     </Text>
                   </View>
@@ -723,10 +779,12 @@ const ManagePlant = ({ route }) => {
                   dispatch(setEarnState(false));
                   setEarnModalVisibility(false);
                 }
-              }}>
+              }}
+            >
               <View style={styles.earnModalButton}>
                 <Text
-                  style={{ fontFamily: 'NanumGothicBold', textAlign: 'center' }}>
+                  style={{ fontFamily: 'NanumGothicBold', textAlign: 'center' }}
+                >
                   확인
                 </Text>
               </View>
