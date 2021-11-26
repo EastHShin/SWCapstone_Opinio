@@ -36,6 +36,7 @@ export const registerUser = (user) => {
                     })
                 }
                 if (res.status == "NOT_ACCEPTABLE") {
+                    console.log('이메일 이미 존재함'); 
                     dispatch({
                         type: REGISTER_USER,
                         payload: "failure",
@@ -67,6 +68,7 @@ export const emailAuthentication = (email) => {
             headers: { "Content-Type": `application/json` }
         }).then(function (res) {
             console.log(res);
+            console.log("여기 이메일 인증 성공")
             if (res.status == 200) {
                 dispatch({
                     type: SEND_EMAIL,
@@ -127,7 +129,7 @@ export const loginUser = (user) => {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
-                console.log(res.headers.authorization);
+                console.log("로그인 성공ㅇ시 "+res.headers.authorization);
                 if (res.status == 200) {
                     dispatch(setLogoutTimer(3600000));
 
@@ -213,7 +215,6 @@ export const logoutUser = (email) => {
         })
             .then(function (res) {
                 if (res.status == 200) {
-                    console.log("tq");
                     axios.defaults.headers.common['Authorization'] = undefined
                     AsyncStorage.getItem('kakaoLogin').then((value) => {
                         clearLogoutTimer();
@@ -412,6 +413,7 @@ export const getDiagnosisList = (plantId) => {
 
 export const findPassword = (user) => {
 
+    console.log(user)
     return async dispatch => {
         return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/find`, user,
             {
@@ -474,6 +476,7 @@ export const setCheckPasswordState = state => dispatch => {
 }
 
 export const checkNickname = (nickName) => {
+    console.log(nickName);
     return async dispatch => {
         return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/cu`, nickName,
             {
@@ -481,6 +484,7 @@ export const checkNickname = (nickName) => {
             })
             .then(function (res) {
                 if (res.status == 200) {
+                    
                     dispatch({
                         type: CHECK_NICKNAME,
                         payload: 'success'
@@ -497,7 +501,7 @@ export const checkNickname = (nickName) => {
     }
 }
 
-export const checkNicknameState = state => dispatch => {
+export const setCheckNicknameState = state => dispatch => {
     dispatch({
         type: CHECK_NICKNAME,
         payload: state

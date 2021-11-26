@@ -61,7 +61,7 @@ const AccountDeleteNoticeScreen = ({ navigation }) => {
             }}>다음</Text>
           </TouchableOpacity>
         </View>
-        <Footer />
+        <Footer name={'My Page'} />
       </View>
     </SafeAreaView>
   )

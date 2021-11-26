@@ -307,7 +307,7 @@ const AccountEditScreen = ({ route, navigation }) => {
             }}>확인</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
-        <Footer />
+        <Footer name={'My Page'} />
       </View>
 
     </SafeAreaView>

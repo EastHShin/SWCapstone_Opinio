@@ -211,15 +211,11 @@ const LoginScreen = ({ navigation }) => {
       alert('생년월일을 입력해주세요');
       return;
     }
-    if (!checkEmail) {
-      alert('올바른 이메일 형식을 입력해주세요!');
-      return;
-    }
-
+ 
     setLoading(true);
 
     const user = JSON.stringify({
-      user_email: email,
+      email: email,
       user_birth: userBirth
     })
 
@@ -247,17 +243,7 @@ const LoginScreen = ({ navigation }) => {
     setUserBirth(year + '-' + month + '-' + day);
   }
 
-  const validationEmail = (e) => {
-    console.log('ddd');
-
-    var emailExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    if (!emailExp.test(e.nativeEvent.text)) {
-      setCheckEmail(false);
-    }
-    else {
-      setCheckEmail(true);
-    }
-  }
+ 
 
   return (
     <SafeAreaView style={styles.body}>
@@ -359,7 +345,10 @@ const LoginScreen = ({ navigation }) => {
       <Modal
         transparent={true}
         animationType={'none'}
-        onRequestClose={() => setIsFindPwModalVisible(false)}
+        onRequestClose={() => {
+          setUserBirth('');
+          setIsFindPwModalVisible(false)
+        }}
         visible={isFindPwModalVisible}
       >
         <View style={styles.modal}>
@@ -375,9 +364,7 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={(email) =>
                   setEmail(email)
                 }
-                onEndEditing={
-                  validationEmail
-                }
+
                 placeholder="Enter Email"
                 underlineColorAndroid="#f000"
                 placeholderTextColor="#808080"

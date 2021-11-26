@@ -29,7 +29,7 @@ export const getPost = (boardId) => {
             .then(function (res) {
                 if (res.status == 200) {
                     dispatch({
-                        type: SAVE_POST,
+                        type: GET_POST,
                         payload: res.data.data
                     })
                 }
@@ -37,7 +37,7 @@ export const getPost = (boardId) => {
             .catch(function (err) {
                 console.log(err);
                 dispatch({
-                    type: SAVE_POST,
+                    type: GET_POST,
                     payload: {}
                 })
             })
@@ -53,7 +53,7 @@ export const createPost = (userId, post) => {
             .then(function (res) {
                 if (res.status == 200) {
                     dispatch({
-                        type: CREATE_POST,
+                        type: SAVE_POST,
                         payload: 'success'
                     })
                 }
@@ -61,7 +61,7 @@ export const createPost = (userId, post) => {
             .catch(function (err) {
                 console.log(err);
                 dispatch({
-                    type: CREATE_POST,
+                    type: SAVE_POST,
                     payload: 'failure'
                 })
             })
@@ -106,7 +106,7 @@ export const deletePost = (boardId) => {
             .catch(function (err) {
                 console.log(err);
                 dispatch({
-                    type: EDIT_POST,
+                    type: DELETE_POST,
                     payload: 'failure'
                 })
             })

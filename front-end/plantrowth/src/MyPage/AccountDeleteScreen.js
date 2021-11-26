@@ -159,7 +159,7 @@ const AccountDeleteScreen = ({ navigation }) => {
                     </View>
                 </Modal>
 
-                <Footer />
+                <Footer name={'My Page'} />
 
             </View>
 
@@ -216,7 +216,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         height: Dimensions.get('window').height,
         width: Dimensions.get('window').width,
-        borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
 
