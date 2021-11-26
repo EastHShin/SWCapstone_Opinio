@@ -202,16 +202,13 @@ export const getProfile = plantId => {
         },
       )
       .then(function (res) {
-        console.log('getProfile 확인용: ' + JSON.stringify(res));
+        //console.log('getProfile 확인용: ' + JSON.stringify(res));
         console.log('get Profile res:' + JSON.stringify(res.data));
         if (res.status == 200) {
-          console.log('get profile in reducer: ' + JSON.stringify(res.data));
-          //console.log('get 식물 리스트 response: '+JSON.stringify(res.data.data));
           dispatch({
             type: GET_PLANT_PROFILE,
             payload: res.data,
           });
-          //console.warn(Store.getState());
         }
       })
       .catch(function (error) {
