@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { getBoardList } from '../actions/CommunityActions';
+import { getBoardList, setPost } from '../actions/CommunityActions';
 import { useIsFocused } from '@react-navigation/core';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -243,6 +243,7 @@ const CommunityMainScreen = ({ navigation }) => {
 
   useEffect(() => {
     if(isFocused){
+      dispatch(setPost());
       dispatch(getBoardList());
     }
     
