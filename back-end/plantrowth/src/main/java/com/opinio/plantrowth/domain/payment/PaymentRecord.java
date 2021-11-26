@@ -1,5 +1,7 @@
 package com.opinio.plantrowth.domain.payment;
 
+import java.time.LocalDate;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,7 +43,7 @@ public class PaymentRecord {
 	@Column(name = "imp_uid")
 	private String impUid;
 
-	@Column(name = "merchant_uid")
+	@Column(name = "merchant_uid", unique = true)
 	private String merchantUid;
 
 	@Column(name = "amount")
@@ -50,9 +52,12 @@ public class PaymentRecord {
 	@Column(name = "cancel_amount")
 	private Integer cancelAmount;
 
+	@Column(name = "payment_date")
+	private LocalDate date;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_type")
-	private PaymentType paymentType;	//SUBSCRIPTION, SLOT
+	private PaymentType paymentType;    //SUBSCRIPTION, SLOT
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_status")

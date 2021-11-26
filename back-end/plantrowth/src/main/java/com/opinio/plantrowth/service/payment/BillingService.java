@@ -1,7 +1,9 @@
 package com.opinio.plantrowth.service.payment;
 
 import com.google.gson.Gson;
+import com.opinio.plantrowth.api.dto.payment.RefundRequestDTO;
 import com.opinio.plantrowth.domain.payment.PaymentRecord;
+import com.opinio.plantrowth.domain.payment.PaymentStatus;
 import com.opinio.plantrowth.domain.payment.PaymentType;
 import com.opinio.plantrowth.domain.payment.Subscription;
 import com.opinio.plantrowth.domain.user.User;
@@ -22,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -102,6 +105,8 @@ public class BillingService {
 				.amount(amount)
 				.cancelAmount(0)
 				.paymentType(PaymentType.SUBSCRIPTION)
+				.paymentStatus(PaymentStatus.PAYMENT)
+				.date(LocalDate.now())
 				.build();
 			paymentRecordRepository.save(paymentRecord);
 
@@ -124,6 +129,8 @@ public class BillingService {
 				.amount(amount)
 				.cancelAmount(0)
 				.paymentType(PaymentType.SLOT)
+				.paymentStatus(PaymentStatus.PAYMENT)
+				.date(LocalDate.now())
 				.build();
 			paymentRecordRepository.save(paymentRecord);
 			return user;
@@ -132,4 +139,43 @@ public class BillingService {
 		}
 	}
 
+	public PaymentRecord findPaymentInfo(String merchant_uid) {
+		PaymentRecord paymentRecord = paymentRecordRepository.findByMerchantUid(merchant_uid)
+			.orElseThrow(() -> new IllegalArgumentException("No Record Found"));
+		return paymentRecord;
+	}
+
+	@Transactional
+	public void refund(PaymentRecord paymentInfo, RefundRequestDTO refundRequestDTO, String accessToken) throws
+		ParseException {
+		String impUid = paymentInfo.getImpUid();
+		Integer amount = paymentInfo.getAmount();
+		Integer cancelAmount = paymentInfo.getCancelAmount();
+		Integer cancelableAmount = amount - cancelAmount;
+		if (cancelableAmount <= 0) {
+			throw new IllegalArgumentException("Already Refunded Payment");
+		}
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", accessToken);
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("reason", refundRequestDTO.getReason());
+		map.put("imp_uid", impUid);
+		map.put("amount", refundRequestDTO.getCancel_request_amount());
+		map.put("checksum", cancelableAmount);
+
+		HttpEntity entity = new HttpEntity<>(headers);
+		ResponseEntity<String> response = restTemplate.exchange("https://api.iamport.kr/payments/cancel",
+			HttpMethod.POST,
+			entity, String.class);
+
+		PaymentRecord paymentRecord = paymentRecordRepository.findByMerchantUid(paymentInfo.getMerchantUid())
+			.orElseThrow(() -> new IllegalArgumentException("No Record found"));
+		paymentRecord.setPaymentStatus(PaymentStatus.REFUND);
+		paymentRecord.setCancelAmount(refundRequestDTO.getCancel_request_amount());
+
+	}
 }

@@ -9,7 +9,7 @@ application-aws.properties
 application-credentials.properties
 application-kakao.properties
 serviceAccountKey.json
-
+.java-version
 ### STS ###
 .apt_generated
 .classpath

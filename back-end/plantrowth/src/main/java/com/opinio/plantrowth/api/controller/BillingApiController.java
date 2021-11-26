@@ -1,8 +1,10 @@
 package com.opinio.plantrowth.api.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.opinio.plantrowth.api.dto.payment.RefundRequestDTO;
 import com.opinio.plantrowth.api.dto.subscription.BillingDTO;
 import com.opinio.plantrowth.domain.payment.PaymentRecord;
 import com.opinio.plantrowth.domain.payment.PaymentStatus;
@@ -58,11 +60,15 @@ public class BillingApiController {
         return new ResponseEntity<paymentRecordDTO>(new paymentRecordDTO(user, paymentRecords), HttpStatus.OK);
     }
 
-    // @PostMapping("/api/payments/refund")
-    // public ResponseEntity paymentRefund(@RequestBody RefundRequestDTO requestDTO) {
-    //
-    //
-    // }
+    @PostMapping("/api/payments/refund")
+    public ResponseEntity paymentRefund(@RequestBody RefundRequestDTO requestDTO) throws ParseException {
+        String accessToken = billingService.getToken();
+        PaymentRecord paymentInfo = billingService.findPaymentInfo(requestDTO.getMerchant_uid());
+        billingService.refund(paymentInfo, requestDTO, accessToken);
+
+        return new ResponseEntity(HttpStatus.OK);
+
+    }
 
     @Data
     @AllArgsConstructor
@@ -76,14 +82,6 @@ public class BillingApiController {
         }
     }
 
-    @Data
-    @AllArgsConstructor
-    static class RefundRequestDTO{
-        private String merchant_uid;
-        private Integer cancel_request_amount;
-        private String reason;
-
-    }
 
     @Data
     @AllArgsConstructor
@@ -108,6 +106,7 @@ public class BillingApiController {
         private Integer cancel_amount;
         private PaymentType paymentType;
         private PaymentStatus paymentStatus;
+        private LocalDate payment_date;
 
         public paymentInfoDTO(PaymentRecord paymentRecord) {
             imp_uid = paymentRecord.getImpUid();
@@ -116,6 +115,7 @@ public class BillingApiController {
             cancel_amount = paymentRecord.getCancelAmount();
             paymentType = paymentRecord.getPaymentType();
             paymentStatus = paymentRecord.getPaymentStatus();
+            payment_date = paymentRecord.getDate();
         }
     }
 }
