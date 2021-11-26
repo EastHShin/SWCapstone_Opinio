@@ -35,22 +35,26 @@ export const registerUser = (user) => {
                         text: ""
                     })
                 }
-                if (res.status == "NOT_ACCEPTABLE") {
+               
+            })
+            .catch(function (error) {
+                console.log(error.response.status)
+               
+                if (error.response.status == 406) {
                     console.log('이메일 이미 존재함'); 
                     dispatch({
                         type: REGISTER_USER,
                         payload: "failure",
-                        text: res.data.message
+                        text: error.response.data.message
                     })
                 }
-            })
-            .catch(function (error) {
-                console.log(error);
+                else{
                 dispatch({
                     type: REGISTER_USER,
                     payload: "failure",
                     text: ""
                 })
+            }
             })
     }
 }
@@ -134,7 +138,7 @@ export const loginUser = (user) => {
                     dispatch(setLogoutTimer(3600000));
 
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
 
 
                     dispatch({
@@ -167,7 +171,7 @@ export const kakaoLogin = (data) => {
 
                 if (res.status == 200) {
 
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
                     dispatch(setLogoutTimer(3600000));
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');

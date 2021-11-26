@@ -220,9 +220,9 @@ const Item = ({ item, onPress, style }) => {
         </View>
         <View style={{flexDirection:"row"}}>
         <MaterialCommunityIcons name='heart-outline' size = {14} color="#DC143C" />
-        <Text style={{fontSize:10, color : "#DC143C", marginRight:Dimensions.get('window').width*0.02}}>{item.good}</Text>
+        <Text style={{fontSize:10, color : "#DC143C", marginRight:Dimensions.get('window').width*0.02}}>{item.countedLike}</Text>
         <SimpleLineIcons name = 'bubble' size ={14} color="#00BFFF"  />
-        <Text style={{fontSize:10, color : "#00BFFF", marginRight:Dimensions.get('window').width*0.02}}>{item.comment}</Text>
+        <Text style={{fontSize:10, color : "#00BFFF", marginRight:Dimensions.get('window').width*0.02}}>{item.countedComments}</Text>
       </View>
       </View>
       
@@ -310,9 +310,9 @@ const CommunityMainScreen = ({ navigation }) => {
       <View style={styles.boardWrapper}>
         {boardList != '' ? (
           <FlatList
-            data={reverseData}
+            data={boardList}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.board_id}
             extraData={selectedId}
             //  onRefresh= {refreshList}
             // refreshing={isFetching}

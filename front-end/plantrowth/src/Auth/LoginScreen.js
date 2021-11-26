@@ -22,7 +22,7 @@ import EntypoIcons from 'react-native-vector-icons/Entypo';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loader from '../Loader';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink, setRegisterState, setLoginState, findPassword, setFindPasswordState } from '../actions/UserActions';
+import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink, setRegisterState, setLoginState, findPassword, setFindPasswordState, checkNickname, setCheckNicknameState } from '../actions/UserActions';
 import messaging from '@react-native-firebase/messaging';
 
 const LoginScreen = ({ navigation }) => {
@@ -36,6 +36,7 @@ const LoginScreen = ({ navigation }) => {
   const [fcmToken, setFcmToken] = useState('');
   const [email, setEmail] = useState('');
   const [checkEmail, setCheckEmail] = useState('');
+  const [checkedNickName, setCheckedNickName] = useState('');
 
 
   const [loading, setLoading] = useState(false);
@@ -54,6 +55,7 @@ const LoginScreen = ({ navigation }) => {
   const kakaoRegisterState = useSelector(state => state.UserReducer.kakaoRegisterState);
   const registerState = useSelector(state => state.UserReducer.registerState);
   const findPasswordState = useSelector(state => state.UserReducer.findPasswordState);
+  const checkNicknameState = useSelector(state => state.UserReducer.checkNicknameState);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -103,6 +105,21 @@ const LoginScreen = ({ navigation }) => {
     }
 
   }, [registerState])
+
+  useEffect(() => {
+    if (checkNicknameState == 'success' && isFocused) {
+      setLoading(false);
+      dispatch(setCheckNicknameState(''));
+      setCheckedNickName(userName);
+      alert('사용할 수 있는 닉네임입니다.');
+    }
+    else if (checkNicknameState == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setCheckNicknameState(''));
+      setCheckedNickName('');
+      alert('이미 존재하는 닉네임입니다!');
+    }
+  }, [checkNicknameState])
 
   useEffect(() => {
     if (findPasswordState == 'success' && isFocused) {
@@ -179,7 +196,15 @@ const LoginScreen = ({ navigation }) => {
   const register = () => {
 
     if (!userName) {
-      alert('이름을 입력해주세요.');
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
+    if (!checkedNickName) {
+      alert('닉네임을 인증해주세요!');
+      return;
+    }
+    if (checkedNickName != userName) {
+      alert('닉네임을 인증해주세요!');
       return;
     }
     if (!userBirth) {
@@ -221,6 +246,17 @@ const LoginScreen = ({ navigation }) => {
 
     dispatch(findPassword(user));
 
+  }
+
+  const checkUserNickname = () => {
+    if (!userName) {
+      alert('닉네임을 입력해주세요!');
+      return;
+    }
+
+    setLoading(true);
+
+    dispatch(checkNickname(userName));
   }
 
   const kakaoRegisterFail = () => {
@@ -436,6 +472,15 @@ const LoginScreen = ({ navigation }) => {
                 }
                 blurOnSubmit={false}
               />
+               <TouchableOpacity
+                style={styles.smallButton}
+                activeOpacity={0.5}
+                onPress={checkUserNickname}>
+                <Text style={{
+                  color: '#FFFFFF',
+                  paddingVertical: 10, fontSize: 10
+                }}>확인</Text>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.section}>
@@ -604,6 +649,22 @@ const styles = StyleSheet.create({
   textWrapper: {
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  smallButton: {
+    backgroundColor: '#BEE9B4',
+    height: 35,
+    marginLeft: Dimensions.get('window').width * 0.02,
+    width: "20%",
+    alignItems: 'center',
+    borderRadius: 30,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 5
+
+  },
 
 });
