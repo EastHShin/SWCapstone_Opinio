@@ -42,7 +42,7 @@ import { navigationRef } from './RootNavigation';
 const Stack = createNativeStackNavigator();
 
 function App() {
-  
+
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
   });
@@ -58,7 +58,7 @@ function App() {
 
   useEffect(() => {
     const foreground = messaging().onMessage(async remoteMessage => {
-      console.log("어플 안 : "+remoteMessage.data.plant_id);
+      console.log("어플 안 : " + remoteMessage.data.plant_id);
       console.log(remoteMessage);
       Alert.alert('물주기 알림', '식물에게 물을 줄 시간입니다!', [
         {
@@ -233,6 +233,43 @@ function App() {
               headerShown: false,
             }}
           />
+
+          <Stack.Screen
+            name="PlantDiagnosisScreen"
+            component={PlantDiagnosisScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PasswordCheckScreen"
+            component={PasswordCheckScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PostCreateScreen"
+            component={PostCreateScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PostEditScreen"
+            component={PostEditScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PostDetailScreen"
+            component={PostDetailScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
           <Stack.Screen
             name="Payment"
             component={Payment}
@@ -253,3 +290,5 @@ function App() {
   );
 }
 export default App;
+
+

@@ -1,50 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { View, StyleSheet, Text, Alert, Modal, Dimensions, TouchableOpacity, SafeAreaView, TextInput, Keyboard, KeyboardAvoidingView } from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Text,
+    Alert,
+    Modal,
+    Dimensions,
+    TouchableOpacity,
+    SafeAreaView,
+    TextInput,
+    Keyboard,
+    KeyboardAvoidingView,
+} from 'react-native';
 
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteUser, setUserDeleteState, setLogoutState } from '../actions/UserActions';
+import { checkPassword, setCheckPasswordState } from '../actions/UserActions';
 import Loader from '../Loader';
 
-//UI 수정 필요!
-const AccountDeleteScreen = ({ navigation }) => {
 
+const PasswordCheckScreen = ({ route, navigation }) => {
+
+    const { userId, userInfo } = route.params;
     const [userPassword, setUserPassword] = useState("");
-    const [userId, setUserId] = useState("");
+    // const [userId, setUserId] = useState("");
     const [loading, setLoading] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
+
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
-    const userDeleteState = useSelector(state => state.UserReducer.userDeleteState);
-
-    useEffect(() => {
-        if (isFocused) {
-            AsyncStorage.getItem('userId').then(value => {
-                if (value != null) {
-                    setUserId(JSON.parse(value));
-                }
-            });
-        }
-    }, [isFocused])
+    const checkPasswordState = useSelector(state => state.UserReducer.checkPasswordState);
 
     useEffect(() => {
 
-        if (userDeleteState == "success" && isFocused) {
+        if (checkPasswordState == "success" && isFocused) {
             setLoading(false);
-            dispatch(setUserDeleteState(''));
-            setIsModalVisible(true);
+            dispatch(setCheckPasswordState(''));
+            navigation.navigate('AccountEditScreen', { userId: userId, userInfo: userInfo });
         }
-        else if (userDeleteState == "failure" && isFocused) {
+        else if (checkPasswordState == "failure" && isFocused) {
             setLoading(false);
-            dispatch(setUserDeleteState(''));
-            alert('회원탈퇴 실패! 비밀번호를 다시 확인해주세요.');
+            dispatch(setCheckPasswordState(''));
+            alert('비밀번호 인증에 실패했습니다. 비밀번호를 다시 확인해주세요.');
         }
-    }, [userDeleteState])
+    }, [checkPasswordState])
 
     const onPressHandler = () => {
 
@@ -52,21 +56,9 @@ const AccountDeleteScreen = ({ navigation }) => {
             alert('비밀번호를 입력해주세요!');
             return;
         }
+        setLoading(true);
 
-        Alert.alert('회원탈퇴', '정말 떠나실 건가요?', [
-            {
-                text: '취소',
-                onPress: () => console.log('취소'),
-            },
-            {
-                text: '확인',
-                onPress: () => {
-                    setLoading(true);
-                    dispatch(deleteUser(userId, userPassword));
-                },
-            },
-        ]);
-
+        dispatch(checkPassword(userId, userPassword));
     }
 
     return (
@@ -80,7 +72,14 @@ const AccountDeleteScreen = ({ navigation }) => {
                     onPress={() => navigation.goBack()}>
                     <Ionicons name='chevron-back-sharp' size={23} color="#000000" />
                 </TouchableOpacity>
-                <Text style={{ marginEnd: Dimensions.get('window').width * 0.42, fontWeight: "bold", color: "#000000" }}>회원탈퇴</Text>
+                <Text
+                    style={{
+                        marginEnd: Dimensions.get('window').width * 0.39,
+                        fontFamily: 'NanumGothicBold',
+                        color: '#000000',
+                    }}>
+                    회원정보 수정
+                </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, }}>
                 <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
@@ -109,7 +108,7 @@ const AccountDeleteScreen = ({ navigation }) => {
 
                         </View>
 
-
+                        <Text style={{ fontSize: 12, marginStart: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.02 }}>회원정보 수정을 위해서는 비밀번호 인증이 필요합니다.</Text>
                         <TouchableOpacity
                             style={styles.smallButton}
                             activeOpacity={0.5}
@@ -118,48 +117,15 @@ const AccountDeleteScreen = ({ navigation }) => {
                             <Text style={{
                                 color: '#FFFFFF',
                                 paddingVertical: 10, fontSize: 10, fontWeight: "bold"
-                            }}>탈퇴</Text>
+                            }}>인증</Text>
                         </TouchableOpacity>
 
                     </View>
                 </KeyboardAvoidingView>
 
-                <Modal
-                    transparent={true}
-                    animationType={'none'}
-                    onRequestClose={() => {
-                        setIsModalVisible(false);
-                        AsyncStorage.clear();
-                    }}
-                    visible={isModalVisible}
-                >
-                    <View style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>
-                        <View style={styles.modalSectionWrapper}>
 
-                            <Text style={{ color: "#000000" }}>그동안 Plantrowth를 이용해주셔서 감사합니다.</Text>
-                            <Text style={{ color: "#000000" }}>다음에 또 만나요 !</Text>
 
-                            <TouchableOpacity
-                                style={styles.button}
-                                activeOpacity={0.5}
-                                onPress={() => {
-                                    dispatch(setLogoutState('end'));
-                                    AsyncStorage.clear();
-                                    setIsModalVisible(false);
-                                }
-                                }>
-                                <Text style={{ color: "#000000" }}>OK</Text>
-                            </TouchableOpacity>
-
-                        </View>
-                    </View>
-                </Modal>
-
-                <Footer name={'My Page'} />
+                <Footer />
 
             </View>
 
@@ -216,6 +182,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         height: Dimensions.get('window').height,
         width: Dimensions.get('window').width,
+        borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
 
@@ -245,4 +212,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default AccountDeleteScreen;
+export default PasswordCheckScreen;

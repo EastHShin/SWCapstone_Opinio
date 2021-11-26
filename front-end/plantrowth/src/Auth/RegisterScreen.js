@@ -22,7 +22,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerUser, setRegisterState, emailAuthentication, codeVerification, setEmialTransState, setCodeVerificationState } from '../actions/UserActions';
+import { registerUser, setRegisterState, emailAuthentication, codeVerification, setEmialTransState, setCodeVerificationState, checkNickname, setCheckNicknameState } from '../actions/UserActions';
 import messaging from '@react-native-firebase/messaging';
 
 function RegisterScreen({ navigation }) {
@@ -39,6 +39,7 @@ function RegisterScreen({ navigation }) {
   const [checkEmail, setCheckEmail] = useState(true);
   const [checkPassword, setCheckPassword] = useState(true);
   const [checkEmailCode, setCheckEmailCode] = useState(false);
+  const [checkedNickName, setCheckedNickName] = useState('');
 
   const [inputAuthCode, setInputAuthCode] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -51,6 +52,7 @@ function RegisterScreen({ navigation }) {
   const registerText = useSelector(state => state.UserReducer.registerText);
   const emailTrans = useSelector(state => state.UserReducer.emailTrans);
   const codeVerificationState = useSelector(state => state.UserReducer.codeVerificationState);
+  const checkNicknameState = useSelector(state => state.UserReducer.checkNicknameState);
   const passwordInputRef = createRef();
 
   const maximumDate = new Date();
@@ -70,6 +72,21 @@ function RegisterScreen({ navigation }) {
       setCheckEmailCode(false);
     }
   }, [registerState])
+
+  useEffect(() => {
+    if (checkNicknameState == 'success' && isFocused) {
+      setLoading(false);
+      dispatch(setCheckNicknameState(''));
+      setCheckedNickName(userNickName);
+      alert('사용할 수 있는 닉네임입니다.');
+    }
+    else if (checkNicknameState == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setCheckNicknameState(''));
+      setCheckedNickName('');
+      alert('이미 존재하는 닉네임입니다!');
+    }
+  }, [checkNicknameState])
 
   const getFcmToken = useCallback(async () => {
     const fcmToken = await messaging().getToken();
@@ -135,14 +152,14 @@ function RegisterScreen({ navigation }) {
       alert('이메일을 인증해주세요!');
       return;
     }
-    // if (!checkedNickName) {
-    //   alert('닉네임을 인증해주세요!');
-    //   return;
-    // }
-    // if (checkedNickName != userNickName) {
-    //   alert('닉네임을 인증해주세요!');
-    //   return;
-    // }
+    if (!checkedNickName) {
+      alert('닉네임을 인증해주세요!');
+      return;
+    }
+    if (checkedNickName != userNickName) {
+      alert('닉네임을 인증해주세요!');
+      return;
+    }
     if (!checkPassword) {
       alert('비밀번호를 다시 확인해주세요!');
       return;
@@ -167,8 +184,16 @@ function RegisterScreen({ navigation }) {
 
   }
 
+  const checkUserNickname = () => {
+    if (!userNickName) {
+      alert('닉네임을 입력해주세요!');
+      return;
+    }
 
+    setLoading(true);
 
+    dispatch(checkNickname(userNickName));
+  }
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -273,7 +298,17 @@ function RegisterScreen({ navigation }) {
                 }
                 blurOnSubmit={false}
               />
+              <TouchableOpacity
+                style={styles.smallButton}
+                activeOpacity={0.5}
+                onPress={checkUserNickname}>
+                <Text style={{
+                  color: '#FFFFFF',
+                  paddingVertical: 10, fontSize: 10
+                }}>확인</Text>
+              </TouchableOpacity>
             </View>
+
 
             <View style={styles.section}>
               <EntypoIcons name='calendar' size={20} color="#8EB695" style={styles.icon} />
@@ -417,7 +452,7 @@ function RegisterScreen({ navigation }) {
                   validationPassword
                 }
                 onSubmitEditing={
-                  Keyboard.dismiss()
+                  Keyboard.dismiss
                 }
                 blurOnSubmit={false}
               />
@@ -508,7 +543,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 30,
     borderColor: '#BEE9B4',
+    fontSize: 13
   },
+
   errorText: {
     color: 'red',
     textAlign: 'center',
@@ -532,6 +569,13 @@ const styles = StyleSheet.create({
     width: "20%",
     alignItems: 'center',
     borderRadius: 30,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 5
 
   },
   modal: {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,23 +12,23 @@ import {
   Keyboard,
   Alert,
 } from 'react-native';
-import {updatePlant, setUpdatePlantState} from '../actions/PlantActions';
-import {useDispatch, useSelector} from 'react-redux';
+import { updatePlant, setUpdatePlantState } from '../actions/PlantActions';
+import { useDispatch, useSelector } from 'react-redux';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
-import {useIsFocused, useNavigation} from '@react-navigation/core';
+import { useIsFocused, useNavigation } from '@react-navigation/core';
 import Loader from '../Loader';
 import Modal from 'react-native-modal';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Slider from '@react-native-community/slider';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-UpdatePlantProfile = ({route}) => {
+UpdatePlantProfile = ({ route }) => {
   const [loading, setLoading] = useState(false);
 
   //const [plantName, setPlantName] = useState(route.params.profile.plant_name);
@@ -141,7 +141,7 @@ UpdatePlantProfile = ({route}) => {
               } else {
                 console.log(
                   'update할 때 not plantBirth' +
-                    route.params.profile.plant_birth,
+                  route.params.profile.plant_birth,
                 );
                 fd.append('recent_watering', route.params.profile.plant_birth);
               }
@@ -243,7 +243,7 @@ UpdatePlantProfile = ({route}) => {
 
   const takePicture = () => {
     return new Promise((resolve, reject) => {
-      launchCamera({mediaType: 'photo'}, response => {
+      launchCamera({ mediaType: 'photo' }, response => {
         if (!response.didCancel) {
           // console.warn(response);
           setPlantImage(response.assets[0].uri);
@@ -256,7 +256,7 @@ UpdatePlantProfile = ({route}) => {
   };
   const selectImage = () => {
     return new Promise((resolve, reject) => {
-      launchImageLibrary({mediaType: 'photo'}, response => {
+      launchImageLibrary({ mediaType: 'photo' }, response => {
         if (!response.didCancel) {
           // console.warn(response);
           // console.warn(response.assets[0].base64);
@@ -273,15 +273,15 @@ UpdatePlantProfile = ({route}) => {
     if (plantImage) {
       return (
         <Image
-          style={{width: screenWidth * 0.3, height: screenWidth * 0.3}}
-          source={{uri: plantImage}}
+          style={{ width: screenWidth * 0.3, height: screenWidth * 0.3 }}
+          source={{ uri: plantImage }}
         />
       );
     } else {
       return (
         <Image
-          style={{width: screenWidth * 0.3, height: screenWidth * 0.3}}
-          source={{uri: route.params.profile.file_name}}
+          style={{ width: screenWidth * 0.3, height: screenWidth * 0.3 }}
+          source={{ uri: route.params.profile.file_name }}
         />
       );
     }
@@ -364,7 +364,7 @@ UpdatePlantProfile = ({route}) => {
               <Icon name="md-calendar" size={30} color="#93d07d" />
             </View>
             <TouchableOpacity
-              style={{backgroundColor: '#fff'}}
+              style={{ backgroundColor: '#fff' }}
               onPress={() => showDatePicker('plantBirth')}>
               <TextInput
                 pointerEvents="none"
@@ -397,7 +397,7 @@ UpdatePlantProfile = ({route}) => {
               <Icon name="notifications" size={30} color="#93d07d" />
             </View>
             <TouchableOpacity
-              style={{backgroundColor: '#fff'}}
+              style={{ backgroundColor: '#fff' }}
               onPress={() => setDayPickerVisibility(true)}>
               <TextInput
                 style={styles.input}
@@ -433,7 +433,7 @@ UpdatePlantProfile = ({route}) => {
                   alignItems: 'center',
                 }}>
                 <Text> </Text>
-                <View style={{width: 150, height: 250}}>
+                <View style={{ width: 150, height: 250 }}>
                   <ScrollPicker
                     dataSource={dayArray}
                     selectedIndex={route.params.profile.alarm_cycle}
@@ -448,7 +448,7 @@ UpdatePlantProfile = ({route}) => {
                     highlightColor={"#93d07d"}
                   />
                 </View>
-                <Text style={{fontFamily: 'NanumGothicBold'}}> Days</Text>
+                <Text style={{ fontFamily: 'NanumGothicBold' }}> Days</Text>
               </View>
 
               <TouchableOpacity
@@ -470,23 +470,23 @@ UpdatePlantProfile = ({route}) => {
             <View style={styles.iconWrapper}>
               <Icon name="water" size={30} color="#93d07d" />
             </View>
-            <View style={{alignItems: 'center', width: screenWidth * 0.6}}>
-              <Text style={{fontFamily: 'NanumGothicBold', fontSize: 12, marginBottom: 3}}>
+            <View style={{ alignItems: 'center', width: screenWidth * 0.6 }}>
+              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 12, marginBottom: 3 }}>
                 {'   물 주는 양'}
               </Text>
-              <View style={{width: screenWidth* 0.6,flexDirection: 'row', justifyContent: 'space-between', alignItems: 'space-between'}}>
-                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 11}}>
+              <View style={{ width: screenWidth * 0.6, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'space-between' }}>
+                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
                   조금만
                 </Text>
-                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 11}}>
+                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
                   적당히
                 </Text>
-                <Text style={{fontFamily: 'NanumGothicBold', fontSize: 11}}>
+                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
                   많이
                 </Text>
               </View>
               <Slider
-                style={{width: screenWidth * 0.66, height: 20, marginLeft: 11}}
+                style={{ width: screenWidth * 0.66, height: 20, marginLeft: 11 }}
                 minimumValue={1}
                 maximumValue={3}
                 step={1}
@@ -507,7 +507,7 @@ UpdatePlantProfile = ({route}) => {
               <Icon name="md-calendar" size={30} color="#93d07d" />
             </View>
             <TouchableOpacity
-              style={{backgroundColor: '#fff'}}
+              style={{ backgroundColor: '#fff' }}
               onPress={() => showDatePicker('watering')}>
               <TextInput
                 pointerEvents="none"

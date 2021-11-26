@@ -1,49 +1,58 @@
-
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { View, StyleSheet, Image, TouchableOpacity, SafeAreaView, Dimensions, ScrollView, TextInput, KeyboardAvoidingView, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity, SafeAreaView, TextInput, ScrollView, KeyboardAvoidingView, Image } from 'react-native';
 
-import Loader from '../Loader';
-import Foundation from 'react-native-vector-icons/Foundation';
+
+import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { editDiary, setResultState } from '../actions/DiaryActions';
+import Loader from '../Loader';
 import { useIsFocused } from '@react-navigation/native'
+import { createPost, setResultState } from '../actions/CommunityActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DiaryEditScreen = ({ route, navigation }) => {
-
-    const { selectedId, plantId, plantImg } = route.params;
-
-    const diary = useSelector(state => state.DiaryReducer.diary);
-
-    const [title, setTitle] = useState(diary.title);
-    const [content, setContent] = useState(diary.content);
-    const originalImageUri = diary.file_name;
-    const [imageUri, setImageUri] = useState(diary.file_name);
-    const [fileName, setFileName] = useState("");
-    const [imageType, setImageType] = useState("");
+const PostCreateScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
 
-    const contentInputRef = createRef();
+    const [imageType, setImageType] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [imageUri, setImageUri] = useState('');
+
+    const [userId, setUserId] = useState('');
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
-
-    const result = useSelector(state => state.DiaryReducer.result);
+    const result = useSelector(state => state.CommunityReducer.result);
+    const contentInputRef = createRef();
 
     useEffect(() => {
-        if (result == "success" && isFocused) {
+        if (isFocused) {
+            AsyncStorage.getItem('userId').then(value => {
+                if (value != null) {
+                    setUserId(JSON.parse(value));
+                }
+            }
+            )
+        }
+    }, [isFocused])
+
+
+    useEffect(() => {
+        if (result == 'success' && isFocused) {
             setLoading(false);
             dispatch(setResultState(''));
-            navigation.navigate('DiaryDetailScreen', { selectedId: selectedId, plantId: plantId, plantImg: plantImg });
+            navigation.navigate('CommunityMainScreen');
         }
-        else if (result == "failure" && isFocused) {
+        else if (result == 'failure' && isFocused) {
             setLoading(false);
             dispatch(setResultState(''));
-            alert("식물일기 수정 실패");
+            alert('게시글 생성 실패!');
         }
+
     }, [result])
 
     const addGalleryImage = () => {
@@ -67,10 +76,7 @@ const DiaryEditScreen = ({ route, navigation }) => {
     }
 
     const onPressHandler = () => {
-        if (diary.title == title && diary.content == content && originalImageUri == imageUri) {
-            alert('아직 식물일기를 수정하지 않으셨어요!');
-            return;
-        }
+
         if (!title) {
             alert('제목을 입력해주세요!');
             return;
@@ -82,70 +88,54 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
         setLoading(true);
 
+
+        const date = new Date();
+
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+
         const Data = new FormData();
 
-        if (diary.title != title) {
-            Data.append('title', title);
+        Data.append('title', title);
+        Data.append('content', content);
+        Data.append('date', year + '-' + month + '-' + day)
+
+        if (imageUri) {
+            console.log("사진 있음");
+            Data.append('file_name', {
+                name: fileName,
+                type: imageType,
+                uri: imageUri
+            });
         }
 
-        if (diary.content != content) {
-            Data.append('content', content);
-
-        }
-
-
-        if (originalImageUri) {
-            if (!imageUri) {
-
-                Data.append('file_delete', true);
-            }
-            else if (imageUri != originalImageUri) {
-
-                Data.append('file_delete', false);
-
-                Data.append('file_name', {
-                    name: fileName,
-                    type: imageType,
-                    uri: imageUri
-                });
-
-            }
-            else {
-
-                Data.append('file_delete', false);
-            }
-        }
-        else {
-            if (imageUri) {
-
-                Data.append('file_delete', false);
-                Data.append('file_name', {
-                    name: fileName,
-                    type: imageType,
-                    uri: imageUri
-                });
-            }
-            else {
-
-                Data.append('file_delete', false);
-
-            }
-
-        }
-        console.log(JSON.stringify(Data));
-
-        dispatch(editDiary(Data, selectedId));
+        dispatch(createPost(userId, Data));
 
     }
+
 
     return (
         <SafeAreaView style={styles.body}>
             <Loader loading={loading} />
-            <View style={{ marginVertical: "5%", marginEnd: "-80%" }}>
+
+            <View style={styles.top}>
                 <TouchableOpacity
+                    style={{ marginStart: Dimensions.get('window').width * 0.03 }}
                     activeOpacity={0.5}
                     onPress={() => navigation.goBack()}>
-                    <Foundation name='x' size={22} color="#FFFFFF" />
+                    <Feather name='x' size={27} color="#000000" />
+                </TouchableOpacity>
+                <Text style={{ marginLeft: Dimensions.get('window').width * 0.08, fontWeight: "bold", color: "#000000", fontSize: 15 }}>게시글 작성</Text>
+                <TouchableOpacity
+                    style={styles.smallButton}
+                    activeOpacity={0.5}
+                    onPress={onPressHandler
+                    }>
+                    <Text style={{
+                        color: '#FFFFFF',
+                        paddingVertical: 8, fontSize: 10, fontWeight: "bold"
+                    }}>완료</Text>
                 </TouchableOpacity>
             </View>
 
@@ -156,33 +146,31 @@ const DiaryEditScreen = ({ route, navigation }) => {
                     alignContent: 'center',
                 }}>
                 <KeyboardAvoidingView enabled>
-                    <View style={styles.diaryWrapper}>
+                    <View style={styles.wrapper}>
                         <View style={styles.title}>
                             <TextInput
                                 style={styles.titleInput}
                                 onChangeText={(title) =>
                                     setTitle(title)
                                 }
-                                placeholder="Enter Title"
+                                placeholder="Title"
                                 placeholderTextColor="#808080"
+
                                 returnKeyType="next"
                                 onSubmitEditing={() =>
                                     contentInputRef.current &&
                                     contentInputRef.current.focus()
                                 }
-                                value={title}
                                 underlineColorAndroid="#A9A9A9"
                                 blurOnSubmit={false}
                             />
                         </View>
-
                         <View style={styles.content}>
                             <TextInput
                                 style={styles.contentInput}
                                 onChangeText={(content) =>
                                     setContent(content)
                                 }
-                                value={content}
                                 multiline={true}
                                 placeholder="Enter Content"
                                 placeholderTextColor="#808080"
@@ -191,21 +179,25 @@ const DiaryEditScreen = ({ route, navigation }) => {
                                 blurOnSubmit={true}
                                 underlineColorAndroid="#f000"
                             />
+
                         </View>
 
-                        <View style={{ marginBottom: Dimensions.get('window').width * 0.06, height: Dimensions.get('window').height * 0.4, }}>
-                            {imageUri != '' ? (
-
+                        {imageUri != '' ? (
+                            <View style={{ marginBottom: Dimensions.get('window').height * 0.02 }}>
                                 <Image source={{ uri: imageUri }}
                                     style={{
-                                        width: Dimensions.get('window').width * 0.8,
-                                        height: Dimensions.get('window').height * 0.4,
+                                        marginTop: Dimensions.get('window').height * 0.01,
+                                        borderRadius: 10,
+                                        width: Dimensions.get('window').width,
+                                        height: Dimensions.get('window').height * 0.7,
                                         resizeMode: 'contain',
                                     }}
                                 />
+                            </View>
+                        ) :
 
-                            ) : null}
-                        </View>
+                            <View style={{ marginBottom: Dimensions.get('window').height * 0.04, height: Dimensions.get('window').height * 0.4, }}>
+                            </View>}
 
                         <View style={{ flexDirection: "row" }}>
                             <View style={styles.imageButton}>
@@ -218,12 +210,7 @@ const DiaryEditScreen = ({ route, navigation }) => {
                             <View style={styles.imageButton}>
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={() => {
-                                        setImageUri('');
-                                        setFileName('');
-                                        setImageType('');
-                                    }
-                                    }>
+                                    onPress={() => setImageUri('')}>
                                     <MaterialIcons name='cancel' size={43} color="#FF0000" />
                                 </TouchableOpacity>
                             </View>
@@ -239,52 +226,63 @@ const DiaryEditScreen = ({ route, navigation }) => {
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
-            <View style={{
-                marginBottom: Dimensions.get('window').height * 0.03,
-                marginTop: Dimensions.get('window').height * 0.02
-            }}>
-                <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={onPressHandler}>
-                    <FontAwesome name='check' size={25} color="#FFFFFF" />
-                </TouchableOpacity>
-            </View>
         </SafeAreaView>
     )
-}
-export default DiaryEditScreen;
+};
+
+
 
 const styles = StyleSheet.create({
+
     body: {
         flex: 1,
-        backgroundColor: "#8EB695",
         alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#FFFFFF'
     },
-    diaryWrapper: {
-        height: Dimensions.get('window').height * 0.9,
-        width: Dimensions.get("window").width,
-        borderRadius: 20,
-        backgroundColor: "#FFFFFF",
-        alignItems: "center"
+    top: {
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: Dimensions.get('window').height * 0.08,
+        width: Dimensions.get('window').width,
+    },
+    wrapper: {
+        alignItems: "center",
+        flex: 1,
+
+
     },
     title: {
-        marginVertical: Dimensions.get("window").height * 0.02,
-        width: Dimensions.get('window').width * 0.8
-    },
-    content: {
-        marginBottom: Dimensions.get("window").height * 0.13,
-        width: Dimensions.get('window').width * 0.8
+        marginVertical: Dimensions.get("window").height * 0.01,
+        width: Dimensions.get('window').width * 0.9
+
     },
     titleInput: {
-        fontWeight: "bold"
+        fontWeight: 'bold',
+        fontSize: 20
+    },
+    content: {
+        marginBottom: Dimensions.get("window").height * 0.22,
+        width: Dimensions.get('window').width * 0.9
     },
     contentInput: {
         flexShrink: 1
     },
     imageButton: {
-        marginBottom: Dimensions.get('window').width * 0.06,
+        marginBottom: Dimensions.get('window').height * 0.06,
         marginHorizontal: Dimensions.get('window').width * 0.04
-    }
+    },
+    smallButton: {
+        backgroundColor: '#B22339',
+        height: Dimensions.get('window').height * 0.04,
+        width: Dimensions.get('window').width * 0.14,
+        alignItems: 'center',
+        borderRadius: 20,
+        marginEnd: Dimensions.get('window').width * 0.06
 
-
+    },
 })
+
+export default PostCreateScreen;

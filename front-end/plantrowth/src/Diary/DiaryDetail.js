@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-    View,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    SafeAreaView,
-    Text,
-    Dimensions,
-    ScrollView,
-    Modal,
-    Alert
-} from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, SafeAreaView, Text, Dimensions, ScrollView, Modal, Alert } from 'react-native';
 
 import { fetchDiary } from '../actions/DiaryActions';
 import { useIsFocused } from '@react-navigation/native'
@@ -35,7 +24,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
     const result = useSelector(state => state.DiaryReducer.result);
 
     useEffect(() => {
-        console.log("디테일에서 : "+ plantId);
+
         if (isFocused) {
             dispatch(fetchDiary(selectedId));
         }
@@ -43,11 +32,10 @@ const DiaryDetailScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (result == 'success' && isFocused) {
-            console.log("성공했을 때 " + plantId);
             setLoading(false);
             dispatch(setResultState(''));
             setIsModalVisible(false);
-            navigation.navigate('DiaryScreen', { selectedId:selectedId ,plantId: plantId, plantImg: plantImg });
+            navigation.navigate('DiaryScreen', { selectedId: selectedId, plantId: plantId, plantImg: plantImg });
         }
         else if (result == 'failure' && isFocused) {
             setLoading(false);
@@ -134,10 +122,10 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                 }}>
                 <View style={styles.diaryWrapper}>
                     <View style={styles.title}>
-                        <Text style={{ color: "#000000", fontWeight: "bold",fontSize:14 }}>{diary.title}</Text>
+                        <Text style={{ color: "#000000", fontWeight: "bold", fontSize: 14 }}>{diary.title}</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width*0.7,marginBottom:Dimensions.get('window').height*0.02 }}>
-                        <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
+                    <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width * 0.7, marginBottom: Dimensions.get('window').height * 0.02 }}>
+                        <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
                     </View>
 
                     {diary.file_name ? (
@@ -154,7 +142,7 @@ const DiaryDetailScreen = ({ route, navigation }) => {
                     ) : null}
 
                     <View style={styles.content}>
-                        <Text style={{ color: "#000000",fontSize:14 }}>
+                        <Text style={{ color: "#000000", fontSize: 14 }}>
                             {diary.content}
                         </Text>
                     </View>
@@ -193,7 +181,7 @@ const styles = StyleSheet.create({
         marginRight: Dimensions.get("window").width * 0.05,
 
     },
-   
+
     diaryWrapper: {
         height: Dimensions.get("window").height,
         width: Dimensions.get("window").width,
@@ -208,9 +196,9 @@ const styles = StyleSheet.create({
         marginVertical: Dimensions.get("window").height * 0.04,
         width: Dimensions.get('window').width * 0.8
     },
-    text:{
-        color:"#000000",
-        fontWeight:"bold"
+    text: {
+        color: "#000000",
+        fontWeight: "bold"
     }
 
 })

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   View,
@@ -9,16 +9,87 @@ import {
   Pressable,
   Dimensions,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  FlatList,
+  Image
 } from 'react-native';
 
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {getHomeInfo} from '../actions/HomeActions'
+import { getHomeInfo } from '../actions/HomeActions'
+import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+const Item = ({ item, onPress, style }) => {
+
+  return (
+    <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
+      <View style={{ flexDirection: "row" }}>
+        <Image
+          source={{ uri: item.file_name }}
+          style={styles.image}
+        />
+        <View style={styles.textWrapper}>
+          <Text style={{ flexDirection: 'column' }}>
+            <Text style={styles.text}>Name  :    </Text>
+            <Text style={styles.text}>
+              {item.plant_name}
+            </Text>
+          </Text>
+          <Text style={{ flexDirection: 'column' }}>
+            <Text style={styles.text}>Level    :    </Text>
+            <Text style={styles.text}>
+              {item.plant_level}
+            </Text>
+          </Text>
+          <Text style={{ flexDirection: 'column' }}>
+            <Text style={styles.text}>EXP      :    </Text>
+            <Text style={styles.text}>
+              {item.plant_exp}
+            </Text>
+          </Text>
+        </View>
+      </View>
+
+    </TouchableOpacity>
+  );
+}
 
 const DiseaseDiagnosisScreen = ({ navigation }) => {
+
+  const [selectedId, setSelectedId] = useState('');
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
+  const infoList = useSelector(state => state.HomeReducer.infoList);
+  const plantList = infoList.plants;
+
+  useEffect(() => {
+    if (isFocused) {
+      AsyncStorage.getItem('userId').then(value => {
+        if (value != null) {
+          dispatch(getHomeInfo(JSON.parse(value)));
+        }
+      }
+      )
+    }
+  }, [isFocused])
+
+  const renderItem = ({ item }) => {
+
+    return (
+      <Item
+        item={item}
+        onPress={() => {
+          setSelectedId(item.plant_id);
+          navigation.push("PlantDiagnosisScreen", { selectedId: item.plant_id });
+        }
+        }
+        style={{ backgroundColor: "#FFFFFF" }}
+      />
+    )
+  };
+
   return (
     <SafeAreaView style={styles.body}>
       <View style={styles.top}>
@@ -34,11 +105,15 @@ const DiseaseDiagnosisScreen = ({ navigation }) => {
         <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
       </View>
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
-      <View style={styles.wrapper}>
-      <View style={styles.section}>
-        </View>
-        </View>
-        <Footer />
+
+        <FlatList
+          data={plantList}
+          renderItem={renderItem}
+          keyExtractor={item => item.plant_id}
+          extraData={selectedId}
+        />
+
+        <Footer name={'My Page'}/>
       </View>
     </SafeAreaView>
   )
@@ -51,7 +126,8 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: '#C9E7BE'
   },
   top: {
     backgroundColor: "#FFFFFF",
@@ -61,17 +137,40 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.06,
     width: Dimensions.get('window').width
   },
-  wrapper: {
-   
-    width: Dimensions.get('window').width,
+  text: {
+    fontSize: 15,
+    color: "#000000"
   },
-  section: {
-  
-    backgroundColor: "#FFFFFF",
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height * 0.3,
-  
+  item: {
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 20,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 5
   },
+  image: {
+
+    width: Dimensions.get('window').width * 0.25,
+    height: Dimensions.get('window').height * 0.13,
+    resizeMode: 'cover',
+    borderRadius: 10
+
+  },
+  textWrapper: {
+    justifyContent: 'center',
+    marginLeft: Dimensions.get('window').width * 0.07
+
+
+  },
+
+
 })
 
 export default DiseaseDiagnosisScreen;

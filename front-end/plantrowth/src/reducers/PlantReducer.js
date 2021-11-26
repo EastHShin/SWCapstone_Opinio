@@ -1,4 +1,4 @@
-import { ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE, WATER_PLANT, DIAGNOSIS_PLANT, GET_POINT, GET_EXP, SAVE_DIAGNOSIS_CHART, LEVEL_UP, EARN} from "../actions/type";
+import { ADD_PLANT, DELETE_PLANT, UPDATE_PLANT, GET_PLANT_PROFILE, WATER_PLANT, DIAGNOSIS_PLANT, GET_POINT, GET_EXP, SAVE_DIAGNOSIS_CHART, LEVEL_UP, EARN } from "../actions/type";
 let initialState = {
     profile: {},
     diagnosisChart: {},
@@ -7,7 +7,7 @@ let initialState = {
     addResult: '',
     deleteResult: '',
     updateResult: '',
-    levelUp : false,
+    levelUp: false,
     wateringResult: '',
     diagnosisResult: '',
     earn: false,
@@ -24,19 +24,19 @@ function PlantReducer(state = initialState, action) {
         case UPDATE_PLANT:
             return { ...state, updateResult: action.payload };
         case LEVEL_UP:
-            return {...state, levelUp:action.payload}
+            return { ...state, levelUp: action.payload }
         case WATER_PLANT:
-            return { ...state, wateringResult: action.payload};
+            return { ...state, wateringResult: action.payload };
         case DIAGNOSIS_PLANT:
-            return { ...state, diagnosisResult: action.payload};
+            return { ...state, diagnosisResult: action.payload };
         case SAVE_DIAGNOSIS_CHART:
-            return { ...state, diagnosisChart: action.payload};
+            return { ...state, diagnosisChart: action.payload };
         case GET_POINT:
-            return { ...state, point: action.payload};
+            return { ...state, point: action.payload };
         case GET_EXP:
-            return { ...state, exp: action.payload};
+            return { ...state, exp: action.payload };
         case EARN:
-            return { ...state, earn: action.payload};
+            return { ...state, earn: action.payload };
         default:
             return state;
     }

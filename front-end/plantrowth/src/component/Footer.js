@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   ScrollView,
@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 
 const screenHeight = Dimensions.get('window').height;
@@ -51,7 +51,7 @@ const Footer = route => {
           <TouchableOpacity
             style={
               item.name == route.name
-                ? [styles.tabButton, {backgroundColor: '#C9E7BE'}]
+                ? [styles.tabButton, { backgroundColor: '#C9E7BE' }]
                 : styles.tabButton
             }
             key={index}
@@ -66,7 +66,7 @@ const Footer = route => {
             <Text
               style={
                 item.name == route.name
-                  ? [styles.tabLabel, {color: 'white'}]
+                  ? [styles.tabLabel, { color: 'white' }]
                   : styles.tabLabel
               }>
               {item.name}

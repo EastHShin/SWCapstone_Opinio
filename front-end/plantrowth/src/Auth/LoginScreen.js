@@ -1,5 +1,5 @@
 
-import React, { useState, createRef, useEffect, useCallback} from 'react';
+import React, { useState, createRef, useEffect, useCallback } from 'react';
 
 import {
   View,
@@ -22,7 +22,7 @@ import EntypoIcons from 'react-native-vector-icons/Entypo';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loader from '../Loader';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink,setRegisterState } from '../actions/UserActions';
+import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink, setRegisterState, setLoginState, findPassword, setFindPasswordState } from '../actions/UserActions';
 import messaging from '@react-native-firebase/messaging';
 
 const LoginScreen = ({ navigation }) => {
@@ -34,13 +34,15 @@ const LoginScreen = ({ navigation }) => {
   const [accessToken, setAccessToken] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
   const [fcmToken, setFcmToken] = useState('');
+  const [email, setEmail] = useState('');
+  const [checkEmail, setCheckEmail] = useState('');
 
 
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
- 
+  const [isFindPwModalVisible, setIsFindPwModalVisible] = useState(false);
 
   const maximumDate = new Date();
 
@@ -51,6 +53,7 @@ const LoginScreen = ({ navigation }) => {
   const isLogin = useSelector(state => state.UserReducer.isLogin);
   const kakaoRegisterState = useSelector(state => state.UserReducer.kakaoRegisterState);
   const registerState = useSelector(state => state.UserReducer.registerState);
+  const findPasswordState = useSelector(state => state.UserReducer.findPasswordState);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -60,6 +63,7 @@ const LoginScreen = ({ navigation }) => {
     } else if (isLogin == 'failure') {
       setLoading(false);
       setErrortext('로그인 실패');
+      dispatch(setLoginState(''));
     }
   }, [isLogin])
 
@@ -73,31 +77,46 @@ const LoginScreen = ({ navigation }) => {
 
       const kakaoLoginData = JSON.stringify({
         email: userEmail,
-        access_token : accessToken,
-        refresh_token : refreshToken
+        access_token: accessToken,
+        refresh_token: refreshToken
       });
 
       dispatch(kakaoLogin(kakaoLoginData));
       dispatch(kakaoRegister(''));
     }
     else if (kakaoRegisterState == 'failure') {
-      setErrortext('회원가입 실패');
+      setErrortext('카카오 회원가입 실패');
     }
   }, [kakaoRegisterState])
 
-  useEffect(()=>{
-    
-    if(registerState == 'success'&& isFocused){
+  useEffect(() => {
+
+    if (registerState == 'success' && isFocused) {
       dispatch(kakaoRegister('success'));
       setIsModalVisible(false);
+
       dispatch(setRegisterState(''));
     }
-    else if(registerState =='failure' && isFocused){
+    else if (registerState == 'failure' && isFocused) {
       setLoading(false);
       kakaoRegisterFail();
     }
-  
-  },[registerState])
+
+  }, [registerState])
+
+  useEffect(() => {
+    if (findPasswordState == 'success' && isFocused) {
+      setLoading(false);
+      alert('이메일로 임시 비밀번호가 전송되었습니다. 로그인 후 비밀번호를 변경하세요.');
+      setIsFindPwModalVisible(false);
+      dispatch(setFindPasswordState(''));
+    }
+    else if (findPasswordState == 'failure' && isFocused) {
+      setLoading(false);
+      alert('인증에 실패하였습니다. 이메일과 생년월일을 다시 확인해주세요.');
+      dispatch(setFindPasswordState(''));
+    }
+  }, [findPasswordState])
 
   const getFcmToken = useCallback(async () => {
     const fcmToken = await messaging().getToken();
@@ -112,20 +131,20 @@ const LoginScreen = ({ navigation }) => {
       if (result) {
         const profile = await KakaoLogins.getProfile();
         setUserEmail(profile.email);
-        setUserPassword(' ');  
+        setUserPassword(' ');
         setAccessToken(result.accessToken);
         setRefreshToken(result.refreshToken);
-     
-        
+
+
         const kakaoLoginData = JSON.stringify({
           email: profile.email,
-          accessToken : result.accessToken,
-          refreshToken : result.refreshToken
+          accessToken: result.accessToken,
+          refreshToken: result.refreshToken
         });
 
         dispatch(kakaoLogin(kakaoLoginData));
 
-    }
+      }
     } catch (err) {
       setLoading(false);
       if (err.code === "E_CANCELLED_OPERATION") {
@@ -158,7 +177,7 @@ const LoginScreen = ({ navigation }) => {
   }
 
   const register = () => {
-    
+
     if (!userName) {
       alert('이름을 입력해주세요.');
       return;
@@ -183,9 +202,31 @@ const LoginScreen = ({ navigation }) => {
 
   }
 
+  const findUserPassword = () => {
+    if (!email) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    if (!userBirth) {
+      alert('생년월일을 입력해주세요');
+      return;
+    }
+ 
+    setLoading(true);
+
+    const user = JSON.stringify({
+      email: email,
+      user_birth: userBirth
+    })
+
+    dispatch(findPassword(user));
+
+  }
+
   const kakaoRegisterFail = () => {
     dispatch(kakaoUnlink());
     dispatch(kakaoRegister('failure'));
+    setUserBirth('');
     setIsModalVisible(false);
   }
 
@@ -201,6 +242,8 @@ const LoginScreen = ({ navigation }) => {
     const day = ('0' + date.getDate()).slice(-2);
     setUserBirth(year + '-' + month + '-' + day);
   }
+
+ 
 
   return (
     <SafeAreaView style={styles.body}>
@@ -282,18 +325,90 @@ const LoginScreen = ({ navigation }) => {
                   style={styles.kakaoImage} />
               </TouchableOpacity>
             </View>
-            <View style={{flexDirection:"row", justifyContent:"center", marginTop:Dimensions.get('window').height*0.01}}>
-            <Text style={styles.registerText}>
-              New Here ? 
-            </Text>
-            <Text
-              style={styles.registerTextButton}
-              onPress={() => navigation.navigate('RegisterScreen')}>Register
-            </Text>
+            <View style={{ flexDirection: "row", justifyContent: "center", marginTop: Dimensions.get('window').height * 0.01 }}>
+              <Text style={styles.registerText}>
+                New Here ?
+              </Text>
+              <Text
+                style={styles.registerTextButton}
+                onPress={() => navigation.navigate('RegisterScreen')}>Register
+              </Text>
             </View>
+            <Text
+              style={styles.passwordTextButton}
+              onPress={() => setIsFindPwModalVisible(true)}>비밀번호를 잃어버리셨나요?
+            </Text>
           </KeyboardAvoidingView>
         </View>
       </ScrollView>
+
+      <Modal
+        transparent={true}
+        animationType={'none'}
+        onRequestClose={() => {
+          setUserBirth('');
+          setIsFindPwModalVisible(false)
+        }}
+        visible={isFindPwModalVisible}
+      >
+        <View style={styles.modal}>
+          <View style={styles.modalSectionWrapper}>
+            <View style={styles.textWrapper}>
+              <Text style={{ marginBottom: Dimensions.get('window').height * 0.015, color: "#000000", fontWeight: 'bold' }}>비밀번호 찾기</Text>
+              <Text style={{ color: '#000000' }}>이메일과 생년월일을 입력해주세요</Text>
+            </View>
+            <View style={styles.section}>
+              <EntypoIcons name='email' size={20} color="#8EB695" style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                onChangeText={(email) =>
+                  setEmail(email)
+                }
+
+                placeholder="Enter Email"
+                underlineColorAndroid="#f000"
+                placeholderTextColor="#808080"
+                keyboardType="email-address"
+                onSubmitEditing={
+                  Keyboard.dismiss
+                }
+                blurOnSubmit={false}
+              />
+            </View>
+
+            <View style={styles.section}>
+              <EntypoIcons name='calendar' size={20} color="#8EB695" style={styles.icon} />
+              <TouchableOpacity onPress={showDatePicker}>
+                <TextInput
+                  pointerEvents="none"
+                  style={styles.input}
+                  underlineColorAndroid="#f000"
+                  placeholder="Date of birth"
+                  placeholderTextColor="#808080"
+                  editable={false}
+                  blurOnSubmit={false}
+                  value={userBirth}
+                />
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate() - 1)}
+                  minimumDate={new Date(1921, 0, 1)}
+                  onConfirm={handleConfirm}
+                  onCancel={() => {
+                    setDatePickerVisibility(false);
+                  }} />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.5}
+              onPress={findUserPassword}>
+              <Text style={styles.buttonText}>Find</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <Modal
         transparent={true}
@@ -305,6 +420,9 @@ const LoginScreen = ({ navigation }) => {
       >
         <View style={styles.modal}>
           <View style={styles.modalSectionWrapper}>
+            <View style={styles.textWrapper}>
+              <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}>Register</Text>
+            </View>
             <View style={styles.section}>
               <EntypoIcons name='user' size={20} color="#8EB695" style={styles.icon} />
               <TextInput
@@ -336,8 +454,8 @@ const LoginScreen = ({ navigation }) => {
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
                   mode="date"
-                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate()-1)} 
-                  minimumDate = {new Date(1921, 0, 1)}
+                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate() - 1)}
+                  minimumDate={new Date(1921, 0, 1)}
                   onConfirm={handleConfirm}
                   onCancel={() => {
                     setDatePickerVisibility(false);
@@ -428,15 +546,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     alignSelf: 'center',
-    marginRight:Dimensions.get('window').width*0.02
+    marginRight: Dimensions.get('window').width * 0.02
   },
   registerTextButton: {
     color: '#FFFFFF',
     textAlign: 'center',
     fontWeight: 'bold',
-    textDecorationLine:'underline',
+    textDecorationLine: 'underline',
     fontSize: 14,
-    padding:1,
+    padding: 1,
     alignSelf: 'center',
 
   },
@@ -446,12 +564,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   kakaoImage: {
-  
-    width:Dimensions.get('window').width*0.66,
-    resizeMode: 'contain',
-    height: Dimensions.get('window').height*0.05,
+
+    width: Dimensions.get('window').width * 0.66,
+    resizeMode: 'cover',
+    height: Dimensions.get('window').height * 0.05,
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 20,
     marginLeft: 35,
     marginRight: 35,
     marginBottom: 25,
@@ -470,11 +588,22 @@ const styles = StyleSheet.create({
   modalSectionWrapper:
   {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('window').height * 0.40,
+    height: Dimensions.get('window').height * 0.46,
     width: Dimensions.get('window').width * 0.85,
     borderRadius: 20,
     display: 'flex',
     justifyContent: 'center'
   },
- 
+  passwordTextButton: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginTop: Dimensions.get('window').height * 0.01,
+    fontSize: 12
+  },
+  textWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+
 });

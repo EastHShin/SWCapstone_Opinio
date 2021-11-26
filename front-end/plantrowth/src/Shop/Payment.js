@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 /* 아임포트 결제모듈을 불러옵니다. */
 import IMP from 'iamport-react-native';
 
 /* 로딩 컴포넌트를 불러옵니다. */
 import Loader from '../Loader';
-import {useNavigation} from '@react-navigation/native';
-import {sendBuySlotData, sendBuySubscribeData} from '../actions/ShopActions';
-import {useDispatch} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { sendBuySlotData, sendBuySubscribeData } from '../actions/ShopActions';
+import { useDispatch } from 'react-redux';
 
-export function Payment({route}) {
+export function Payment({ route }) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
