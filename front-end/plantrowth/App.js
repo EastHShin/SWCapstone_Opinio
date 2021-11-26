@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/Auth/LoginScreen';
 import RegisterScreen from './src/Auth/RegisterScreen';
 import SplashScreen from './src/Auth/SplashScreen';
@@ -11,7 +11,7 @@ import DiaryCreateScreen from './src/Diary/DiaryCreateScreen';
 import DiaryDetailScreen from './src/Diary/DiaryDetail';
 import DiaryEditScreen from './src/Diary/DiaryEditScreen';
 import messaging from '@react-native-firebase/messaging';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import Store from './src/store';
 import AddProfileScreen from './src/Plant/AddPlantProfile';
 import ManagePlantScreen from './src/Plant/ManagePlant';
@@ -34,6 +34,7 @@ import {navigationRef} from './RootNavigation';
 import PostCreateScreen from './src/Community/PostCreateScreen';
 import PostEditScreen from './src/Community/PostEditScreen';
 import PostDetailScreen from './src/Community/PostDetailScreen';
+import Payment from './src/Shop/Payment';
 
 const Stack = createNativeStackNavigator();
 
@@ -229,6 +230,7 @@ function App() {
               headerShown: false,
             }}
           />
+
            <Stack.Screen
             name="PlantDiagnosisScreen"
             component={PlantDiagnosisScreen}
@@ -260,6 +262,14 @@ function App() {
           <Stack.Screen
             name="PostDetailScreen"
             component={PostDetailScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Payment"
+            component={Payment}
             options={{
               headerShown: false,
             }}
