@@ -1,16 +1,29 @@
 package com.opinio.plantrowth.api;
 
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
-import com.opinio.plantrowth.domain.Plant;
-import com.opinio.plantrowth.domain.User;
-import com.opinio.plantrowth.repository.UserRepository;
-import com.opinio.plantrowth.service.*;
+import com.opinio.plantrowth.domain.plant.Plant;
+import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.repository.user.UserRepository;
 import com.opinio.plantrowth.service.EmailAuth.EmailService;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
+import com.opinio.plantrowth.service.community.BoardService;
+import com.opinio.plantrowth.service.community.CommentService;
+import com.opinio.plantrowth.service.community.ReportService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
+import com.opinio.plantrowth.service.payment.BillingService;
+import com.opinio.plantrowth.service.plant.DiaryService;
+import com.opinio.plantrowth.service.plant.PlantExpService;
+import com.opinio.plantrowth.service.plant.PlantService;
+import com.opinio.plantrowth.service.plant.WateringService;
+import com.opinio.plantrowth.service.user.AuthService;
+import com.opinio.plantrowth.service.user.FindPasswordService;
+import com.opinio.plantrowth.service.user.UserPointService;
+import com.opinio.plantrowth.service.user.UserService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,13 +31,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -59,6 +68,18 @@ class WateringApiControllerTest {
     private PlantExpService plantExpService;
     @MockBean
     private EmailService emailService;
+    @MockBean
+    private BillingService billingService;
+    @MockBean
+    private BoardService boardService;
+    @MockBean
+    private AuthService authService;
+    @MockBean
+    private CommentService commentService;
+    @MockBean
+    private ReportService reportService;
+    @MockBean
+    private FindPasswordService findPasswordService;
 
     private User user;
     private Plant plant;

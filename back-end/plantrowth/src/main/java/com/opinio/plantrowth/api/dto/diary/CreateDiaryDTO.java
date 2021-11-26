@@ -1,6 +1,6 @@
 package com.opinio.plantrowth.api.dto.diary;
 
-import com.opinio.plantrowth.domain.PlantDiary;
+import com.opinio.plantrowth.domain.plant.PlantDiary;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
