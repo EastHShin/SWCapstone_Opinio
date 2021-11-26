@@ -4,14 +4,16 @@ import './App.css';
 import {Route, Link, BrowserRouter, Routes} from "react-router-dom";
 import Login from "./login";
 import Front from './front.js';
-import Advertisement from "./advertisement";
-import AdvertisementAdd from "./advertisementAdd"
-import AdvertisementUpdate from "./advertisementUpdate"
-import AdvertisementDelete from "./advertisementDelete";
-import Users from "./users";
-import UserUpdate from "./userUpdate"
-import UserInfo from "./userInfo"
-import Board from "./userBoard"
+import Advertisement from "./ads/advertisement"
+import AdvertisementAdd from "./ads/advertisementAdd"
+import AdvertisementUpdate from "./ads/advertisementUpdate"
+import AdvertisementDelete from "./ads/advertisementDelete";
+import Users from "./user/users";
+import UserUpdate from "./user/userUpdate"
+import UserInfo from "./user/userInfo"
+import Board from "./board/userBoard"
+import Post from "./board/userPost"
+import Comment from "./board/userComment"
 import Report from "./report"
 import React from "react";
 
@@ -32,6 +34,8 @@ function App() {
                         <Route path="/administrator/user/info" element={<UserInfo />} />
                         <Route path="/administrator/report" element={<Report />} />
                         <Route path="/administrator/board" element={<Board />} />
+                        <Route path="/administrator/board/post" element={<Post />} />
+                        <Route path="/administrator/board/comment" element={<Comment />} />
                     </Routes>
                 </BrowserRouter>
             </div>

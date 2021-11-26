@@ -1,9 +1,8 @@
 import React from "react";
 import NavBar from "./NavBar.js";
-import Table from './usersbackenddummy';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import './users.css';
+import './user/users.css';
 
 function Report() {
     return (

@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "./NavBar.js";
+import NavBar from "../NavBar.js";
 import './advertisement.css';
 import Button from 'react-bootstrap/Button';
 
