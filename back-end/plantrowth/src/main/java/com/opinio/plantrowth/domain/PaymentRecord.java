@@ -51,4 +51,8 @@ public class PaymentRecord {
 	@Column(name = "payment_type")
 	private PaymentType paymentType;	//SUBSCRIPTION, SLOT
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "payment_status")
+	private PaymentStatus paymentStatus;
+
 }
