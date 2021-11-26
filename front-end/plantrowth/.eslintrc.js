@@ -11,3 +11,4 @@ module.exports = {
     ['error', { 'extensions': [".js", ".jsx"] }],
   }
 };
+

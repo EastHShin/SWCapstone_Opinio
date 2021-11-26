@@ -44,4 +44,5 @@ export const EDIT_POST = 'EDIT_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const SAVE_POST = 'CREATE_POST';
 export const RESULT_STATE_POST = 'RESULT_STATE_POST';
-
+export const GET_PAYMENT_HISTORY = 'get_payment_history';
+export const REFUND = 'refund';

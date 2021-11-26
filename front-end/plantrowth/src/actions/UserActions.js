@@ -6,13 +6,12 @@ import axios from "axios";
 let timer;
 
 const clearLogoutTimer = () => {
-    if (timer) {
-        clearTimeout(timer);
-    }
+	if (timer) {
+		clearTimeout(timer);
+	}
 };
 
 const setLogoutTimer = (expirationTime) => dispatch => {
-
     timer = setTimeout(() => {
         dispatch(logoutUser());
         console.log('로그인 만료')
@@ -21,6 +20,7 @@ const setLogoutTimer = (expirationTime) => dispatch => {
 
 
 export const registerUser = (user) => {
+
 
     return async dispatch => {
         return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/join', user, {
@@ -127,7 +127,6 @@ export const setCodeVerificationState = state => dispatch => {
 }
 
 export const loginUser = (user) => {
-
     return async dispatch => {
         return await axios.post("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login", user, {
             headers: { "Content-Type": `application/json` }
@@ -190,36 +189,35 @@ export const kakaoLogin = (data) => {
             })
     }
 
+
 }
 
 export const setLoginState = state => dispatch => {
-    dispatch({
-        type: LOGIN_USER,
-        payload: state
-    })
+	dispatch({
+		type: LOGIN_USER,
+		payload: state
+	})
 }
 
 export const kakaoRegister = (register) => dispatch => {
 
-    dispatch({
-        type: KAKAO_REGISTER,
-        payload: register,
-    });
+	dispatch({
+		type: KAKAO_REGISTER,
+		payload: register,
+	});
 
 }
 
 
 
 export const logoutUser = (email) => {
-
-
     return async dispatch => {
         return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout', email, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
                 if (res.status == 200) {
-                    axios.defaults.headers.common['Authorization'] = undefined
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = undefined
                     AsyncStorage.getItem('kakaoLogin').then((value) => {
                         clearLogoutTimer();
                         AsyncStorage.clear();
@@ -248,7 +246,6 @@ export const logoutUser = (email) => {
 };
 
 export const setLogoutState = state => dispatch => {
-
     dispatch({
         type: LOGOUT_USER,
         payload: state
@@ -287,7 +284,7 @@ export const deleteUser = (userId, password) => {
             })
             .then(function (res) {
                 if (res.status == 200) {
-                    axios.defaults.headers.common['Authorization'] = undefined
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = undefined
                     AsyncStorage.getItem('kakaoLogin').then((value) => {
                         clearLogoutTimer();
 
@@ -314,7 +311,6 @@ export const deleteUser = (userId, password) => {
                 })
             })
     }
-
 }
 
 export const infoUser = (userId) => {
@@ -367,7 +363,6 @@ export const editUser = (userId, data) => {
                 })
             })
     }
-
 }
 
 export const setUserDeleteState = state => dispatch => {
@@ -392,7 +387,6 @@ export const setUserInfoState = state => dispatch => {
 }
 
 export const getDiagnosisList = (plantId) => {
-
     return async dispatch => {
         return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diagnosis/${plantId}`)
             .then(function (res) {

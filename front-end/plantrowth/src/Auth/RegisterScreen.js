@@ -165,7 +165,6 @@ function RegisterScreen({ navigation }) {
       return;
     }
 
-
     setLoading(true);
 
     console.log(fcmToken);
