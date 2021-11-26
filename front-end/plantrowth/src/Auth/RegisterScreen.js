@@ -135,6 +135,18 @@ function RegisterScreen({ navigation }) {
       alert('이메일을 인증해주세요!');
       return;
     }
+    // if (!checkedNickName) {
+    //   alert('닉네임을 인증해주세요!');
+    //   return;
+    // }
+    // if (checkedNickName != userNickName) {
+    //   alert('닉네임을 인증해주세요!');
+    //   return;
+    // }
+    if (!checkPassword) {
+      alert('비밀번호를 다시 확인해주세요!');
+      return;
+    }
 
     setLoading(true);
 
