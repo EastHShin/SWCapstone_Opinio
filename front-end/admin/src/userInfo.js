@@ -1,14 +1,16 @@
 import React from "react";
 import NavBar from "./NavBar.js";
-import './front.css';
+import './users.css';
+import './userUpdate.css';
 
-function Front() {
+import {Link} from "react-router-dom";
+
+function userInfo() {
     return (
         <div className="front">
             <NavBar class="top" />
-            <h1>메인화면</h1>
         </div>
     );
 }
 
-export default Front;
+export default userInfo;

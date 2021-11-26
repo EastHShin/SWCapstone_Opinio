@@ -29,3 +29,11 @@
 .icon {
     font-size: 24px;
 }
+
+.head_font {
+    font-size: calc(10px + 1vmin);
+}
+
+.content_font {
+    font-size: calc(10px + 0.5vmin);
+}

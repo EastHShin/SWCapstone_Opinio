@@ -1,0 +1,17 @@
+import React from "react";
+import NavBar from "./NavBar.js";
+import Table from './usersbackenddummy';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import './users.css';
+
+function Report() {
+    return (
+        <div className="front">
+            <NavBar class="top" />
+            <h1>유저신고</h1>
+        </div>
+    );
+}
+
+export default Report;

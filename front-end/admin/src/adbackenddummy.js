@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import * as ReactBootStrap from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import './users.css';
+import './advertisement.css';
 
 import {Link} from "react-router-dom";
 
@@ -23,9 +23,8 @@ const Table = () => {
             <ReactBootStrap.Table striped bordered hover className="table">
                 <thead>
                 <tr className="head_font">
-                    <th class="table-light" width="140px">아이디 번호</th>
-                    <th class="table-primary">이메일</th>
-                    <th class="table-light">내용</th>
+                    <th class="table-light" width="140px">광고번호</th>
+                    <th class="table-primary">광고</th>
                     <th class="table-warning" width="250px">수정 / 삭제</th>
                 </tr>
                 </thead>
@@ -35,15 +34,14 @@ const Table = () => {
                         <tr key={item.id} class="content_font">
                             <td class="table-light" valign="middle">{item.id}</td>
                             <td class="table-primary" valign="middle">{item.title}</td>
-                            <td class="table-light" valign="middle">{item.body}</td>
                             <td class="table-warning" valign="middle">
-                                <Link to="/administrator/user/info">
                                 <Button variant="info" className="mar">Info</Button>
-                                </Link>
-                                <Link to="/administrator/user/update">
+                                <Link to="/administrator/ad/update">
                                     <Button variant="warning" className="mar">Update</Button>
                                 </Link>
-                                <Button variant="danger">Ban</Button>
+                                <Link to="/administrator/ad/delete">
+                                <Button variant="danger">Delete</Button>
+                                </Link>
                             </td>
                         </tr>
                     ))

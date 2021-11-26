@@ -94,7 +94,7 @@ def infer_image():
         disease_name = "녹병"
     elif int(value) == 5 or int(value) == 25:
         #disease_name = "Powdery_Mildew"
-        disease_name = "백분병"
+        disease_name = "흰가루병"
     elif int(value) == 7 or int(value) == 16 or int(value) == 18 or int(value) == 28 or int(value) == 32 or int(value) == 34:
         #disease_name = "Leaf_Spot"
         disease_name = "무늬병"
@@ -112,7 +112,7 @@ def infer_image():
         disease_name = "잎가마름병"
     elif int(value) == 31:
         #disease_name = "Mold"
-        disease_name = "잎공팡이병"
+        disease_name = "잎곰팡이병"
     elif int(value) == 33:
         #disease_name = "Mite"
         disease_name = "잎응애"
