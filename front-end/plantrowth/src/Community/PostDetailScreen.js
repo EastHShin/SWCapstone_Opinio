@@ -16,35 +16,25 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 const PostDetailScreen = ({ route, navigation }) => {
 
-    const { selectedId, testData } = route.params;
+    const { selectedId } = route.params;
 
     const [loading, setLoading] = useState(false);
     const [imageWidth, setImageWidth] = useState('');
     const [imageHeight, setImageHeight] = useState('');
 
     const [userId, setUserId] = useState('');
-    const [post, setPost] = useState('')
     const [comment, setComment] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
     const result = useSelector(state => state.CommunityReducer.result);
-    // const post = useSelector(state => state.CommunityReducer.post);
+    const post = useSelector(state => state.CommunityReducer.post);
 
-    useEffect(() => {
-        console.log(selectedId);
-        setPost(testData[7]);
-        setComment(testData[7].commentList)
+    useEffect(() => {        
+        setComment(post.comments)
         if (isFocused) {
-
-            Image.getSize(testData[7].file_name, (width, height) => {
-                console.log(height);
-                console.log(width);
-                setImageHeight(height);
-                setImageWidth(width);
-
-            })
+            dispatch(getPost(selectedId, userId));
 
             AsyncStorage.getItem('userId').then(value => {
                 if (value != null) {
@@ -55,6 +45,16 @@ const PostDetailScreen = ({ route, navigation }) => {
             )
         }
     }, [isFocused])
+
+    useEffect(() => {
+        if(post.file_name){
+            Image.getSize(post.file_name, (width, height) => {
+                setImageHeight(height);
+                setImageWidth(width);
+
+            })
+        }
+    }, [post])
 
     useEffect(() => {
         if (result == 'success' && isFocused) {
@@ -243,9 +243,9 @@ const PostDetailScreen = ({ route, navigation }) => {
                     </View>
                     <View style={styles.likeAndComment}>
                         <MaterialCommunityIcons name='heart-outline' size={15} color="#DC143C" style={{ marginRight: Dimensions.get('window').width * 0.01 }} />
-                        <Text style={{ fontSize: 12, color: "#DC143C", marginRight: Dimensions.get('window').width * 0.02 }}>{post.good}</Text>
+                        <Text style={{ fontSize: 12, color: "#DC143C", marginRight: Dimensions.get('window').width * 0.02 }}>{post.countedLike}</Text>
                         <SimpleLineIcons name='bubble' size={15} color="#00BFFF" style={{ marginRight: Dimensions.get('window').width * 0.01 }} />
-                        <Text style={{ fontSize: 12, color: "#00BFFF", marginRight: Dimensions.get('window').width * 0.02 }}>{post.comment}</Text>
+                        <Text style={{ fontSize: 12, color: "#00BFFF", marginRight: Dimensions.get('window').width * 0.02 }}>{post.countedComments}</Text>
                     </View>
 
                 </View>

@@ -35,22 +35,26 @@ export const registerUser = (user) => {
                         text: ""
                     })
                 }
-                if (res.status == "NOT_ACCEPTABLE") {
+               
+            })
+            .catch(function (error) {
+                console.log(error.response.status)
+               
+                if (error.response.status == 406) {
                     console.log('이메일 이미 존재함'); 
                     dispatch({
                         type: REGISTER_USER,
                         payload: "failure",
-                        text: res.data.message
+                        text: error.response.data.message
                     })
                 }
-            })
-            .catch(function (error) {
-                console.log(error);
+                else{
                 dispatch({
                     type: REGISTER_USER,
                     payload: "failure",
                     text: ""
                 })
+            }
             })
     }
 }
@@ -133,7 +137,7 @@ export const loginUser = (user) => {
                     dispatch(setLogoutTimer(3600000));
 
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
 
 
                     dispatch({
@@ -157,33 +161,34 @@ export const loginUser = (user) => {
 
 export const kakaoLogin = (data) => {
 
-	return async dispatch => {
-		return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/kakao', data,
-			{
-				headers: { "Content-Type": `application/json` }
-			})
-			.then(function (res) {
+    return async dispatch => {
+        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/kakao', data,
+            {
+                headers: { "Content-Type": `application/json` }
+            })
+            .then(function (res) {
 
-				if (res.status == 200) {
+                if (res.status == 200) {
 
-					axios.defaults.headers.common['Authorization'] = `Bearer ${res.headers.authorization}`;
-					dispatch(setLogoutTimer(3600000));
-					AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
-					AsyncStorage.setItem('kakaoLogin', 'yes');
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
+                    dispatch(setLogoutTimer(3600000));
+                    AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
+                    AsyncStorage.setItem('kakaoLogin', 'yes');
 
-					dispatch({
-						type: LOGIN_USER,
-						payload: "success"
-					});
-				}
+                    dispatch({
+                        type: LOGIN_USER,
+                        payload: "success"
+                    });
+                }
 
-			}).catch(function (err) {
-				dispatch({
-					type: KAKAO_REGISTER,
-					payload: 'loading',
-				});
-			})
-	}
+            }).catch(function (err) {
+                dispatch({
+                    type: KAKAO_REGISTER,
+                    payload: 'loading',
+                });
+            })
+    }
+
 
 }
 
@@ -212,7 +217,7 @@ export const logoutUser = (email) => {
         })
             .then(function (res) {
                 if (res.status == 200) {
-                    axios.defaults.headers.common['Authorization'] = undefined
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = undefined
                     AsyncStorage.getItem('kakaoLogin').then((value) => {
                         clearLogoutTimer();
                         AsyncStorage.clear();
@@ -279,7 +284,7 @@ export const deleteUser = (userId, password) => {
             })
             .then(function (res) {
                 if (res.status == 200) {
-                    axios.defaults.headers.common['Authorization'] = undefined
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = undefined
                     AsyncStorage.getItem('kakaoLogin').then((value) => {
                         clearLogoutTimer();
 
