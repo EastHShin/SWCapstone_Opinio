@@ -28,107 +28,108 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PlantServiceTest {
-    @Mock
-    private PlantRepository plantRepository;
-    @Mock
-    private UserRepository userRepository;
+	@Mock
+	private PlantRepository plantRepository;
+	@Mock
+	private UserRepository userRepository;
 
-    @InjectMocks
-    private PlantService plantService;
+	@InjectMocks
+	private PlantService plantService;
 
-    private User user;
-    private Plant plant;
-    private Plant plant2;
+	private User user;
+	private Plant plant;
+	private Plant plant2;
 
-    @BeforeEach
-    public void setUpTest() {
-        user = User.builder()
-                .email("fff")
-                .name("east")
-                .password("orort")
-                .build();
+	@BeforeEach
+	public void setUpTest() {
+		user = User.builder()
+			.email("fff")
+			.name("east")
+			.password("orort")
+			.plantNum(2)
+			.build();
 
-        plant = Plant.builder()
-                .plantSpecies("장미")
-                .plantName("토리이")
-                .plantBirth(LocalDate.now())
-                .alarmCycle(2)
-                .waterSupply(3)
-                .plantExp(0)
-                .build();
+		plant = Plant.builder()
+			.plantSpecies("장미")
+			.plantName("토리이")
+			.plantBirth(LocalDate.now())
+			.alarmCycle(2)
+			.waterSupply(3)
+			.plantExp(0)
+			.user(user)
+			.build();
 
-        plant2 = Plant.builder()
-                .plantSpecies("가시")
-                .plantName("토이이이")
-                .plantBirth(LocalDate.now())
-                .alarmCycle(5)
-                .waterSupply(1)
-                .plantExp(0)
-                .build();
+		plant2 = Plant.builder()
+			.plantSpecies("가시")
+			.plantName("토이이이")
+			.plantBirth(LocalDate.now())
+			.alarmCycle(5)
+			.waterSupply(1)
+			.plantExp(0)
+			.build();
 
-    }
+	}
 
-    @Test
-    @DisplayName("join 기능 테스트")
-    public void join() throws Exception{
-        //given
-//        User user = new User();
-//        user.setEmail("xlddd@gmail.com");
-//        user.setPassword("fffff");
-//        user.setId(1L);
-//        Plant plant = getPlant(user, "장미", "토로리",
-//                LocalDate.now(), 0, 3, 2);
+	@Test
+	@DisplayName("join 기능 테스트")
+	public void join() throws Exception {
+		//given
+		//        User user = new User();
+		//        user.setEmail("xlddd@gmail.com");
+		//        user.setPassword("fffff");
+		//        user.setId(1L);
+		//        Plant plant = getPlant(user, "장미", "토로리",
+		//                LocalDate.now(), 0, 3, 2);
 
-        when(plantRepository.save(any())).thenReturn(plant);
+		when(plantRepository.save(any())).thenReturn(plant);
 
-        //when
-        Long id = plantService.join(plant);
-        //then
-        Assertions.assertThat(plant.getId()).isEqualTo(id);
-    }
+		//when
+		Long id = plantService.join(plant);
+		//then
+		Assertions.assertThat(plant.getId()).isEqualTo(id);
+	}
 
-    @Test
-    @DisplayName("식물 목록 테스트")
-    public void plantList() throws Exception{
-        //given
-        List<Plant> plants = new ArrayList<>();
-        plants.add(plant);
-        plants.add(plant2);
-        given(plantRepository.findAllByUserId(any())).willReturn(plants);
-        //when
-        List<Plant> findPlants = plantService.findPlants(user.getId());
-        //then
-        Assertions.assertThat(findPlants.size()).isEqualTo(2);
-        Assertions.assertThat(findPlants.get(0)).isSameAs(plant);
-        Assertions.assertThat(findPlants.get(1)).isSameAs(plant2);
-    }
+	@Test
+	@DisplayName("식물 목록 테스트")
+	public void plantList() throws Exception {
+		//given
+		List<Plant> plants = new ArrayList<>();
+		plants.add(plant);
+		plants.add(plant2);
+		given(plantRepository.findAllByUserId(any())).willReturn(plants);
+		//when
+		List<Plant> findPlants = plantService.findPlants(user.getId());
+		//then
+		Assertions.assertThat(findPlants.size()).isEqualTo(2);
+		Assertions.assertThat(findPlants.get(0)).isSameAs(plant);
+		Assertions.assertThat(findPlants.get(1)).isSameAs(plant2);
+	}
 
-    @Test
-    public void updatePlant() throws Exception{
-        //given
+	@Test
+	public void updatePlant() throws Exception {
+		//given
 
-        //when
-        CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
-                LocalDate.now(), 5, 3, LocalDate.now());
-        when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
-        plantService.update(plant.getId(), requestDto);
+		//when
+		CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
+			LocalDate.now(), 5, 3, LocalDate.now());
+		when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
+		plantService.update(plant.getId(), requestDto);
 
-        //then
-        Assertions.assertThat(plant.getPlantSpecies()).isEqualTo("가시");
-        Assertions.assertThat(plant.getWaterSupply()).isEqualTo(5);
-        Assertions.assertThat(plant.getAlarmCycle()).isEqualTo(3);
-    }
+		//then
+		Assertions.assertThat(plant.getPlantSpecies()).isEqualTo("가시");
+		Assertions.assertThat(plant.getWaterSupply()).isEqualTo(5);
+		Assertions.assertThat(plant.getAlarmCycle()).isEqualTo(3);
+	}
 
-    @Test
-    public void deletePlant() throws Exception{
-        //given
+	@Test
+	public void deletePlant() throws Exception {
+		//given
 
-        //when
-        when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
-        plantService.delete(1L);
-        //then
-        Mockito.verify(plantRepository).delete(plant);
-    }
-
+		//when
+		when(plantRepository.findById(any())).thenReturn(Optional.of(plant));
+		plantService.delete(1L);
+		//then
+		Mockito.verify(plantRepository).delete(plant);
+	}
 
 }

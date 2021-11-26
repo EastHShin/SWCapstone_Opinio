@@ -42,7 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             .authorizeRequests()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/user/**").hasRole("USER")
-            .antMatchers("/api/auth/**", "/api/community", "/api/community/**").permitAll()
+            .antMatchers("/api/auth/**", "/api/community", "/api/community/**","/email", "/verify",
+                "/api/user/find").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
