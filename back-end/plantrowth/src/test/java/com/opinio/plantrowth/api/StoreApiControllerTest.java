@@ -6,11 +6,17 @@ import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.repository.user.UserRepository;
 import com.opinio.plantrowth.service.EmailAuth.EmailService;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
+import com.opinio.plantrowth.service.community.BoardService;
+import com.opinio.plantrowth.service.community.CommentService;
+import com.opinio.plantrowth.service.community.ReportService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
+import com.opinio.plantrowth.service.payment.BillingService;
 import com.opinio.plantrowth.service.plant.DiaryService;
 import com.opinio.plantrowth.service.plant.PlantExpService;
 import com.opinio.plantrowth.service.plant.PlantService;
 import com.opinio.plantrowth.service.plant.WateringService;
+import com.opinio.plantrowth.service.user.AuthService;
+import com.opinio.plantrowth.service.user.FindPasswordService;
 import com.opinio.plantrowth.service.user.UserPointService;
 import com.opinio.plantrowth.service.user.UserService;
 
@@ -59,6 +65,18 @@ class StoreApiControllerTest {
     private PlantExpService plantExpService;
     @MockBean
     private EmailService emailService;
+    @MockBean
+    private BillingService billingService;
+    @MockBean
+    private BoardService boardService;
+    @MockBean
+    private AuthService authService;
+    @MockBean
+    private CommentService commentService;
+    @MockBean
+    private ReportService reportService;
+    @MockBean
+    private FindPasswordService findPasswordService;
 
     private User user;
     private Plant plant;
