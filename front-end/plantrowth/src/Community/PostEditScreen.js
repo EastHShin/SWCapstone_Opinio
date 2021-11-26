@@ -1,18 +1,7 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-    View,
-    StyleSheet,
-    Text,
-    Dimensions,
-    TouchableOpacity,
-    SafeAreaView,
-    TextInput,
-    ScrollView,
-    KeyboardAvoidingView,
-    Image
-} from 'react-native';
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity, SafeAreaView, TextInput, ScrollView, KeyboardAvoidingView, Image } from 'react-native';
 
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -33,7 +22,7 @@ const PostEditScreen = ({ route, navigation }) => {
     const [title, setTitle] = useState(post.title);
     const [content, setContent] = useState(post.content);
     const originalImageUri = post.file_name;
-   
+
     const [imageType, setImageType] = useState('');
     const [fileName, setFileName] = useState('');
     const [imageUri, setImageUri] = useState(post.file_name);
@@ -44,8 +33,8 @@ const PostEditScreen = ({ route, navigation }) => {
     const contentInputRef = createRef();
 
     useEffect(() => {
-        if(isFocused && originalImageUri){
-            Image.getSize(originalImageUri,(width, height) =>{
+        if (isFocused && originalImageUri) {
+            Image.getSize(originalImageUri, (width, height) => {
                 setImageHeight(height);
                 setImageWidth(width);
             })

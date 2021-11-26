@@ -18,7 +18,7 @@ const PointHistoryScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   return (
     <View style={styles.body}>
-     <Text>포인트 조회 스크린</Text>
+      <Text>포인트 조회 스크린</Text>
       <Footer />
     </View>
   )

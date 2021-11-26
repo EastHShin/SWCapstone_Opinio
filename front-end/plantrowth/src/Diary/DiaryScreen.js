@@ -27,7 +27,7 @@ const Item = ({ item, onPress, style }) => {
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
       <View>
         <Text style={styles.title}>
-        {item.title.length > 20 ? (item.title.substring(0, 18) + "···") : item.title}
+          {item.title.length > 20 ? (item.title.substring(0, 18) + "···") : item.title}
         </Text>
       </View>
       <View>
@@ -55,12 +55,12 @@ const DiaryScreen = ({ route, navigation }) => {
   const [isEarnModalVisible, setEarnModalVisibility] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const earnState = useSelector(state => state.PlantReducer.earn);
-  const exp = useSelector(state=>state.DiaryReducer.exp);
-  const point = useSelector(state=>state.DiaryReducer.point);
-  const plant_level = useSelector(state=>state.DiaryReducer.level);
+  const exp = useSelector(state => state.DiaryReducer.exp);
+  const point = useSelector(state => state.DiaryReducer.point);
+  const plant_level = useSelector(state => state.DiaryReducer.level);
 
   useEffect(() => {
-  
+
     if (isFocused) {
       dispatch(fetchDiaries(plantId));
     }
@@ -83,33 +83,33 @@ const DiaryScreen = ({ route, navigation }) => {
   }
 
   const renderEarnPoint = () => {
-      return (
-        <View>
-          <Text style={styles.earnText}>포인트를 10만큼 획득하셨어요!</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginBottom: 20,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text style={[styles.earnText, { fontSize: 16 }]}>보유 포인트:</Text>
-            <Text
-              style={[
-                styles.earnText,
-                {
-                  fontSize: 16,
-                  fontFamily: 'NanumGothicExtraBold',
-                  color: '#7e57c2',
-                },
-              ]}>
-              {' '}
-              {point}
-            </Text>
-            <Entypo name={'arrow-up'} size={20} color={'#93d07d'} />
-          </View>
+    return (
+      <View>
+        <Text style={styles.earnText}>포인트를 10만큼 획득하셨어요!</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginBottom: 20,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={[styles.earnText, { fontSize: 16 }]}>보유 포인트:</Text>
+          <Text
+            style={[
+              styles.earnText,
+              {
+                fontSize: 16,
+                fontFamily: 'NanumGothicExtraBold',
+                color: '#7e57c2',
+              },
+            ]}>
+            {' '}
+            {point}
+          </Text>
+          <Entypo name={'arrow-up'} size={20} color={'#93d07d'} />
         </View>
-      );
+      </View>
+    );
   };
   const renderItem = ({ item }) => {
 
@@ -128,7 +128,7 @@ const DiaryScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.body}>
-      <LevelUp plant_level = {plant_level} />
+      <LevelUp plant_level={plant_level} />
       <View style={styles.top}>
         <Image
           source={{ uri: plantImg }}
@@ -137,7 +137,7 @@ const DiaryScreen = ({ route, navigation }) => {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => navigation.push("DiaryCreateScreen", { plantId: plantId, plantImg: plantImg })}>
-          <SimpleLineIcons name='note' size={25}  color="#FFFFFF" />
+          <SimpleLineIcons name='note' size={25} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
       <View style={styles.diaryWrapper}>
@@ -160,7 +160,7 @@ const DiaryScreen = ({ route, navigation }) => {
       </View>
       <Modal
         isVisible={earnState}
-        onBackButtonPress={()=>dispatch(setEarnState(false))}>
+        onBackButtonPress={() => dispatch(setEarnState(false))}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View
             style={{
@@ -210,8 +210,8 @@ const DiaryScreen = ({ route, navigation }) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                  dispatch(setEarnState(false));
-                  setEarnModalVisibility(false);
+                dispatch(setEarnState(false));
+                setEarnModalVisibility(false);
               }}>
               <View style={styles.earnModalButton}>
                 <Text
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     height: Dimensions.get('window').height * 0.05,
-    marginStart:Dimensions.get('window').width*0.1
+    marginStart: Dimensions.get('window').width * 0.1
   },
   diaryWrapper: {
     height: Dimensions.get('window').height * 0.83,
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     color: "#DCDCDC",
     fontSize: 10,
   },
- 
+
   image: {
 
     width: Dimensions.get('window').width * 0.2,

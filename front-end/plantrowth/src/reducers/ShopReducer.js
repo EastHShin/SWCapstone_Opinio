@@ -16,15 +16,15 @@ let initialState = {
 function ShopReducer(state = initialState, action) {
   switch (action.type) {
     case BUY_PROFILE_SLOT:
-      return {...state, buyProfileSlotResult: action.payload};
+      return { ...state, buyProfileSlotResult: action.payload };
     case GET_POINT:
-      return {...state, point: action.payload};
+      return { ...state, point: action.payload };
     case GET_MAX_PLANT_NUM:
-      return {...state, maxPlantNumber: action.payload};
+      return { ...state, maxPlantNumber: action.payload };
     case GET_SHOP_INFO:
-      return {...state, shopInfo: action.payload};
+      return { ...state, shopInfo: action.payload };
     case BUY_SUBSCRIBE:
-      return {...state, buySubscribeResult: action.payload};
+      return { ...state, buySubscribeResult: action.payload };
     default:
       return state;
   }

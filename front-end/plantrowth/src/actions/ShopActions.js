@@ -16,7 +16,7 @@ export const getShopInfo = userId => {
       .then(function (response) {
         console.log('상점 response: ' + JSON.stringify(response.data));
         if (response.status === 200) {
-          dispatch({type: GET_SHOP_INFO, payload: response.data});
+          dispatch({ type: GET_SHOP_INFO, payload: response.data });
         }
       })
       .catch(function (error) {
@@ -40,13 +40,13 @@ export const buyProfileSlot = userId => {
             type: GET_MAX_PLANT_NUM,
             payload: response.data.data.max_plant_num,
           });
-          dispatch({type: BUY_PROFILE_SLOT, payload: 'point'});
-          dispatch({type: GET_POINT, payload: response.data.data.point});
+          dispatch({ type: BUY_PROFILE_SLOT, payload: 'point' });
+          dispatch({ type: GET_POINT, payload: response.data.data.point });
         }
       })
       .catch(function (error) {
         console.warn('slot 구매 에러요~~~~~~~~~~~~');
-        dispatch({type: BUY_PROFILE_SLOT, payload: 'failure'});
+        dispatch({ type: BUY_PROFILE_SLOT, payload: 'failure' });
         console.log(error);
       });
   };
@@ -64,7 +64,7 @@ export const sendBuySlotData = (userId, imp_uid, merchant_uid) => {
           merchant_uid: merchant_uid,
         },
         {
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
         },
       )
       .then(function (response) {
@@ -74,12 +74,12 @@ export const sendBuySlotData = (userId, imp_uid, merchant_uid) => {
             type: GET_MAX_PLANT_NUM,
             payload: response.data.max_plant_num,
           });
-          dispatch({type: BUY_PROFILE_SLOT, payload: 'cash'});
+          dispatch({ type: BUY_PROFILE_SLOT, payload: 'cash' });
         }
       })
       .catch(function (error) {
         console.warn('slot 캐시 구매 에러요~~~~~~~~~~~~');
-        dispatch({type: BUY_PROFILE_SLOT, payload: 'failure'});
+        dispatch({ type: BUY_PROFILE_SLOT, payload: 'failure' });
         console.log(error);
       });
   };
@@ -97,19 +97,19 @@ export const sendBuySubscribeData = (userId, imp_uid, merchant_uid) => {
           merchant_uid: merchant_uid,
         },
         {
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
         },
       )
       .then(function (response) {
         console.log('질병진단 구독 response :', response);
         if (response.status === 200) {
           console.log('질병진단 구독 response status 200');
-          dispatch({type: BUY_SUBSCRIBE, payload: 'success'});
+          dispatch({ type: BUY_SUBSCRIBE, payload: 'success' });
         }
       })
       .catch(function (error) {
         console.warn('질병진단 구독 에러요~~~~~~~~~~~~');
-        dispatch({type: BUY_SUBSCRIBE, payload: 'failure'});
+        dispatch({ type: BUY_SUBSCRIBE, payload: 'failure' });
         console.log(error);
       });
   };

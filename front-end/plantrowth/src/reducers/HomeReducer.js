@@ -6,10 +6,10 @@ let initialState = {
 };
 
 
-function HomeReducer(state=initialState, action){
-    switch (action.type){
+function HomeReducer(state = initialState, action) {
+    switch (action.type) {
         case GET_HOME_INFO:
-            return {...state, infoList : action.payload};
+            return { ...state, infoList: action.payload };
         default:
             return state;
     }

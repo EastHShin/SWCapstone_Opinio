@@ -19,21 +19,21 @@ import { useIsFocused } from '@react-navigation/core';
 
 
 
-const PlantDiagnosisScreen = ({ route,navigation }) => {
-  const {selectedId} = route.params;
+const PlantDiagnosisScreen = ({ route, navigation }) => {
+  const { selectedId } = route.params;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const diagnosisList =  useSelector(state => state.UserReducer.diagnosisList);
+  const diagnosisList = useSelector(state => state.UserReducer.diagnosisList);
 
   useEffect(() => {
-      if(isFocused){
-          dispatch(getDiagnosisList(selectedId));
-      }
+    if (isFocused) {
+      dispatch(getDiagnosisList(selectedId));
+    }
   }, [isFocused])
-  
+
   return (
     <SafeAreaView style={styles.body}>
-     <Text>포인트 조회 스크린</Text>
+      <Text>포인트 조회 스크린</Text>
       <Footer />
     </SafeAreaView>
   )

@@ -16,7 +16,7 @@ import {
 
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {getHomeInfo} from '../actions/HomeActions'
+import { getHomeInfo } from '../actions/HomeActions'
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -25,33 +25,33 @@ const Item = ({ item, onPress, style }) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
-      <View style={{flexDirection:"row"}}>
-        <Image 
-        source={{uri:item.file_name}}
-        style={styles.image}
+      <View style={{ flexDirection: "row" }}>
+        <Image
+          source={{ uri: item.file_name }}
+          style={styles.image}
         />
         <View style={styles.textWrapper}>
-          <Text style={{flexDirection:'column'}}>
-          <Text style={styles.text}>Name  :    </Text>
-        <Text style={styles.text}>
-        {item.plant_name}
-        </Text>
-        </Text>
-        <Text style={{flexDirection:'column'}}>
-        <Text style={styles.text}>Level    :    </Text>
-        <Text style={styles.text}>
-        {item.plant_level}
-        </Text>
-        </Text>
-        <Text style={{flexDirection:'column'}}>
-        <Text style={styles.text}>EXP      :    </Text>
-        <Text style={styles.text}>
-        {item.plant_exp}
-        </Text>
-        </Text>
+          <Text style={{ flexDirection: 'column' }}>
+            <Text style={styles.text}>Name  :    </Text>
+            <Text style={styles.text}>
+              {item.plant_name}
+            </Text>
+          </Text>
+          <Text style={{ flexDirection: 'column' }}>
+            <Text style={styles.text}>Level    :    </Text>
+            <Text style={styles.text}>
+              {item.plant_level}
+            </Text>
+          </Text>
+          <Text style={{ flexDirection: 'column' }}>
+            <Text style={styles.text}>EXP      :    </Text>
+            <Text style={styles.text}>
+              {item.plant_exp}
+            </Text>
+          </Text>
         </View>
       </View>
-    
+
     </TouchableOpacity>
   );
 }
@@ -65,13 +65,13 @@ const DiseaseDiagnosisScreen = ({ navigation }) => {
   const plantList = infoList.plants;
 
   useEffect(() => {
-    if(isFocused){
+    if (isFocused) {
       AsyncStorage.getItem('userId').then(value => {
         if (value != null) {
-            dispatch(getHomeInfo(JSON.parse(value)));
+          dispatch(getHomeInfo(JSON.parse(value)));
         }
-    }
-    )
+      }
+      )
     }
   }, [isFocused])
 
@@ -105,14 +105,14 @@ const DiseaseDiagnosisScreen = ({ navigation }) => {
         <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
       </View>
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
-     
-      <FlatList
+
+        <FlatList
           data={plantList}
           renderItem={renderItem}
           keyExtractor={item => item.plant_id}
           extraData={selectedId}
         />
-      
+
         <Footer />
       </View>
     </SafeAreaView>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.06,
     width: Dimensions.get('window').width
   },
-  text:{
+  text: {
     fontSize: 15,
     color: "#000000"
   },
@@ -155,21 +155,21 @@ const styles = StyleSheet.create({
     shadowRadius: 3.00,
     elevation: 5
   },
-  image:{
-    
-    width:Dimensions.get('window').width*0.25,
-    height:Dimensions.get('window').height*0.13,
-    resizeMode:'cover',
-    borderRadius:10
+  image: {
+
+    width: Dimensions.get('window').width * 0.25,
+    height: Dimensions.get('window').height * 0.13,
+    resizeMode: 'cover',
+    borderRadius: 10
 
   },
-  textWrapper:{
-    justifyContent:'center',
-    marginLeft:Dimensions.get('window').width*0.07
+  textWrapper: {
+    justifyContent: 'center',
+    marginLeft: Dimensions.get('window').width * 0.07
 
 
   },
- 
+
 
 })
 

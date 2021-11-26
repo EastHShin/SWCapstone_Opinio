@@ -25,12 +25,12 @@ import AccountEditScreen from './src/MyPage/AccountEditScreen';
 import DiseaseDiagnosisHistoryScreen from './src/MyPage/DiseaseDiagnosisHistoryScreen';
 import PointHistoryScreen from './src/MyPage/PointHistoryScreen';
 import PlantDiagnosisScreen from './src/MyPage/PlantDiagonosisScreen';
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 import UpdatePlantProfileScreen from './src/Plant/UpdatePlantProfile';
 import DiagnosisScreen from './src/Plant/DiagnosisScreen';
 import PasswordCheckScreen from './src/MyPage/PasswordCheckScreen';
 import * as RootNavigation from './RootNavigation';
-import {navigationRef} from './RootNavigation';
+import { navigationRef } from './RootNavigation';
 import PostCreateScreen from './src/Community/PostCreateScreen';
 import PostEditScreen from './src/Community/PostEditScreen';
 import PostDetailScreen from './src/Community/PostDetailScreen';
@@ -39,7 +39,7 @@ import Payment from './src/Shop/Payment';
 const Stack = createNativeStackNavigator();
 
 function App() {
-  
+
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
   });
@@ -55,7 +55,7 @@ function App() {
 
   useEffect(() => {
     const foreground = messaging().onMessage(async remoteMessage => {
-      console.log("어플 안 : "+remoteMessage.data.plant_id);
+      console.log("어플 안 : " + remoteMessage.data.plant_id);
       console.log(remoteMessage);
       Alert.alert('물주기 알림', '식물에게 물을 줄 시간입니다!', [
         {
@@ -231,28 +231,28 @@ function App() {
             }}
           />
 
-           <Stack.Screen
+          <Stack.Screen
             name="PlantDiagnosisScreen"
             component={PlantDiagnosisScreen}
             options={{
               headerShown: false,
             }}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="PasswordCheckScreen"
             component={PasswordCheckScreen}
             options={{
               headerShown: false,
             }}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="PostCreateScreen"
             component={PostCreateScreen}
             options={{
               headerShown: false,
             }}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="PostEditScreen"
             component={PostEditScreen}
             options={{

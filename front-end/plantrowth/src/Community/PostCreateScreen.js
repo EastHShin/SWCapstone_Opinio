@@ -1,18 +1,7 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-    View,
-    StyleSheet,
-    Text,
-    Dimensions,
-    TouchableOpacity,
-    SafeAreaView,
-    TextInput,
-    ScrollView,
-    KeyboardAvoidingView,
-    Image
-} from 'react-native';
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity, SafeAreaView, TextInput, ScrollView, KeyboardAvoidingView, Image } from 'react-native';
 
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -32,7 +21,7 @@ const PostCreateScreen = ({ navigation }) => {
     const [imageType, setImageType] = useState('');
     const [fileName, setFileName] = useState('');
     const [imageUri, setImageUri] = useState('');
-   
+
     const [userId, setUserId] = useState('');
 
     const dispatch = useDispatch();
@@ -192,7 +181,7 @@ const PostCreateScreen = ({ navigation }) => {
                             />
 
                         </View>
-                        
+
                         {imageUri != '' ? (
                             <View style={{ marginBottom: Dimensions.get('window').height * 0.02 }}>
                                 <Image source={{ uri: imageUri }}

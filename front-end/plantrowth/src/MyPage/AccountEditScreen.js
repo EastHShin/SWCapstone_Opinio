@@ -46,23 +46,23 @@ const AccountEditScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (isFocused) {
-        AsyncStorage.getItem('kakaoLogin').then((value) => {
-            if (value) {
-                  setKakaoLoginUser(true);
-                }
-              })
+      AsyncStorage.getItem('kakaoLogin').then((value) => {
+        if (value) {
+          setKakaoLoginUser(true);
+        }
+      })
     }
-}, [isFocused])
+  }, [isFocused])
 
   useEffect(() => {
-    if(isFocused && userEditState == 'success'){
+    if (isFocused && userEditState == 'success') {
       setLoading(false);
       dispatch(setUserEditState(''));
       alert('회원정보가 수정되었습니다.');
       navigation.navigate('AccountInfoScreen');
-      
+
     }
-    else if(isFocused && userEditState == 'failure'){
+    else if (isFocused && userEditState == 'failure') {
       setLoading(false);
       dispatch(setUserEditState(''));
       alert('회원정보 수정 실패!');
@@ -76,15 +76,15 @@ const AccountEditScreen = ({ route, navigation }) => {
       return;
     }
 
-    if(!nickName){
+    if (!nickName) {
       alert('닉네임을 입력해주세요!');
       return;
     }
-    if(!birth){
+    if (!birth) {
       alert('생년월일을 입력해주세요!');
       return;
     }
-    if(vailErrorText || checkErrorText){
+    if (vailErrorText || checkErrorText) {
       alert('비밀번호를 다시 확인해주세요.');
       return;
     }
@@ -93,19 +93,19 @@ const AccountEditScreen = ({ route, navigation }) => {
 
     const user = {};
 
-    if(nickName != userInfo.user){
+    if (nickName != userInfo.user) {
       user.user_name = nickName;
     }
-    if(birth != userInfo.user_birth){
+    if (birth != userInfo.user_birth) {
       user.user_birth = birth;
     }
-   
-    if(!vailErrorText && !checkErrorText && password){
+
+    if (!vailErrorText && !checkErrorText && password) {
       user.password = password;
     }
     user.email = userInfo.email;
 
-    dispatch(editUser(userId,JSON.stringify(user)));
+    dispatch(editUser(userId, JSON.stringify(user)));
 
   }
 
@@ -152,15 +152,15 @@ const AccountEditScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.body}>
       <Loader loading={loading} />
-    
-        <View style={styles.top}>
-          <TouchableOpacity
-            style={{ marginStart: Dimensions.get('window').width * 0.03 }}
-            activeOpacity={0.5}
-            onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-sharp" size={23} color="#000000" />
-          </TouchableOpacity>
-          <Text
+
+      <View style={styles.top}>
+        <TouchableOpacity
+          style={{ marginStart: Dimensions.get('window').width * 0.03 }}
+          activeOpacity={0.5}
+          onPress={() => navigation.goBack()}>
+          <Ionicons name="chevron-back-sharp" size={23} color="#000000" />
+        </TouchableOpacity>
+        <Text
           style={{
             marginEnd: Dimensions.get('window').width * 0.39,
             fontFamily: 'NanumGothicBold',
@@ -168,12 +168,12 @@ const AccountEditScreen = ({ route, navigation }) => {
           }}>
           회원정보 수정
         </Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
-        </View>
-    
-        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
+      </View>
+
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <KeyboardAvoidingView enabled>
           <View style={styles.wrapper}>
             <View style={styles.section}>
@@ -218,7 +218,7 @@ const AccountEditScreen = ({ route, navigation }) => {
               </View>
 
               <View style={styles.lineWrapper}>
-              <Text style={{
+                <Text style={{
                   color: kakaoLoginUser != true ? "#000000" : "#808080",
                   fontSize: 14
                 }}>       새로운 비밀번호   :   </Text>
@@ -228,7 +228,7 @@ const AccountEditScreen = ({ route, navigation }) => {
                     setUserPassword(password)
                   }
                   editable={kakaoLoginUser != true ? true : false}
-                   selectTextOnFocus={kakaoLoginUser != true ? true : false}
+                  selectTextOnFocus={kakaoLoginUser != true ? true : false}
 
                   placeholderTextColor="#808080"
                   placeholder="8~12자 영문,숫자,특수문자"
@@ -290,12 +290,12 @@ const AccountEditScreen = ({ route, navigation }) => {
               ) : null}
             </View>
           </View>
-          
-          <Text style={{fontSize:12,marginStart:Dimensions.get('window').width*0.05, marginTop:Dimensions.get('window').height*0.02}}>수정이 완료되면 '확인' 버튼을 눌러주세요.</Text>
+
+          <Text style={{ fontSize: 12, marginStart: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.02 }}>수정이 완료되면 '확인' 버튼을 눌러주세요.</Text>
           {kakaoLoginUser == true ? (
-                <Text style={{fontSize:12, color : '#000000',marginStart:Dimensions.get('window').width*0.05, marginTop:Dimensions.get('window').height*0.003}}>*    카카오 로그인 유저는 비밀번호를 변경할 수 없습니다.</Text>
-              ) : null}
-  
+            <Text style={{ fontSize: 12, color: '#000000', marginStart: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.003 }}>*    카카오 로그인 유저는 비밀번호를 변경할 수 없습니다.</Text>
+          ) : null}
+
           <TouchableOpacity
             style={styles.smallButton}
             activeOpacity={0.5}
@@ -306,10 +306,10 @@ const AccountEditScreen = ({ route, navigation }) => {
               paddingVertical: 10, fontSize: 10, fontWeight: "bold"
             }}>확인</Text>
           </TouchableOpacity>
-          </KeyboardAvoidingView>
-          <Footer />
-        </View>
-       
+        </KeyboardAvoidingView>
+        <Footer />
+      </View>
+
     </SafeAreaView>
   )
 };
@@ -332,9 +332,9 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.06,
     width: Dimensions.get('window').width
   },
-  
+
   section: {
-    
+
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     width: Dimensions.get('window').width,

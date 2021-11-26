@@ -1,19 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-    View,
-    StyleSheet,
-    Text,
-    Alert,
-    Modal,
-    Dimensions,
-    TouchableOpacity,
-    SafeAreaView,
-    TextInput,
-    Keyboard,
-    KeyboardAvoidingView,
-} from 'react-native';
+import { View, StyleSheet, Text, Alert, Modal, Dimensions, TouchableOpacity, SafeAreaView, TextInput, Keyboard, KeyboardAvoidingView } from 'react-native';
 
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -45,7 +33,7 @@ const AccountDeleteScreen = ({ navigation }) => {
     }, [isFocused])
 
     useEffect(() => {
-        
+
         if (userDeleteState == "success" && isFocused) {
             setLoading(false);
             dispatch(setUserDeleteState(''));
@@ -60,7 +48,7 @@ const AccountDeleteScreen = ({ navigation }) => {
 
     const onPressHandler = () => {
 
-        if(!userPassword){
+        if (!userPassword) {
             alert('비밀번호를 입력해주세요!');
             return;
         }
@@ -84,58 +72,58 @@ const AccountDeleteScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.body}>
             <Loader loading={loading} />
-           
-                <View style={styles.top}>
-                    <TouchableOpacity
-                        style={{ marginStart: Dimensions.get('window').width * 0.03 }}
-                        activeOpacity={0.5}
-                        onPress={() => navigation.goBack()}>
-                        <Ionicons name='chevron-back-sharp' size={23} color="#000000" />
-                    </TouchableOpacity>
-                    <Text style={{ marginEnd: Dimensions.get('window').width * 0.42, fontWeight: "bold", color: "#000000" }}>회원탈퇴</Text>
-                </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width,}}>
-                        <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
-                    </View>
-                    <View style={{flex: 1,justifyContent: 'space-between'}}>
-                    <KeyboardAvoidingView enabled>
-                <View style={styles.wrapper}>
-                    <View style={styles.section}>
-                        <View style={{ flexDirection: "row", width: Dimensions.get('window').width * 0.65, marginStart: Dimensions.get('window').width * 0.04, alignItems:"center"}}>
-                            <Text style={{ color: "#000000", fontSize: 15}}> 비밀번호   :    </Text>
-                            <TextInput
-                                style={styles.passwordInput}
-                                onChangeText={(UserPassword) =>
-                                    setUserPassword(UserPassword)
-                                }
-                                underlineColorAndroid="#A9A9A9"
-                                placeholder="Enter Password"
-                                placeholderTextColor="#808080"
-                                secureTextEntry={true}
-                                onSubmitEditing={
-                                    Keyboard.dismiss
-                                }
-                                blurOnSubmit={false}
-                            />
+
+            <View style={styles.top}>
+                <TouchableOpacity
+                    style={{ marginStart: Dimensions.get('window').width * 0.03 }}
+                    activeOpacity={0.5}
+                    onPress={() => navigation.goBack()}>
+                    <Ionicons name='chevron-back-sharp' size={23} color="#000000" />
+                </TouchableOpacity>
+                <Text style={{ marginEnd: Dimensions.get('window').width * 0.42, fontWeight: "bold", color: "#000000" }}>회원탈퇴</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, }}>
+                <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
+            </View>
+            <View style={{ flex: 1, justifyContent: 'space-between' }}>
+                <KeyboardAvoidingView enabled>
+                    <View style={styles.wrapper}>
+                        <View style={styles.section}>
+                            <View style={{ flexDirection: "row", width: Dimensions.get('window').width * 0.65, marginStart: Dimensions.get('window').width * 0.04, alignItems: "center" }}>
+                                <Text style={{ color: "#000000", fontSize: 15 }}> 비밀번호   :    </Text>
+                                <TextInput
+                                    style={styles.passwordInput}
+                                    onChangeText={(UserPassword) =>
+                                        setUserPassword(UserPassword)
+                                    }
+                                    underlineColorAndroid="#A9A9A9"
+                                    placeholder="Enter Password"
+                                    placeholderTextColor="#808080"
+                                    secureTextEntry={true}
+                                    onSubmitEditing={
+                                        Keyboard.dismiss
+                                    }
+                                    blurOnSubmit={false}
+                                />
+                            </View>
+
                         </View>
-                        
+
+
+                        <TouchableOpacity
+                            style={styles.smallButton}
+                            activeOpacity={0.5}
+                            onPress={onPressHandler
+                            }>
+                            <Text style={{
+                                color: '#FFFFFF',
+                                paddingVertical: 10, fontSize: 10, fontWeight: "bold"
+                            }}>탈퇴</Text>
+                        </TouchableOpacity>
+
                     </View>
-
-
-                    <TouchableOpacity
-                        style={styles.smallButton}
-                        activeOpacity={0.5}
-                        onPress={onPressHandler
-                        }>
-                        <Text style={{
-                            color: '#FFFFFF',
-                            paddingVertical: 10, fontSize: 10, fontWeight: "bold"
-                        }}>탈퇴</Text>
-                    </TouchableOpacity>
-                    
-                </View>
                 </KeyboardAvoidingView>
-               
+
                 <Modal
                     transparent={true}
                     animationType={'none'}
@@ -151,10 +139,10 @@ const AccountDeleteScreen = ({ navigation }) => {
                         justifyContent: 'center',
                     }}>
                         <View style={styles.modalSectionWrapper}>
-                            
-                                <Text style={{color:"#000000"}}>그동안 Plantrowth를 이용해주셔서 감사합니다.</Text>
-                                <Text style={{color:"#000000"}}>다음에 또 만나요 !</Text>
-                               
+
+                            <Text style={{ color: "#000000" }}>그동안 Plantrowth를 이용해주셔서 감사합니다.</Text>
+                            <Text style={{ color: "#000000" }}>다음에 또 만나요 !</Text>
+
                             <TouchableOpacity
                                 style={styles.button}
                                 activeOpacity={0.5}
@@ -166,15 +154,15 @@ const AccountDeleteScreen = ({ navigation }) => {
                                 }>
                                 <Text style={{ color: "#000000" }}>OK</Text>
                             </TouchableOpacity>
-                           
+
                         </View>
                     </View>
                 </Modal>
-               
+
                 <Footer />
-              
-                </View>
-                
+
+            </View>
+
         </SafeAreaView>
     )
 };
@@ -222,18 +210,18 @@ const styles = StyleSheet.create({
     },
     passwordInput: {
         width: Dimensions.get('window').width * 0.5,
-      },
+    },
     modalSectionWrapper:
     {
         backgroundColor: '#FFFFFF',
-        height: Dimensions.get('window').height ,
-        width: Dimensions.get('window').width ,
+        height: Dimensions.get('window').height,
+        width: Dimensions.get('window').width,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
 
     },
-   
+
     button: {
         backgroundColor: '#BEE9B4',
         borderWidth: 0,

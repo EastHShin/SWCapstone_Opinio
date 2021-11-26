@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {logoutUser} from '../actions/UserActions';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../actions/UserActions';
 
 import {
   SafeAreaView,
@@ -17,12 +17,12 @@ import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //laylout만 작성, 로그아웃은 가능
-const MyPageScreen = ({navigation}) => {
+const MyPageScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
 
   const onPressHandler = () => {
-   
+
     Alert.alert('로그아웃', '로그아웃 하시겠습니까?', [
       {
         text: '취소',
@@ -31,7 +31,7 @@ const MyPageScreen = ({navigation}) => {
       {
         text: '확인',
         onPress: () => {
-        
+
           dispatch(logoutUser());
         },
       },
@@ -40,10 +40,10 @@ const MyPageScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.body}>
-     
+
       <View style={styles.top}>
         <TouchableOpacity
-          style={{marginStart: Dimensions.get('window').width * 0.03}}
+          style={{ marginStart: Dimensions.get('window').width * 0.03 }}
           activeOpacity={0.5}
           onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back-sharp" size={23} color="#000000" />
@@ -57,13 +57,13 @@ const MyPageScreen = ({navigation}) => {
           My Page
         </Text>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width,}}>
-                        <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
-                    </View>
-      <View style={{flex: 1,justifyContent: 'space-between'}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
+      </View>
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <View style={styles.wrapper}>
           <TouchableOpacity
-            style={{flexDirection: 'row'}}
+            style={{ flexDirection: 'row' }}
             activeOpacity={0.5}
             onPress={() => navigation.push('AccountInfoScreen')}>
             <View style={styles.section}>
@@ -93,7 +93,7 @@ const MyPageScreen = ({navigation}) => {
           </TouchableOpacity> */}
 
           <TouchableOpacity
-            style={{flexDirection: 'row'}}
+            style={{ flexDirection: 'row' }}
             activeOpacity={0.5}
             onPress={() => navigation.push('PointHistoryScreen')}>
             <View style={styles.section}>
@@ -108,7 +108,7 @@ const MyPageScreen = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={{flexDirection: 'row'}}
+            style={{ flexDirection: 'row' }}
             activeOpacity={0.5}
             onPress={() => navigation.push('DiseaseDiagnosisHistoryScreen')}>
             <View style={styles.section}>
@@ -123,7 +123,7 @@ const MyPageScreen = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={{flexDirection: 'row'}}
+            style={{ flexDirection: 'row' }}
             activeOpacity={0.5}
             onPress={onPressHandler}>
             <View style={styles.section}>
@@ -138,7 +138,7 @@ const MyPageScreen = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={{flexDirection: 'row'}}
+            style={{ flexDirection: 'row' }}
             activeOpacity={0.5}
             onPress={() => navigation.push('AccountDeleteNoticeScreen')}>
             <View style={styles.section}>
@@ -152,7 +152,7 @@ const MyPageScreen = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <Footer name={'My Page'}/>
+        <Footer name={'My Page'} />
       </View>
     </SafeAreaView>
   );

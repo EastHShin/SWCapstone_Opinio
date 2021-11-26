@@ -40,7 +40,7 @@ HomeScreen = () => {
 
   useEffect(() => {
     if (isLogin == 'end') {
-      navigation.reset({routes: [{name: "LoginScreen"}]});
+      navigation.reset({ routes: [{ name: "LoginScreen" }] });
     }
   }, [isLogin]);
 

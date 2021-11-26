@@ -1,5 +1,5 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   StyleSheet,
   View,
@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useIsFocused } from '@react-navigation/native'
-import {setLevelUpState, setEarnState} from './actions/PlantActions';
+import { setLevelUpState, setEarnState } from './actions/PlantActions';
 
 const LevelUp = props => {
-  const {plant_level} = props;
+  const { plant_level } = props;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -29,7 +29,7 @@ const LevelUp = props => {
     if (isLevelUp && isFocused) {
       setIsModalVisible(true);
 
-    } else if(!isLevelUp & isFocused) {
+    } else if (!isLevelUp & isFocused) {
       setTimeOut(false);
       endTextLevelUp();
       endNumberLevelUp();
@@ -89,7 +89,7 @@ const LevelUp = props => {
   });
 
   const shakeStyles = {
-    transform: [{translateX: interplated}],
+    transform: [{ translateX: interplated }],
   };
 
   const levelUpStyles = {
@@ -121,17 +121,17 @@ const LevelUp = props => {
           <View style={styles.section}>
             <Animated.Text
               style={[
-                {fontSize: 20, color: '#BEE9B4', fontWeight: 'bold'},
+                { fontSize: 20, color: '#BEE9B4', fontWeight: 'bold' },
                 shakeStyles,
               ]}>
               LEVEL UP !!
             </Animated.Text>
           </View>
           <View style={styles.section}>
-            <Text style={{fontSize: 35, color: '#000000'}}>Lv. </Text>
+            <Text style={{ fontSize: 35, color: '#000000' }}>Lv. </Text>
 
             <Animated.Text
-              style={[levelUpStyles, {fontSize: 35, color: '#000000'}]}>
+              style={[levelUpStyles, { fontSize: 35, color: '#000000' }]}>
               {!timeOut ? plant_level - 1 : plant_level}
             </Animated.Text>
           </View>
@@ -145,9 +145,9 @@ const LevelUp = props => {
               setTimeout(() => {
                 dispatch(setLevelUpState(false));
               }, 1000);
-              
+
             }}>
-            <Text style={{color: '#000000'}}>OK</Text>
+            <Text style={{ color: '#000000' }}>OK</Text>
           </TouchableOpacity>
         </View>
       </View>

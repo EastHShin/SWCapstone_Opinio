@@ -1,4 +1,4 @@
-import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY, DELETE_DIARY,  GET_EXP, GET_POINT, GET_LEVEL } from "./type";
+import { RESULT_STATE, FETCH_DIARIES, FETCH_DIARY, SAVE_DIARY, EDIT_DIARY, DELETE_DIARY, GET_EXP, GET_POINT, GET_LEVEL } from "./type";
 import { setLevelUpState, setEarnState } from "./PlantActions";
 
 import axios from "axios";
@@ -13,7 +13,7 @@ export const fetchDiaries = (plantId) => {
                         type: FETCH_DIARIES,
                         payload: res.data.data,
                     })
-                    
+
                 }
             })
             .catch(function (error) {
@@ -51,10 +51,10 @@ export const fetchDiary = (diaryId) => {
 }
 
 export const setResultState = state => dispatch => {
-  dispatch({
-    type: RESULT_STATE,
-    payload: state,
-  });
+    dispatch({
+        type: RESULT_STATE,
+        payload: state,
+    });
 };
 
 export const saveDiary = (diary, plantId) => {
@@ -72,9 +72,9 @@ export const saveDiary = (diary, plantId) => {
                         type: SAVE_DIARY,
                         payload: "success"
                     })
-                    dispatch({type: GET_POINT, payload: res.data.data.point})
-                    dispatch({type: GET_EXP, payload: res.data.data.plantExp})
-                    dispatch({type: GET_LEVEL, payload: res.data.data.plant_level})
+                    dispatch({ type: GET_POINT, payload: res.data.data.point })
+                    dispatch({ type: GET_EXP, payload: res.data.data.plantExp })
+                    dispatch({ type: GET_LEVEL, payload: res.data.data.plant_level })
                     dispatch(setLevelUpState(res.data.data.isLevelUp));
                     if (!res.data.data.isLevelUp) dispatch(setEarnState(true));
                 }
@@ -92,8 +92,8 @@ export const saveDiary = (diary, plantId) => {
 
 export const editDiary = (diary, diaryId) => {
     return async dispatch => {
-        console.log('diary'+diary);
-        console.log('id'+diaryId);
+        console.log('diary' + diary);
+        console.log('id' + diaryId);
         return await axios.put(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`, diary, {
             headers: { "Content-Type": `multipart/form-data` }
         })

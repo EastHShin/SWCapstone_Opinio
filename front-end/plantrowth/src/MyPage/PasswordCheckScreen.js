@@ -25,23 +25,23 @@ import Loader from '../Loader';
 
 const PasswordCheckScreen = ({ route, navigation }) => {
 
-    const {userId, userInfo} = route.params;
+    const { userId, userInfo } = route.params;
     const [userPassword, setUserPassword] = useState("");
     // const [userId, setUserId] = useState("");
     const [loading, setLoading] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
-   
+
 
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
     const checkPasswordState = useSelector(state => state.UserReducer.checkPasswordState);
 
     useEffect(() => {
-        
+
         if (checkPasswordState == "success" && isFocused) {
             setLoading(false);
             dispatch(setCheckPasswordState(''));
-            navigation.navigate('AccountEditScreen',{userId: userId, userInfo:userInfo});
+            navigation.navigate('AccountEditScreen', { userId: userId, userInfo: userInfo });
         }
         else if (checkPasswordState == "failure" && isFocused) {
             setLoading(false);
@@ -52,7 +52,7 @@ const PasswordCheckScreen = ({ route, navigation }) => {
 
     const onPressHandler = () => {
 
-        if(!userPassword){
+        if (!userPassword) {
             alert('비밀번호를 입력해주세요!');
             return;
         }
@@ -64,14 +64,14 @@ const PasswordCheckScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.body}>
             <Loader loading={loading} />
-           
-                <View style={styles.top}>
-                    <TouchableOpacity
-                        style={{ marginStart: Dimensions.get('window').width * 0.03 }}
-                        activeOpacity={0.5}
-                        onPress={() => navigation.goBack()}>
-                        <Ionicons name='chevron-back-sharp' size={23} color="#000000" />
-                    </TouchableOpacity>
+
+            <View style={styles.top}>
+                <TouchableOpacity
+                    style={{ marginStart: Dimensions.get('window').width * 0.03 }}
+                    activeOpacity={0.5}
+                    onPress={() => navigation.goBack()}>
+                    <Ionicons name='chevron-back-sharp' size={23} color="#000000" />
+                </TouchableOpacity>
                 <Text
                     style={{
                         marginEnd: Dimensions.get('window').width * 0.39,
@@ -80,55 +80,55 @@ const PasswordCheckScreen = ({ route, navigation }) => {
                     }}>
                     회원정보 수정
                 </Text>
-                </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center',width:Dimensions.get('window').width,}}>
-                        <View style={{ flex: 1, height: 1 ,backgroundColor: '#A9A9A9' }} />
-                    </View>
-                    <View style={{flex: 1,justifyContent: 'space-between'}}>
-                    <KeyboardAvoidingView enabled>
-                <View style={styles.wrapper}>
-                    <View style={styles.section}>
-                        <View style={{ flexDirection: "row", width: Dimensions.get('window').width * 0.65, marginStart: Dimensions.get('window').width * 0.04, alignItems:"center"}}>
-                            <Text style={{ color: "#000000", fontSize: 15}}> 비밀번호   :    </Text>
-                            <TextInput
-                                style={styles.passwordInput}
-                                onChangeText={(UserPassword) =>
-                                    setUserPassword(UserPassword)
-                                }
-                                underlineColorAndroid="#A9A9A9"
-                                placeholder="Enter Password"
-                                placeholderTextColor="#808080"
-                                secureTextEntry={true}
-                                onSubmitEditing={
-                                    Keyboard.dismiss
-                                }
-                                blurOnSubmit={false}
-                            />
-                        </View>
-                        
-                    </View>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, }}>
+                <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
+            </View>
+            <View style={{ flex: 1, justifyContent: 'space-between' }}>
+                <KeyboardAvoidingView enabled>
+                    <View style={styles.wrapper}>
+                        <View style={styles.section}>
+                            <View style={{ flexDirection: "row", width: Dimensions.get('window').width * 0.65, marginStart: Dimensions.get('window').width * 0.04, alignItems: "center" }}>
+                                <Text style={{ color: "#000000", fontSize: 15 }}> 비밀번호   :    </Text>
+                                <TextInput
+                                    style={styles.passwordInput}
+                                    onChangeText={(UserPassword) =>
+                                        setUserPassword(UserPassword)
+                                    }
+                                    underlineColorAndroid="#A9A9A9"
+                                    placeholder="Enter Password"
+                                    placeholderTextColor="#808080"
+                                    secureTextEntry={true}
+                                    onSubmitEditing={
+                                        Keyboard.dismiss
+                                    }
+                                    blurOnSubmit={false}
+                                />
+                            </View>
 
-                    <Text style={{fontSize:12,marginStart:Dimensions.get('window').width*0.05, marginTop:Dimensions.get('window').height*0.02}}>회원정보 수정을 위해서는 비밀번호 인증이 필요합니다.</Text>
-                    <TouchableOpacity
-                        style={styles.smallButton}
-                        activeOpacity={0.5}
-                        onPress={onPressHandler
-                        }>
-                        <Text style={{
-                            color: '#FFFFFF',
-                            paddingVertical: 10, fontSize: 10, fontWeight: "bold"
-                        }}>인증</Text>
-                    </TouchableOpacity>
-                    
-                </View>
+                        </View>
+
+                        <Text style={{ fontSize: 12, marginStart: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.02 }}>회원정보 수정을 위해서는 비밀번호 인증이 필요합니다.</Text>
+                        <TouchableOpacity
+                            style={styles.smallButton}
+                            activeOpacity={0.5}
+                            onPress={onPressHandler
+                            }>
+                            <Text style={{
+                                color: '#FFFFFF',
+                                paddingVertical: 10, fontSize: 10, fontWeight: "bold"
+                            }}>인증</Text>
+                        </TouchableOpacity>
+
+                    </View>
                 </KeyboardAvoidingView>
-               
-            
-               
+
+
+
                 <Footer />
-              
-                </View>
-                
+
+            </View>
+
         </SafeAreaView>
     )
 };
@@ -176,18 +176,18 @@ const styles = StyleSheet.create({
     },
     passwordInput: {
         width: Dimensions.get('window').width * 0.5,
-      },
+    },
     modalSectionWrapper:
     {
         backgroundColor: '#FFFFFF',
-        height: Dimensions.get('window').height ,
-        width: Dimensions.get('window').width ,
+        height: Dimensions.get('window').height,
+        width: Dimensions.get('window').width,
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
 
     },
-   
+
     button: {
         backgroundColor: '#BEE9B4',
         borderWidth: 0,

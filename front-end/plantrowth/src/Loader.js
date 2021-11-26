@@ -1,15 +1,15 @@
 import React from 'react';
 
 import {
-  StyleSheet, 
-  View, 
-  Modal, 
+  StyleSheet,
+  View,
+  Modal,
   ActivityIndicator
 } from 'react-native';
 
 const Loader = (props) => {
 
-  const {loading} = props;
+  const { loading } = props;
 
   return (
     <Modal

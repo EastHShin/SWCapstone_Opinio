@@ -1,4 +1,3 @@
-
 export const REGISTER_USER = 'REGISTER_USER';
 export const SEND_EMAIL = 'SEND_EMAIL';
 export const CODE_VERIFICATION = 'CODE_VERIFICATION';

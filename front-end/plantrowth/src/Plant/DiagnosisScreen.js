@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, Text, Button, Image, Dimensions} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { StyleSheet, View, Text, Button, Image, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const DiagnosisScreen = ({route}) => {
+const DiagnosisScreen = ({ route }) => {
   const navigation = useNavigation();
   const chart = route.params.chart;
   const imagePath = route.params.image;
@@ -24,27 +24,25 @@ const DiagnosisScreen = ({route}) => {
           <Text
             style={[
               styles.diagnosisText,
-              {textAlign: 'center'},
+              { textAlign: 'center' },
             ]}>{`지금 ${chart.plant_name}(은/는)`}</Text>
 
           <Text
             style={[
               styles.diagnosisText,
-              {textAlign: 'center', fontSize: 24, color: 'red'},
+              { textAlign: 'center', fontSize: 24, color: 'red' },
             ]}>{`${chart.diagnosisResult.disease_model}`}</Text>
-          <Text style={[styles.diagnosisText, {textAlign: 'center'}]}>
+          <Text style={[styles.diagnosisText, { textAlign: 'center' }]}>
             이라는 병을 앓고 있어요 ㅜㅜ
           </Text>
           <Text
             style={[
               styles.diagnosisText,
-              {fontSize: 14},
-            ]}>{`\n질병진단 인공지능의 판단:\n\n${
-            chart.diagnosisResult.disease_model
-          }을 앓고 있을 확률이 ${
-            Math.round(Number(chart.diagnosisResult.percent_model * 1000)) /
-            1000
-          }%에요.`}</Text>
+              { fontSize: 14 },
+            ]}>{`\n질병진단 인공지능의 판단:\n\n${chart.diagnosisResult.disease_model
+              }을 앓고 있을 확률이 ${Math.round(Number(chart.diagnosisResult.percent_model * 1000)) /
+              1000
+              }%에요.`}</Text>
         </View>
       );
     } else {
@@ -82,10 +80,9 @@ const DiagnosisScreen = ({route}) => {
           <Text
             style={
               styles.diagnosisText
-            }>{`질병진단 인공지능의 판단:\n\n건강할 확률이 ${
-            Math.round(Number(chart.diagnosisResult.percent_model * 1000)) /
-            1000
-          }%에요.`}</Text>
+            }>{`질병진단 인공지능의 판단:\n\n건강할 확률이 ${Math.round(Number(chart.diagnosisResult.percent_model * 1000)) /
+              1000
+              }%에요.`}</Text>
         </View>
       );
     }
@@ -107,14 +104,14 @@ const DiagnosisScreen = ({route}) => {
         }}>
         진단표
       </Text>
-      <Image source={{uri: imagePath}} style={{width: 300, height: 300}} />
+      <Image source={{ uri: imagePath }} style={{ width: 300, height: 300 }} />
       {renderDiagnosis(chart.diagnosisResult.disease_model)}
       <TouchableOpacity
         style={styles.ModalButton}
         onPress={() => {
           navigation.goBack();
         }}>
-        <Text style={{fontFamily: 'NanumGothicBold', textAlign: 'center', fontSize:16}}>확인</Text>
+        <Text style={{ fontFamily: 'NanumGothicBold', textAlign: 'center', fontSize: 16 }}>확인</Text>
       </TouchableOpacity>
     </View>
   );

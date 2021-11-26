@@ -2,18 +2,7 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-    View,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    SafeAreaView,
-    Dimensions,
-    ScrollView,
-    TextInput,
-    KeyboardAvoidingView,
-    Text
-} from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, SafeAreaView, Dimensions, ScrollView, TextInput, KeyboardAvoidingView, Text } from 'react-native';
 
 import Loader from '../Loader';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -25,7 +14,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 const DiaryEditScreen = ({ route, navigation }) => {
 
-    const {selectedId, plantId, plantImg} = route.params;
+    const { selectedId, plantId, plantImg } = route.params;
 
     const diary = useSelector(state => state.DiaryReducer.diary);
 
@@ -41,52 +30,52 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
-    
+
     const result = useSelector(state => state.DiaryReducer.result);
- 
-   useEffect(() => {
-      if(result == "success" && isFocused){
-          setLoading(false);
-          dispatch(setResultState(''));
-          navigation.navigate('DiaryDetailScreen',{selectedId: selectedId, plantId: plantId, plantImg:plantImg});
-      }
-      else if(result == "failure" && isFocused){
-          setLoading(false);
-          dispatch(setResultState(''));
-          alert("식물일기 수정 실패");
-      }
-   }, [result])
+
+    useEffect(() => {
+        if (result == "success" && isFocused) {
+            setLoading(false);
+            dispatch(setResultState(''));
+            navigation.navigate('DiaryDetailScreen', { selectedId: selectedId, plantId: plantId, plantImg: plantImg });
+        }
+        else if (result == "failure" && isFocused) {
+            setLoading(false);
+            dispatch(setResultState(''));
+            alert("식물일기 수정 실패");
+        }
+    }, [result])
 
     const addGalleryImage = () => {
-        launchImageLibrary({mediaType:'photo' }, response =>{
-            if(!response.didCancel){
+        launchImageLibrary({ mediaType: 'photo' }, response => {
+            if (!response.didCancel) {
                 setImageType(response.assets[0].type);
                 setFileName(response.assets[0].fileName);
                 setImageUri(response.assets[0].uri);
-                }
+            }
         })
     }
 
     const addCameraImage = () => {
-        launchCamera({mediaType:'photo'}, response => {
-            if(!response.didCancel){
+        launchCamera({ mediaType: 'photo' }, response => {
+            if (!response.didCancel) {
                 setImageType(response.assets[0].type);
                 setFileName(response.assets[0].fileName);
                 setImageUri(response.assets[0].uri);
-                }
+            }
         })
     }
-    
+
     const onPressHandler = () => {
-        if(diary.title == title && diary.content == content && originalImageUri == imageUri){
+        if (diary.title == title && diary.content == content && originalImageUri == imageUri) {
             alert('아직 식물일기를 수정하지 않으셨어요!');
             return;
         }
-        if(!title){
+        if (!title) {
             alert('제목을 입력해주세요!');
             return;
         }
-        if(!content){
+        if (!content) {
             alert('내용을 입력해주세요!');
             return;
         }
@@ -95,25 +84,25 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
         const Data = new FormData();
 
-        if(diary.title != title){
+        if (diary.title != title) {
             Data.append('title', title);
         }
 
-        if(diary.content != content){
+        if (diary.content != content) {
             Data.append('content', content);
-           
+
         }
 
-      
+
         if (originalImageUri) {
             if (!imageUri) {
-                
-                Data.append('file_delete',true);
+
+                Data.append('file_delete', true);
             }
             else if (imageUri != originalImageUri) {
-                
-                Data.append('file_delete',false);
-                
+
+                Data.append('file_delete', false);
+
                 Data.append('file_name', {
                     name: fileName,
                     type: imageType,
@@ -121,37 +110,37 @@ const DiaryEditScreen = ({ route, navigation }) => {
                 });
 
             }
-            else{
-               
-                Data.append('file_delete',false);
+            else {
+
+                Data.append('file_delete', false);
             }
         }
-        else{
-            if(imageUri){
-                
-                Data.append('file_delete',false);
+        else {
+            if (imageUri) {
+
+                Data.append('file_delete', false);
                 Data.append('file_name', {
                     name: fileName,
                     type: imageType,
                     uri: imageUri
                 });
             }
-            else{
-               
-                Data.append('file_delete',false);
-                
+            else {
+
+                Data.append('file_delete', false);
+
             }
-            
+
         }
         console.log(JSON.stringify(Data));
 
         dispatch(editDiary(Data, selectedId));
-        
+
     }
 
     return (
         <SafeAreaView style={styles.body}>
-             <Loader loading={loading} />
+            <Loader loading={loading} />
             <View style={{ marginVertical: "5%", marginEnd: "-80%" }}>
                 <TouchableOpacity
                     activeOpacity={0.5}
@@ -181,7 +170,7 @@ const DiaryEditScreen = ({ route, navigation }) => {
                                     contentInputRef.current &&
                                     contentInputRef.current.focus()
                                 }
-                                value = {title}
+                                value={title}
                                 underlineColorAndroid="#A9A9A9"
                                 blurOnSubmit={false}
                             />
@@ -193,7 +182,7 @@ const DiaryEditScreen = ({ route, navigation }) => {
                                 onChangeText={(content) =>
                                     setContent(content)
                                 }
-                                value = {content}
+                                value={content}
                                 multiline={true}
                                 placeholder="Enter Content"
                                 placeholderTextColor="#808080"
@@ -204,9 +193,9 @@ const DiaryEditScreen = ({ route, navigation }) => {
                             />
                         </View>
 
-                        <View style = {{marginBottom:Dimensions.get('window').width * 0.06,height: Dimensions.get('window').height * 0.4,}}>
-                        {imageUri != '' ? (
-                           
+                        <View style={{ marginBottom: Dimensions.get('window').width * 0.06, height: Dimensions.get('window').height * 0.4, }}>
+                            {imageUri != '' ? (
+
                                 <Image source={{ uri: imageUri }}
                                     style={{
                                         width: Dimensions.get('window').width * 0.8,
@@ -214,8 +203,8 @@ const DiaryEditScreen = ({ route, navigation }) => {
                                         resizeMode: 'contain',
                                     }}
                                 />
-                            
-                        ) : null}
+
+                            ) : null}
                         </View>
 
                         <View style={{ flexDirection: "row" }}>
@@ -254,7 +243,7 @@ const DiaryEditScreen = ({ route, navigation }) => {
                 marginBottom: Dimensions.get('window').height * 0.03,
                 marginTop: Dimensions.get('window').height * 0.02
             }}>
-                 <TouchableOpacity
+                <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={onPressHandler}>
                     <FontAwesome name='check' size={25} color="#FFFFFF" />
@@ -272,7 +261,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     diaryWrapper: {
-        height : Dimensions.get('window').height*0.9,
+        height: Dimensions.get('window').height * 0.9,
         width: Dimensions.get("window").width,
         borderRadius: 20,
         backgroundColor: "#FFFFFF",
@@ -280,22 +269,22 @@ const styles = StyleSheet.create({
     },
     title: {
         marginVertical: Dimensions.get("window").height * 0.02,
-        width:Dimensions.get('window').width*0.8
+        width: Dimensions.get('window').width * 0.8
     },
     content: {
         marginBottom: Dimensions.get("window").height * 0.13,
         width: Dimensions.get('window').width * 0.8
     },
-    titleInput:{
-        fontWeight:"bold"
+    titleInput: {
+        fontWeight: "bold"
     },
     contentInput: {
         flexShrink: 1
     },
     imageButton: {
         marginBottom: Dimensions.get('window').width * 0.06,
-        marginHorizontal:Dimensions.get('window').width * 0.04
+        marginHorizontal: Dimensions.get('window').width * 0.04
     }
-   
+
 
 })

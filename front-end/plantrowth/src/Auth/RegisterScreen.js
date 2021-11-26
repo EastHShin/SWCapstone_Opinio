@@ -73,13 +73,13 @@ function RegisterScreen({ navigation }) {
   }, [registerState])
 
   useEffect(() => {
-    if(checkNicknameState == 'success' && isFocused){
+    if (checkNicknameState == 'success' && isFocused) {
       setLoading(false);
       dispatch(checkNicknameState(''));
       setCheckedNickName(userNickName);
       alert('사용할 수 있는 닉네임입니다.');
     }
-    else if(checkNicknameState =='failure' && isFocused){
+    else if (checkNicknameState == 'failure' && isFocused) {
       setLoading(false);
       dispatch(checkNicknameState(''));
       setCheckedNickName('');
@@ -151,19 +151,19 @@ function RegisterScreen({ navigation }) {
       alert('이메일을 인증해주세요!');
       return;
     }
-    if(!checkedNickName){
+    if (!checkedNickName) {
       alert('닉네임을 인증해주세요!');
       return;
     }
-    if(checkedNickName != userNickName){
+    if (checkedNickName != userNickName) {
       alert('닉네임을 인증해주세요!');
       return;
     }
-    if(!checkPassword){
+    if (!checkPassword) {
       alert('비밀번호를 다시 확인해주세요!');
       return;
     }
-    
+
 
     setLoading(true);
 
@@ -185,11 +185,11 @@ function RegisterScreen({ navigation }) {
   }
 
   const checkUserNickname = () => {
-    if(!userNickName){
+    if (!userNickName) {
       alert('닉네임을 입력해주세요!');
       return;
     }
-    
+
     setLoading(true);
 
     dispatch(checkNickname(userNickName));
@@ -298,7 +298,7 @@ function RegisterScreen({ navigation }) {
                 }
                 blurOnSubmit={false}
               />
-                <TouchableOpacity
+              <TouchableOpacity
                 style={styles.smallButton}
                 activeOpacity={0.5}
                 onPress={checkUserNickname}>
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 30,
     borderColor: '#BEE9B4',
-    fontSize:13
+    fontSize: 13
   },
 
   errorText: {
