@@ -137,6 +137,8 @@ export const loginUser = (user) => {
                     dispatch(setLogoutTimer(3600000));
 
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
+                    AsyncStorage.setItem('auth', res.headers.authorization);
+                    
                     axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
 
 
@@ -170,6 +172,7 @@ export const kakaoLogin = (data) => {
 
                 if (res.status == 200) {
 
+                    AsyncStorage.setItem('auth', res.headers.authorization);
                     axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
                     dispatch(setLogoutTimer(3600000));
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));

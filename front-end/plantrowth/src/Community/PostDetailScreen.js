@@ -13,6 +13,7 @@ import { getPost, deletePost } from '../actions/CommunityActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { Value } from 'react-native-reanimated';
 
 const PostDetailScreen = ({ route, navigation }) => {
 
@@ -32,14 +33,13 @@ const PostDetailScreen = ({ route, navigation }) => {
     const post = useSelector(state => state.CommunityReducer.post);
 
     useEffect(() => {        
-        setComment(post.comments)
+        
         if (isFocused) {
-            dispatch(getPost(selectedId, userId));
 
             AsyncStorage.getItem('userId').then(value => {
                 if (value != null) {
-
                     setUserId(JSON.parse(value));
+                    dispatch(getPost(selectedId, JSON.parse(value)));
                 }
             }
             )
@@ -47,11 +47,11 @@ const PostDetailScreen = ({ route, navigation }) => {
     }, [isFocused])
 
     useEffect(() => {
+        setComment(post.comments)
         if(post.file_name){
             Image.getSize(post.file_name, (width, height) => {
                 setImageHeight(height);
                 setImageWidth(width);
-
             })
         }
     }, [post])
@@ -166,8 +166,8 @@ const PostDetailScreen = ({ route, navigation }) => {
                 >
 
                     <View style={{ flex: 1, justifyContent: "flex-start" }}>
-                        <View style={userId == post.user_id ? styles.modal : styles.modalSmall}>
-                            {userId == post.user_id ?
+                        <View style={userId == post.userId ? styles.modal : styles.modalSmall}>
+                            {userId == post.userId ?
                                 <View>
                                     <View style={styles.modalWrapper}>
                                         <TouchableOpacity

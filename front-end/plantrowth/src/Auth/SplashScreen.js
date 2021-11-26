@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const SplashScreen = ({ navigation }) => {
     const [animating, setAnimating] = useState(true);
@@ -17,7 +18,11 @@ const SplashScreen = ({ navigation }) => {
         setTimeout(() => {
             setAnimating(false);
             AsyncStorage.getItem('userId').then((value) => {
-                // navigation.reset(value === null ? 'LoginScreen':'HomeScreen')
+                AsyncStorage.getItem('auth').then((value) =>{
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = value;
+
+                })
+                
                 navigation.reset({ routes: [{ name: (value === null ? 'LoginScreen' : 'HomeScreen') }] });
             }
             );

@@ -24,7 +24,7 @@ export const getBoardList = () => {
 }
 
 export const getPost = (boardId, userId) => {
-    console.log(boardId);
+    console.log(boardId + "유저 id" + userId);
     return async dispatch => {
         return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/${boardId}`,
         {
@@ -47,6 +47,14 @@ export const getPost = (boardId, userId) => {
                 })
             })
     }
+
+}
+
+export const setPost = () => dispatch => {
+    dispatch({
+        type:GET_POST,
+        payload:{}
+    })
 
 }
 
