@@ -35,8 +35,8 @@ const LoginScreen = ({ navigation }) => {
   const [refreshToken, setRefreshToken] = useState('');
   const [fcmToken, setFcmToken] = useState('');
   const [email, setEmail] = useState('');
-  const [checkEmail, setCheckEmail] = useState('');
   const [checkedNickName, setCheckedNickName] = useState('');
+  const [createPassword, setCreatePassword] = useState('');
 
 
   const [loading, setLoading] = useState(false);
@@ -194,6 +194,7 @@ const LoginScreen = ({ navigation }) => {
   }
 
   const register = () => {
+    var passwordExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/
 
     if (!userName) {
       alert('닉네임을 입력해주세요.');
@@ -211,6 +212,10 @@ const LoginScreen = ({ navigation }) => {
       alert('생년월일을 입력해주세요.');
       return;
     }
+    if (!passwordExp.test(createPassword)) {
+      alert('비밀번호를 다시 확인해주세요!');
+      return;
+    }
 
     setLoading(true);
 
@@ -218,7 +223,7 @@ const LoginScreen = ({ navigation }) => {
       user_name: userName,
       user_birth: userBirth,
       email: userEmail,
-      password: userPassword,
+      password: createPassword,
       fcm_access_token: fcmToken
     });
 
@@ -472,6 +477,7 @@ const LoginScreen = ({ navigation }) => {
                 }
                 blurOnSubmit={false}
               />
+           
                <TouchableOpacity
                 style={styles.smallButton}
                 activeOpacity={0.5}
@@ -506,6 +512,24 @@ const LoginScreen = ({ navigation }) => {
                     setDatePickerVisibility(false);
                   }} />
               </TouchableOpacity>
+            </View>
+            <View style={styles.section}>
+              <EntypoIcons name='key' size={20} color="#8EB695" style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                onChangeText={(UserPassword) =>
+                  setCreatePassword(UserPassword)
+                }
+                underlineColorAndroid="#f000"
+                placeholder="8~12자 영문,숫자,특수문자"
+                placeholderTextColor="#808080"
+                returnKeyType="next"
+                secureTextEntry={true}
+                onSubmitEditing={
+                  Keyboard.dismiss
+                }
+                blurOnSubmit={false}
+              />
             </View>
             <TouchableOpacity
               style={styles.button}

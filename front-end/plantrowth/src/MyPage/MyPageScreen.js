@@ -67,7 +67,7 @@ const MyPageScreen = ({ navigation }) => {
             activeOpacity={0.5}
             onPress={() => navigation.push('AccountInfoScreen')}>
             <View style={styles.section}>
-              <Text style={styles.text}>회원정보 조회</Text>
+              <Text style={styles.text}>회원정보 조회 및 수정</Text>
               <Ionicons
                 name="chevron-forward-sharp"
                 size={23}
@@ -77,20 +77,6 @@ const MyPageScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity
-            style={{flexDirection: 'row'}}
-            activeOpacity={0.5}
-            onPress={() => navigation.push('AccountEditScreen')}>
-            <View style={styles.section}>
-              <Text style={styles.text}>회원정보 수정</Text>
-              <Ionicons
-                name="chevron-forward-sharp"
-                size={23}
-                color="#000000"
-                style={styles.icon}
-              />
-            </View>
-          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={{ flexDirection: 'row' }}

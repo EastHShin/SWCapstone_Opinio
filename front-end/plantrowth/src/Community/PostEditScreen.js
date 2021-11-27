@@ -22,7 +22,7 @@ const PostEditScreen = ({ route, navigation }) => {
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState(post.title);
     const [content, setContent] = useState(post.content);
-    const originalImageUri = post.file_name;
+    const [originalImageUri, setOriginalImageUri] = useState(post.file_name);
 
     const [imageType, setImageType] = useState('');
     const [fileName, setFileName] = useState('');
@@ -33,13 +33,15 @@ const PostEditScreen = ({ route, navigation }) => {
 
     const contentInputRef = createRef();
 
-    useEffect(() => {
+    // useEffect(() => {
         
-        if (isFocused && !originalImageUri) {
-           setImageUri('');
-        }
+    //     if (isFocused && !originalImageUri) {
+    //       //  setImageUri('');
+    //       //  setOriginalImageUri('');
+           
+    //     }
         
-    }, [isFocused])
+    // }, [isFocused])
 
 
     useEffect(() => {
@@ -159,7 +161,10 @@ const PostEditScreen = ({ route, navigation }) => {
           <TouchableOpacity
             style={{ marginStart: Dimensions.get('window').width * 0.03 }}
             activeOpacity={0.5}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              navigation.goBack()
+            }
+          }
           >
             <Feather name="x" size={27} color="#000000" />
           </TouchableOpacity>
@@ -230,7 +235,7 @@ const PostEditScreen = ({ route, navigation }) => {
                 />
               </View>
 
-              {imageUri != '' ? (
+              {imageUri ? (
                 <View
                   style={{
                     marginBottom: Dimensions.get('window').height * 0.02,

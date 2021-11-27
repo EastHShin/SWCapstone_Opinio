@@ -129,8 +129,9 @@ function RegisterScreen({ navigation }) {
 
 
   const onPressHandler = () => {
-    setErrortext('');
+    var passwordExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/
 
+    setErrortext('');
 
     if (!userNickName) {
       alert('닉네임을 입력해주세요.');
@@ -160,10 +161,11 @@ function RegisterScreen({ navigation }) {
       alert('닉네임을 인증해주세요!');
       return;
     }
-    if (!checkPassword) {
+    if (!passwordExp.test(userPassword)) {
       alert('비밀번호를 다시 확인해주세요!');
       return;
     }
+    
 
     setLoading(true);
 
@@ -223,6 +225,7 @@ function RegisterScreen({ navigation }) {
   }
 
   const validationPassword = (e) => {
+
 
     var passwordExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/
     if (!passwordExp.test(e.nativeEvent.text)) {
@@ -449,8 +452,7 @@ function RegisterScreen({ navigation }) {
                 returnKeyType="next"
                 secureTextEntry={true}
                 onEndEditing={
-                  validationPassword
-                }
+                  validationPassword}
                 onSubmitEditing={
                   Keyboard.dismiss
                 }

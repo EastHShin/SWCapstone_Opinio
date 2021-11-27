@@ -35,7 +35,6 @@ const AccountEditScreen = ({ route, navigation }) => {
   const [doublePassword, setDoublePassword] = useState(true);
   const [nickName, setUserNickName] = useState(userInfo.user_name);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [kakaoLoginUser, setKakaoLoginUser] = useState(false);
   const maximumDate = new Date();
   const passwordInputRef = createRef();
   const isFocused = useIsFocused();
@@ -44,15 +43,7 @@ const AccountEditScreen = ({ route, navigation }) => {
   const userEditState = useSelector(state => state.UserReducer.userEditState);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (isFocused) {
-      AsyncStorage.getItem('kakaoLogin').then((value) => {
-        if (value) {
-          setKakaoLoginUser(true);
-        }
-      })
-    }
-  }, [isFocused])
+ 
 
   useEffect(() => {
     if (isFocused && userEditState == 'success') {
@@ -71,7 +62,7 @@ const AccountEditScreen = ({ route, navigation }) => {
   }, [userEditState])
 
   const onPressHandler = () => {
-    console.log(password)
+    
     if (nickName == userInfo.user_name && birth == userInfo.user_birth && !password) {
       alert('수정된 정보가 없습니다!');
       return;
@@ -85,15 +76,19 @@ const AccountEditScreen = ({ route, navigation }) => {
       alert('생년월일을 입력해주세요!');
       return;
     }
-    if (vailErrorText || checkErrorText) {
-      alert('비밀번호를 다시 확인해주세요.');
-      return;
-    }
     if(password && !checkPassword){
       alert('비밀번호 확인 절차를 완료해주세요.');
       return;
     }
+    if(checkPassword && !password){
+      alert('비밀번호를 다시 확인해주세요.');
+      return;
+    }
     if(checkPassword != password){
+      alert('비밀번호를 다시 확인해주세요.');
+      return;
+    }
+    if(!doublePassword || !vailPassword){
       alert('비밀번호를 다시 확인해주세요.');
       return;
     }
@@ -232,7 +227,7 @@ const AccountEditScreen = ({ route, navigation }) => {
 
               <View style={styles.lineWrapper}>
                 <Text style={{
-                  color: kakaoLoginUser != true ? "#000000" : "#808080",
+                  color:  "#000000",
                   fontSize: 14
                 }}>       새로운 비밀번호   :   </Text>
                 <TextInput
@@ -240,8 +235,8 @@ const AccountEditScreen = ({ route, navigation }) => {
                   onChangeText={(password) =>
                     setUserPassword(password)
                   }
-                  editable={kakaoLoginUser != true ? true : false}
-                  selectTextOnFocus={kakaoLoginUser != true ? true : false}
+                  editable={true}
+                  selectTextOnFocus={true}
 
                   placeholderTextColor="#808080"
                   placeholder="8~12자 영문,숫자,특수문자"
@@ -269,7 +264,7 @@ const AccountEditScreen = ({ route, navigation }) => {
 
               <View style={styles.lineWrapper}>
                 <Text style={{
-                  color: kakaoLoginUser != true ? "#000000" : "#808080",
+                  color: "#000000",
                   fontSize: 14
                 }}>       비밀번호 확인       :   </Text>
                 <TextInput
@@ -280,8 +275,8 @@ const AccountEditScreen = ({ route, navigation }) => {
                   ref={passwordInputRef}
                   placeholderTextColor="#808080"
                   placeholder="Check Password"
-                  editable={kakaoLoginUser != true ? true : false}
-                  selectTextOnFocus={kakaoLoginUser != true ? true : false}
+                  editable={true}
+                  selectTextOnFocus={true}
                   secureTextEntry={true}
                   returnKeyType="next"
                   onSubmitEditing={() =>
@@ -305,9 +300,6 @@ const AccountEditScreen = ({ route, navigation }) => {
           </View>
 
           <Text style={{ fontSize: 12, marginStart: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.02 }}>수정이 완료되면 '확인' 버튼을 눌러주세요.</Text>
-          {kakaoLoginUser == true ? (
-            <Text style={{ fontSize: 12, color: '#000000', marginStart: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.003 }}>*    카카오 로그인 유저는 비밀번호를 변경할 수 없습니다.</Text>
-          ) : null}
 
           <TouchableOpacity
             style={styles.smallButton}
@@ -316,7 +308,7 @@ const AccountEditScreen = ({ route, navigation }) => {
             }>
             <Text style={{
               color: '#FFFFFF',
-              paddingVertical: 10, fontSize: 10, fontWeight: "bold"
+              paddingVertical: 12, fontSize: 10, fontWeight: "bold"
             }}>확인</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>

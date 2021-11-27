@@ -28,22 +28,17 @@ const AccountInfoScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const userInfo = useSelector(state => state.UserReducer.userInfo);
   const [userId, setUserId] = useState('');
-  const [kakaoLoginUser, setKakaoLoginUser] = useState(false);
+
 
   useEffect(() => {
     if (isFocused) {
       AsyncStorage.getItem('userId').then(value => {
         if (value != null) {
-          setUserId(JSON.parse(value));  //
+          setUserId(JSON.parse(value));  
           dispatch(infoUser(JSON.parse(value)));
         }
       }
       )
-      AsyncStorage.getItem('kakaoLogin').then((value) => {
-        if (value) {
-          setKakaoLoginUser(true);
-        }
-      })
     }
 
   }, [isFocused])
@@ -105,17 +100,12 @@ const AccountInfoScreen = ({ navigation }) => {
             style={styles.smallButton}
             activeOpacity={0.5}
             onPress={() => {
-              if (!kakaoLoginUser) {
                 navigation.push('PasswordCheckScreen', { userId: userId, userInfo: userInfo });
-              }
-              else {
-                navigation.push('AccountEditScreen', { userId: userId, userInfo: userInfo })
-              }
             }
             }>
             <Text style={{
               color: '#FFFFFF',
-              paddingVertical: 10, fontSize: 10, fontWeight: "bold"
+              paddingVertical: 12, fontSize: 10, fontWeight: "bold"
             }}>수정</Text>
           </TouchableOpacity>
         </View>

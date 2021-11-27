@@ -29,11 +29,9 @@ const PostDetailScreen = ({ route, navigation }) => {
     const post = useSelector(state => state.CommunityReducer.post);
 
     useEffect(() => {        
-        
         if (isFocused) {
-            
             AsyncStorage.getItem('userId').then(value => {
-                if (value != null) {
+                if (value) {
                     setUserId(JSON.parse(value));
                     dispatch(getPost(selectedId, JSON.parse(value)));
                 }
@@ -42,11 +40,14 @@ const PostDetailScreen = ({ route, navigation }) => {
         }
     }, [isFocused])
 
-    useEffect(() => {
-        setComment(post.comments)
-        console.log(post)
 
-    }, [post])
+
+
+    // useEffect(() => {
+    //     setComment(post.comments)
+    //     console.log(post)
+
+    // }, [post])
 
     useEffect(() => {
         if (result == 'success' && isFocused) {
