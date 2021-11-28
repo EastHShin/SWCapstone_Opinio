@@ -2,6 +2,7 @@ package com.opinio.plantrowth.api.controller.plant;
 
 import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.service.plant.DiagnosisRecordService;
 import com.opinio.plantrowth.service.plant.PlantExpService;
 import com.opinio.plantrowth.service.plant.PlantService;
 import com.opinio.plantrowth.service.user.UserPointService;
@@ -34,6 +35,7 @@ public class DiagnosisApiController {
 	private final FileUploadService fileUploadService;
 	private final UserPointService userPointService;
 	private final PlantExpService plantExpService;
+	private final DiagnosisRecordService diagnosisRecordService;
 	private final String filePath = "diagnosis";
 	private final OkHttpClient client = new OkHttpClient();
 	private static final String RequestURL = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:5000/predict";
@@ -84,6 +86,8 @@ public class DiagnosisApiController {
 			isLevelUp = true;
 		}
 		Plant updatedPlant = plantService.findOnePlant(plant.getId());
+		diagnosisRecordService.saveDiagnosisRecord(updatedPlant, jsonObj.get("disease_model_1").toString(),
+			jsonObj.get("percent_model_1").toString(), uploadImageName);
 
 		return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(updatedUser, updatedPlant, true, jsonObj, isLevelUp),
 			HttpStatus.OK);
