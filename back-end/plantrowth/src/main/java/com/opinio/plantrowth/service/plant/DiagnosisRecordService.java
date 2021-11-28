@@ -1,6 +1,7 @@
 package com.opinio.plantrowth.service.plant;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,5 +29,10 @@ public class DiagnosisRecordService {
 			.imageUrl(imageUrl)
 			.build();
 		return diagnosisRecordRepository.save(diagnosisRecord);
+	}
+
+	public List<DiagnosisRecord> getDiagnosisRecords(Long plantId) {
+		List<DiagnosisRecord> records = diagnosisRecordRepository.findAllByPlantId(plantId);
+		return records;
 	}
 }
