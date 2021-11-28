@@ -1,4 +1,4 @@
-package com.opinio.plantrowth.service;
+package com.opinio.plantrowth.service.plant;
 
 import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.domain.plant.Plant;
