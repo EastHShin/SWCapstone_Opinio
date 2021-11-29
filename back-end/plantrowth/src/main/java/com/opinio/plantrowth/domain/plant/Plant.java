@@ -53,4 +53,7 @@ public class Plant {
     @Builder.Default
     private List<PlantDiary> diaries = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "plant")
+    private List<DiagnosisRecord> records = new ArrayList<>();
+
 }
