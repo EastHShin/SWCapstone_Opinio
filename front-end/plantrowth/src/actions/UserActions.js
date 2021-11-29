@@ -391,12 +391,12 @@ export const setUserInfoState = state => dispatch => {
 
 export const getDiagnosisList = (plantId) => {
     return async dispatch => {
-        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diagnosis/${plantId}`)
+        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diagnosis/record/${plantId}`)
             .then(function (res) {
                 if (res.status == 200) {
                     dispatch({
                         type: DIAGNOSIS_LIST,
-                        payload: res.data.data
+                        payload: res.data
                     })
                 }
 

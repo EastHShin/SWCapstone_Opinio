@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
   item: {
     padding: 20,
     marginVertical: 5,
-    // marginHorizontal: 16,
     borderRadius: 20,
     shadowOffset: {
       width: 0,
@@ -243,10 +242,6 @@ const styles = StyleSheet.create({
       color: 'white' 
     },
   
-
-
-
-
 });
 
 export default CommunityMainScreen;

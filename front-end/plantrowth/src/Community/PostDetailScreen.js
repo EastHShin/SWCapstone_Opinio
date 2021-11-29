@@ -41,14 +41,6 @@ const PostDetailScreen = ({ route, navigation }) => {
     }, [isFocused])
 
 
-
-
-    // useEffect(() => {
-    //     setComment(post.comments)
-    //     console.log(post)
-
-    // }, [post])
-
     useEffect(() => {
         if (result == 'success' && isFocused) {
             setLoading(false);
@@ -148,6 +140,7 @@ const PostDetailScreen = ({ route, navigation }) => {
                 contentContainerStyle={{
                     justifyContent: 'center',
                     alignContent: 'center',
+
 
                 }}>
                 <Modal
@@ -252,7 +245,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#FFFFFF',
+        backgroundColor:'#FFFFFF'
         
     },
     top: {
@@ -262,11 +255,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: Dimensions.get('window').height * 0.06,
         width: Dimensions.get('window').width
-    },
-    wrapper: {
-        alignItems: "center",
-        flex: 1,
-
     },
     title: {
         fontWeight: 'bold',
@@ -283,7 +271,6 @@ const styles = StyleSheet.create({
     postWrapper: {
 
         width: Dimensions.get('window').width * 0.95,
-        borderColor: '#C9E7BE',
         marginTop: Dimensions.get('window').height * 0.015,
         marginBottom: Dimensions.get('window').height * 0.015,
         shadowOffset: {
