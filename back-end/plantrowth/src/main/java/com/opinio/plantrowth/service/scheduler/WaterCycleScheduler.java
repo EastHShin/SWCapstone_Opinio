@@ -1,4 +1,4 @@
-package com.opinio.plantrowth.service.plant;
+package com.opinio.plantrowth.service.scheduler;
 
 import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.service.FirebaseAlarm.FCMService;
