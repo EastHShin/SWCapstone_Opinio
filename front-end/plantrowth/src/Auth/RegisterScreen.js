@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFFFFF',
-    paddingVertical: 10,
+    paddingVertical: 9,
     fontSize: 16,
 
   },

@@ -11,10 +11,10 @@ const clearLogoutTimer = () => {
 	}
 };
 
-const setLogoutTimer = (expirationTime) => dispatch => {
+const setLogoutTimer = (expirationTime, email) => dispatch => {
     timer = setTimeout(() => {
-        dispatch(logoutUser());
-        console.log('로그인 만료')
+        dispatch(logoutUser(email));
+        console.log('로그인 만료'+email)
     }, expirationTime);
 };
 
@@ -134,8 +134,11 @@ export const loginUser = (user) => {
             .then(function (res) {
                 
                 if (res.status == 200) {
-                    dispatch(setLogoutTimer(3600000));
-
+                    AsyncStorage.getItem('email').then(value => {
+                        if (value != null) {
+                            dispatch(setLogoutTimer(3600000,value));
+                        }
+                      })
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('auth', res.headers.authorization);
                     
@@ -172,9 +175,14 @@ export const kakaoLogin = (data) => {
 
                 if (res.status == 200) {
 
+                    AsyncStorage.getItem('email').then(value => {
+                        if (value != null) {
+                            dispatch(setLogoutTimer(3600000,value));
+                        }
+                      })
+
                     AsyncStorage.setItem('auth', res.headers.authorization);
                     axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
-                    dispatch(setLogoutTimer(3600000));
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');
 

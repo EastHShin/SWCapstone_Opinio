@@ -17,7 +17,7 @@ import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../Loader';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { editUser, setUserEditState } from '../actions/UserActions';
+import { editUser, setUserEditState, checkNickname, setCheckNicknameState } from '../actions/UserActions';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -35,12 +35,15 @@ const AccountEditScreen = ({ route, navigation }) => {
   const [doublePassword, setDoublePassword] = useState(true);
   const [nickName, setUserNickName] = useState(userInfo.user_name);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [checkedNickName, setCheckedNickName] = useState('');
+
   const maximumDate = new Date();
   const passwordInputRef = createRef();
   const isFocused = useIsFocused();
 
   const dispatch = useDispatch();
   const userEditState = useSelector(state => state.UserReducer.userEditState);
+  const checkNicknameState = useSelector(state => state.UserReducer.checkNicknameState);
   const [loading, setLoading] = useState(false);
 
  
@@ -61,6 +64,21 @@ const AccountEditScreen = ({ route, navigation }) => {
 
   }, [userEditState])
 
+  useEffect(() => {
+    if (checkNicknameState == 'success' && isFocused) {
+      setLoading(false);
+      dispatch(setCheckNicknameState(''));
+      setCheckedNickName(nickName);
+      alert('사용할 수 있는 닉네임입니다.');
+    }
+    else if (checkNicknameState == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setCheckNicknameState(''));
+      setCheckedNickName('');
+      alert('이미 존재하는 닉네임입니다!');
+    }
+  }, [checkNicknameState])
+
   const onPressHandler = () => {
     
     if (nickName == userInfo.user_name && birth == userInfo.user_birth && !password) {
@@ -71,6 +89,16 @@ const AccountEditScreen = ({ route, navigation }) => {
     if (!nickName) {
       alert('닉네임을 입력해주세요!');
       return;
+    }
+    if(nickName && nickName != userInfo.user_name){
+      if (!checkedNickName) {
+        alert('닉네임을 인증해주세요!');
+        return;
+      }
+      if (checkedNickName != nickName) {
+        alert('닉네임을 인증해주세요!');
+        return;
+      }
     }
     if (!birth) {
       alert('생년월일을 입력해주세요!');
@@ -142,6 +170,20 @@ const AccountEditScreen = ({ route, navigation }) => {
     }
   }
 
+  const checkUserNickname = () => {
+    if (!nickName) {
+      alert('닉네임을 입력해주세요!');
+      return;
+    }
+    if(nickName == userInfo.user_name){
+      alert('현재 닉네임입니다!');
+      return;
+    }
+    setLoading(true);
+
+    dispatch(checkNickname(nickName));
+  }
+
   const doubleCheckPassword = () => {
     if (checkPassword == password) {
       setCheckErrorText('');
@@ -199,6 +241,17 @@ const AccountEditScreen = ({ route, navigation }) => {
                   underlineColorAndroid="#A9A9A9"
                   blurOnSubmit={false}
                 />
+                 <TouchableOpacity
+                style={styles.button}
+                activeOpacity={0.5}
+                onPress ={checkUserNickname}
+               >
+                <Text style={{
+                  color: '#FFFFFF',
+                  fontSize: 10,
+                  marginVertical:Dimensions.get('window').height*0.01
+                }}>확인</Text>
+              </TouchableOpacity>
               </View>
               <View style={styles.lineWrapper}>
                 <Text style={styles.text}>       생년월일   :   </Text>
@@ -383,7 +436,23 @@ const styles = StyleSheet.create({
     color: "red",
     marginStart: Dimensions.get('window').width * 0.39
 
-  }
+  },
+  button: {
+    backgroundColor: '#BEE9B4',
+    height: Dimensions.get('window').height*0.04,
+    marginLeft: Dimensions.get('window').width * 0.02,
+    width: "15%",
+    alignItems: 'center',
+    borderRadius: 30,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 5
+
+  },
 })
 
 export default AccountEditScreen;

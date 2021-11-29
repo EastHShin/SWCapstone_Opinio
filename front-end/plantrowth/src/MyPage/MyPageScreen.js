@@ -15,12 +15,23 @@ import {
 
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useIsFocused } from '@react-navigation/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//laylout만 작성, 로그아웃은 가능
 const MyPageScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const [userEmail, setUserEmail] =useState('');
 
-
+  useEffect(() => {
+    if(isFocused){
+      AsyncStorage.getItem('email').then(value => {
+        if (value != null) {
+          setUserEmail(value);
+        }
+      })
+    }
+  }, [isFocused])
   const onPressHandler = () => {
 
     Alert.alert('로그아웃', '로그아웃 하시겠습니까?', [
@@ -32,7 +43,7 @@ const MyPageScreen = ({ navigation }) => {
         text: '확인',
         onPress: () => {
 
-          dispatch(logoutUser());
+          dispatch(logoutUser(userEmail));
         },
       },
     ]);

@@ -17,8 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getDiagnosisList } from '../actions/UserActions';
 import { useIsFocused } from '@react-navigation/core';
 
-
-const Item = ({ item, onPress}) => {
+const Item = ({ item}) => {
 
   return (
       <View style={styles.section}>
@@ -45,9 +44,12 @@ const Item = ({ item, onPress}) => {
         >
           <Image source={{ uri: item.image_url }} style={styles.image} />
           <View style={styles.textWrapper}>
+            <View style={{flexDirection:"row"}}>
             <Text style={{ fontSize: 15, color: '#000000' }}>
-              상태 : {item.disease_name}
+              상태 : 
             </Text>
+            <Text style={item.disease_name=='건강한' ? {color:"green", marginLeft:Dimensions.get('window').width*0.01} : {color:"red", marginLeft:Dimensions.get('window').width*0.01} }>{item.disease_name}</Text>
+            </View>
             <Text style={{ fontSize: 15, color: '#000000' }}>
               확률 : { Math.round(Number(item.disease_percent * 1000))/1000} %
             </Text>
@@ -126,7 +128,8 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    
   },
   top: {
     backgroundColor: "#FFFFFF",
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: Dimensions.get('window').height * 0.0009,
     backgroundColor: '#FFFFFF',
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height * 0.2,
+    height: Dimensions.get('window').height * 0.211,
   },
   text: {
     color: '#000000',

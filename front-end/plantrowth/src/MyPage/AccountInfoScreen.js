@@ -29,7 +29,6 @@ const AccountInfoScreen = ({ navigation }) => {
   const userInfo = useSelector(state => state.UserReducer.userInfo);
   const [userId, setUserId] = useState('');
 
-
   useEffect(() => {
     if (isFocused) {
       AsyncStorage.getItem('userId').then(value => {
@@ -37,8 +36,8 @@ const AccountInfoScreen = ({ navigation }) => {
           setUserId(JSON.parse(value));  
           dispatch(infoUser(JSON.parse(value)));
         }
-      }
-      )
+      })
+      
     }
 
   }, [isFocused])

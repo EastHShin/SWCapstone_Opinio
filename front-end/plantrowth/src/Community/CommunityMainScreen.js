@@ -6,7 +6,9 @@ import {
   Dimensions,
   TouchableOpacity,
   SafeAreaView,
-  FlatList
+  FlatList,
+  Modal,
+  
 } from 'react-native';
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,9 +18,6 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { getBoardList, setPost } from '../actions/CommunityActions';
 import { useIsFocused } from '@react-navigation/core';
 import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
 
 const Item = ({ item, onPress, style }) => {
 
@@ -70,14 +69,17 @@ const CommunityMainScreen = ({ navigation }) => {
     
   }, [isFocused])
 
-  // useEffect(() => {
-  //   setIsFetching(false);
-  // }, [boardList])
+  useEffect(() => {
+    setIsFetching(false);
+  }, [boardList])
+
+
   
-  // const refreshList = () => {
-  //   setIsFetching(true);
-  //   dispatch(getBoardList());
-  // }
+  const refreshList = () => {
+    setIsFetching(true);
+    dispatch(getBoardList());
+  }
+
 
   const renderItem = ({ item }) => {
 
@@ -123,12 +125,55 @@ const CommunityMainScreen = ({ navigation }) => {
         </Text>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => console.log('ddd')}
+          onPress={() => setIsModalVisible(true)}
           style={{ marginEnd: Dimensions.get('window').width * 0.02 }}
         >
           <Entypo name="dots-three-vertical" size={22} color="#000000" />
         </TouchableOpacity>
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
+          setIsModalVisible(false);
+        }}
+      >
+         <TouchableOpacity 
+            style={styles.container} 
+            activeOpacity={1} 
+            onPressOut={() => {setIsModalVisible(false)}}
+          >
+        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+          <View style={styles.modal}>
+            <View style={styles.modalWrapper}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  setIsModalVisible(false);
+                  refreshList();
+                }}
+                style={{ flexDirection: 'row' }}
+              >
+                <Text style={styles.text}>새로고침</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalWrapper}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  setIsModalVisible(false);
+                  navigation.push('PostCreateScreen')
+                }}
+                style={{ flexDirection: 'row' }}
+              >
+                <Text style={styles.text}>글쓰기</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        </TouchableOpacity>
+      </Modal>
       <View style={styles.boardWrapper}>
         {boardList != '' ? (
           <FlatList
@@ -136,12 +181,11 @@ const CommunityMainScreen = ({ navigation }) => {
             renderItem={renderItem}
             keyExtractor={item => item.board_id}
             extraData={selectedId}
-            //  onRefresh= {refreshList}
-            // refreshing={isFetching}
+            onRefresh={refreshList}
+            refreshing={isFetching}
           />
         ) : (
-          <View style={{ width: Dimensions.get('window').width}}>
-          </View>
+          <View style={{ width: Dimensions.get('window').width }}></View>
         )}
 
         <TouchableOpacity
@@ -241,6 +285,27 @@ const styles = StyleSheet.create({
       fontSize: 40, 
       color: 'white' 
     },
+    modalWrapper: {
+      marginVertical: Dimensions.get("window").height * 0.02,
+  },
+  modal: {
+    marginTop: Dimensions.get('window').height * 0.01,
+    marginLeft: Dimensions.get('window').width * 0.5,
+    height: Dimensions.get('window').height * 0.15,
+    width: Dimensions.get('window').width * 0.47,
+    backgroundColor: "#FFFFFF",
+    flexDirection: "column",
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 10,
+},
+container:{
+  flex:1,
+}
   
 });
 
