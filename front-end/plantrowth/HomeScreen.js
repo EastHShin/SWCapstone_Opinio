@@ -225,17 +225,6 @@ HomeScreen = () => {
           </Text>
           <PlantList />
         </View>
-        <View style={styles.advertisementSectionWrapper}>
-          <Text
-            style={{
-              color: '#666666',
-              textAlign: 'center',
-              fontFamily: 'NanumGothicBold',
-            }}
-          >
-            광고
-          </Text>
-        </View>
         <View style={styles.hotSectionWrapper}>
           <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>
             인기 게시물
