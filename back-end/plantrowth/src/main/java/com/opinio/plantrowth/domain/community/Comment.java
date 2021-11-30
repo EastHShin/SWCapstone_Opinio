@@ -1,6 +1,6 @@
 package com.opinio.plantrowth.domain.community;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,6 +43,6 @@ public class Comment {
     @JsonIgnore
     private Board board;
     private String content;
-    private LocalDate date;
+    private LocalDateTime date;
     private String writer;
 }

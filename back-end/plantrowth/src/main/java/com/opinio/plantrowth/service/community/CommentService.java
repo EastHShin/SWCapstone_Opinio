@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.service.community;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -48,8 +49,7 @@ public class CommentService {
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 댓글 입니다."));
         if(!(dto.getContent()==null))
             comment.setContent(dto.getContent());
-        if(!(dto.getDate()==null))
-            comment.setDate(dto.getDate());
+            comment.setDate(LocalDateTime.now());
 
         return comment.getId();
     }
