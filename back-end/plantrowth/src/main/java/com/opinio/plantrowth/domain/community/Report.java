@@ -1,11 +1,24 @@
 package com.opinio.plantrowth.domain.community;
 
+import java.time.LocalDate;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.opinio.plantrowth.domain.user.User;
-import lombok.*;
 
-import javax.persistence.*;
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +33,7 @@ public class Report {
     private Long id;
     private LocalDate date;
     private StateEnum state;
+    private tagEnum tag;
     public enum StateEnum{
         NOTPROCESSED(0, "Not Processed"),
         PROCESSED(1, "Processed"),
@@ -29,6 +43,16 @@ public class Report {
         StateEnum(Integer stateCode, String stateMessage){
             this.stateCode =stateCode;
             this.stateMessage = stateMessage;
+        }
+    }
+    public enum tagEnum{
+        BOARD(0, "boardReport"),
+        COMMENT(1, "commentReport");
+        Integer tagCode;
+        String tagMessage;
+        tagEnum(Integer tagCode, String tagMessage){
+            this.tagCode = tagCode;
+            this.tagMessage = tagMessage;
         }
     }
     @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.MERGE)

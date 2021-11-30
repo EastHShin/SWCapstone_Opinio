@@ -13,6 +13,7 @@ import com.opinio.plantrowth.service.community.CommentService;
 import com.opinio.plantrowth.service.community.ReportService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import com.opinio.plantrowth.service.payment.BillingService;
+import com.opinio.plantrowth.service.plant.DiagnosisRecordService;
 import com.opinio.plantrowth.service.plant.DiaryService;
 import com.opinio.plantrowth.service.plant.PlantExpService;
 import com.opinio.plantrowth.service.plant.PlantService;
@@ -83,6 +84,8 @@ class MainPageApiControllerTest {
     private ReportService reportService;
     @MockBean
     private FindPasswordService findPasswordService;
+    @MockBean
+    private DiagnosisRecordService diagnosisRecordService;
 
     private User user;
     private Plant plant;

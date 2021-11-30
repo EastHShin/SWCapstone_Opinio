@@ -8,6 +8,7 @@ import com.opinio.plantrowth.api.dto.community.board.BoardResult;
 import com.opinio.plantrowth.domain.community.Board;
 import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.service.community.CommentService;
+import com.opinio.plantrowth.service.community.ReportService;
 import com.opinio.plantrowth.service.user.UserService;
 import com.opinio.plantrowth.service.community.BoardService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
@@ -33,16 +34,17 @@ public class BoardApiController {
     private final BoardService boardService;
     private final UserService userService;
     private final String filePath = "board";
+    private final ReportService reportService;
 
     @Transactional
     @GetMapping("/api/community/{user-id}/all") // 유저가 자신이 작성한 게시글 조회
     public ResponseEntity<BoardResult> boards(@PathVariable("user-id") Long id){
         List<Board> boards = boardService.findBoardsByUserId(id);
         List<BoardDTO> collect = boards.stream()
-                .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
-                        m.getId(), m.getUser().getName(), boardService.countedLike(m.getId()),
-                        boardService.countedCommentByBoardId(m.getId())))
-                .collect(Collectors.toList());
+            .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
+                m.getId(), m.getUser().getName(), boardService.countedLike(m.getId()),
+                boardService.countedCommentByBoardId(m.getId())))
+            .collect(Collectors.toList());
 
         return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
     }
@@ -51,10 +53,10 @@ public class BoardApiController {
     public ResponseEntity<BoardResult> boardList(){
         List<Board> boards = boardService.BoardList();
         List<BoardDTO> collect = boards.stream()
-                .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
-                        m.getId(), m.getUser().getName(), boardService.countedLike(m.getId()),
-                        boardService.countedCommentByBoardId(m.getId())))
-                .collect(Collectors.toList());
+            .map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
+                m.getId(), m.getUser().getName(), boardService.countedLike(m.getId()),
+                boardService.countedCommentByBoardId(m.getId())))
+            .collect(Collectors.toList());
 
         return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
     }
@@ -65,14 +67,14 @@ public class BoardApiController {
     @Transactional
     @PostMapping(value = "/api/community/{user-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createBoard(
-            @PathVariable("user-id") Long userId,
-            @ModelAttribute BoardCreateRequest dto,
-            @RequestPart(name = "file_name", required = false) Optional<MultipartFile> file){
+        @PathVariable("user-id") Long userId,
+        @ModelAttribute BoardCreateRequest dto,
+        @RequestPart(name = "file_name", required = false) Optional<MultipartFile> file){
         Board board = Board.builder()
-                .title(dto.getTitle())
-                .createDate(dto.getDate())
-                .content(dto.getContent())
-                .build();
+            .title(dto.getTitle())
+            .createDate(dto.getDate())
+            .content(dto.getContent())
+            .build();
         User user = userService.findUser(userId);
         board.setUser(user);
         if(file.isPresent()) {
@@ -87,14 +89,14 @@ public class BoardApiController {
         message.setMessage("게시글 작성 완료");
 
         return result !=null?
-                new ResponseEntity<>(message, headers, HttpStatus.OK):
-                ResponseEntity.badRequest().build();
+            new ResponseEntity<>(message, headers, HttpStatus.OK):
+            ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/api/community/{board-id}")
     public ResponseEntity<?> lookUpBoard(
-            HttpServletRequest request,
-            @PathVariable("board-id") Long id){
+        HttpServletRequest request,
+        @PathVariable("board-id") Long id){
         String userIdStr = request.getHeader("userId");
         Long userId = Long.parseLong(userIdStr);
         BoardLookUpDTO board = boardService.LookUpBoard(id, userId);
@@ -109,14 +111,15 @@ public class BoardApiController {
     }
     @PutMapping("/api/community/{board-id}")
     public ResponseEntity<?> updateBoard(@PathVariable("board-id") Long id,
-                                         @ModelAttribute BoardCreateRequest dto,
-                                         @RequestPart(name = "file_name", required = false) Optional<MultipartFile> file){
+        @ModelAttribute BoardCreateRequest dto,
+        @RequestPart(name = "file_name", required = false) Optional<MultipartFile> file){
         Long updatedId = boardService.updateBoard(id, dto);
+        Boolean isFileDelete =dto.getFile_delete();
+        if(isFileDelete){
+            boardService.updateImage(updatedId, null);
+        }
         if(file.isPresent()) {
             String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
-            if(uploadImageName == "delete"){
-                boardService.updateImage(updatedId, null);
-            }
             boardService.updateImage(updatedId, uploadImageName);
         }
         Board board = boardService.findBoard(updatedId);
@@ -133,10 +136,10 @@ public class BoardApiController {
     public ResponseEntity<?> deleteBoard(@PathVariable("board-id") Long id){
         Long result = boardService.deleteBoard(id);
         return result !=null?
-                ResponseEntity.ok().body("게시글 삭제 완료"):
-                ResponseEntity.badRequest().build();
+            ResponseEntity.ok().body("게시글 삭제 완료"):
+            ResponseEntity.badRequest().build();
     }
-//    @PostMapping("/api/community/report/{board-id}")//게시글 신고
+    //    @PostMapping("/api/community/report/{board-id}")//게시글 신고
 
 
 
@@ -158,5 +161,12 @@ public class BoardApiController {
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
-
+    @PostMapping("/api/community/report/{board-id}&{user-id}")//댓글 신고
+    public ResponseEntity<?> reportBoard(@PathVariable("board-id")Long boardId,
+        @PathVariable("user-id") Long userId){
+        Long result = reportService.BoardReport(boardId, userId);
+        return result!=null?
+            ResponseEntity.ok().body("신고성공"):
+            ResponseEntity.badRequest().body("신고실패");
+    }
 }
