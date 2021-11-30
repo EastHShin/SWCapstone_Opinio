@@ -1,7 +1,9 @@
 package com.opinio.plantrowth.service;
 
+import com.opinio.plantrowth.domain.payment.PointSpendType;
 import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.repository.payment.PointRecordRepository;
 import com.opinio.plantrowth.repository.plant.PlantRepository;
 import com.opinio.plantrowth.repository.user.UserRepository;
 import com.opinio.plantrowth.service.user.UserPointService;
@@ -28,6 +30,8 @@ class UserPointServiceTest {
     private PlantRepository plantRepository;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private PointRecordRepository pointRecordRepository;
 
     @InjectMocks
     private UserPointService userPointService;
@@ -75,7 +79,7 @@ class UserPointServiceTest {
         Integer curPoint = user.getPoint();
         //when
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        User updatedUser = userPointService.increasePoint(user.getId());
+        User updatedUser = userPointService.increasePoint(user.getId(), PointSpendType.WATERING);
         //then
         Assertions.assertThat(updatedUser.getPoint()).isEqualTo(curPoint+increasingPoint);
     }

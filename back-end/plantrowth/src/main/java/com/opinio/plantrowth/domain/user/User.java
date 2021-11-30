@@ -64,7 +64,7 @@ public class User implements UserDetails {
 	@Builder.Default
 	List<Comment> comments = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "user")
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "user")
 	@Builder.Default
 	List<PaymentRecord> paymentRecords = new ArrayList<>();
 

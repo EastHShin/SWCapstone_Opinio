@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.api.controller.plant;
 
+import com.opinio.plantrowth.domain.payment.PointSpendType;
 import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.service.plant.PlantExpService;
@@ -35,7 +36,7 @@ public class WateringApiController {
             isLevelUp = true;
         }
         Plant updatedPlant = plantService.findOnePlant(plant_id);
-        User user = userPointService.increasePoint(plant.getUser().getId());
+        User user = userPointService.increasePoint(plant.getUser().getId(), PointSpendType.WATERING);
         return new ResponseEntity<WateringDto>(new WateringDto(user, updatedPlant, isLevelUp), HttpStatus.OK);
     }
 

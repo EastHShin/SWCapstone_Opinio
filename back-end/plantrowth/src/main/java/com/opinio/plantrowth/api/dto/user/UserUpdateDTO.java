@@ -9,5 +9,6 @@ import java.time.LocalDate;
 @Setter
 public class UserUpdateDTO {
     private String user_name;
+    private String password;
     private LocalDate user_birth;
 }
