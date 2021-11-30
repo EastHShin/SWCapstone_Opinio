@@ -31,7 +31,6 @@ HomeScreen = () => {
 
   const [userId, setUserId] = useState('');
 
-
   const infoList = useSelector(state => state.HomeReducer.infoList);
   const [name, setName] = useState('');
   const isLogin = useSelector(state => state.UserReducer.isLogin);
@@ -40,7 +39,7 @@ HomeScreen = () => {
 
   useEffect(() => {
     if (isLogin == 'end') {
-      navigation.reset({ routes: [{ name: "LoginScreen" }] });
+      navigation.reset({ routes: [{ name: 'LoginScreen' }] });
     }
   }, [isLogin]);
 
@@ -48,7 +47,7 @@ HomeScreen = () => {
     AsyncStorage.getItem('userId').then(value => {
       if (value != null) {
         setUserId(JSON.parse(value));
-        console.log('홈스크린 userId: ' + userId);
+        console.log('userId: ' + userId);
         if (isFocused) {
           dispatch(getHomeInfo(JSON.parse(value)));
           setLoading(false);
@@ -61,98 +60,104 @@ HomeScreen = () => {
     if (PlantList !== null && PlantList !== undefined) {
       return PlantList
         ? PlantList.map((item, index) => {
-          console.log('hi:' + item);
-          plantNumber++;
-          return (
-            <TouchableOpacity
-              style={styles.profileContainer}
-              key={index}
-              onPress={() => {
-                navigation.navigate('ManagePlantScreen', {
-                  plantId: item.plant_id,
-                  point: infoList.point,
-                });
-              }}
-              key={index}>
-              <Image
-                source={{ uri: item.file_name }}
-                style={styles.profileImage}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <Text style={{ fontFamily: 'NanumGothicExtraBold', color: '#363636' }}>
-                  {`LV.${item.plant_level}`}
-                </Text>
-                <View style={styles.levelBar}>
-                  <View
-                    style={[
-                      styles.expBar,
-                      {
-                        width:
-                          (screenWidth * 0.17 * item.plant_exp) /
-                          ((item.plant_level - 1) * 10 + 30),
-                      },
-                    ]}>
-                    <Text
-                      style={{
-                        width: screenWidth * 0.17,
-                        textAlign: 'center',
-                        fontFamily: 'NanumGothicExtraBold',
-                        color: '#363636',
-                      }}>
-                      {item.plant_exp} / {(item.plant_level - 1) * 10 + 30}
-                    </Text>
+            console.log('hi:' + item);
+            plantNumber++;
+            return (
+              <TouchableOpacity
+                style={styles.profileContainer}
+                key={index}
+                onPress={() => {
+                  navigation.navigate('ManagePlantScreen', {
+                    plantId: item.plant_id,
+                    point: infoList.point,
+                  });
+                }}
+              >
+                <Image
+                  source={{ uri: item.file_name }}
+                  style={styles.profileImage}
+                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicExtraBold',
+                      color: '#363636',
+                    }}
+                  >
+                    {`LV.${item.plant_level}`}
+                  </Text>
+                  <View style={styles.levelBar}>
+                    <View
+                      style={[
+                        styles.expBar,
+                        {
+                          width:
+                            (screenWidth * 0.17 * item.plant_exp) /
+                            ((item.plant_level - 1) * 10 + 30),
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          width: screenWidth * 0.17,
+                          textAlign: 'center',
+                          fontFamily: 'NanumGothicExtraBold',
+                          color: '#363636',
+                        }}
+                      >
+                        {item.plant_exp} / {(item.plant_level - 1) * 10 + 30}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
 
-              <View style={styles.nameWrapper}>
-                <Text
-                  style={{
-                    fontFamily: 'NanumGothicBold',
-                    textAlign: 'center',
-                    fontSize: 12,
-                    color: '#363636',
-                  }}>
-                  {item.plant_name}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })
+                <View style={styles.nameWrapper}>
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      textAlign: 'center',
+                      fontSize: 12,
+                      color: '#363636',
+                    }}
+                  >
+                    {item.plant_name}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })
         : null;
     }
   };
 
   const renderProfileAddSlot = max_plant_num => {
-    console.log('plantNumber' + plantNumber);
-    console.log('maxplantNumber' + max_plant_num);
     let arr = [];
     for (let i = 0; i < max_plant_num - plantNumber; i++) {
       arr.push(1);
     }
-    console.log('renderProfileAddslot arr: ' + arr);
     return arr
       ? arr.map((value, index) => {
-        return (
-          <TouchableOpacity
-            style={[styles.profileContainer, { justifyContent: 'center' }]}
-            onPress={() =>
-              navigation.navigate('AddProfileScreen', { userId: userId })
-            }
-            key={index}>
-            <Icon name={'add'} color={'white'} size={60} />
-          </TouchableOpacity>
-        );
-      })
+          return (
+            <TouchableOpacity
+              style={[styles.profileContainer, { justifyContent: 'center' }]}
+              onPress={() =>
+                navigation.navigate('AddProfileScreen', { userId: userId })
+              }
+              key={index}
+            >
+              <Icon name={'add'} color={'white'} size={60} />
+            </TouchableOpacity>
+          );
+        })
       : null;
   };
   const PlantList = () => {
-    console.log('plants: ' + infoList.plants);
     return (
       <View style={styles.plantListWrapper}>
         <ScrollView
@@ -164,14 +169,18 @@ HomeScreen = () => {
           style={{
             borderRadius: 10,
             paddingTop: 5,
-          }}>
+          }}
+        >
           {renderPlantList(infoList.plants)}
           {renderProfileAddSlot(infoList.max_plant_num)}
           {plantNumber == infoList.max_plant_num ? (
             <TouchableOpacity
               style={[styles.profileContainer, { justifyContent: 'center' }]}
-              onPress={() => navigation.navigate('ShopScreen')}>
-              <Text style={{ fontFamily: 'NanumGothicBold' }}>프로필 슬롯 추가</Text>
+              onPress={() => navigation.navigate('ShopScreen')}
+            >
+              <Text style={{ fontFamily: 'NanumGothicBold' }}>
+                프로필 슬롯 추가
+              </Text>
             </TouchableOpacity>
           ) : null}
         </ScrollView>
@@ -187,27 +196,42 @@ HomeScreen = () => {
           backgroundColor: '#C9E7BE',
           height: '100%',
           justifyContent: 'space-between',
-        }}>
+        }}
+      >
         <View style={styles.memberInfoSectionWrapper}>
           <Icon name={'person-circle-outline'} size={45} color={'gray'} />
           <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16, color: '#666666', fontFamily: 'NanumGothic' }}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#666666',
+                fontFamily: 'NanumGothic',
+              }}
+            >
               환영합니다! {infoList.user_name}님
             </Text>
-            <Text style={{ fontSize: 16, color: '#666666', fontFamily: 'NanumGothic' }}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#666666',
+                fontFamily: 'NanumGothic',
+              }}
+            >
               보유 포인트: {infoList.point}
             </Text>
           </View>
         </View>
         <View style={styles.plantListSectionWrapper}>
-          <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>내 식물들</Text>
+          <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>
+            내 식물들
+          </Text>
           <PlantList />
         </View>
-        {/* <View style={styles.advertisementSectionWrapper}>
-          <Text style={{ color: '#666666', textAlign: 'center', fontFamily: 'NanumGothicBold' }}>광고</Text>
-        </View> */}
+
         <View style={styles.hotSectionWrapper}>
-          <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>인기 게시물</Text>
+          <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>
+            인기 게시물
+          </Text>
         </View>
         <Footer name={'Home'} />
       </View>
@@ -360,7 +384,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f1c40f',
     height: screenHeight * 0.03,
     borderRadius: 5,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 });
 

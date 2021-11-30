@@ -141,7 +141,7 @@ UpdatePlantProfile = ({ route }) => {
               } else {
                 console.log(
                   'update할 때 not plantBirth' +
-                  route.params.profile.plant_birth,
+                    route.params.profile.plant_birth,
                 );
                 fd.append('recent_watering', route.params.profile.plant_birth);
               }
@@ -294,7 +294,8 @@ UpdatePlantProfile = ({ route }) => {
         justifyContent: 'space-between',
         padding: 5,
         backgroundColor: '#BEE9B4',
-      }}>
+      }}
+    >
       <Loader loading={loading} />
       <View style={styles.sectionWrapper}>
         <KeyboardAwareScrollView>
@@ -304,7 +305,8 @@ UpdatePlantProfile = ({ route }) => {
               color: '#556951',
               marginBottom: 10,
               textAlign: 'center',
-            }}>
+            }}
+          >
             식물 프로필 수정
           </Text>
           <View
@@ -312,18 +314,21 @@ UpdatePlantProfile = ({ route }) => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-            }}>
+            }}
+          >
             <TouchableOpacity
               style={styles.photoButton}
               activeOpacity={0.5}
-              onPress={() => photoUpload('pick')}>
+              onPress={() => photoUpload('pick')}
+            >
               <Icon name="image" size={35} color="#556951" />
             </TouchableOpacity>
             <View style={styles.imageWrapper}>{renderImage()}</View>
             <TouchableOpacity
               style={styles.photoButton}
               activeOpacity={0.5}
-              onPress={() => photoUpload('take')}>
+              onPress={() => photoUpload('take')}
+            >
               <Icon name="camera" size={35} color="#556951" />
             </TouchableOpacity>
           </View>
@@ -365,7 +370,8 @@ UpdatePlantProfile = ({ route }) => {
             </View>
             <TouchableOpacity
               style={{ backgroundColor: '#fff' }}
-              onPress={() => showDatePicker('plantBirth')}>
+              onPress={() => showDatePicker('plantBirth')}
+            >
               <TextInput
                 pointerEvents="none"
                 style={styles.input}
@@ -398,7 +404,8 @@ UpdatePlantProfile = ({ route }) => {
             </View>
             <TouchableOpacity
               style={{ backgroundColor: '#fff' }}
-              onPress={() => setDayPickerVisibility(true)}>
+              onPress={() => setDayPickerVisibility(true)}
+            >
               <TextInput
                 style={styles.input}
                 underlineColorAndroid="#000"
@@ -416,7 +423,8 @@ UpdatePlantProfile = ({ route }) => {
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-            }}>
+            }}
+          >
             <View
               style={{
                 alignItems: 'center',
@@ -425,13 +433,15 @@ UpdatePlantProfile = ({ route }) => {
                 width: screenWidth * 0.6,
                 height: screenHeight * 0.5,
                 padding: 10,
-              }}>
+              }}
+            >
               <View
                 style={{
                   flex: 1,
                   flexDirection: 'row',
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 <Text> </Text>
                 <View style={{ width: 150, height: 250 }}>
                   <ScrollPicker
@@ -445,7 +455,7 @@ UpdatePlantProfile = ({ route }) => {
                     wrapperHeight={250}
                     wrapperWidth={50}
                     itemHeight={50}
-                    highlightColor={"#93d07d"}
+                    highlightColor={'#93d07d'}
                   />
                 </View>
                 <Text style={{ fontFamily: 'NanumGothicBold' }}> Days</Text>
@@ -455,12 +465,14 @@ UpdatePlantProfile = ({ route }) => {
                 style={styles.ModalButton}
                 onPress={() => {
                   setDayPickerVisibility(false);
-                }}>
+                }}
+              >
                 <Text
                   style={{
                     fontFamily: 'NanumGothicBold',
                     textAlign: 'center',
-                  }}>
+                  }}
+                >
                   닫기
                 </Text>
               </TouchableOpacity>
@@ -471,10 +483,23 @@ UpdatePlantProfile = ({ route }) => {
               <Icon name="water" size={30} color="#93d07d" />
             </View>
             <View style={{ alignItems: 'center', width: screenWidth * 0.6 }}>
-              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 12, marginBottom: 3 }}>
+              <Text
+                style={{
+                  fontFamily: 'NanumGothicBold',
+                  fontSize: 12,
+                  marginBottom: 3,
+                }}
+              >
                 {'   물 주는 양'}
               </Text>
-              <View style={{ width: screenWidth * 0.6, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'space-between' }}>
+              <View
+                style={{
+                  width: screenWidth * 0.6,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'space-between',
+                }}
+              >
                 <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
                   조금만
                 </Text>
@@ -486,7 +511,11 @@ UpdatePlantProfile = ({ route }) => {
                 </Text>
               </View>
               <Slider
-                style={{ width: screenWidth * 0.66, height: 20, marginLeft: 11 }}
+                style={{
+                  width: screenWidth * 0.66,
+                  height: 20,
+                  marginLeft: 11,
+                }}
                 minimumValue={1}
                 maximumValue={3}
                 step={1}
@@ -508,7 +537,8 @@ UpdatePlantProfile = ({ route }) => {
             </View>
             <TouchableOpacity
               style={{ backgroundColor: '#fff' }}
-              onPress={() => showDatePicker('watering')}>
+              onPress={() => showDatePicker('watering')}
+            >
               <TextInput
                 pointerEvents="none"
                 style={styles.input}
@@ -547,11 +577,13 @@ UpdatePlantProfile = ({ route }) => {
             flexDirection: 'row',
             justifyContent: 'space-evenly',
             marginTop: 20,
-          }}>
+          }}
+        >
           <TouchableOpacity
             onPress={() => {
               navigation.goBack();
-            }}>
+            }}
+          >
             <FontAwesome name={'close'} size={40} color={'#e3242b'} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onPressHandler()}>
@@ -616,7 +648,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     borderRadius: 10,
     padding: 5,
-    fontFamily: 'NanumGothic'
+    fontFamily: 'NanumGothic',
   },
   photoButton: {
     width: 50,

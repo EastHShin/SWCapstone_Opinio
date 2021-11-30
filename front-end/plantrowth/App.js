@@ -42,14 +42,13 @@ import { navigationRef } from './RootNavigation';
 const Stack = createNativeStackNavigator();
 
 function App() {
-
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
   });
 
   messaging().onNotificationOpenedApp(async remoteMessage => {
     console.log('open!');
-    console.log("open : " + remoteMessage.data.plant_id);
+    console.log('open : ' + remoteMessage.data.plant_id);
 
     RootNavigation.push('ManagePlantScreen', {
       plantId: remoteMessage.data.plant_id,
@@ -58,7 +57,7 @@ function App() {
 
   useEffect(() => {
     const foreground = messaging().onMessage(async remoteMessage => {
-      console.log("어플 안 : " + remoteMessage.data.plant_id);
+      console.log('어플 안 : ' + remoteMessage.data.plant_id);
       console.log(remoteMessage);
       Alert.alert('물주기 알림', '식물에게 물을 줄 시간입니다!', [
         {
@@ -118,7 +117,6 @@ function App() {
               headerShown: false,
             }}
           />
-
           <Stack.Screen
             name="DiaryCreateScreen"
             component={DiaryCreateScreen}
@@ -126,7 +124,6 @@ function App() {
               headerShown: false,
             }}
           />
-
           <Stack.Screen
             name="DiaryDetailScreen"
             component={DiaryDetailScreen}
@@ -134,7 +131,6 @@ function App() {
               headerShown: false,
             }}
           />
-
           <Stack.Screen
             name="DiaryEditScreen"
             component={DiaryEditScreen}
@@ -290,5 +286,3 @@ function App() {
   );
 }
 export default App;
-
-

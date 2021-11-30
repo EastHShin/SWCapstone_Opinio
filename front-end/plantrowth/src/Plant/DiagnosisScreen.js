@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, Button, Image, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -12,7 +19,6 @@ const DiagnosisScreen = ({ route }) => {
   const imagePath = route.params.image;
   console.log('chart: ' + JSON.stringify(chart));
   const renderDiagnosis = diagnosis => {
-    //한국어로 바꿀 예정
     if (diagnosis != '건강한') {
       return (
         <View
@@ -20,29 +26,29 @@ const DiagnosisScreen = ({ route }) => {
             height: screenHeight * 0.3,
             padding: 10,
             justifyContent: 'space-between',
-          }}>
+          }}
+        >
           <Text
-            style={[
-              styles.diagnosisText,
-              { textAlign: 'center' },
-            ]}>{`지금 ${chart.plant_name}(은/는)`}</Text>
+            style={[styles.diagnosisText, { textAlign: 'center' }]}
+          >{`지금 ${chart.plant_name}(은/는)`}</Text>
 
           <Text
             style={[
               styles.diagnosisText,
               { textAlign: 'center', fontSize: 24, color: 'red' },
-            ]}>{`${chart.diagnosisResult.disease_model}`}</Text>
+            ]}
+          >{`${chart.diagnosisResult.disease_model}`}</Text>
           <Text style={[styles.diagnosisText, { textAlign: 'center' }]}>
             이라는 병을 앓고 있어요 ㅜㅜ
           </Text>
           <Text
-            style={[
-              styles.diagnosisText,
-              { fontSize: 14 },
-            ]}>{`\n질병진단 인공지능의 판단:\n\n${chart.diagnosisResult.disease_model
-              }을 앓고 있을 확률이 ${Math.round(Number(chart.diagnosisResult.percent_model * 1000)) /
-              1000
-              }%에요.`}</Text>
+            style={[styles.diagnosisText, { fontSize: 14 }]}
+          >{`\n질병진단 인공지능의 판단:\n\n${
+            chart.diagnosisResult.disease_model
+          }을 앓고 있을 확률이 ${
+            Math.round(Number(chart.diagnosisResult.percent_model * 1000)) /
+            1000
+          }%에요.`}</Text>
         </View>
       );
     } else {
@@ -52,17 +58,18 @@ const DiagnosisScreen = ({ route }) => {
             height: screenHeight * 0.3,
             padding: 10,
             justifyContent: 'space-between',
-          }}>
+          }}
+        >
           <Text
-            style={
-              styles.diagnosisText
-            }>{`지금 ${chart.plant_name}(은/는) `}</Text>
+            style={styles.diagnosisText}
+          >{`지금 ${chart.plant_name}(은/는) `}</Text>
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-            }}>
+            }}
+          >
             <Text
               style={[
                 styles.diagnosisText,
@@ -71,18 +78,19 @@ const DiagnosisScreen = ({ route }) => {
                   fontFamily: 'NanumGothicExtraBold',
                   fontSize: 24,
                 },
-              ]}>
+              ]}
+            >
               건강
             </Text>
             <Text style={styles.diagnosisText}> 해요!</Text>
           </View>
 
           <Text
-            style={
-              styles.diagnosisText
-            }>{`질병진단 인공지능의 판단:\n\n건강할 확률이 ${Math.round(Number(chart.diagnosisResult.percent_model * 1000)) /
-              1000
-              }%에요.`}</Text>
+            style={styles.diagnosisText}
+          >{`질병진단 인공지능의 판단:\n\n건강할 확률이 ${
+            Math.round(Number(chart.diagnosisResult.percent_model * 1000)) /
+            1000
+          }%에요.`}</Text>
         </View>
       );
     }
@@ -95,13 +103,15 @@ const DiagnosisScreen = ({ route }) => {
         justifyContent: 'space-between',
         paddingTop: 20,
         paddingBottom: 15,
-      }}>
+      }}
+    >
       <Text
         style={{
           fontFamily: 'NanumGothicExtraBold',
           fontSize: 20,
           color: '#363636',
-        }}>
+        }}
+      >
         진단표
       </Text>
       <Image source={{ uri: imagePath }} style={{ width: 300, height: 300 }} />
@@ -110,8 +120,17 @@ const DiagnosisScreen = ({ route }) => {
         style={styles.ModalButton}
         onPress={() => {
           navigation.goBack();
-        }}>
-        <Text style={{ fontFamily: 'NanumGothicBold', textAlign: 'center', fontSize: 16 }}>확인</Text>
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: 'NanumGothicBold',
+            textAlign: 'center',
+            fontSize: 16,
+          }}
+        >
+          확인
+        </Text>
       </TouchableOpacity>
     </View>
   );

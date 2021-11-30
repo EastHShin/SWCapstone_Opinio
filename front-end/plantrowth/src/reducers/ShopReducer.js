@@ -5,6 +5,7 @@ import {
   GET_SHOP_INFO,
   BUY_SUBSCRIBE,
   GET_PAYMENT_HISTORY,
+  REFUND,
 } from '../actions/type';
 let initialState = {
   point: '',
@@ -12,7 +13,8 @@ let initialState = {
   buyProfileSlotResult: '',
   buySubscribeResult: '',
   shopInfo: {},
-  paymentHistory: [],
+  paymentRecord: {},
+  refundResult: '',
 };
 
 function ShopReducer(state = initialState, action) {
@@ -28,7 +30,9 @@ function ShopReducer(state = initialState, action) {
     case BUY_SUBSCRIBE:
       return { ...state, buySubscribeResult: action.payload };
     case GET_PAYMENT_HISTORY:
-      return { ...state, paymentHistory: action.payload };
+      return { ...state, paymentRecord: action.payload };
+    case REFUND:
+      return { ...state, refundResult: action.payload };
     default:
       return state;
   }
