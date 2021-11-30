@@ -1,117 +1,158 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  SafeAreaView,
+  TextInput,
+  Modal,
+  ScrollView,
+  KeyboardAvoidingView,
+  Image,
+  Alert,
+  Keyboard
+} from 'react-native';
 
-import { View, StyleSheet, Text, Dimensions, TouchableOpacity, SafeAreaView, TextInput, Modal, ScrollView, KeyboardAvoidingView,  Alert} from 'react-native';
-
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../Loader';
-import { useIsFocused } from '@react-navigation/native'
-import { getPost, deletePost, setResultState } from '../actions/CommunityActions';
+import { useIsFocused } from '@react-navigation/native';
+import { getPost, deletePost, setResultState, createComment, setCommentResultState } from '../actions/CommunityActions';
+
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AutoHeightImage from 'react-native-auto-height-image';
 
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 const PostDetailScreen = ({ route, navigation }) => {
+  const { selectedId } = route.params;
 
-    const { selectedId } = route.params;
+  const [loading, setLoading] = useState(false);
 
-    const [loading, setLoading] = useState(false);
-    const [comment, setComment] = useState('');
-    const [userId, setUserId] = useState('');
-    const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [commentList, setCommentList] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [comment, setComment] = useState('');
 
-    const dispatch = useDispatch();
-    const isFocused = useIsFocused();
-    const result = useSelector(state => state.CommunityReducer.result);
-    const post = useSelector(state => state.CommunityReducer.post);
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const result = useSelector(state => state.CommunityReducer.result);
+  const post = useSelector(state => state.CommunityReducer.post);
+  const commentResult = useSelector(state=>state.CommunityReducer.commentResult);
 
-    useEffect(() => {        
-        if (isFocused) {
-            AsyncStorage.getItem('userId').then(value => {
-                if (value) {
-                    setUserId(JSON.parse(value));
-                    dispatch(getPost(selectedId, JSON.parse(value)));
-                }
-            }
-            )
+  useEffect(() => {        
+    if (isFocused) {
+      AsyncStorage.getItem('userId').then(value => {
+        if (value) {
+          setUserId(JSON.parse(value));
+          dispatch(getPost(selectedId, JSON.parse(value)));
         }
-    }, [isFocused])
-
-     useEffect(() => {
-        setComment(post.comments)
-        console.log(post)
-
-    }, [post])
-
-
-    useEffect(() => {
-        if (result == 'success' && isFocused) {
-            setLoading(false);
-            dispatch(setResultState(''));
-            setIsModalVisible(false);
-            navigation.navigate('CommunityMainScreen');
-        }
-        else if (result == 'failure' && isFocused) {
-            setLoading(false);
-            dispatch(setResultState(''));
-            setIsModalVisible(false);
-            alert('게시글 삭제 실패!');
-        }
-
-    }, [result])
-
-    const deleteMode = () => {
-        Alert.alert(
-            "삭제", "게시글을 삭제하시겠습니까?", [
-            {
-                text: "취소",
-                onPress: () => console.log("취소")
-
-            },
-            {
-                text: "확인",
-                onPress: () => {
-                    setLoading(true);
-                    dispatch(deletePost(selectedId))
-                }
-            }
-        ]
-        )
-
-
+      })
     }
+  }, [isFocused])
 
-    const renderComment = (comment) => {
-
-        if (comment) {
-            return comment.map((item, index) => {
-                return (
-                    <View
-                        key={index}
-                        style={styles.commentWrapper}
-                    >
-                        <Text style={{ color: '#000000', fontWeight: 'bold' }}>{item.writer}</Text>
-                        <Text style={{ fontSize: 14, marginBottom: Dimensions.get('window').height * 0.007, marginTop: Dimensions.get('window').height * 0.003 }}>{item.content}</Text>
-                        <Text style={{ fontSize: 11 }}>{item.date}</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width * 0.95, }}>
-                            <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
-                        </View>
-                    </View>
-
-                )
+  useEffect(() => {
+    setCommentList(post.comments);
+    console.log(post)
+  }, [post])
 
 
-            })
-
-        }
-
+  useEffect(() => {
+    if (result == 'success' && isFocused) {
+      setLoading(false);
+      dispatch(setResultState(''));
+      setIsModalVisible(false);
+      navigation.navigate('CommunityMainScreen');
     }
+    else if (result == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setResultState(''));
+      setIsModalVisible(false);
+      alert('게시글 삭제 실패!');
+    }
+  }, [result])
 
+  const deleteMode = () => {
+    Alert.alert(
+      "삭제", "게시글을 삭제하시겠습니까?", [
+        {
+          text: "취소",
+          onPress: () => console.log("취소")
+        },
+        {
+          text: "확인",
+          onPress: () => {
+            setLoading(true);
+            dispatch(deletePost(selectedId))
+          }
+        }
+      ]
+    )
+  }
 
+  useEffect(() => {
+    if (commentResult == 'success' && isFocused) {
+      setLoading(false);
+      dispatch(setCommentResultState(''));
+    } else if (commentResult == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setCommentResultState(''));
+      alert('댓글 작성 실패!');
+    }
+  }, [commentResult]);
 
+  const renderComment = comment => {
+    if (comment) {
+      return comment.map((item, index) => {
+        return (
+          <View key={index} style={styles.commentWrapper}>
+            <Text style={{ color: '#000000', fontWeight: 'bold' }}>
+              {item.writer}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                marginBottom: Dimensions.get('window').height * 0.007,
+                marginTop: Dimensions.get('window').height * 0.003,
+              }}
+            >
+              {item.content}
+            </Text>
+            <Text style={{ fontSize: 11 }}>{item.date}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: Dimensions.get('window').width * 0.95,
+              }}
+            >
+              <View
+                style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }}
+              />
+            </View>
+          </View>
+        );
+      });
+    }
+  };
 
+  const SendHandler = (comment) => {
+    if(!comment) {
+      alert('아무 내용도 입력하지 않으셨어요!');
+      return;
+    }
+    setLoading(true);
+    dispatch(createComment(selectedId, userId, comment));
+  }
+  
     return (
       <SafeAreaView style={styles.body}>
         <Loader loading={loading} />
@@ -199,17 +240,6 @@ const PostDetailScreen = ({ route, navigation }) => {
                       </View>
                     </View>
                   ) : null}
-                  <View style={styles.modalWrapper}>
-                    <TouchableOpacity
-                      activeOpacity={0.5}
-                      onPress={() => {
-                        setIsModalVisible(false);
-                        navigation.navigate('PostEditScreen', {
-                          selectedId: selectedId,
-                        });
-                      }}
-                      style={{ flexDirection: 'row' }}
-                    >
                       <Text style={styles.text}>신고</Text>
                     </TouchableOpacity>
                   </View>
@@ -217,7 +247,6 @@ const PostDetailScreen = ({ route, navigation }) => {
               </View>
             </TouchableOpacity>
           </Modal>
-
           <View style={styles.postWrapper}>
             <View style={{ flexDirection: 'row' }}>
               <View style={styles.userWrapper}>
@@ -294,131 +323,153 @@ const PostDetailScreen = ({ route, navigation }) => {
           </View>
           {renderComment(comment)}
         </ScrollView>
+      <KeyboardAvoidingView
+        style={{ padding: 5, alignItems: 'center', justifyContent: 'center' }}
+      >
+        <View style={styles.editScreen}>
+          <TextInput
+            multiline={true}
+            placeholder={'내용을 입력하세요'}
+            style={{
+              width: screenWidth * 0.9,
+            }}
+            placeholderTextColor="#999999"
+            underlineColorAndroid="#999999"
+            onChangeText={comment => setComment(comment)}
+            onSubmitEditing={Keyboard.dismiss}
+          />
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 5,
+            }}
+            onPress={() => SendHandler(comment)}
+          >
+            <FontAwesome name={'send'} size={20} color={'#93d07d'} />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
       </SafeAreaView>
     );
 };
 
-
-
 const styles = StyleSheet.create({
-
-    body: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor:'#FFFFFF'
-        
+  body: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFFFFF',
+  },
+  top: {
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: Dimensions.get('window').height * 0.06,
+    width: Dimensions.get('window').width,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#000000',
+  },
+  content: {
+    marginTop: Dimensions.get('window').height * 0.015,
+    marginBottom: Dimensions.get('window').height * 0.015,
+    color: '#000000',
+  },
+  postWrapper: {
+    borderColor: '#C0C0C0',
+    width: Dimensions.get('window').width * 0.95,
+    marginTop: Dimensions.get('window').height * 0.015,
+    marginBottom: Dimensions.get('window').height * 0.015,
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    top: {
-        backgroundColor: "#FFFFFF",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        height: Dimensions.get('window').height * 0.06,
-        width: Dimensions.get('window').width
+    shadowOpacity: 0.3,
+    shadowRadius: 3.0,
+    elevation: 2,
+  },
+  userWrapper: {
+    height: Dimensions.get('window').height * 0.07,
+    width: Dimensions.get('window').width * 0.35,
+    marginTop: Dimensions.get('window').height * 0.01,
+    marginStart: Dimensions.get('window').width * 0.03,
+  },
+  textWrapper: {
+    width: Dimensions.get('window').width * 0.9,
+    marginTop: Dimensions.get('window').height * 0.005,
+    marginStart: Dimensions.get('window').width * 0.02,
+  },
+  button: {
+    marginTop: Dimensions.get('window').height * 0.005,
+    marginStart: Dimensions.get('window').width * 0.02,
+  },
+  commentWrapper: {
+    marginVertical: Dimensions.get('window').height * 0.01,
+    width: Dimensions.get('window').width * 0.8,
+    marginStart: Dimensions.get('window').width * 0.021,
+  },
+  likeAndComment: {
+    flexDirection: 'row',
+    marginStart: Dimensions.get('window').width * 0.015,
+    marginVertical: Dimensions.get('window').height * 0.01,
+  },
+  date: {
+    marginLeft: Dimensions.get('window').width * 0.23,
+    marginTop: Dimensions.get('window').height * 0.01,
+  },
+  modal: {
+    marginTop: Dimensions.get('window').height * 0.01,
+    marginLeft: Dimensions.get('window').width * 0.5,
+    height: Dimensions.get('window').height * 0.2,
+    width: Dimensions.get('window').width * 0.47,
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'column',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    title: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: "#000000"
-
+    shadowOpacity: 0.3,
+    shadowRadius: 3.0,
+    elevation: 10,
+  },
+  modalWrapper: {
+    marginTop: Dimensions.get('window').height * 0.025,
+  },
+  text: {
+    color: '#000000',
+    fontSize: 17,
+    marginLeft: Dimensions.get('window').width * 0.05,
+  },
+  modalSmall: {
+    marginTop: Dimensions.get('window').height * 0.01,
+    marginLeft: Dimensions.get('window').width * 0.5,
+    height: Dimensions.get('window').height * 0.1,
+    width: Dimensions.get('window').width * 0.47,
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'column',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    content: {
-        marginTop: Dimensions.get("window").height * 0.015,
-        marginBottom: Dimensions.get("window").height * 0.015,
-        color: "#000000"
-    },
-
-    postWrapper: {
-        borderColor: '#C0C0C0',
-        width: Dimensions.get('window').width * 0.95,
-        marginTop: Dimensions.get('window').height * 0.015,
-        marginBottom: Dimensions.get('window').height * 0.015,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 3.00,
-        elevation: 2
-
-    },
-    userWrapper: {
-        height: Dimensions.get('window').height * 0.07,
-        width: Dimensions.get('window').width * 0.35,
-        marginTop: Dimensions.get('window').height * 0.01,
-        marginStart: Dimensions.get('window').width * 0.03,
-
-    },
-    textWrapper: {
-        width: Dimensions.get('window').width * 0.9,
-        marginTop: Dimensions.get('window').height * 0.005,
-        marginStart: Dimensions.get('window').width * 0.02,
-
-    },
-    button: {
-        marginTop: Dimensions.get('window').height * 0.005,
-        marginStart: Dimensions.get('window').width * 0.02,
-    },
-    commentWrapper: {
-        marginVertical: Dimensions.get('window').height * 0.01,
-        width: Dimensions.get('window').width * 0.8,
-        marginStart: Dimensions.get('window').width * 0.021
-
-    },
-    likeAndComment: {
-        flexDirection: 'row',
-        marginStart: Dimensions.get('window').width * 0.015,
-        marginVertical: Dimensions.get('window').height * 0.01
-    },
-    date: {
-        marginLeft: Dimensions.get('window').width * 0.23,
-        marginTop: Dimensions.get('window').height * 0.01,
-    },
-    modal: {
-        marginTop: Dimensions.get('window').height * 0.01,
-        marginLeft: Dimensions.get('window').width * 0.5,
-        height: Dimensions.get('window').height * 0.2,
-        width: Dimensions.get('window').width * 0.47,
-        backgroundColor: "#FFFFFF",
-        flexDirection: "column",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 3.00,
-        elevation: 10
-
-    },
-    modalWrapper: {
-        marginTop: Dimensions.get("window").height * 0.025,
-    },
-    text: {
-        color: '#000000',
-        fontSize: 17,
-        marginLeft: Dimensions.get('window').width * 0.05,
-    },
-    modalSmall:{
-        marginTop: Dimensions.get('window').height * 0.01,
-        marginLeft: Dimensions.get('window').width * 0.5,
-        height: Dimensions.get('window').height * 0.1,
-        width: Dimensions.get('window').width * 0.47,
-        backgroundColor: "#FFFFFF",
-        flexDirection: "column",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 3.00,
-        elevation: 10
-
-    },
-    container:{
-        flex:1
-    }
-
+    shadowOpacity: 0.3,
+    shadowRadius: 3.0,
+    elevation: 10,
+  },
+  container: {
+    flex: 1,
+  },
+  editScreen: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 15,
+    backgroundColor: '#e8ebed',
+    width: '100%',
+    padding: 5,
+  },
 })
-
 export default PostDetailScreen;

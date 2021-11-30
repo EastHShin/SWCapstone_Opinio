@@ -46,3 +46,5 @@ export const SAVE_POST = 'CREATE_POST';
 export const RESULT_STATE_POST = 'RESULT_STATE_POST';
 export const GET_PAYMENT_HISTORY = 'get_payment_history';
 export const REFUND = 'refund';
+export const CREATE_COMMENT = 'create_comment';
+export const RESULT_STATE_COMMENT = 'result_state_comment';

@@ -227,7 +227,6 @@ HomeScreen = () => {
           </Text>
           <PlantList />
         </View>
-
         <View style={styles.hotSectionWrapper}>
           <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>
             인기 게시물
