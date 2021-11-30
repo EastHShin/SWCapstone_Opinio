@@ -3,6 +3,8 @@ package com.opinio.plantrowth.api.dto.plant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.opinio.plantrowth.domain.plant.Plant;
+import com.opinio.plantrowth.domain.user.User;
+
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ public class PlantManageDto {
     private Integer remain_cycle;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate recent_watering;
+    private Boolean is_subscription;
 
     public PlantManageDto(Plant plant) {
         plant_id = plant.getId();
@@ -36,6 +39,7 @@ public class PlantManageDto {
         alarm_cycle = plant.getAlarmCycle();
         remain_cycle = plant.getRemainCycle();
         recent_watering = plant.getRecentWatering();
+        is_subscription = plant.getUser().getSubscription();
     }
 
 }
