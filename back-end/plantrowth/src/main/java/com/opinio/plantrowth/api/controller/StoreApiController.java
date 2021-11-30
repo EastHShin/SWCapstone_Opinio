@@ -28,12 +28,14 @@ public class StoreApiController {
         private String user_name;
         private Integer point;
         private String email;
+        private Boolean is_subscription;
 
         public StoreDTO(User user) {
             user_id = user.getId();
             user_name = user.getName();
             point = user.getPoint();
             email = user.getEmail();
+            is_subscription = user.getSubscription();
         }
     }
 }
