@@ -1,22 +1,21 @@
 package com.opinio.plantrowth.service.community;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.opinio.plantrowth.api.dto.community.board.BoardCreateRequest;
 import com.opinio.plantrowth.api.dto.community.board.BoardLookUpDTO;
 import com.opinio.plantrowth.domain.community.Board;
 import com.opinio.plantrowth.domain.community.BoardLike;
-import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.repository.community.BoardLikeRepository;
 import com.opinio.plantrowth.repository.community.BoardRepository;
 import com.opinio.plantrowth.repository.community.CommentRepository;
 import com.opinio.plantrowth.repository.plant.PlantRepository;
 import com.opinio.plantrowth.repository.user.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional(readOnly = true)

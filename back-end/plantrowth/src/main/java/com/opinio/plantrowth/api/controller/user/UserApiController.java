@@ -62,12 +62,10 @@ public class UserApiController {
     public ResponseEntity<?> deleteUser(@PathVariable("user-id") Long id,
         @RequestBody checkPasswordDTO dto) {
         if(!(authService.checkPassword(id, dto))){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("잘못된 비밀번호");
         }
-        Long result = userService.deleteUser(id);
-        return result != null ?
-            ResponseEntity.ok().body("회원 탈퇴 성공") :
-            ResponseEntity.badRequest().build();
+        userService.deleteUser(id);
+        return ResponseEntity.ok().body("회원 탈퇴 성공");
     }
 
 

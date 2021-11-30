@@ -1,14 +1,16 @@
 package com.opinio.plantrowth.service.community;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.opinio.plantrowth.api.dto.community.comment.CommentCUDto;
 import com.opinio.plantrowth.api.dto.community.comment.CommentLookUpDTO;
 import com.opinio.plantrowth.domain.community.Comment;
 import com.opinio.plantrowth.repository.community.CommentRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional(readOnly = true)
@@ -64,4 +66,10 @@ public class CommentService {
         Integer countedComments = commentRepository.countByBoardId(boardId);
         return countedComments;
     }
+
+    public Boolean checkOwner(Long commentId, Long userId){
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException("잘못된 보드 아이디"));
+        return comment.getUser().getId()==userId;
+    }
+
 }
