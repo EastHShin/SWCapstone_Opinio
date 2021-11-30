@@ -37,12 +37,6 @@ const Table = () => {
                             <td class="table-primary" valign="middle">{item.title}</td>
                             <td className="table-light" valign="middle">{item.body}</td>
                             <td class="table-warning" valign="middle">
-                                <Link to="/administrator/board/info">
-                                   <Button variant="info" className="mar">Info</Button>
-                                </Link>
-                                <Link to="/administrator/board/update">
-                                    <Button variant="warning" className="mar">Update</Button>
-                                </Link>
                                 <Link to="/administrator/board/delete">
                                     <Button variant="danger">Delete</Button>
                                 </Link>
