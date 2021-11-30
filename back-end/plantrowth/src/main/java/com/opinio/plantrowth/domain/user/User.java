@@ -40,6 +40,8 @@ public class User implements UserDetails {
     private Integer maxPlantNum;
     @Column(name = "fcm_access_token")
     private String FCMAccessToken;
+
+    @Version
     @Column(name = "is_subscription")
     private Boolean subscription;
 
