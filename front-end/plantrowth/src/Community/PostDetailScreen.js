@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
-  Modal,
   ScrollView,
   KeyboardAvoidingView,
   Image,
@@ -22,8 +21,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../Loader';
 import { useIsFocused } from '@react-navigation/native';
-import { getPost, deletePost, setResultState, createComment, setCommentResultState } from '../actions/CommunityActions';
-
+import { getPost, deletePost, setResultState, createComment, setCommentResultState, like, setLikeState, deleteComment, updateComment } from '../actions/CommunityActions';
+import Modal from 'react-native-modal';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -41,12 +40,14 @@ const PostDetailScreen = ({ route, navigation }) => {
   const [commentList, setCommentList] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [comment, setComment] = useState('');
+  const [isCommentModalVisible, setCommentModalVisibility] = useState(false);
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const result = useSelector(state => state.CommunityReducer.result);
   const post = useSelector(state => state.CommunityReducer.post);
   const commentResult = useSelector(state => state.CommunityReducer.commentResult);
+  const likeState = useSelector(state => state.CommunityReducer.likeResult);
 
   useEffect(() => {
     if (isFocused) {
@@ -63,7 +64,6 @@ const PostDetailScreen = ({ route, navigation }) => {
     setCommentList(post.comments);
     console.log(post)
   }, [post])
-
 
   useEffect(() => {
     if (result == 'success' && isFocused) {
@@ -101,50 +101,115 @@ const PostDetailScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (commentResult == 'success' && isFocused) {
       setLoading(false);
+      dispatch(getPost(selectedId, userId));
+      setComment('');
+      setCommentModalVisibility(false);
       dispatch(setCommentResultState(''));
     } else if (commentResult == 'failure' && isFocused) {
       setLoading(false);
       dispatch(setCommentResultState(''));
-      alert('댓글 작성 실패!');
+      alert('오류가 발생했습니다. 다시 시도해주세요.');
     }
   }, [commentResult]);
 
+  //좋아요useEffect
+  useEffect(() => {
+    if (likeState == 'success' && isFocused) {
+      setLoading(false);
+      post.boardLike ? alert('좋아요를 취소했습니다') : alert('좋아요를 눌렀습니다')
+      dispatch(getPost(selectedId, userId));
+      dispatch(setLikeState(''));
+    }
+    else if (likeState == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setLikeState(''));
+    }
+  }, [likeState])
+  //좋아요useEffect
+
+  //댓글
   const renderComment = comment => {
     if (comment) {
       return comment.map((item, index) => {
         return (
-          <View key={index} style={styles.commentWrapper}>
-            <Text style={{ color: '#000000', fontWeight: 'bold' }}>
-              {item.writer}
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                marginBottom: Dimensions.get('window').height * 0.007,
-                marginTop: Dimensions.get('window').height * 0.003,
-              }}
-            >
-              {item.content}
-            </Text>
-            <Text style={{ fontSize: 11 }}>{item.date}</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                width: Dimensions.get('window').width * 0.95,
-              }}
-            >
-              <View
-                style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }}
-              />
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
+            <View>
+              <View key={index} style={styles.commentWrapper}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Entypo name={'user'} size={16} />
+                  <Text style={{ color: '#000000', fontWeight: 'bold' }}>
+                    {item.writer}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    marginBottom: Dimensions.get('window').height * 0.007,
+                    marginTop: Dimensions.get('window').height * 0.003,
+                  }}
+                >
+                  {item.content} id: {item.id}
+                </Text>
+                <Text style={{ fontSize: 11 }}>{item.date}</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    width: Dimensions.get('window').width * 0.95,
+                  }}
+                >
+                  <View
+                    style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }}
+                  />
+                </View>
+              </View>
             </View>
+            <TouchableOpacity style={[styles.likeButton, { marginRight: 10, padding: 4, }]}
+              onPress={() => setCommentModalVisibility(true)}>
+              <Entypo name="dots-three-vertical" size={14} color="#363636" />
+            </TouchableOpacity>
+            <Modal
+              isVisible={isCommentModalVisible}
+              animationIn="fadeIn"
+              animationInTiming={10}
+              animationOut="fadeOut"
+              animationOutTiming={10}
+              backdropOpacity={0.25}
+              onBackButtonPress={() => {
+                setCommentModalVisibility(false);
+              }}
+              onBackdropPress={() => {
+                setCommentModalVisibility(false);
+              }}>
+              <TouchableOpacity
+                style={{ width: '100%', height: screenHeight * 0.05, backgroundColor: 'white', justifyContent: 'center' }}
+                onPress={() => updateCommentHandler(item.id)}>
+                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
+                  수정
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ width: '100%', height: screenHeight * 0.05, backgroundColor: 'white', justifyContent: 'center' }}
+                onPress={() => deleteCommentHandler(item.id)}>
+                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
+                  삭제
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ width: '100%', height: screenHeight * 0.05, backgroundColor: 'white', justifyContent: 'center' }}>
+                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
+                  신고
+                </Text>
+              </TouchableOpacity>
+            </Modal>
           </View>
         );
       });
     }
   };
+  //댓글
 
-  const SendHandler = (comment) => {
+  //댓글 작성 Handler
+  const sendHandler = (comment) => {
     if (!comment) {
       alert('아무 내용도 입력하지 않으셨어요!');
       return;
@@ -152,6 +217,35 @@ const PostDetailScreen = ({ route, navigation }) => {
     setLoading(true);
     dispatch(createComment(selectedId, userId, comment));
   }
+  //댓글 작성 Handler
+
+  //좋아요 Handler
+  const likeHandler = () => {
+    console.log('게시글 userId' + post.userId);
+    console.log('내 userId' + userId);
+    if (Number(post.userId) == userId) {
+      alert('본인이 작성한 게시글에는 좋아요를 누를 수 없어요!');
+      return;
+    }
+    setLoading(true);
+    dispatch(like(selectedId, userId));
+  }
+  //좋아요 Handler
+
+  //댓글 수정 Handler
+  const updateCommentHandler = (commentId) => {
+    setLoading(true);
+    dispatch(updateComment(commentId, userId));
+  }
+  //댓글 수정 Handler
+
+  //댓글 삭제 Handler
+  const deleteCommentHandler = (commentId) => {
+    console.log('handler 삭제 id: '+commentId);
+    setLoading(true);
+    dispatch(deleteComment(commentId, userId));
+  }
+  //댓글 삭제 Handler
 
   return (
     <SafeAreaView style={styles.body}>
@@ -191,15 +285,24 @@ const PostDetailScreen = ({ route, navigation }) => {
           alignContent: 'center',
         }}
       >
+        {/* native modal */}
         <Modal
-          animationType="fade"
-          transparent={true}
-          visible={isModalVisible}
-          onRequestClose={() => {
+          animationIn="fadeIn"
+          animationInTiming={10}
+          animationOut="fadeOut"
+          animationOutTiming={10}
+          backdropOpacity={0}
+          isVisible={isModalVisible}
+          onBackButtonPress={() => {
+            console.log('close');
+            setIsModalVisible(false);
+          }}
+          onBackdropPress={() => {
             console.log('close');
             setIsModalVisible(false);
           }}
         >
+          {/* native modal */}
           <TouchableOpacity
             style={styles.container}
             activeOpacity={1}
@@ -299,41 +402,73 @@ const PostDetailScreen = ({ route, navigation }) => {
               </View>
             ) : null}
           </View>
-          <View style={styles.likeAndComment}>
-            <MaterialCommunityIcons
-              name="heart-outline"
-              size={15}
-              color="#DC143C"
-              style={{ marginRight: Dimensions.get('window').width * 0.01 }}
-            />
-            <Text
-              style={{
-                fontSize: 12,
-                color: '#DC143C',
-                marginRight: Dimensions.get('window').width * 0.02,
-              }}
-            >
-              {post.countedLike}
-            </Text>
-            <SimpleLineIcons
-              name="bubble"
-              size={15}
-              color="#00BFFF"
-              style={{ marginRight: Dimensions.get('window').width * 0.01 }}
-            />
-            <Text
-              style={{
-                fontSize: 12,
-                color: '#00BFFF',
-                marginRight: Dimensions.get('window').width * 0.02,
-              }}
-            >
-              {post.countedComments}
-            </Text>
+          {/* 좋아요버튼 */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={styles.likeAndComment}>
+              <MaterialCommunityIcons
+                name="heart-outline"
+                size={15}
+                color="#DC143C"
+                style={{ marginRight: Dimensions.get('window').width * 0.01 }}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: '#DC143C',
+                  marginRight: Dimensions.get('window').width * 0.02,
+                }}
+              >
+                {post.countedLike}
+              </Text>
+              <SimpleLineIcons
+                name="bubble"
+                size={15}
+                color="#00BFFF"
+                style={{ marginRight: Dimensions.get('window').width * 0.01 }}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: '#00BFFF',
+                  marginRight: Dimensions.get('window').width * 0.02,
+                }}
+              >
+                {post.countedComments}
+              </Text>
+            </View>
+            <View style={{ marginRight: 10 }}>
+              {post.boardLike ?
+                <TouchableOpacity style={styles.likeButton} onPress={() => likeHandler()}>
+                  <MaterialCommunityIcons
+                    name='heart-outline'
+                    size={15}
+                    color='#DC143C'
+                    style={{ marginRight: Dimensions.get('window').width * 0.01 }}
+                  />
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 12, color: '#DC143C' }}>
+                    좋아요
+                  </Text>
+                </TouchableOpacity>
+                :
+                <TouchableOpacity style={styles.likeButton} onPress={() => likeHandler()}>
+                  <MaterialCommunityIcons
+                    name="heart-outline"
+                    size={15}
+                    color="#72787f"
+                    style={{ marginRight: Dimensions.get('window').width * 0.01 }}
+                  />
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 12, color: '#72787f' }}>
+                    좋아요
+                  </Text>
+                </TouchableOpacity>
+              }
+            </View>
           </View>
+          {/* 좋아요버튼 */}
         </View>
         {renderComment(commentList)}
       </ScrollView>
+      {/* 댓글작성 */}
       <KeyboardAvoidingView
         style={{ padding: 5, alignItems: 'center', justifyContent: 'center' }}
       >
@@ -355,12 +490,13 @@ const PostDetailScreen = ({ route, navigation }) => {
               justifyContent: 'center',
               marginRight: 5,
             }}
-            onPress={() => SendHandler(comment)}
+            onPress={() => sendHandler(comment)}
           >
             <FontAwesome name={'send'} size={20} color={'#93d07d'} />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+      {/* 댓글작성 */}
     </SafeAreaView>
   );
 };
@@ -473,6 +609,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  //상웅
   editScreen: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -482,5 +619,13 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 5,
   },
+  likeButton: {
+    backgroundColor: '#e8ebed',
+    borderRadius: 5,
+    padding: 3,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  //상웅
 })
 export default PostDetailScreen;

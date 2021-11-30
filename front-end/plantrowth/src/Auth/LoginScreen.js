@@ -512,6 +512,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.container}
           activeOpacity={1}
           onPressOut={() => {
+            kakaoRegisterFail();
             setIsModalVisible(false);
           }}
         >

@@ -174,18 +174,6 @@ const PaymentHistoryScreen = ({ navigation }) => {
           </Text>
           <ScrollView style={{ margin: 10, overflow: 'hidden' }}>
             {renderMerchant(paymentInfoList)}
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
-            <View style={styles.merchantWrapper}></View>
           </ScrollView>
         </View>
       </View>

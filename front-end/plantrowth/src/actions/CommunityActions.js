@@ -7,6 +7,9 @@ import {
   RESULT_STATE_POST,
   CREATE_COMMENT,
   RESULT_STATE_COMMENT,
+  LIKE,
+  UPDATE_COMMENT,
+  DELETE_COMMENT,
 } from './type';
 import axios from 'axios';
 
@@ -18,6 +21,7 @@ export const getBoardList = () => {
       )
       .then(function (res) {
         if (res.status == 200) {
+          console.log(JSON.stringify(res));
           dispatch({
             type: GET_BOARD_LIST,
             payload: res.data.data,
@@ -35,13 +39,10 @@ export const getBoardList = () => {
 };
 
 export const getPost = (boardId, userId) => {
-    console.log(boardId + "유저 id" + userId);
-    return async dispatch => {
-        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/${boardId}`,
-        {
-          headers: { userId: `${userId}` },
-        },
-      )
+  console.log(boardId + "유저 id" + userId);
+  return async dispatch => {
+    return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/view?board-id=${boardId}&user-id=${userId}`,
+    )
       .then(function (res) {
         if (res.status == 200) {
           dispatch({
@@ -62,10 +63,10 @@ export const getPost = (boardId, userId) => {
 };
 
 export const setPost = () => dispatch => {
-    dispatch({
-        type:GET_POST,
-        payload:{}
-    })
+  dispatch({
+    type: GET_POST,
+    payload: {}
+  })
 
 }
 
@@ -151,18 +152,20 @@ export const deletePost = boardId => {
 };
 
 export const createComment = (boardId, userId, comment) => {
-    console.log('bId, uId, comment : '+boardId, userId, comment);
+  console.log('bId, uId, comment : ' + boardId, userId, comment);
+  console.log(new Date());
   return async dispatch => {
     return await axios
       .post(
         `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/comments?user-id=${userId}&board-id=${boardId}`,
-        comment,
+        { content: comment, date: new Date() },
         {
           headers: { 'Content-Type': `application/json` },
         },
       )
       .then(function (res) {
         if (res.status == 200) {
+          console.log('댓글 작성' + JSON.stringify(res));
           dispatch({
             type: CREATE_COMMENT,
             payload: 'success',
@@ -177,6 +180,93 @@ export const createComment = (boardId, userId, comment) => {
         });
       });
   };
+};
+
+export const updateComment = (commentId, userId, comment) => {
+  return async dispatch => {
+    return await axios
+      .put(
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/comments?comment-id=${commentId}&user-id=${userId}`,
+        { content: comment, date: new Date() },
+        {
+          headers: { 'Content-Type': `application/json` },
+        },
+      )
+      .then(function (res) {
+        if (res.status == 200) {
+          console.log('댓글 수정' + JSON.stringify(res));
+          dispatch({
+            type: UPDATE_COMMENT,
+            payload: 'success',
+          });
+        }
+      })
+      .catch(function (err) {
+        console.log('댓글 수정 에러' + err);
+        dispatch({
+          type: UPDATE_COMMENT,
+          payload: 'failure',
+        });
+      });
+  };
+};
+
+export const deleteComment = (commentId, userId) => {
+  return async dispatch => {
+    console.log('삭제할 comment Id: '+commentId);
+    return await axios
+      .delete(
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/comments?comment-id=${commentId}&user-id=${userId}`,
+      )
+      .then(function (res) {
+        if (res.status == 200) {
+          console.log('댓글 삭제' + JSON.stringify(res));
+          dispatch({
+            type: DELETE_COMMENT,
+            payload: 'success',
+          });
+        }
+      })
+      .catch(function (err) {
+        console.log('댓글 삭제 에러' + err);
+        dispatch({
+          type: DELETE_COMMENT,
+          payload: 'failure',
+        });
+      });
+  };
+};
+
+export const like = (boardId, userId) => {
+  return async dispatch => {
+    return await axios
+      .post(
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/like?board-id=${boardId}&user-id=${userId}`,
+      )
+      .then(function (res) {
+        if (res.status == 200) {
+          console.log('좋아요' + JSON.stringify(res));
+          dispatch({
+            type: LIKE,
+            payload: 'success',
+          });
+        }
+      })
+      .catch(function (err) {
+        console.log('좋아요 에러' + err);
+        dispatch({
+          type: LIKE,
+          payload: 'failure',
+        });
+      });
+  };
+};
+
+export const setLikeState = state => dispatch => {
+  dispatch({
+    type: LIKE,
+    payload: state,
+  });
 };
 
 export const setResultState = state => dispatch => {
