@@ -6,7 +6,9 @@ import {
   Dimensions,
   TouchableOpacity,
   SafeAreaView,
-  FlatList
+  FlatList,
+  Modal,
+  
 } from 'react-native';
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,189 +18,6 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { getBoardList, setPost } from '../actions/CommunityActions';
 import { useIsFocused } from '@react-navigation/core';
 import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const dataList = [
-  {
-    "id":1,
-    "level" : 1,
-    "title":"안녕하세요!",
-    "content":"반갑습니다~",
-    "file_name": "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/2f6285c1-7571-4d33-80d3-f0b0e74bd5dc.jpg",
-    "good":10,
-    "comment":2,
-    "createDate":"2021-11-05",
-    "updateDate" : "2021-11-07",
-    "writer" : "식물집사",
-    "user_id" : 3,
-    "commentList" : [
-      {
-        "comment_id" : 1,
-        "user_id" : 1,
-        "content" : "안녕하",
-        "writer" : "식물집사",
-        "date":"2021-11-05"
-      },
-      {
-        "comment_id" : 7,
-        "user_id" : 2,
-        "content" : "안녕하",
-        "writer" : "2번 유저",
-        "date":"2021-11-25"
-      },
-
-  ]
-
-  
-
-  },
-  {
-    "id":2,
-    "level" : 2,
-    "title":"2안녕하세요!",
-    "content":"2반갑습니다~",
-    "file_name": "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/0137a962-2200-4f53-8255-ec1d654a837f.jpg",
-    "good":5,
-    "comment":4,
-    "createDate":"2021-11-06",
-    "updateDate" : "2021-11-08",
-    "writer" : "나 !",
-    "user_id" : 2,
-    "commentList" : [
-      {
-        "comment_id" : 2,
-        "user_id" : 1,
-        "content" : "안녕하",
-        "writer" : "1번 유저",
-        "date":"2021-11-06"
-      }
-  ]
-
-  },
-  {
-    "id":3,
-    "level" : 3,
-    "title":"3안녕하세요!",
-    "content":"3반갑습니다~",
-    "file_name": "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/0137a962-2200-4f53-8255-ec1d654a837f.jpg",
-    "good":50,
-    "comment":24,
-    "createDate":"2021-11-09",
-    "updateDate" : "",
-    "writer" : "3번유저",
-    "user_id" : 3,
-    "commentList" : [
-      {
-        "comment_id" : 3,
-        "user_id" : 2,
-        "content" : "안녕하",
-        "writer" : "1번 유저",
-        "date":"2021-11-10"
-      }
-  ]
-
-  },
-  {
-    "id":4,
-    "level" : 2,
-    "title":"4안녕하세요!",
-    "content":"4반갑습니다~",
-    "file_name": "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/0137a962-2200-4f53-8255-ec1d654a837f.jpg",
-    "good":8,
-    "comment":4,
-    "createDate":"2021-11-11",
-    "updateDate" : "2021-11-14",
-    "writer" : "나 !",
-    "user_id" : 2,
-    "commentList" : [
-      {
-        "comment_id" : 4,
-        "user_id" :1,
-        "content" : "안녕하",
-        "writer" : "1번 유저",
-        "date":"2021-11-12"
-      }
-  ]
-  },
-  {
-    "id":5,
-    "level" : 6,
-    "title":"5안녕하세요!",
-    "content":"5반갑습니다~",
-    "file_name": "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/0137a962-2200-4f53-8255-ec1d654a837f.jpg",
-    "good":10,
-    "comment":2,
-    "createDate":"2021-11-14",
-    "updateDate" : "",
-    "writer" : "6번유저",
-    "user_id" : 6,
-    "commentList" : []
-
-  },
-  {
-    "id":6,
-    "level" : 2,
-    "title":"6안녕하세요!",
-    "content":"6반갑습니다~",
-    "file_name": "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/0137a962-2200-4f53-8255-ec1d654a837f.jpg",
-    "good":4,
-    "comment":1,
-    "createDate":"2021-11-18",
-    "updateDate" : "2021-11-20",
-    "writer" : "나 !",
-    "user_id" : 2,
-    "commentList" : [
-      {
-        "comment_id" : 5,
-        "user_id" : 2,
-        "content" : "안녕하",
-        "writer" : "2번 유저",
-        "date":"2021-11-18"
-      }
-  ]
-
-  },
-  {
-    "id":7,
-    "level" : 2,
-    "title":"7안녕하세요!",
-    "content":"7반갑습니다~",
-    "file_name": "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/0137a962-2200-4f53-8255-ec1d654a837f.jpg",
-    "good":10,
-    "comment":2,
-    "createDate":"2021-11-21",
-    "updateDate" : "",
-    "writer" : "2번유저",
-    "user_id" : 2,
-    "commentList" : []
-
-  }, {
-    "id":8,
-    "level" : 1,
-    "title":"8안녕하세요!",
-    "content":"8반갑습니다~",
-    "file_name": "https://plantrowth-imageupload2.s3.ap-northeast-2.amazonaws.com/profiles/0137a962-2200-4f53-8255-ec1d654a837f.jpg",
-    "good":100,
-    "comment":51,
-    "createDate":"2021-11-23",
-    "updateDate" : "",
-    "writer" : "1번유저",
-    "user_id" : 1,
-    "commentList" : [
-      {
-        "comment_id" : 6,
-        "user_id" : 1,
-        "content" : "안녕하",
-        "writer" : "1번 유저",
-        "date":"2021-11-23"
-      }
-  ]
-
-  },
- 
-]
-
-const reverseData = dataList.reverse();
 
 const Item = ({ item, onPress, style }) => {
 
@@ -219,10 +38,11 @@ const Item = ({ item, onPress, style }) => {
         <Text style={styles.date}>{item.writer}</Text>
         </View>
         <View style={{flexDirection:"row"}}>
+        
         <MaterialCommunityIcons name='heart-outline' size = {14} color="#DC143C" />
-        <Text style={{fontSize:10, color : "#DC143C", marginRight:Dimensions.get('window').width*0.02}}>{item.countedLike}</Text>
+        <Text style={{fontSize:10, color : "#DC143C", marginLeft:Dimensions.get('window').width*0.01,marginRight:Dimensions.get('window').width*0.02}}>{item.countedLike}</Text>
         <SimpleLineIcons name = 'bubble' size ={14} color="#00BFFF"  />
-        <Text style={{fontSize:10, color : "#00BFFF", marginRight:Dimensions.get('window').width*0.02}}>{item.countedComments}</Text>
+        <Text style={{fontSize:10, color : "#00BFFF", marginHorizontal:Dimensions.get('window').width*0.01}}>{item.countedComments}</Text>
       </View>
       </View>
       
@@ -249,14 +69,17 @@ const CommunityMainScreen = ({ navigation }) => {
     
   }, [isFocused])
 
-  // useEffect(() => {
-  //   setIsFetching(false);
-  // }, [boardList])
+  useEffect(() => {
+    setIsFetching(false);
+  }, [boardList])
+
+
   
-  // const refreshList = () => {
-  //   setIsFetching(true);
-  //   dispatch(getBoardList());
-  // }
+  const refreshList = () => {
+    setIsFetching(true);
+    dispatch(getBoardList());
+  }
+
 
   const renderItem = ({ item }) => {
 
@@ -302,12 +125,55 @@ const CommunityMainScreen = ({ navigation }) => {
         </Text>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => console.log('ddd')}
+          onPress={() => setIsModalVisible(true)}
           style={{ marginEnd: Dimensions.get('window').width * 0.02 }}
         >
           <Entypo name="dots-three-vertical" size={22} color="#000000" />
         </TouchableOpacity>
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
+          setIsModalVisible(false);
+        }}
+      >
+         <TouchableOpacity 
+            style={styles.container} 
+            activeOpacity={1} 
+            onPressOut={() => {setIsModalVisible(false)}}
+          >
+        <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+          <View style={styles.modal}>
+            <View style={styles.modalWrapper}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  setIsModalVisible(false);
+                  refreshList();
+                }}
+                style={{ flexDirection: 'row' }}
+              >
+                <Text style={styles.text}>새로고침</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalWrapper}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  setIsModalVisible(false);
+                  navigation.push('PostCreateScreen')
+                }}
+                style={{ flexDirection: 'row' }}
+              >
+                <Text style={styles.text}>글쓰기</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        </TouchableOpacity>
+      </Modal>
       <View style={styles.boardWrapper}>
         {boardList != '' ? (
           <FlatList
@@ -315,12 +181,11 @@ const CommunityMainScreen = ({ navigation }) => {
             renderItem={renderItem}
             keyExtractor={item => item.board_id}
             extraData={selectedId}
-            //  onRefresh= {refreshList}
-            // refreshing={isFetching}
+            onRefresh={refreshList}
+            refreshing={isFetching}
           />
         ) : (
-          <View style={{ width: Dimensions.get('window').width}}>
-          </View>
+          <View style={{ width: Dimensions.get('window').width }}></View>
         )}
 
         <TouchableOpacity
@@ -376,7 +241,6 @@ const styles = StyleSheet.create({
   item: {
     padding: 20,
     marginVertical: 5,
-    // marginHorizontal: 16,
     borderRadius: 20,
     shadowOffset: {
       width: 0,
@@ -421,11 +285,28 @@ const styles = StyleSheet.create({
       fontSize: 40, 
       color: 'white' 
     },
+    modalWrapper: {
+      marginVertical: Dimensions.get("window").height * 0.02,
+  },
+  modal: {
+    marginTop: Dimensions.get('window').height * 0.01,
+    marginLeft: Dimensions.get('window').width * 0.5,
+    height: Dimensions.get('window').height * 0.15,
+    width: Dimensions.get('window').width * 0.47,
+    backgroundColor: "#FFFFFF",
+    flexDirection: "column",
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 10,
+},
+container:{
+  flex:1,
+}
   
-
-
-
-
 });
 
 export default CommunityMainScreen;

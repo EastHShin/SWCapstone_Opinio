@@ -17,7 +17,7 @@ import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../Loader';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { editUser, setUserEditState } from '../actions/UserActions';
+import { editUser, setUserEditState, checkNickname, setCheckNicknameState } from '../actions/UserActions';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -35,24 +35,18 @@ const AccountEditScreen = ({ route, navigation }) => {
   const [doublePassword, setDoublePassword] = useState(true);
   const [nickName, setUserNickName] = useState(userInfo.user_name);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [kakaoLoginUser, setKakaoLoginUser] = useState(false);
+  const [checkedNickName, setCheckedNickName] = useState('');
+
   const maximumDate = new Date();
   const passwordInputRef = createRef();
   const isFocused = useIsFocused();
 
   const dispatch = useDispatch();
   const userEditState = useSelector(state => state.UserReducer.userEditState);
+  const checkNicknameState = useSelector(state => state.UserReducer.checkNicknameState);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (isFocused) {
-      AsyncStorage.getItem('kakaoLogin').then((value) => {
-        if (value) {
-          setKakaoLoginUser(true);
-        }
-      })
-    }
-  }, [isFocused])
+ 
 
   useEffect(() => {
     if (isFocused && userEditState == 'success') {
@@ -70,7 +64,23 @@ const AccountEditScreen = ({ route, navigation }) => {
 
   }, [userEditState])
 
+  useEffect(() => {
+    if (checkNicknameState == 'success' && isFocused) {
+      setLoading(false);
+      dispatch(setCheckNicknameState(''));
+      setCheckedNickName(nickName);
+      alert('사용할 수 있는 닉네임입니다.');
+    }
+    else if (checkNicknameState == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setCheckNicknameState(''));
+      setCheckedNickName('');
+      alert('이미 존재하는 닉네임입니다!');
+    }
+  }, [checkNicknameState])
+
   const onPressHandler = () => {
+    
     if (nickName == userInfo.user_name && birth == userInfo.user_birth && !password) {
       alert('수정된 정보가 없습니다!');
       return;
@@ -80,11 +90,33 @@ const AccountEditScreen = ({ route, navigation }) => {
       alert('닉네임을 입력해주세요!');
       return;
     }
+    if(nickName && nickName != userInfo.user_name){
+      if (!checkedNickName) {
+        alert('닉네임을 인증해주세요!');
+        return;
+      }
+      if (checkedNickName != nickName) {
+        alert('닉네임을 인증해주세요!');
+        return;
+      }
+    }
     if (!birth) {
       alert('생년월일을 입력해주세요!');
       return;
     }
-    if (vailErrorText || checkErrorText) {
+    if(password && !checkPassword){
+      alert('비밀번호 확인 절차를 완료해주세요.');
+      return;
+    }
+    if(checkPassword && !password){
+      alert('비밀번호를 다시 확인해주세요.');
+      return;
+    }
+    if(checkPassword != password){
+      alert('비밀번호를 다시 확인해주세요.');
+      return;
+    }
+    if(!doublePassword || !vailPassword){
       alert('비밀번호를 다시 확인해주세요.');
       return;
     }
@@ -100,7 +132,8 @@ const AccountEditScreen = ({ route, navigation }) => {
       user.user_birth = birth;
     }
 
-    if (!vailErrorText && !checkErrorText && password) {
+    if (password) {
+      console.log(password);
       user.password = password;
     }
     user.email = userInfo.email;
@@ -135,6 +168,20 @@ const AccountEditScreen = ({ route, navigation }) => {
       setVailPassword(true);
       setVailErrorText('');
     }
+  }
+
+  const checkUserNickname = () => {
+    if (!nickName) {
+      alert('닉네임을 입력해주세요!');
+      return;
+    }
+    if(nickName == userInfo.user_name){
+      alert('현재 닉네임입니다!');
+      return;
+    }
+    setLoading(true);
+
+    dispatch(checkNickname(nickName));
   }
 
   const doubleCheckPassword = () => {
@@ -188,9 +235,23 @@ const AccountEditScreen = ({ route, navigation }) => {
                   placeholderTextColor="#808080"
                   returnKeyType="next"
                   value={nickName}
+                  onSubmitEditing={() =>
+                    Keyboard.dismiss()
+                  }
                   underlineColorAndroid="#A9A9A9"
                   blurOnSubmit={false}
                 />
+                 <TouchableOpacity
+                style={styles.button}
+                activeOpacity={0.5}
+                onPress ={checkUserNickname}
+               >
+                <Text style={{
+                  color: '#FFFFFF',
+                  fontSize: 10,
+                  marginVertical:Dimensions.get('window').height*0.01
+                }}>확인</Text>
+              </TouchableOpacity>
               </View>
               <View style={styles.lineWrapper}>
                 <Text style={styles.text}>       생년월일   :   </Text>
@@ -219,7 +280,7 @@ const AccountEditScreen = ({ route, navigation }) => {
 
               <View style={styles.lineWrapper}>
                 <Text style={{
-                  color: kakaoLoginUser != true ? "#000000" : "#808080",
+                  color:  "#000000",
                   fontSize: 14
                 }}>       새로운 비밀번호   :   </Text>
                 <TextInput
@@ -227,8 +288,8 @@ const AccountEditScreen = ({ route, navigation }) => {
                   onChangeText={(password) =>
                     setUserPassword(password)
                   }
-                  editable={kakaoLoginUser != true ? true : false}
-                  selectTextOnFocus={kakaoLoginUser != true ? true : false}
+                  editable={true}
+                  selectTextOnFocus={true}
 
                   placeholderTextColor="#808080"
                   placeholder="8~12자 영문,숫자,특수문자"
@@ -256,7 +317,7 @@ const AccountEditScreen = ({ route, navigation }) => {
 
               <View style={styles.lineWrapper}>
                 <Text style={{
-                  color: kakaoLoginUser != true ? "#000000" : "#808080",
+                  color: "#000000",
                   fontSize: 14
                 }}>       비밀번호 확인       :   </Text>
                 <TextInput
@@ -267,8 +328,8 @@ const AccountEditScreen = ({ route, navigation }) => {
                   ref={passwordInputRef}
                   placeholderTextColor="#808080"
                   placeholder="Check Password"
-                  editable={kakaoLoginUser != true ? true : false}
-                  selectTextOnFocus={kakaoLoginUser != true ? true : false}
+                  editable={true}
+                  selectTextOnFocus={true}
                   secureTextEntry={true}
                   returnKeyType="next"
                   onSubmitEditing={() =>
@@ -292,9 +353,6 @@ const AccountEditScreen = ({ route, navigation }) => {
           </View>
 
           <Text style={{ fontSize: 12, marginStart: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.02 }}>수정이 완료되면 '확인' 버튼을 눌러주세요.</Text>
-          {kakaoLoginUser == true ? (
-            <Text style={{ fontSize: 12, color: '#000000', marginStart: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.003 }}>*    카카오 로그인 유저는 비밀번호를 변경할 수 없습니다.</Text>
-          ) : null}
 
           <TouchableOpacity
             style={styles.smallButton}
@@ -303,7 +361,7 @@ const AccountEditScreen = ({ route, navigation }) => {
             }>
             <Text style={{
               color: '#FFFFFF',
-              paddingVertical: 10, fontSize: 10, fontWeight: "bold"
+              paddingVertical: 12, fontSize: 10, fontWeight: "bold"
             }}>확인</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
@@ -378,7 +436,23 @@ const styles = StyleSheet.create({
     color: "red",
     marginStart: Dimensions.get('window').width * 0.39
 
-  }
+  },
+  button: {
+    backgroundColor: '#BEE9B4',
+    height: Dimensions.get('window').height*0.04,
+    marginLeft: Dimensions.get('window').width * 0.02,
+    width: "15%",
+    alignItems: 'center',
+    borderRadius: 30,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.00,
+    elevation: 5
+
+  },
 })
 
 export default AccountEditScreen;

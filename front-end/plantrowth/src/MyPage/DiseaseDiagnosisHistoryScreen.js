@@ -5,8 +5,6 @@ import {
   View,
   StyleSheet,
   Text,
-  Alert,
-  Pressable,
   Dimensions,
   TouchableOpacity,
   SafeAreaView,
@@ -38,13 +36,13 @@ const Item = ({ item, onPress, style }) => {
             </Text>
           </Text>
           <Text style={{ flexDirection: 'column' }}>
-            <Text style={styles.text}>Level    :    </Text>
+            <Text style={styles.text}>Level   :    </Text>
             <Text style={styles.text}>
               {item.plant_level}
             </Text>
           </Text>
           <Text style={{ flexDirection: 'column' }}>
-            <Text style={styles.text}>EXP      :    </Text>
+            <Text style={styles.text}>EXP     :    </Text>
             <Text style={styles.text}>
               {item.plant_exp}
             </Text>
