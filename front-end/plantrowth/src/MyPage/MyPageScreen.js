@@ -15,12 +15,23 @@ import {
 
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useIsFocused } from '@react-navigation/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//laylout만 작성, 로그아웃은 가능
 const MyPageScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const [userEmail, setUserEmail] =useState('');
 
-
+  useEffect(() => {
+    if(isFocused){
+      AsyncStorage.getItem('email').then(value => {
+        if (value != null) {
+          setUserEmail(value);
+        }
+      })
+    }
+  }, [isFocused])
   const onPressHandler = () => {
 
     Alert.alert('로그아웃', '로그아웃 하시겠습니까?', [
@@ -32,7 +43,7 @@ const MyPageScreen = ({ navigation }) => {
         text: '확인',
         onPress: () => {
 
-          dispatch(logoutUser());
+          dispatch(logoutUser(userEmail));
         },
       },
     ]);
@@ -67,7 +78,7 @@ const MyPageScreen = ({ navigation }) => {
             activeOpacity={0.5}
             onPress={() => navigation.push('AccountInfoScreen')}>
             <View style={styles.section}>
-              <Text style={styles.text}>회원정보 조회</Text>
+              <Text style={styles.text}>회원정보 조회 및 수정</Text>
               <Ionicons
                 name="chevron-forward-sharp"
                 size={23}
@@ -77,20 +88,6 @@ const MyPageScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity
-            style={{flexDirection: 'row'}}
-            activeOpacity={0.5}
-            onPress={() => navigation.push('AccountEditScreen')}>
-            <View style={styles.section}>
-              <Text style={styles.text}>회원정보 수정</Text>
-              <Ionicons
-                name="chevron-forward-sharp"
-                size={23}
-                color="#000000"
-                style={styles.icon}
-              />
-            </View>
-          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={{ flexDirection: 'row' }}

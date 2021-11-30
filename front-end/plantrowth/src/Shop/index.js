@@ -168,7 +168,7 @@ ShopScreen = () => {
                 }}
               >
                 <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
-                <Text style={styles.goodsText}>{'50포인트'}</Text>
+                <Text style={styles.goodsText}>{'300포인트'}</Text>
               </View>
               <TouchableOpacity
                 style={styles.buyButton}
@@ -187,7 +187,7 @@ ShopScreen = () => {
                 }}
               >
                 <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
-                <Text style={styles.goodsText}>{'50원'}</Text>
+                <Text style={styles.goodsText}>{'1000원'}</Text>
               </View>
               <TouchableOpacity
                 style={styles.buyButton}
@@ -211,7 +211,7 @@ ShopScreen = () => {
                 <Text style={styles.goodsText}>
                   {'질병진단 구독 서비스 가입'}
                 </Text>
-                <Text style={styles.goodsText}>{'100원'}</Text>
+                <Text style={styles.goodsText}>{'5900원/월'}</Text>
               </View>
               <TouchableOpacity
                 style={styles.buyButton}

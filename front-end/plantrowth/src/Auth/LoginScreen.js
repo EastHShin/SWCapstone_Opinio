@@ -1,4 +1,3 @@
-
 import React, { useState, createRef, useEffect, useCallback } from 'react';
 
 import {
@@ -13,20 +12,31 @@ import {
   ScrollView,
   Modal,
   Dimensions,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
 
 import { useIsFocused } from '@react-navigation/native';
-import * as KakaoLogins from "@react-native-seoul/kakao-login";
+import * as KakaoLogins from '@react-native-seoul/kakao-login';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loader from '../Loader';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, kakaoLogin, kakaoRegister, registerUser, kakaoUnlink, setRegisterState, setLoginState, findPassword, setFindPasswordState, checkNickname, setCheckNicknameState } from '../actions/UserActions';
+import {
+  loginUser,
+  kakaoLogin,
+  kakaoRegister,
+  registerUser,
+  kakaoUnlink,
+  setRegisterState,
+  setLoginState,
+  findPassword,
+  setFindPasswordState,
+  checkNickname,
+  setCheckNicknameState,
+} from '../actions/UserActions';
 import messaging from '@react-native-firebase/messaging';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const LoginScreen = ({ navigation }) => {
-
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [userName, setUserName] = useState('');
@@ -35,9 +45,8 @@ const LoginScreen = ({ navigation }) => {
   const [refreshToken, setRefreshToken] = useState('');
   const [fcmToken, setFcmToken] = useState('');
   const [email, setEmail] = useState('');
-  const [checkEmail, setCheckEmail] = useState('');
   const [checkedNickName, setCheckedNickName] = useState('');
-
+  const [createPassword, setCreatePassword] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
@@ -52,10 +61,16 @@ const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const isLogin = useSelector(state => state.UserReducer.isLogin);
-  const kakaoRegisterState = useSelector(state => state.UserReducer.kakaoRegisterState);
+  const kakaoRegisterState = useSelector(
+    state => state.UserReducer.kakaoRegisterState,
+  );
   const registerState = useSelector(state => state.UserReducer.registerState);
-  const findPasswordState = useSelector(state => state.UserReducer.findPasswordState);
-  const checkNicknameState = useSelector(state => state.UserReducer.checkNicknameState);
+  const findPasswordState = useSelector(
+    state => state.UserReducer.findPasswordState,
+  );
+  const checkNicknameState = useSelector(
+    state => state.UserReducer.checkNicknameState,
+  );
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -67,44 +82,38 @@ const LoginScreen = ({ navigation }) => {
       setErrortext('로그인 실패');
       dispatch(setLoginState(''));
     }
-  }, [isLogin])
+  }, [isLogin]);
 
   useEffect(() => {
     if (kakaoRegisterState == 'loading') {
       getFcmToken();
       setIsModalVisible(true);
       setLoading(false);
-    }
-    else if (kakaoRegisterState == 'success') {
-
+    } else if (kakaoRegisterState == 'success') {
       const kakaoLoginData = JSON.stringify({
         email: userEmail,
         access_token: accessToken,
-        refresh_token: refreshToken
+        refresh_token: refreshToken,
       });
 
       dispatch(kakaoLogin(kakaoLoginData));
       dispatch(kakaoRegister(''));
-    }
-    else if (kakaoRegisterState == 'failure') {
+    } else if (kakaoRegisterState == 'failure') {
       setErrortext('카카오 회원가입 실패');
     }
-  }, [kakaoRegisterState])
+  }, [kakaoRegisterState]);
 
   useEffect(() => {
-
     if (registerState == 'success' && isFocused) {
       dispatch(kakaoRegister('success'));
       setIsModalVisible(false);
 
       dispatch(setRegisterState(''));
-    }
-    else if (registerState == 'failure' && isFocused) {
+    } else if (registerState == 'failure' && isFocused) {
       setLoading(false);
       kakaoRegisterFail();
     }
-
-  }, [registerState])
+  }, [registerState]);
 
   useEffect(() => {
     if (checkNicknameState == 'success' && isFocused) {
@@ -112,33 +121,32 @@ const LoginScreen = ({ navigation }) => {
       dispatch(setCheckNicknameState(''));
       setCheckedNickName(userName);
       alert('사용할 수 있는 닉네임입니다.');
-    }
-    else if (checkNicknameState == 'failure' && isFocused) {
+    } else if (checkNicknameState == 'failure' && isFocused) {
       setLoading(false);
       dispatch(setCheckNicknameState(''));
       setCheckedNickName('');
       alert('이미 존재하는 닉네임입니다!');
     }
-  }, [checkNicknameState])
+  }, [checkNicknameState]);
 
   useEffect(() => {
     if (findPasswordState == 'success' && isFocused) {
       setLoading(false);
-      alert('이메일로 임시 비밀번호가 전송되었습니다. 로그인 후 비밀번호를 변경하세요.');
+      alert(
+        '이메일로 임시 비밀번호가 전송되었습니다. 로그인 후 비밀번호를 변경하세요.',
+      );
       setIsFindPwModalVisible(false);
       dispatch(setFindPasswordState(''));
-    }
-    else if (findPasswordState == 'failure' && isFocused) {
+    } else if (findPasswordState == 'failure' && isFocused) {
       setLoading(false);
       alert('인증에 실패하였습니다. 이메일과 생년월일을 다시 확인해주세요.');
       dispatch(setFindPasswordState(''));
     }
-  }, [findPasswordState])
+  }, [findPasswordState]);
 
   const getFcmToken = useCallback(async () => {
     const fcmToken = await messaging().getToken();
     setFcmToken(fcmToken);
-
   }, []);
 
   const KakaoLoginActive = async () => {
@@ -152,25 +160,24 @@ const LoginScreen = ({ navigation }) => {
         setAccessToken(result.accessToken);
         setRefreshToken(result.refreshToken);
 
-
         const kakaoLoginData = JSON.stringify({
           email: profile.email,
           accessToken: result.accessToken,
-          refreshToken: result.refreshToken
+          refreshToken: result.refreshToken,
         });
 
+        AsyncStorage.setItem('email', profile.email);
         dispatch(kakaoLogin(kakaoLoginData));
-
       }
     } catch (err) {
       setLoading(false);
-      if (err.code === "E_CANCELLED_OPERATION") {
+      if (err.code === 'E_CANCELLED_OPERATION') {
         console.log(`Login Cancelled:${err.message}`);
       } else {
         console.log(`Login Failed:${err.code} ${err.message}`);
       }
     }
-  }
+  };
 
   const onPressHandler = () => {
     setErrortext('');
@@ -189,11 +196,14 @@ const LoginScreen = ({ navigation }) => {
       password: userPassword,
     });
 
-    dispatch(loginUser(loginData));
+    AsyncStorage.setItem('email', userEmail);
 
-  }
+    dispatch(loginUser(loginData));
+  };
 
   const register = () => {
+    var passwordExp =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,12}$/;
 
     if (!userName) {
       alert('닉네임을 입력해주세요.');
@@ -211,6 +221,10 @@ const LoginScreen = ({ navigation }) => {
       alert('생년월일을 입력해주세요.');
       return;
     }
+    if (!passwordExp.test(createPassword)) {
+      alert('비밀번호를 다시 확인해주세요!');
+      return;
+    }
 
     setLoading(true);
 
@@ -218,14 +232,13 @@ const LoginScreen = ({ navigation }) => {
       user_name: userName,
       user_birth: userBirth,
       email: userEmail,
-      password: userPassword,
-      fcm_access_token: fcmToken
+      password: createPassword,
+      fcm_access_token: fcmToken,
     });
 
     console.log(user);
     dispatch(registerUser(user));
-
-  }
+  };
 
   const findUserPassword = () => {
     if (!email) {
@@ -236,17 +249,16 @@ const LoginScreen = ({ navigation }) => {
       alert('생년월일을 입력해주세요');
       return;
     }
- 
+
     setLoading(true);
 
     const user = JSON.stringify({
       email: email,
-      user_birth: userBirth
-    })
+      user_birth: userBirth,
+    });
 
     dispatch(findPassword(user));
-
-  }
+  };
 
   const checkUserNickname = () => {
     if (!userName) {
@@ -257,29 +269,27 @@ const LoginScreen = ({ navigation }) => {
     setLoading(true);
 
     dispatch(checkNickname(userName));
-  }
+  };
 
   const kakaoRegisterFail = () => {
     dispatch(kakaoUnlink());
     dispatch(kakaoRegister('failure'));
     setUserBirth('');
     setIsModalVisible(false);
-  }
+  };
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
 
-  const handleConfirm = (date) => {
+  const handleConfirm = date => {
     setDatePickerVisibility(false);
 
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     setUserBirth(year + '-' + month + '-' + day);
-  }
-
- 
+  };
 
   return (
     <SafeAreaView style={styles.body}>
@@ -290,7 +300,8 @@ const LoginScreen = ({ navigation }) => {
           flex: 1,
           justifyContent: 'center',
           alignContent: 'center',
-        }}>
+        }}
+      >
         <View>
           <KeyboardAvoidingView enabled>
             <View style={{ alignItems: 'center' }}>
@@ -306,31 +317,36 @@ const LoginScreen = ({ navigation }) => {
             </View>
             <View style={styles.sectionWrapper}>
               <View style={styles.section}>
-                <EntypoIcons name='email' size={20} color="#8EB695" style={styles.icon} />
+                <EntypoIcons
+                  name="email"
+                  size={20}
+                  color="#8EB695"
+                  style={styles.icon}
+                />
                 <TextInput
                   style={styles.input}
-                  onChangeText={(userEmail) =>
-                    setUserEmail(userEmail)
-                  }
+                  onChangeText={userEmail => setUserEmail(userEmail)}
                   placeholder="Enter Email"
                   placeholderTextColor="#808080"
                   keyboardType="email-address"
                   returnKeyType="next"
                   onSubmitEditing={() =>
-                    passwordInputRef.current &&
-                    passwordInputRef.current.focus()
+                    passwordInputRef.current && passwordInputRef.current.focus()
                   }
                   underlineColorAndroid="#f000"
                   blurOnSubmit={false}
                 />
               </View>
               <View style={styles.section}>
-                <EntypoIcons name='key' size={20} color="#8EB695" style={styles.icon} />
+                <EntypoIcons
+                  name="key"
+                  size={20}
+                  color="#8EB695"
+                  style={styles.icon}
+                />
                 <TextInput
                   style={styles.input}
-                  onChangeText={(UserPassword) =>
-                    setUserPassword(UserPassword)
-                  }
+                  onChangeText={UserPassword => setUserPassword(UserPassword)}
                   placeholder="Enter Password"
                   placeholderTextColor="#808080"
                   keyboardType="default"
@@ -343,36 +359,43 @@ const LoginScreen = ({ navigation }) => {
                 />
               </View>
               {errortext != '' ? (
-                <Text style={styles.errorText}>
-                  {errortext}
-                </Text>
+                <Text style={styles.errorText}>{errortext}</Text>
               ) : null}
 
               <TouchableOpacity
                 style={styles.button}
                 activeOpacity={0.5}
-                onPress={onPressHandler}>
+                onPress={onPressHandler}
+              >
                 <Text style={styles.buttonText}>LOGIN</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                onPress={KakaoLoginActive}>
-                <Image source={require('../assets/kakao_login.png')}
-                  style={styles.kakaoImage} />
+              <TouchableOpacity activeOpacity={0.5} onPress={KakaoLoginActive}>
+                <Image
+                  source={require('../assets/kakao_login.png')}
+                  style={styles.kakaoImage}
+                />
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: "row", justifyContent: "center", marginTop: Dimensions.get('window').height * 0.01 }}>
-              <Text style={styles.registerText}>
-                New Here ?
-              </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: Dimensions.get('window').height * 0.01,
+              }}
+            >
+              <Text style={styles.registerText}>New Here ?</Text>
               <Text
                 style={styles.registerTextButton}
-                onPress={() => navigation.navigate('RegisterScreen')}>Register
+                onPress={() => navigation.navigate('RegisterScreen')}
+              >
+                Register
               </Text>
             </View>
             <Text
               style={styles.passwordTextButton}
-              onPress={() => setIsFindPwModalVisible(true)}>비밀번호를 잃어버리셨나요?
+              onPress={() => setIsFindPwModalVisible(true)}
+            >
+              비밀번호를 잃어버리셨나요?
             </Text>
           </KeyboardAvoidingView>
         </View>
@@ -383,67 +406,98 @@ const LoginScreen = ({ navigation }) => {
         animationType={'none'}
         onRequestClose={() => {
           setUserBirth('');
-          setIsFindPwModalVisible(false)
+          setIsFindPwModalVisible(false);
         }}
         visible={isFindPwModalVisible}
       >
-        <View style={styles.modal}>
-          <View style={styles.modalSectionWrapper}>
-            <View style={styles.textWrapper}>
-              <Text style={{ marginBottom: Dimensions.get('window').height * 0.015, color: "#000000", fontWeight: 'bold' }}>비밀번호 찾기</Text>
-              <Text style={{ color: '#000000' }}>이메일과 생년월일을 입력해주세요</Text>
-            </View>
-            <View style={styles.section}>
-              <EntypoIcons name='email' size={20} color="#8EB695" style={styles.icon} />
-              <TextInput
-                style={styles.input}
-                onChangeText={(email) =>
-                  setEmail(email)
-                }
-
-                placeholder="Enter Email"
-                underlineColorAndroid="#f000"
-                placeholderTextColor="#808080"
-                keyboardType="email-address"
-                onSubmitEditing={
-                  Keyboard.dismiss
-                }
-                blurOnSubmit={false}
-              />
-            </View>
-
-            <View style={styles.section}>
-              <EntypoIcons name='calendar' size={20} color="#8EB695" style={styles.icon} />
-              <TouchableOpacity onPress={showDatePicker}>
-                <TextInput
-                  pointerEvents="none"
-                  style={styles.input}
-                  underlineColorAndroid="#f000"
-                  placeholder="Date of birth"
-                  placeholderTextColor="#808080"
-                  editable={false}
-                  blurOnSubmit={false}
-                  value={userBirth}
+        <TouchableOpacity
+          style={styles.container}
+          activeOpacity={1}
+          onPressOut={() => {
+            setIsFindPwModalVisible(false);
+          }}
+        >
+          <View style={styles.modal}>
+            <View style={styles.modalSectionWrapper}>
+              <View style={styles.textWrapper}>
+                <Text
+                  style={{
+                    marginBottom: Dimensions.get('window').height * 0.015,
+                    color: '#000000',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  비밀번호 찾기
+                </Text>
+                <Text style={{ color: '#000000' }}>
+                  이메일과 생년월일을 입력해주세요
+                </Text>
+              </View>
+              <View style={styles.section}>
+                <EntypoIcons
+                  name="email"
+                  size={20}
+                  color="#8EB695"
+                  style={styles.icon}
                 />
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate() - 1)}
-                  minimumDate={new Date(1921, 0, 1)}
-                  onConfirm={handleConfirm}
-                  onCancel={() => {
-                    setDatePickerVisibility(false);
-                  }} />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={email => setEmail(email)}
+                  placeholder="Enter Email"
+                  underlineColorAndroid="#f000"
+                  placeholderTextColor="#808080"
+                  keyboardType="email-address"
+                  onSubmitEditing={Keyboard.dismiss}
+                  blurOnSubmit={false}
+                />
+              </View>
+
+              <View style={styles.section}>
+                <EntypoIcons
+                  name="calendar"
+                  size={20}
+                  color="#8EB695"
+                  style={styles.icon}
+                />
+                <TouchableOpacity onPress={showDatePicker}>
+                  <TextInput
+                    pointerEvents="none"
+                    style={styles.input}
+                    underlineColorAndroid="#f000"
+                    placeholder="Date of birth"
+                    placeholderTextColor="#808080"
+                    editable={false}
+                    blurOnSubmit={false}
+                    value={userBirth}
+                  />
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    maximumDate={
+                      new Date(
+                        maximumDate.getFullYear(),
+                        maximumDate.getMonth(),
+                        maximumDate.getDate() - 1,
+                      )
+                    }
+                    minimumDate={new Date(1921, 0, 1)}
+                    onConfirm={handleConfirm}
+                    onCancel={() => {
+                      setDatePickerVisibility(false);
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                activeOpacity={0.5}
+                onPress={findUserPassword}
+              >
+                <Text style={styles.buttonText}>Find</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              activeOpacity={0.5}
-              onPress={findUserPassword}>
-              <Text style={styles.buttonText}>Find</Text>
-            </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
 
       <Modal
@@ -454,67 +508,121 @@ const LoginScreen = ({ navigation }) => {
         }}
         visible={isModalVisible}
       >
-        <View style={styles.modal}>
-          <View style={styles.modalSectionWrapper}>
-            <View style={styles.textWrapper}>
-              <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}>Register</Text>
-            </View>
-            <View style={styles.section}>
-              <EntypoIcons name='user' size={20} color="#8EB695" style={styles.icon} />
-              <TextInput
-                style={styles.input}
-                onChangeText={(UserName) => setUserName(UserName)}
-                underlineColorAndroid="#f000"
-                placeholder="Name"
-                placeholderTextColor="#808080"
-                onSubmitEditing={
-                  Keyboard.dismiss
-                }
-                blurOnSubmit={false}
-              />
-               <TouchableOpacity
-                style={styles.smallButton}
-                activeOpacity={0.5}
-                onPress={checkUserNickname}>
-                <Text style={{
-                  color: '#FFFFFF',
-                  paddingVertical: 10, fontSize: 10
-                }}>확인</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.section}>
-              <EntypoIcons name='calendar' size={20} color="#8EB695" style={styles.icon} />
-              <TouchableOpacity onPress={showDatePicker}>
-                <TextInput
-                  pointerEvents="none"
-                  style={styles.input}
-                  underlineColorAndroid="#f000"
-                  placeholder="Date of birth"
-                  placeholderTextColor="#808080"
-                  editable={false}
-                  blurOnSubmit={false}
-                  value={userBirth}
+        <TouchableOpacity
+          style={styles.container}
+          activeOpacity={1}
+          onPressOut={() => {
+            setIsModalVisible(false);
+          }}
+        >
+          <View style={styles.modal}>
+            <View style={styles.modalSectionWrapper}>
+              <View style={styles.textWrapper}>
+                <Text
+                  style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}
+                >
+                  Register
+                </Text>
+              </View>
+              <View style={styles.section}>
+                <EntypoIcons
+                  name="user"
+                  size={20}
+                  color="#8EB695"
+                  style={styles.icon}
                 />
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate() - 1)}
-                  minimumDate={new Date(1921, 0, 1)}
-                  onConfirm={handleConfirm}
-                  onCancel={() => {
-                    setDatePickerVisibility(false);
-                  }} />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={UserName => setUserName(UserName)}
+                  underlineColorAndroid="#f000"
+                  placeholder="Name"
+                  placeholderTextColor="#808080"
+                  onSubmitEditing={Keyboard.dismiss}
+                  blurOnSubmit={false}
+                />
+
+                <TouchableOpacity
+                  style={styles.smallButton}
+                  activeOpacity={0.5}
+                  onPress={checkUserNickname}
+                >
+                  <Text
+                    style={{
+                      color: '#FFFFFF',
+                      paddingVertical: 10,
+                      fontSize: 10,
+                    }}
+                  >
+                    확인
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.section}>
+                <EntypoIcons
+                  name="calendar"
+                  size={20}
+                  color="#8EB695"
+                  style={styles.icon}
+                />
+                <TouchableOpacity onPress={showDatePicker}>
+                  <TextInput
+                    pointerEvents="none"
+                    style={styles.input}
+                    underlineColorAndroid="#f000"
+                    placeholder="Date of birth"
+                    placeholderTextColor="#808080"
+                    editable={false}
+                    blurOnSubmit={false}
+                    value={userBirth}
+                  />
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    maximumDate={
+                      new Date(
+                        maximumDate.getFullYear(),
+                        maximumDate.getMonth(),
+                        maximumDate.getDate() - 1,
+                      )
+                    }
+                    minimumDate={new Date(1921, 0, 1)}
+                    onConfirm={handleConfirm}
+                    onCancel={() => {
+                      setDatePickerVisibility(false);
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.section}>
+                <EntypoIcons
+                  name="key"
+                  size={20}
+                  color="#8EB695"
+                  style={styles.icon}
+                />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={UserPassword => setCreatePassword(UserPassword)}
+                  underlineColorAndroid="#f000"
+                  placeholder="8~12자 영문,숫자,특수문자"
+                  placeholderTextColor="#808080"
+                  returnKeyType="next"
+                  secureTextEntry={true}
+                  onSubmitEditing={Keyboard.dismiss}
+                  blurOnSubmit={false}
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                activeOpacity={0.5}
+                onPress={register}
+              >
+                <Text style={styles.buttonText}>Join</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              activeOpacity={0.5}
-              onPress={register}>
-              <Text style={styles.buttonText}>Join</Text>
-            </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
     </SafeAreaView>
   );
@@ -541,8 +649,8 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 3.00,
-    elevation: 5
+    shadowRadius: 3.0,
+    elevation: 5,
   },
   section: {
     flexDirection: 'row',
@@ -568,8 +676,8 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 3.00,
-    elevation: 5
+    shadowRadius: 3.0,
+    elevation: 5,
   },
   buttonText: {
     color: '#FFFFFF',
@@ -591,7 +699,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     alignSelf: 'center',
-    marginRight: Dimensions.get('window').width * 0.02
+    marginRight: Dimensions.get('window').width * 0.02,
   },
   registerTextButton: {
     color: '#FFFFFF',
@@ -601,7 +709,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     padding: 1,
     alignSelf: 'center',
-
   },
   errorText: {
     color: 'red',
@@ -609,7 +716,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   kakaoImage: {
-
     width: Dimensions.get('window').width * 0.66,
     resizeMode: 'cover',
     height: Dimensions.get('window').height * 0.05,
@@ -622,7 +728,7 @@ const styles = StyleSheet.create({
   icon: {
     marginTop: 8,
     marginRight: 10,
-    marginLeft: -5
+    marginLeft: -5,
   },
   modal: {
     flex: 1,
@@ -630,31 +736,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#00000040',
   },
-  modalSectionWrapper:
-  {
+  modalSectionWrapper: {
     backgroundColor: '#FFFFFF',
     height: Dimensions.get('window').height * 0.46,
     width: Dimensions.get('window').width * 0.85,
     borderRadius: 20,
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   passwordTextButton: {
     color: '#FFFFFF',
     textAlign: 'center',
     fontWeight: 'bold',
     marginTop: Dimensions.get('window').height * 0.01,
-    fontSize: 12
+    fontSize: 12,
   },
   textWrapper: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   smallButton: {
     backgroundColor: '#BEE9B4',
     height: 35,
     marginLeft: Dimensions.get('window').width * 0.02,
-    width: "20%",
+    width: '20%',
     alignItems: 'center',
     borderRadius: 30,
     shadowOffset: {
@@ -662,9 +767,10 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 3.00,
-    elevation: 5
-
+    shadowRadius: 3.0,
+    elevation: 5,
   },
-
+  container: {
+    flex: 1,
+  },
 });

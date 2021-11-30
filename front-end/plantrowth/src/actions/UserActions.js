@@ -11,10 +11,10 @@ const clearLogoutTimer = () => {
 	}
 };
 
-const setLogoutTimer = (expirationTime) => dispatch => {
+const setLogoutTimer = (expirationTime, email) => dispatch => {
     timer = setTimeout(() => {
-        dispatch(logoutUser());
-        console.log('로그인 만료')
+        dispatch(logoutUser(email));
+        console.log('로그인 만료'+email)
     }, expirationTime);
 };
 
@@ -132,11 +132,16 @@ export const loginUser = (user) => {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
-                console.log("로그인 성공ㅇ시 "+res.headers.authorization);
+                
                 if (res.status == 200) {
-                    dispatch(setLogoutTimer(3600000));
-
+                    AsyncStorage.getItem('email').then(value => {
+                        if (value != null) {
+                            dispatch(setLogoutTimer(3600000,value));
+                        }
+                      })
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
+                    AsyncStorage.setItem('auth', res.headers.authorization);
+                    
                     axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
 
 
@@ -170,8 +175,14 @@ export const kakaoLogin = (data) => {
 
                 if (res.status == 200) {
 
+                    AsyncStorage.getItem('email').then(value => {
+                        if (value != null) {
+                            dispatch(setLogoutTimer(3600000,value));
+                        }
+                      })
+
+                    AsyncStorage.setItem('auth', res.headers.authorization);
                     axios.defaults.headers.common['X-AUTH-TOKEN'] = `${res.headers.authorization}`;
-                    dispatch(setLogoutTimer(3600000));
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
                     AsyncStorage.setItem('kakaoLogin', 'yes');
 
@@ -278,7 +289,7 @@ export const kakaoUnlink = () => dispatch => {
 export const deleteUser = (userId, password) => {
     return async dispatch => {
         console.log(userId + "    " + password);
-        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,
+        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,password,
             {
                 headers: { "Content-Type": `application/json` }
             })
@@ -339,7 +350,7 @@ export const infoUser = (userId) => {
 }
 
 export const editUser = (userId, data) => {
-    console.log(userId + "   " + data);
+ 
     return async dispatch => {
         return await axios.put(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`, data,
             {
@@ -388,12 +399,12 @@ export const setUserInfoState = state => dispatch => {
 
 export const getDiagnosisList = (plantId) => {
     return async dispatch => {
-        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diagnosis/${plantId}`)
+        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diagnosis/record/${plantId}`)
             .then(function (res) {
                 if (res.status == 200) {
                     dispatch({
                         type: DIAGNOSIS_LIST,
-                        payload: res.data.data
+                        payload: res.data
                     })
                 }
 

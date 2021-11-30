@@ -42,7 +42,7 @@ const AccountDeleteNoticeScreen = ({ navigation }) => {
               <Text style={styles.smallText}>Plantrowth 회원탈퇴를 하시면 더이상 Plantrowth가 제공하는 서비스를
                 사용할 수 없습니다. 또한 해당 계정에 존재하는 모든 정보와 포인트가 소멸됩니다.</Text>
             </View>
-            <View style={styles.textWrapper}>
+            <View style={styles.secondTextWrapper}>
               <Text style={styles.dot}>·  </Text>
               <Text style={styles.smallText}>회원탈퇴 진행을 위해 비밀번호 인증이 필요합니다.</Text>
             </View>
@@ -57,8 +57,8 @@ const AccountDeleteNoticeScreen = ({ navigation }) => {
             }>
             <Text style={{
               color: '#FFFFFF',
-              paddingVertical: 10, fontSize: 10, fontWeight: "bold"
-            }}>다음</Text>
+              paddingVertical: 12, fontSize: 10, fontWeight: "bold"
+            }}>{}다음</Text>
           </TouchableOpacity>
         </View>
         <Footer name={'My Page'} />
@@ -108,13 +108,19 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: Dimensions.get('window').height * 0.006,
 
-
   },
   textWrapper: {
     flexDirection: "row",
     width: Dimensions.get('window').width * 0.9,
     marginStart: Dimensions.get('window').width * 0.05,
     marginBottom: Dimensions.get('window').height * 0.02,
+    marginTop: Dimensions.get('window').height * 0.01,
+
+  },
+  secondTextWrapper: {
+    flexDirection: "row",
+    width: Dimensions.get('window').width * 0.9,
+    marginStart: Dimensions.get('window').width * 0.05,
     marginTop: Dimensions.get('window').height * 0.01,
 
   },

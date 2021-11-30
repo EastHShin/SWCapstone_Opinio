@@ -1,6 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import {
   View,
   StyleSheet,
@@ -23,10 +22,13 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../Loader';
 import { useIsFocused } from '@react-navigation/native';
-import { getPost, deletePost, createComment, setCommentResultState } from '../actions/CommunityActions';
+import { getPost, deletePost, setResultState, createComment, setCommentResultState } from '../actions/CommunityActions';
+
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -34,8 +36,6 @@ const PostDetailScreen = ({ route, navigation }) => {
   const { selectedId } = route.params;
 
   const [loading, setLoading] = useState(false);
-  const [imageWidth, setImageWidth] = useState('');
-  const [imageHeight, setImageHeight] = useState('');
 
   const [userId, setUserId] = useState('');
   const [commentList, setCommentList] = useState('');
@@ -48,39 +48,55 @@ const PostDetailScreen = ({ route, navigation }) => {
   const post = useSelector(state => state.CommunityReducer.post);
   const commentResult = useSelector(state=>state.CommunityReducer.commentResult);
 
+  useEffect(() => {        
+    if (isFocused) {
+      AsyncStorage.getItem('userId').then(value => {
+        if (value) {
+          setUserId(JSON.parse(value));
+          dispatch(getPost(selectedId, JSON.parse(value)));
+        }
+      })
+    }
+  }, [isFocused])
+
   useEffect(() => {
     setCommentList(post.comments);
-    if (isFocused) {
-      dispatch(getPost(selectedId, userId));
+    console.log(post)
+  }, [post])
 
-      AsyncStorage.getItem('userId').then(value => {
-        if (value != null) {
-          setUserId(JSON.parse(value));
-        }
-      });
-    }
-  }, [isFocused]);
-
-  useEffect(() => {
-    if (post.file_name) {
-      Image.getSize(post.file_name, (width, height) => {
-        setImageHeight(height);
-        setImageWidth(width);
-      });
-    }
-  }, [post]);
 
   useEffect(() => {
     if (result == 'success' && isFocused) {
       setLoading(false);
       dispatch(setResultState(''));
+      setIsModalVisible(false);
       navigation.navigate('CommunityMainScreen');
-    } else if (result == 'failure' && isFocused) {
+    }
+    else if (result == 'failure' && isFocused) {
       setLoading(false);
       dispatch(setResultState(''));
+      setIsModalVisible(false);
       alert('게시글 삭제 실패!');
     }
-  }, [result]);
+  }, [result])
+
+  const deleteMode = () => {
+    Alert.alert(
+      "삭제", "게시글을 삭제하시겠습니까?", [
+        {
+          text: "취소",
+          onPress: () => console.log("취소")
+        },
+        {
+          text: "확인",
+          onPress: () => {
+            setLoading(true);
+            dispatch(deletePost(selectedId))
+          }
+        }
+      ]
+    )
+  }
 
   useEffect(() => {
     if (commentResult == 'success' && isFocused) {
@@ -92,22 +108,6 @@ const PostDetailScreen = ({ route, navigation }) => {
       alert('댓글 작성 실패!');
     }
   }, [commentResult]);
-
-  const deleteMode = () => {
-    Alert.alert('삭제', '게시글을 삭제하시겠습니까?', [
-      {
-        text: '취소',
-        onPress: () => console.log('취소'),
-      },
-      {
-        text: '확인',
-        onPress: () => {
-          setLoading(true);
-          dispatch(deletePost(post.id));
-        },
-      },
-    ]);
-  };
 
   const renderComment = comment => {
     if (comment) {
@@ -152,182 +152,177 @@ const PostDetailScreen = ({ route, navigation }) => {
     setLoading(true);
     dispatch(createComment(selectedId, userId, comment));
   }
+  
+    return (
+      <SafeAreaView style={styles.body}>
+        <Loader loading={loading} />
 
-  return (
-    <SafeAreaView style={styles.body}>
-      <Loader loading={loading} />
+        <View style={styles.top}>
+          <TouchableOpacity
+            style={{ marginStart: Dimensions.get('window').width * 0.03 }}
+            activeOpacity={0.5}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="chevron-back-sharp" size={23} color="#000000" />
+          </TouchableOpacity>
+          <Text
+            style={{
+              marginEnd: Dimensions.get('window').width * 0.01,
+              fontFamily: 'NanumGothicBold',
 
-      <View style={styles.top}>
-        <TouchableOpacity
-          style={{ marginStart: Dimensions.get('window').width * 0.03 }}
-          activeOpacity={0.5}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="chevron-back-sharp" size={23} color="#000000" />
-        </TouchableOpacity>
-        <Text
-          style={{
-            marginEnd: Dimensions.get('window').width * 0.01,
-            fontFamily: 'NanumGothicBold',
+              color: '#000000',
+            }}
+          >
+            커뮤니티
+          </Text>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => setIsModalVisible(true)}
+            style={{ marginEnd: Dimensions.get('window').width * 0.02 }}
+          >
+            <Entypo name="dots-three-vertical" size={22} color="#000000" />
+          </TouchableOpacity>
+        </View>
 
-            color: '#000000',
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            justifyContent: 'center',
+            alignContent: 'center',
           }}
         >
-          커뮤니티
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => setIsModalVisible(true)}
-          style={{ marginEnd: Dimensions.get('window').width * 0.02 }}
-        >
-          <Entypo name="dots-three-vertical" size={22} color="#000000" />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}
-      >
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={isModalVisible}
-          onRequestClose={() => {
-            console.log('close');
-            setIsModalVisible(false);
-          }}
-        >
-          <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-            <View
-              style={userId == post.user_id ? styles.modal : styles.modalSmall}
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={isModalVisible}
+            onRequestClose={() => {
+              console.log('close');
+              setIsModalVisible(false);
+            }}
+          >
+            <TouchableOpacity
+              style={styles.container}
+              activeOpacity={1}
+              onPressOut={() => {
+                setIsModalVisible(false);
+              }}
             >
-              {userId == post.user_id ? (
-                <View>
-                  <View style={styles.modalWrapper}>
-                    <TouchableOpacity activeOpacity={0.5} onPress={deleteMode}>
-                      <Text style={styles.text}>삭제</Text>
-                    </TouchableOpacity>
-                  </View>
+              <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                <View
+                  style={
+                    userId == post.userId ? styles.modal : styles.modalSmall
+                  }
+                >
+                  {userId == post.userId ? (
+                    <View>
+                      <View style={styles.modalWrapper}>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={deleteMode}
+                        >
+                          <Text style={styles.text}>삭제</Text>
+                        </TouchableOpacity>
+                      </View>
 
-                  <View style={styles.modalWrapper}>
-                    <TouchableOpacity
-                      activeOpacity={0.5}
-                      onPress={() => {
-                        setIsModalVisible(false);
-                        navigation.navigate('PostEditScreen', {
-                          selectedId: selectedId,
-                        });
-                      }}
-                      style={{ flexDirection: 'row' }}
-                    >
-                      <Text style={styles.text}>수정</Text>
+                      <View style={styles.modalWrapper}>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={() => {
+                            setIsModalVisible(false);
+                            navigation.navigate('PostEditScreen', {
+                              selectedId: selectedId,
+                            });
+                          }}
+                          style={{ flexDirection: 'row' }}
+                        >
+                          <Text style={styles.text}>수정</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ) : null}
+                      <Text style={styles.text}>신고</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
-              ) : null}
-              <View style={styles.modalWrapper}>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => {
-                    setIsModalVisible(false);
-                    navigation.navigate('PostEditScreen', {
-                      selectedId: selectedId,
-                    });
-                  }}
-                  style={{ flexDirection: 'row' }}
+              </View>
+            </TouchableOpacity>
+          </Modal>
+          <View style={styles.postWrapper}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.userWrapper}>
+                <Text
+                  style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}
                 >
-                  <Text style={styles.text}>신고</Text>
-                </TouchableOpacity>
+                  {post.writer}
+                </Text>
+                <Text
+                  style={{ fontSize: 14, fontWeight: 'bold', color: '#000000' }}
+                >
+                  Lv. {post.level}
+                </Text>
+              </View>
+              <View style={styles.date}>
+                <Text style={{ fontSize: 10 }}>
+                  최초 게시일 : {post.createDate}
+                </Text>
+                {post.updateDate != null ? (
+                  <Text style={{ fontSize: 10 }}>
+                    최근 수정일 : {post.updateDate}
+                  </Text>
+                ) : null}
               </View>
             </View>
-          </View>
-        </Modal>
-
-        <View style={styles.postWrapper}>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={styles.userWrapper}>
-              <Text
-                style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}
-              >
-                {post.writer}
-              </Text>
-              <Text
-                style={{ fontSize: 14, fontWeight: 'bold', color: '#000000' }}
-              >
-                Lv. {post.level}
-              </Text>
-            </View>
-            <View style={styles.date}>
-              <Text style={{ fontSize: 10 }}>
-                최초 게시일 : {post.createDate}
-              </Text>
-              {post.updateDate != '' ? (
-                <Text style={{ fontSize: 10 }}>
-                  최근 수정일 : {post.updateDate}
-                </Text>
+            <View style={styles.textWrapper}>
+              <Text style={styles.title}>{post.title}</Text>
+              <Text style={styles.content}>{post.content}</Text>
+              {post.file_name != '' ? (
+                <View style={{ alignItems: 'center' }}>
+                  <AutoHeightImage
+                    source={{ uri: post.file_name }}
+                    width={Dimensions.get('window').width * 0.9}
+                    style={{
+                      marginBottom: Dimensions.get('window').height * 0.01,
+                      marginTop: Dimensions.get('window').height * 0.01,
+                    }}
+                  />
+                </View>
               ) : null}
             </View>
+            <View style={styles.likeAndComment}>
+              <MaterialCommunityIcons
+                name="heart-outline"
+                size={15}
+                color="#DC143C"
+                style={{ marginRight: Dimensions.get('window').width * 0.01 }}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: '#DC143C',
+                  marginRight: Dimensions.get('window').width * 0.02,
+                }}
+              >
+                {post.countedLike}
+              </Text>
+              <SimpleLineIcons
+                name="bubble"
+                size={15}
+                color="#00BFFF"
+                style={{ marginRight: Dimensions.get('window').width * 0.01 }}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: '#00BFFF',
+                  marginRight: Dimensions.get('window').width * 0.02,
+                }}
+              >
+                {post.countedComments}
+              </Text>
+            </View>
           </View>
-          <View style={styles.textWrapper}>
-            <Text style={styles.title}>{post.title}</Text>
-            <Text style={styles.content}>{post.content}</Text>
-            {post.file_name != '' ? (
-              <View style={{ alignItems: 'center' }}>
-                <Image
-                  source={{ uri: post.file_name }}
-                  style={{
-                    marginTop: Dimensions.get('window').height * 0.01,
-                    borderRadius: 10,
-                    width: Dimensions.get('window').width,
-                    height:
-                      imageHeight / imageWidth >= 2
-                        ? imageHeight / 1.6
-                        : imageHeight / 2,
-
-                    resizeMode: 'contain',
-                  }}
-                />
-              </View>
-            ) : null}
-          </View>
-          <View style={styles.likeAndComment}>
-            <MaterialCommunityIcons
-              name="heart-outline"
-              size={15}
-              color="#DC143C"
-              style={{ marginRight: Dimensions.get('window').width * 0.01 }}
-            />
-            <Text
-              style={{
-                fontSize: 12,
-                color: '#DC143C',
-                marginRight: Dimensions.get('window').width * 0.02,
-              }}
-            >
-              {post.countedLike}
-            </Text>
-            <SimpleLineIcons
-              name="bubble"
-              size={15}
-              color="#00BFFF"
-              style={{ marginRight: Dimensions.get('window').width * 0.01 }}
-            />
-            <Text
-              style={{
-                fontSize: 12,
-                color: '#00BFFF',
-                marginRight: Dimensions.get('window').width * 0.02,
-              }}
-            >
-              {post.countedComments}
-            </Text>
-          </View>
-        </View>
-        {renderComment(commentList)}
-      </ScrollView>
+          {renderComment(comment)}
+        </ScrollView>
       <KeyboardAvoidingView
         style={{ padding: 5, alignItems: 'center', justifyContent: 'center' }}
       >
@@ -355,8 +350,8 @@ const PostDetailScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -374,10 +369,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.06,
     width: Dimensions.get('window').width,
   },
-  wrapper: {
-    alignItems: 'center',
-    flex: 1,
-  },
   title: {
     fontWeight: 'bold',
     fontSize: 18,
@@ -388,13 +379,18 @@ const styles = StyleSheet.create({
     marginBottom: Dimensions.get('window').height * 0.015,
     color: '#000000',
   },
-
   postWrapper: {
+    borderColor: '#C0C0C0',
     width: Dimensions.get('window').width * 0.95,
-    borderColor: '#C9E7BE',
-    borderRadius: 20,
-    borderWidth: 2,
     marginTop: Dimensions.get('window').height * 0.015,
+    marginBottom: Dimensions.get('window').height * 0.015,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.0,
+    elevation: 2,
   },
   userWrapper: {
     height: Dimensions.get('window').height * 0.07,
@@ -463,6 +459,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3.0,
     elevation: 10,
   },
+  container: {
+    flex: 1,
+  },
   editScreen: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -472,6 +471,5 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 5,
   },
-});
-
+})
 export default PostDetailScreen;

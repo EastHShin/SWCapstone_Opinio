@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { View, StyleSheet, Text, Dimensions, TouchableOpacity, SafeAreaView, TextInput, ScrollView, KeyboardAvoidingView, Image } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity, SafeAreaView, TextInput, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -11,6 +11,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Loader from '../Loader';
 import { useIsFocused } from '@react-navigation/native'
 import { editPost, setResultState } from '../actions/CommunityActions';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const PostEditScreen = ({ route, navigation }) => {
 
@@ -21,7 +22,7 @@ const PostEditScreen = ({ route, navigation }) => {
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState(post.title);
     const [content, setContent] = useState(post.content);
-    const originalImageUri = post.file_name;
+    const [originalImageUri, setOriginalImageUri] = useState(post.file_name);
 
     const [imageType, setImageType] = useState('');
     const [fileName, setFileName] = useState('');
@@ -32,14 +33,15 @@ const PostEditScreen = ({ route, navigation }) => {
 
     const contentInputRef = createRef();
 
-    useEffect(() => {
-        if (isFocused && originalImageUri) {
-            Image.getSize(originalImageUri, (width, height) => {
-                setImageHeight(height);
-                setImageWidth(width);
-            })
-        }
-    }, [isFocused])
+    // useEffect(() => {
+        
+    //     if (isFocused && !originalImageUri) {
+    //       //  setImageUri('');
+    //       //  setOriginalImageUri('');
+           
+    //     }
+        
+    // }, [isFocused])
 
 
     useEffect(() => {
@@ -77,7 +79,7 @@ const PostEditScreen = ({ route, navigation }) => {
     }
 
     const onPressHandler = () => {
-        if (post.title == title && psot.content == content && originalImageUri == imageUri) {
+        if (post.title == title && post.content == content && originalImageUri == imageUri) {
             alert('아직 게시글을 수정하지 않으셨어요!');
             return;
         }
@@ -110,6 +112,7 @@ const PostEditScreen = ({ route, navigation }) => {
             Data.append('content', content);
 
         }
+        Data.append('updateDate', year + '-' + month + '-' + day )
 
         if (originalImageUri) {
             if (!imageUri) {
@@ -151,125 +154,146 @@ const PostEditScreen = ({ route, navigation }) => {
 
 
     return (
-        <SafeAreaView style={styles.body}>
-            <Loader loading={loading} />
+      <SafeAreaView style={styles.body}>
+        <Loader loading={loading} />
 
-            <View style={styles.top}>
-                <TouchableOpacity
-                    style={{ marginStart: Dimensions.get('window').width * 0.03 }}
+        <View style={styles.top}>
+          <TouchableOpacity
+            style={{ marginStart: Dimensions.get('window').width * 0.03 }}
+            activeOpacity={0.5}
+            onPress={() => {
+              navigation.goBack()
+            }
+          }
+          >
+            <Feather name="x" size={27} color="#000000" />
+          </TouchableOpacity>
+          <Text
+            style={{
+              marginLeft: Dimensions.get('window').width * 0.08,
+              fontWeight: 'bold',
+              color: '#000000',
+              fontSize: 15,
+            }}
+          >
+            게시글 수정
+          </Text>
+          <TouchableOpacity
+            style={styles.smallButton}
+            activeOpacity={0.5}
+            onPress={onPressHandler}
+          >
+            <Text
+              style={{
+                color: '#FFFFFF',
+                paddingVertical: 8,
+                fontSize: 10,
+                fontWeight: 'bold',
+              }}
+            >
+              완료
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}
+        >
+          <KeyboardAvoidingView enabled>
+            <View style={styles.wrapper}>
+              <View style={styles.title}>
+                <TextInput
+                  style={styles.titleInput}
+                  onChangeText={title => setTitle(title)}
+                  placeholder="Title"
+                  placeholderTextColor="#808080"
+                  value={title}
+                  returnKeyType="next"
+                  onSubmitEditing={() =>
+                    contentInputRef.current && contentInputRef.current.focus()
+                  }
+                  underlineColorAndroid="#A9A9A9"
+                  blurOnSubmit={false}
+                />
+              </View>
+              <View style={styles.content}>
+                <TextInput
+                  style={styles.contentInput}
+                  onChangeText={content => setContent(content)}
+                  value={content}
+                  multiline={true}
+                  placeholder="Enter Content"
+                  placeholderTextColor="#808080"
+                  returnKeyType="next"
+                  ref={contentInputRef}
+                  blurOnSubmit={true}
+                  underlineColorAndroid="#f000"
+                />
+              </View>
+
+              {imageUri ? (
+                <View
+                  style={{
+                    marginBottom: Dimensions.get('window').height * 0.02,
+                  }}
+                >
+                  <AutoHeightImage
+                    source={{ uri: imageUri }}
+                    width={Dimensions.get('window').width * 0.9}
+                    style={{
+                      marginBottom: Dimensions.get('window').height * 0.01,
+                      marginTop: Dimensions.get('window').height * 0.01,
+                    }}
+                  />
+                </View>
+              ) : (
+                <View
+                  style={{
+                    marginBottom: Dimensions.get('window').height * 0.04,
+                    height: Dimensions.get('window').height * 0.4,
+                  }}
+                ></View>
+              )}
+
+              <View style={{ flexDirection: 'row' }}>
+                <View style={styles.imageButton}>
+                  <TouchableOpacity
                     activeOpacity={0.5}
-                    onPress={() => navigation.goBack()}>
-                    <Feather name='x' size={27} color="#000000" />
-                </TouchableOpacity>
-                <Text style={{ marginLeft: Dimensions.get('window').width * 0.08, fontWeight: "bold", color: "#000000", fontSize: 15 }}>게시글 수정</Text>
-                <TouchableOpacity
-                    style={styles.smallButton}
+                    onPress={addGalleryImage}
+                  >
+                    <FontAwesome name="image" size={35} color="#000000" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.imageButton}>
+                  <TouchableOpacity
                     activeOpacity={0.5}
-                    onPress={onPressHandler
-                    }>
-                    <Text style={{
-                        color: '#FFFFFF',
-                        paddingVertical: 8, fontSize: 10, fontWeight: "bold"
-                    }}>완료</Text>
-                </TouchableOpacity>
+                    onPress={() => {
+                      setImageUri('');
+                      setFileName('');
+                      setImageType('');
+                    }}
+                  >
+                    <MaterialIcons name="cancel" size={43} color="#FF0000" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.imageButton}>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={addCameraImage}
+                  >
+                    <FontAwesome name="camera" size={35} color="#000000" />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-
-            <ScrollView
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                }}>
-                <KeyboardAvoidingView enabled>
-                    <View style={styles.wrapper}>
-                        <View style={styles.title}>
-                            <TextInput
-                                style={styles.titleInput}
-                                onChangeText={(title) =>
-                                    setTitle(title)
-                                }
-                                placeholder="Title"
-                                placeholderTextColor="#808080"
-                                value={title}
-                                returnKeyType="next"
-                                onSubmitEditing={() =>
-                                    contentInputRef.current &&
-                                    contentInputRef.current.focus()
-                                }
-                                underlineColorAndroid="#A9A9A9"
-                                blurOnSubmit={false}
-                            />
-                        </View>
-                        <View style={styles.content}>
-                            <TextInput
-                                style={styles.contentInput}
-                                onChangeText={(content) =>
-                                    setContent(content)
-                                }
-                                value={content}
-                                multiline={true}
-                                placeholder="Enter Content"
-                                placeholderTextColor="#808080"
-                                returnKeyType="next"
-                                ref={contentInputRef}
-                                blurOnSubmit={true}
-                                underlineColorAndroid="#f000"
-                            />
-
-                        </View>
-
-                        {imageUri != '' ? (
-                            <View style={{ marginBottom: Dimensions.get('window').height * 0.02 }}>
-                                <Image source={{ uri: imageUri }}
-                                    style={{
-                                        marginTop: Dimensions.get('window').height * 0.01,
-                                        borderRadius: 10,
-                                        width: Dimensions.get('window').width,
-                                        height: Dimensions.get('window').height * 0.7,
-                                        resizeMode: 'contain',
-                                    }}
-                                />
-                            </View>
-                        ) :
-
-                            <View style={{ marginBottom: Dimensions.get('window').height * 0.04, height: Dimensions.get('window').height * 0.4, }}>
-                            </View>}
-
-
-
-                        <View style={{ flexDirection: "row" }}>
-                            <View style={styles.imageButton}>
-                                <TouchableOpacity
-                                    activeOpacity={0.5}
-                                    onPress={addGalleryImage}>
-                                    <FontAwesome name='image' size={35} color="#000000" />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.imageButton}>
-                                <TouchableOpacity
-                                    activeOpacity={0.5}
-                                    onPress={() => {
-                                        setImageUri('');
-                                        setFileName('');
-                                        setImageType('');
-                                    }}>
-                                    <MaterialIcons name='cancel' size={43} color="#FF0000" />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.imageButton}>
-                                <TouchableOpacity
-                                    activeOpacity={0.5}
-                                    onPress={addCameraImage}>
-                                    <FontAwesome name='camera' size={35} color="#000000" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                    </View>
-                </KeyboardAvoidingView>
-            </ScrollView>
-        </SafeAreaView>
-    )
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </SafeAreaView>
+    );
 };
 
 

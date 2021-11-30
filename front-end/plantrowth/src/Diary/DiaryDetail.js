@@ -67,95 +67,137 @@ const DiaryDetailScreen = ({ route, navigation }) => {
     }
 
     return (
-        <SafeAreaView style={styles.body}>
-            <Loader loading={loading} />
-            <View style={{ marginVertical: "5%", marginEnd: "-80%" }}>
-                <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => setIsModalVisible(true)}>
-                    <Entypo name='dots-three-vertical' size={22} color="#FFFFFF" />
-                </TouchableOpacity>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={isModalVisible}
-                    onRequestClose={() => {
-                        console.log("close");
+      <SafeAreaView style={styles.body}>
+        <Loader loading={loading} />
+        <View style={{ marginVertical: '5%', marginEnd: '-80%' }}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => setIsModalVisible(true)}
+          >
+            <Entypo name="dots-three-vertical" size={22} color="#FFFFFF" />
+          </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={isModalVisible}
+            onRequestClose={() => {
+              console.log('close');
+              setIsModalVisible(false);
+            }}
+          >
+            <TouchableOpacity
+              style={styles.container}
+              activeOpacity={1}
+              onPressOut={() => {
+                setIsModalVisible(false);
+              }}
+            >
+              <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                <View style={styles.modal}>
+                  <View style={styles.wrapper}>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={deleteMode}
+                      style={{ flexDirection: 'row' }}
+                    >
+                      <FontAwesome5
+                        name="trash"
+                        size={20}
+                        color="#000000"
+                        style={styles.icon}
+                      />
+                      <Text style={styles.text}>삭제</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.wrapper}>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => {
                         setIsModalVisible(false);
-                    }}
-                >
-                    <View style={{ flex: 1, justifyContent: "flex-end" }}>
-                        <View style={styles.modal}>
-                            <View style={styles.wrapper}>
-                                <TouchableOpacity
-                                    activeOpacity={0.5}
-                                    onPress={deleteMode}
-                                    style={{ flexDirection: "row" }}>
-                                    <FontAwesome5 name='trash' size={20} color="#000000" style={styles.icon} />
-                                    <Text style={styles.text}>삭제</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={styles.wrapper}>
-                                <TouchableOpacity
-                                    activeOpacity={0.5}
-                                    onPress={() => {
-                                        setIsModalVisible(false);
-                                        navigation.navigate('DiaryEditScreen', { selectedId: selectedId, plantId: plantId, plantImg: plantImg })
-                                    }
-                                    }
-                                    style={{ flexDirection: "row" }}>
-                                    <FontAwesome5 name='pen' size={25} color="#000000" style={styles.icon} />
-                                    <Text style={styles.text}>수정</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
-            </View>
-
-            <ScrollView
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                }}>
-                <View style={styles.diaryWrapper}>
-                    <View style={styles.title}>
-                        <Text style={{ color: "#000000", fontWeight: "bold", fontSize: 14 }}>{diary.title}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width * 0.7, marginBottom: Dimensions.get('window').height * 0.02 }}>
-                        <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
-                    </View>
-
-                    {diary.file_name ? (
-                        <View>
-                            <Image
-                                source={{ uri: diary.file_name }}
-                                style={{
-                                    width: Dimensions.get('window').width * 0.8,
-                                    height: Dimensions.get('window').height * 0.4,
-                                    resizeMode: 'contain',
-                                }}
-                            />
-                        </View>
-                    ) : null}
-
-                    <View style={styles.content}>
-                        <Text style={{ color: "#000000", fontSize: 14 }}>
-                            {diary.content}
-                        </Text>
-                    </View>
+                        navigation.navigate('DiaryEditScreen', {
+                          selectedId: selectedId,
+                          plantId: plantId,
+                          plantImg: plantImg,
+                        });
+                      }}
+                      style={{ flexDirection: 'row' }}
+                    >
+                      <FontAwesome5
+                        name="pen"
+                        size={25}
+                        color="#000000"
+                        style={styles.icon}
+                      />
+                      <Text style={styles.text}>수정</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-            </ScrollView>
-            <View style={{
-                marginBottom: Dimensions.get('window').height * 0.02,
-                marginTop: Dimensions.get('window').height * 0.01
-            }}>
-                <Text style={{ color: "#FFFFFF", fontWeight: "bold" }}>{diary.date}</Text>
+              </View>
+            </TouchableOpacity>
+          </Modal>
+        </View>
+
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}
+        >
+          <View style={styles.diaryWrapper}>
+            <View style={styles.title}>
+              <Text
+                style={{ color: '#000000', fontWeight: 'bold', fontSize: 14 }}
+              >
+                {diary.title}
+              </Text>
             </View>
-        </SafeAreaView>
-    )
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: Dimensions.get('window').width * 0.7,
+                marginBottom: Dimensions.get('window').height * 0.02,
+              }}
+            >
+              <View
+                style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }}
+              />
+            </View>
+
+            {diary.file_name ? (
+              <View>
+                <Image
+                  source={{ uri: diary.file_name }}
+                  style={{
+                    width: Dimensions.get('window').width * 0.8,
+                    height: Dimensions.get('window').height * 0.4,
+                    resizeMode: 'contain',
+                  }}
+                />
+              </View>
+            ) : null}
+
+            <View style={styles.content}>
+              <Text style={{ color: '#000000', fontSize: 14 }}>
+                {diary.content}
+              </Text>
+            </View>
+          </View>
+        </ScrollView>
+        <View
+          style={{
+            marginBottom: Dimensions.get('window').height * 0.02,
+            marginTop: Dimensions.get('window').height * 0.01,
+          }}
+        >
+          <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>
+            {diary.date}
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
 }
 export default DiaryDetailScreen;
 
@@ -199,6 +241,9 @@ const styles = StyleSheet.create({
     text: {
         color: "#000000",
         fontWeight: "bold"
+    },
+    container:{
+        flex:1
     }
 
 })
