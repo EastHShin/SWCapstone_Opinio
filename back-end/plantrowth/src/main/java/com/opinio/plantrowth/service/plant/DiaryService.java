@@ -1,22 +1,23 @@
 package com.opinio.plantrowth.service.plant;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.opinio.plantrowth.api.dto.diary.CreateDiaryDTO;
 import com.opinio.plantrowth.api.dto.diary.DiaryLookUpDTO;
 import com.opinio.plantrowth.domain.plant.PlantDiary;
 import com.opinio.plantrowth.repository.plant.PlantDiaryRepository;
-import com.opinio.plantrowth.repository.plant.PlantRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DiaryService {
     private final PlantDiaryRepository plantDiaryRepository;
-    private final PlantRepository plantRepository;
 
     @Transactional
     public Long createDiary(PlantDiary diary){
@@ -51,8 +52,7 @@ public class DiaryService {
             diary.setTitle(dto.getTitle());
         if(!(dto.getContent()==null))
             diary.setContent(dto.getContent());
-        if(!(dto.getDate()==null))
-            diary.setDate(dto.getDate());
+            diary.setDate(LocalDate.now());
 
         return diary.getId();
     }

@@ -1,29 +1,42 @@
 package com.opinio.plantrowth.api.controller.plant;
 
+import java.nio.charset.Charset;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import com.opinio.plantrowth.api.dto.diary.*;
-import com.opinio.plantrowth.api.dto.Message;
-import com.opinio.plantrowth.domain.payment.PointSpendType;
-import com.opinio.plantrowth.domain.plant.Plant;
-import com.opinio.plantrowth.domain.plant.PlantDiary;
-import com.opinio.plantrowth.domain.user.User;
-import com.opinio.plantrowth.service.plant.DiaryService;
-import com.opinio.plantrowth.service.plant.PlantExpService;
-import com.opinio.plantrowth.service.plant.PlantService;
-import com.opinio.plantrowth.service.user.UserPointService;
-import com.opinio.plantrowth.service.fileUpload.FileUploadService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.charset.Charset;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.opinio.plantrowth.api.dto.Message;
+import com.opinio.plantrowth.api.dto.diary.CreateDiaryDTO;
+import com.opinio.plantrowth.api.dto.diary.DiaryDTO;
+import com.opinio.plantrowth.api.dto.diary.DiaryLookUpDTO;
+import com.opinio.plantrowth.api.dto.diary.DiaryResponseDTO;
+import com.opinio.plantrowth.api.dto.diary.DiaryResult;
+import com.opinio.plantrowth.domain.payment.PointSpendType;
+import com.opinio.plantrowth.domain.plant.Plant;
+import com.opinio.plantrowth.domain.plant.PlantDiary;
+import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.service.fileUpload.FileUploadService;
+import com.opinio.plantrowth.service.plant.DiaryService;
+import com.opinio.plantrowth.service.plant.PlantExpService;
+import com.opinio.plantrowth.service.plant.PlantService;
+import com.opinio.plantrowth.service.user.UserPointService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,13 +65,9 @@ public class PlantDiaryApiController {
             @ModelAttribute CreateDiaryDTO dto,
             @RequestPart(name = "file_name", required = false) Optional<MultipartFile> file){
 
-        System.out.println(dto.getContent());
-        System.out.println(dto.getTitle());
-        System.out.println(dto.getDate());
-
         PlantDiary diary = PlantDiary.builder()
                 .title(dto.getTitle())
-                .date(dto.getDate())
+                .date(LocalDate.now())
                 .content(dto.getContent())
                 .build();
         Plant plant = plantService.findOnePlant(plantId);

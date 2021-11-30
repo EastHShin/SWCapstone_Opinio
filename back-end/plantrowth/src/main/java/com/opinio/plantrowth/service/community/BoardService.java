@@ -1,6 +1,6 @@
 package com.opinio.plantrowth.service.community;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -70,7 +70,7 @@ public class BoardService {
         if(!(dto.getContent()==null)) {
             board.setContent(dto.getContent());
         }
-        board.setUpdateDate(LocalDate.now());
+        board.setUpdateDate(LocalDateTime.now());
 
         return board.getId();
     }
