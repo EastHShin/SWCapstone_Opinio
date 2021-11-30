@@ -3,6 +3,7 @@ package com.opinio.plantrowth.api.controller.plant;
 
 import com.opinio.plantrowth.api.dto.diary.*;
 import com.opinio.plantrowth.api.dto.Message;
+import com.opinio.plantrowth.domain.payment.PointSpendType;
 import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.plant.PlantDiary;
 import com.opinio.plantrowth.domain.user.User;
@@ -75,7 +76,7 @@ public class PlantDiaryApiController {
         if (curLevel < updatedLevel) {
             isLevelUp = true;
         }
-        User user = userPointService.increasePoint(plant.getUser().getId());
+        User user = userPointService.increasePoint(plant.getUser().getId(), PointSpendType.DIARY);
         Plant updatedPlant = plantService.findOnePlant(plant.getId());
 
         DiaryResponseDTO responseDTO = new DiaryResponseDTO();

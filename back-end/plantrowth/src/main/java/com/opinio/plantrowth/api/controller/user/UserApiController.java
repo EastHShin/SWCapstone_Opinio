@@ -7,6 +7,7 @@ import com.opinio.plantrowth.api.dto.user.UserUpdateDTO;
 import com.opinio.plantrowth.api.dto.user.addPlantDTO;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
 import com.opinio.plantrowth.api.dto.Message;
+import com.opinio.plantrowth.domain.payment.PointSpendType;
 import com.opinio.plantrowth.service.user.AuthService;
 import com.opinio.plantrowth.service.user.UserPointService;
 import com.opinio.plantrowth.service.user.UserService;
@@ -71,7 +72,7 @@ public class UserApiController {
 
     @PostMapping("/api/users/profiles/{user-id}")
     public ResponseEntity<?> addPlant(@PathVariable("user-id") Long id){
-        addPlantDTO dto = userService.addPlant(userPointService.decreasePoint(id, decreasingPoint).getId());
+        addPlantDTO dto = userService.addPlant(userPointService.decreasePoint(id, decreasingPoint, PointSpendType.PROFILE_SLOT).getId());
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

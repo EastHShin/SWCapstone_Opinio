@@ -30,11 +30,14 @@ public class UserService {
     @Transactional
     public UserUpdateDTO updateUser(Long id, UserUpdateDTO user){
         User member = userRepository.findById(id).orElseThrow(IllegalAccessError::new);
-        if(!(user.getUser_name()==null)){
+        if(user.getUser_name()!=null){
             member.setName(user.getUser_name());
         }
-        if(!(user.getUser_birth()==null)) {
+        if(user.getUser_birth()!=null) {
             member.setBirth(user.getUser_birth());
+        }
+        if(user.getPassword()!=null){
+            setNewPassword(id, user.getPassword());
         }
         userRepository.save(member);
         UserUpdateDTO updateUser = new UserUpdateDTO();

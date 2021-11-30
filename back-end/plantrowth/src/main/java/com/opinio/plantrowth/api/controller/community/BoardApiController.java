@@ -93,13 +93,10 @@ public class BoardApiController {
             ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/api/community/{board-id}")
-    public ResponseEntity<?> lookUpBoard(
-        HttpServletRequest request,
-        @PathVariable("board-id") Long id){
-        String userIdStr = request.getHeader("userId");
-        Long userId = Long.parseLong(userIdStr);
-        BoardLookUpDTO board = boardService.LookUpBoard(id, userId);
+    @GetMapping("/api/community/view")
+    public ResponseEntity<?> lookUpBoard( @RequestParam("board-id") Long boardId, @RequestParam("user-id") Long userId){
+
+        BoardLookUpDTO board = boardService.LookUpBoard(boardId, userId);
         Message message= new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -146,11 +143,9 @@ public class BoardApiController {
     /**
      * 게시글 좋아요 부분
      */
-    @PostMapping("/api/community/{board-id}/like")
-    public ResponseEntity<?> boardLike(HttpServletRequest request, @PathVariable ("board-id") Long id){
-        String userIdStr = request.getHeader("userId");
-        Long userId = Long.parseLong(userIdStr);
-        Integer result = boardService.boardLike(userId, id);
+    @PostMapping("/api/community/like")
+    public ResponseEntity<?> boardLike(@RequestParam("board-id") Long boardId, @RequestParam("user-id") Long userId){
+        Integer result = boardService.boardLike(userId, boardId);
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

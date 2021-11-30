@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.api.controller.plant;
 
+import com.opinio.plantrowth.domain.payment.PointSpendType;
 import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.service.plant.DiagnosisRecordService;
@@ -77,7 +78,7 @@ public class DiagnosisApiController {
         질병진단 구독이 들어온다면 포인트를 소비 할지 안할지 정하는 로직 추가해야됨 -> (21/11/28 추가) 프론트측에서 구독여부로 거름
          */
 
-		User updatedUser = userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint);
+		User updatedUser = userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint, PointSpendType.DIAGNOSIS);
 		Integer curLevel = plant.getPlantLevel();
 		plantExpService.increaseExp(plant.getId());
 		Integer updatedLevel = plant.getPlantLevel();

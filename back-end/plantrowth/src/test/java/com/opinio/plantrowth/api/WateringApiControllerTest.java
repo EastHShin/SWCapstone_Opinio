@@ -1,6 +1,7 @@
 package com.opinio.plantrowth.api;
 
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
+import com.opinio.plantrowth.domain.payment.PointSpendType;
 import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.repository.user.UserRepository;
@@ -125,7 +126,7 @@ class WateringApiControllerTest {
         //when
 //            User user = userPointService.updatePoint(plant.getUser().getId());
         Mockito.when(plantService.findOnePlant(any())).thenReturn(plant);
-        Mockito.when(userPointService.increasePoint(any())).thenReturn(updatedUser);
+        Mockito.when(userPointService.increasePoint(any(), any())).thenReturn(updatedUser);
         //then
         mockMvc.perform(post("/api/plants/watering/{plant-id}", 1L)
                 .accept(MediaType.APPLICATION_JSON))
