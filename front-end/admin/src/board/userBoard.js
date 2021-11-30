@@ -2,6 +2,7 @@ import React from "react";
 import NavBar from "../NavBar.js";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Table from './boardbackenddummy.js'
 import "./Board.css"
 import UserIcon from '@material-ui/icons/Person';
 
@@ -20,13 +21,13 @@ function Board() {
                 <Button variant="success">검색</Button>
             </Link>
             <br />
-            <br />
             <Link to="/administrator/board/post">
                 <Button className="mar" variant="primary">게시글 찾기</Button>
             </Link>
             <Link to="/administrator/board/comment">
                 <Button variant="info">댓글 찾기</Button>
             </Link>
+            <Table/>
         </div>
     );
 }

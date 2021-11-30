@@ -41,3 +41,15 @@
 .nextline {
     margin-bottom: 2px;
 }
+
+.info {
+    color: aqua;
+}
+
+.warn {
+    color: red;
+}
+
+.notice {
+    color: gold;
+}

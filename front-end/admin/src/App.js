@@ -9,11 +9,14 @@ import AdvertisementAdd from "./ads/advertisementAdd"
 import AdvertisementUpdate from "./ads/advertisementUpdate"
 import AdvertisementDelete from "./ads/advertisementDelete";
 import Users from "./user/users";
-import UserUpdate from "./user/userUpdate"
 import UserInfo from "./user/userInfo"
+import UserUpdate from "./user/userUpdate"
 import Board from "./board/userBoard"
 import Post from "./board/userPost"
 import Comment from "./board/userComment"
+import BoardInfo from "./board/boardInfo"
+import BoardUpdate from "./board/boardUpdate"
+import BoardDelete from "./board/boardDelete"
 import Report from "./blame/report"
 import React from "react";
 
@@ -36,6 +39,9 @@ function App() {
                         <Route path="/administrator/board" element={<Board />} />
                         <Route path="/administrator/board/post" element={<Post />} />
                         <Route path="/administrator/board/comment" element={<Comment />} />
+                        <Route path="/administrator/board/info" element={<BoardInfo />} />
+                        <Route path="/administrator/board/update" element={<BoardUpdate />} />
+                        <Route path="/administrator/board/delete" element={<BoardDelete />} />
                     </Routes>
                 </BrowserRouter>
             </div>
