@@ -15,4 +15,5 @@ public class BoardDTO {
     private String writer;
     private Integer countedLike;
     private Integer countedComments;
+    private Boolean is_blocked;
 }
