@@ -58,4 +58,8 @@ public class Board {
 	@Builder.Default
 	List<BoardLike> boardLikes = new ArrayList<>();
 
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "board")
+	@Builder.Default
+	List<Report> reports = new ArrayList<>();
+
 }
