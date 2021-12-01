@@ -37,11 +37,7 @@ export const getBoardList = () => {
 export const getPost = (boardId, userId) => {
     console.log(boardId + "유저 id" + userId);
     return async dispatch => {
-        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/${boardId}`,
-        {
-          headers: { userId: `${userId}` },
-        },
-      )
+        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/view?board-id=${boardId}&user-id=${userId}`)
       .then(function (res) {
         if (res.status == 200) {
           dispatch({
@@ -127,6 +123,7 @@ export const editPost = (boardId, post) => {
 };
 
 export const deletePost = boardId => {
+  console.log(boardId);
   return async dispatch => {
     return await axios
       .delete(
@@ -156,7 +153,7 @@ export const createComment = (boardId, userId, comment) => {
     return await axios
       .post(
         `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/comments?user-id=${userId}&board-id=${boardId}`,
-        comment,
+        {content:comment, date: new Date()},
         {
           headers: { 'Content-Type': `application/json` },
         },

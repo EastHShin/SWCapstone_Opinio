@@ -104,7 +104,7 @@ const AccountInfoScreen = ({ navigation }) => {
             }>
             <Text style={{
               color: '#FFFFFF',
-              paddingVertical: 12, fontSize: 10, fontWeight: "bold"
+              paddingVertical: 11, fontSize: 10, fontWeight: "bold"
             }}>수정</Text>
           </TouchableOpacity>
         </View>

@@ -20,42 +20,58 @@ import { useIsFocused } from '@react-navigation/core';
 const Item = ({ item}) => {
 
   return (
-      <View style={styles.section}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: Dimensions.get('window').height * 0.01,
-          }}
-        >
-          <Ionicons
-            name="md-document-text-outline"
-            size={23}
-            color="#000000"
-            style={styles.documentIcon}
-          />
-          <Text style={styles.text}>{item.diagnosis_date} 질병진단 결과</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginStart: Dimensions.get('window').width * 0.05,
-          }}
-        >
-          <Image source={{ uri: item.image_url }} style={styles.image} />
-          <View style={styles.textWrapper}>
-            <View style={{flexDirection:"row"}}>
-            <Text style={{ fontSize: 15, color: '#000000' }}>
-              상태 : 
-            </Text>
-            <Text style={item.disease_name=='건강한' ? {color:"green", marginLeft:Dimensions.get('window').width*0.01} : {color:"red", marginLeft:Dimensions.get('window').width*0.01} }>{item.disease_name}</Text>
-            </View>
-            <Text style={{ fontSize: 15, color: '#000000' }}>
-              확률 : { Math.round(Number(item.disease_percent * 1000))/1000} %
-            </Text>
+    <View style={styles.section}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginVertical: Dimensions.get('window').height * 0.01,
+        }}
+      >
+        <Ionicons
+          name="md-document-text-outline"
+          size={23}
+          color="#000000"
+          style={styles.documentIcon}
+        />
+        <Text style={styles.text}>{item.diagnosis_date} 질병진단 결과</Text>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginStart: Dimensions.get('window').width * 0.05,
+        }}
+      >
+        <Image source={{ uri: item.image_url }} style={styles.image} />
+        <View style={styles.textWrapper}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ fontSize: 15, color: '#000000' }}>상태 :</Text>
+            {item.disease_name == '건강한' ? (
+              <Text
+                style={{
+                  color: 'green',
+                  marginLeft: Dimensions.get('window').width * 0.01,
+                }}
+              >
+                건강
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  color: 'red',
+                  marginLeft: Dimensions.get('window').width * 0.01,
+                }}
+              >
+                {item.disease_name}
+              </Text>
+            )}
           </View>
+          <Text style={{ fontSize: 15, color: '#000000' }}>
+            확률 : {Math.round(Number(item.disease_percent * 1000)) / 1000} %
+          </Text>
         </View>
       </View>
+    </View>
   );
 }
 
@@ -76,6 +92,7 @@ const PlantDiagnosisScreen = ({ route, navigation }) => {
   useEffect(()=> {
     if(diagnosisList.length != 0){
     setDiagnosisRecords(diagnosisList.records.reverse());
+    console.log(diagnosisList.records);
     };
   },[diagnosisList])
 
@@ -100,25 +117,46 @@ const PlantDiagnosisScreen = ({ route, navigation }) => {
         <TouchableOpacity
           style={{ marginStart: Dimensions.get('window').width * 0.03 }}
           activeOpacity={0.5}
-          onPress={() => navigation.goBack()}>
-          <Ionicons name='chevron-back-sharp' size={23} color="#000000" />
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back-sharp" size={23} color="#000000" />
         </TouchableOpacity>
-        <Text style={{ marginEnd: Dimensions.get('window').width * 0.35, fontWeight: "bold", color: "#000000" }}>질병진단 내역 조회</Text>
+        <Text
+          style={{
+            marginEnd: Dimensions.get('window').width * 0.35,
+            fontWeight: 'bold',
+            color: '#000000',
+          }}
+        >
+          질병진단 내역 조회
+        </Text>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          width: Dimensions.get('window').width,
+        }}
+      >
         <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
       </View>
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
-      <FlatList
-          data={diagnosisRecords}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()} //
-          extraData={diagnosisNum}
-        />
-        </View>
+        {diagnosisRecords.length > 0 ? (
+          <FlatList
+            data={diagnosisRecords}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()} 
+            extraData={diagnosisNum}
+          />
+        ) : (
+          <View style={{marginTop:Dimensions.get('window').height*0.4}}>
+            <Text style={{fontSize:15, color:"#000000", fontWeight:"bold"}}>질병진단 내역이 존재하지 않습니다.</Text>
+          </View>
+        )}
+      </View>
       <Footer name={'My Page'} />
     </SafeAreaView>
-  )
+  );
 };
 
 
@@ -129,6 +167,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: "#C9E7BE"
     
   },
   top: {

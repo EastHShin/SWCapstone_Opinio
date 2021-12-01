@@ -116,7 +116,7 @@ const PasswordCheckScreen = ({ route, navigation }) => {
                             }>
                             <Text style={{
                                 color: '#FFFFFF',
-                                paddingVertical: 10, fontSize: 10, fontWeight: "bold"
+                                paddingVertical: 11, fontSize: 10, fontWeight: "bold"
                             }}>인증</Text>
                         </TouchableOpacity>
 

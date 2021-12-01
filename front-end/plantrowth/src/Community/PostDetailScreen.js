@@ -16,6 +16,7 @@ import {
   Keyboard
 } from 'react-native';
 
+import Moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -41,6 +42,8 @@ const PostDetailScreen = ({ route, navigation }) => {
   const [commentList, setCommentList] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [comment, setComment] = useState('');
+  const [postCreateDate, setPostCreateDate] = useState('');
+  const [postUpdateDate, setPostUpdateDate] = useState('');
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -48,6 +51,8 @@ const PostDetailScreen = ({ route, navigation }) => {
   const post = useSelector(state => state.CommunityReducer.post);
   const commentResult = useSelector(state => state.CommunityReducer.commentResult);
 
+  const nowYear = new Date().getFullYear();
+ 
   useEffect(() => {
     if (isFocused) {
       AsyncStorage.getItem('userId').then(value => {
@@ -61,7 +66,11 @@ const PostDetailScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     setCommentList(post.comments);
-    console.log(post)
+    console.log(post);
+    setPostCreateDate(new Date(post.createDate).getFullYear());
+    if(post.updateDate){
+    setPostUpdateDate(new Date(post.updateDate).getFullYear());
+    }
   }, [post])
 
 
@@ -273,12 +282,18 @@ const PostDetailScreen = ({ route, navigation }) => {
               </Text>
             </View>
             <View style={styles.date}>
-              <Text style={{ fontSize: 10 }}>
-                최초 게시일 : {post.createDate}
-              </Text>
+              {nowYear == postCreateDate ?
+               <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.23 }}>
+               최초 게시일 : {Moment(post.createDate).format("MM/DD HH:mm")}
+             </Text>
+             :
+             <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.15 }}>
+             최초 게시일 : {Moment(post.createDate).format("YYYY/MM/DD HH:mm")}
+           </Text>
+           }
               {post.updateDate != null ? (
-                <Text style={{ fontSize: 10 }}>
-                  최근 수정일 : {post.updateDate}
+                <Text style={nowYear == postUpdateDate ? {fontSize:10, marginLeft: Dimensions.get('window').width * 0.23} : {fontSize:10, marginLeft: Dimensions.get('window').width * 0.15}}>
+                  최근 수정일 : {nowYear == postUpdateDate ? Moment(post.updateDate).format("MM/DD HH:mm") : Moment(post.updateDate).format("YYYY/MM/DD HH:mm")}
                 </Text>
               ) : null}
             </View>
@@ -286,7 +301,7 @@ const PostDetailScreen = ({ route, navigation }) => {
           <View style={styles.textWrapper}>
             <Text style={styles.title}>{post.title}</Text>
             <Text style={styles.content}>{post.content}</Text>
-            {post.file_name != '' ? (
+            {post.file_name != null ? (
               <View style={{ alignItems: 'center' }}>
                 <AutoHeightImage
                   source={{ uri: post.file_name }}
@@ -429,7 +444,6 @@ const styles = StyleSheet.create({
     marginVertical: Dimensions.get('window').height * 0.01,
   },
   date: {
-    marginLeft: Dimensions.get('window').width * 0.23,
     marginTop: Dimensions.get('window').height * 0.01,
   },
   modal: {
