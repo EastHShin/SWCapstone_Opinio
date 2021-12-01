@@ -18,34 +18,77 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { getBoardList, setPost } from '../actions/CommunityActions';
 import { useIsFocused } from '@react-navigation/core';
 import { useDispatch, useSelector } from 'react-redux';
+import Moment from 'moment';
+
 
 const Item = ({ item, onPress, style }) => {
-
+  const nowYear = new Date().getFullYear();
+  const boardCreateDate = new Date(item.createDate);
+ 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
       <View>
         <Text style={styles.title}>{item.title}</Text>
       </View>
-      <View style={{marginBottom:Dimensions.get("window").height*0.01}}>
+      <View style={{ marginBottom: Dimensions.get('window').height * 0.01 }}>
         <Text style={styles.content}>
-          {item.content.length > 33 ? (item.content.substring(0, 31) + "···") : item.content}
+          {item.content.length > 33
+            ? item.content.substring(0, 31) + '···'
+            : item.content}
         </Text>
       </View>
-      <View style={{ alignItems: "center", justifyContent:"space-between", flexDirection:"row"}}>
-        <View style={{flexDirection:"row"}}>
-      <Text style={styles.date}>{item.createDate}</Text>
-      <Text style={{fontSize:10, color:"#DCDCDC", fontWeight:'bold'}}> | </Text>
-        <Text style={styles.date}>{item.writer}</Text>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+        }}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          {nowYear == boardCreateDate.getFullYear() ? (
+            <Text style={styles.date}>
+              {Moment(item.createDate).format('MM/DD HH:mm')}
+            </Text>
+          ) : (
+            <Text style={styles.date}>
+              {Moment(item.createDate).format('YYYY/MM/DD HH:mm')}
+            </Text>
+          )}
+
+          <Text style={{ fontSize: 10, color: '#DCDCDC', fontWeight: 'bold' }}>
+            {' '}
+            |{' '}
+          </Text>
+          <Text style={styles.date}>{item.writer}</Text>
         </View>
-        <View style={{flexDirection:"row"}}>
-        
-        <MaterialCommunityIcons name='heart-outline' size = {14} color="#DC143C" />
-        <Text style={{fontSize:10, color : "#DC143C", marginLeft:Dimensions.get('window').width*0.01,marginRight:Dimensions.get('window').width*0.02}}>{item.countedLike}</Text>
-        <SimpleLineIcons name = 'bubble' size ={14} color="#00BFFF"  />
-        <Text style={{fontSize:10, color : "#00BFFF", marginHorizontal:Dimensions.get('window').width*0.01}}>{item.countedComments}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <MaterialCommunityIcons
+            name="heart-outline"
+            size={14}
+            color="#DC143C"
+          />
+          <Text
+            style={{
+              fontSize: 10,
+              color: '#DC143C',
+              marginLeft: Dimensions.get('window').width * 0.01,
+              marginRight: Dimensions.get('window').width * 0.02,
+            }}
+          >
+            {item.countedLike}
+          </Text>
+          <SimpleLineIcons name="bubble" size={14} color="#00BFFF" />
+          <Text
+            style={{
+              fontSize: 10,
+              color: '#00BFFF',
+              marginHorizontal: Dimensions.get('window').width * 0.01,
+            }}
+          >
+            {item.countedComments}
+          </Text>
+        </View>
       </View>
-      </View>
-      
     </TouchableOpacity>
   );
 }
@@ -192,7 +235,8 @@ const CommunityMainScreen = ({ navigation }) => {
           onPress={() => navigation.push('PostCreateScreen')}
           style={styles.fab}
         >
-          <Text style={styles.fabIcon}>+</Text>
+          <Ionicons name={'add'} color={'#FFFFFF'} size={40} style={styles.fabIcon}/>
+
         </TouchableOpacity>
       </View>
 
@@ -282,8 +326,7 @@ const styles = StyleSheet.create({
     elevation: 8 
     }, 
     fabIcon: { 
-      fontSize: 40, 
-      color: 'white' 
+      marginStart:Dimensions.get('window').width*0.01
     },
     modalWrapper: {
       marginVertical: Dimensions.get("window").height * 0.02,

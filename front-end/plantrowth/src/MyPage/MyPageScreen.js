@@ -42,7 +42,6 @@ const MyPageScreen = ({ navigation }) => {
       {
         text: '확인',
         onPress: () => {
-
           dispatch(logoutUser(userEmail));
         },
       },

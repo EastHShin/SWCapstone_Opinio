@@ -289,10 +289,12 @@ export const kakaoUnlink = () => dispatch => {
 export const deleteUser = (userId, password) => {
     return async dispatch => {
         console.log(userId + "    " + password);
-        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,password,
-            {
-                headers: { "Content-Type": `application/json` }
-            })
+        return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,
+        {
+            data:{
+                password:password
+            }
+        })
             .then(function (res) {
                 if (res.status == 200) {
                     axios.defaults.headers.common['X-AUTH-TOKEN'] = undefined

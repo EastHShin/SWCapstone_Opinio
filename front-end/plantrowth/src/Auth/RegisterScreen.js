@@ -308,7 +308,7 @@ function RegisterScreen({ navigation }) {
                 <Text style={{
                   color: '#FFFFFF',
                   paddingVertical: 10, fontSize: 10
-                }}>확인</Text>
+                }}>중복확인</Text>
               </TouchableOpacity>
             </View>
 
