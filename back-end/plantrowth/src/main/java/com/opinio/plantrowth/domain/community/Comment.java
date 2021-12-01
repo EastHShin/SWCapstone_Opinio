@@ -1,6 +1,8 @@
 package com.opinio.plantrowth.domain.community;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.opinio.plantrowth.domain.user.User;
@@ -45,4 +48,10 @@ public class Comment {
     private String content;
     private LocalDateTime date;
     private String writer;
+    @Column(name = "is_blocked")
+    private Boolean isBlocked;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "comment")
+    @Builder.Default
+    List<Report> reports = new ArrayList<>();
 }

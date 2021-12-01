@@ -36,18 +36,21 @@ public class BoardService {
     }
     public BoardLookUpDTO LookUpBoard(Long boardId, Long userId){
         Board board = findBoard(boardId);
-        BoardLookUpDTO page = new BoardLookUpDTO();
-        page.setTitle(board.getTitle());
-        page.setContent(board.getContent());
-        page.setCreateDate(board.getCreateDate());
-        page.setUpdateDate(board.getUpdateDate());
-        page.setFile_name(board.getFilename());
-        page.setBoardLike(boardLikeRepository.existsByUserIdAndBoardId(userId,boardId));
-        page.setWriter(board.getUser().getName());
-        page.setCountedLike(countedLike(board.getId()));
-        page.setComments(board.getComments());
-        page.setUserId(board.getUser().getId());
-        page.setCountedComments(countedCommentByBoardId(boardId));
+        boolean isLike = boardLikeRepository.existsByUserIdAndBoardId(userId, boardId);
+        Integer numOfLike = countedLike(boardId);
+        Integer numOfComment = countedCommentByBoardId(boardId);
+        BoardLookUpDTO page = new BoardLookUpDTO(board, isLike, numOfLike, numOfComment);
+        // page.setTitle(board.getTitle());
+        // page.setContent(board.getContent());
+        // page.setCreateDate(board.getCreateDate());
+        // page.setUpdateDate(board.getUpdateDate());
+        // page.setFile_name(board.getFilename());
+        // page.setBoardLike(boardLikeRepository.existsByUserIdAndBoardId(userId,boardId));
+        // page.setWriter(board.getUser().getName());
+        // page.setCountedLike(countedLike(board.getId()));
+        // page.setComments();
+        // page.setUserId(board.getUser().getId());
+        // page.setCountedComments(countedCommentByBoardId(boardId));
 
         return page;
     }

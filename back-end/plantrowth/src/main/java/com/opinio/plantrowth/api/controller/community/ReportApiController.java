@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.api.controller.community;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,20 +18,19 @@ public class ReportApiController {
 	private final ReportService reportService;
 
 	@PostMapping("/api/community/board/report")//게시글 신고
-	public ResponseEntity<?> reportBoard(@RequestParam("board-id")Long boardId,
+	public ResponseEntity reportBoard(@RequestParam("board-id")Long boardId,
 		@RequestParam("user-id")Long userId){
 		Report report = reportService.boardReport(boardId, userId);
-		return report!=null?
-			ResponseEntity.ok().body("신고성공"):
-			ResponseEntity.badRequest().body("신고실패");
+		reportService.autoBlockBoardReport(report);
+
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@PostMapping("/api/community/comment/report")//댓글 신고
-	public ResponseEntity<?> reportComment(@RequestParam("comment-id")Long commentId,
+	public ResponseEntity reportComment(@RequestParam("comment-id")Long commentId,
 		@RequestParam("user-id")Long userId){
-		Long result = reportService.commentReport(commentId, userId);
-		return result!=null?
-			ResponseEntity.ok().body("신고성공"):
-			ResponseEntity.badRequest().body("신고실패");
+		Report report = reportService.commentReport(commentId, userId);
+		reportService.autoBlockCommentReport(report);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 }

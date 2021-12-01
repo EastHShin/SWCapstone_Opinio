@@ -28,6 +28,8 @@ public class ReportService {
 	private final CommentRepository commentRepository;
 	private final UserRepository userRepository;
 
+	private static final int BLOCK_COUNT = 3;
+
 	@Transactional
 	public Report boardReport(Long boardId, Long userId) {
 		User reportingUser = userRepository.findById(userId).orElseThrow(
@@ -48,7 +50,7 @@ public class ReportService {
 	}
 
 	@Transactional
-	public Long commentReport(Long commentId, Long userId) {
+	public Report commentReport(Long commentId, Long userId) {
 		User reportingUser = userRepository.findById(userId).orElseThrow(
 			() -> new IllegalArgumentException("No Found User in Comment Report")
 		);
@@ -62,8 +64,7 @@ public class ReportService {
 			.state(Report.StateEnum.NOTPROCESSED)
 			.tag(Report.tagEnum.COMMENT)
 			.build();
-		Long reportId = reportRepository.save(report).getId();
-		return reportId;
+		return reportRepository.save(report);
 	}
 
 	public List<Report> viewReports() {
@@ -79,10 +80,36 @@ public class ReportService {
 	}
 
 	@Transactional
-	public Report completeReport(Long reportId) {
+	public Report completeBoardReport(Long reportId) {
 		Report report = reportRepository.findById(reportId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 신고입니다."));
 		report.setState(Report.StateEnum.COMPLETE);
+		report.getBoard().setIsBlocked(true);
 		return report;
+	}
+
+	@Transactional
+	public Report completeCommentReport(Long reportId) {
+		Report report = reportRepository.findById(reportId)
+			.orElseThrow(() -> new IllegalArgumentException("No Found Report in Comment"));
+		report.setState(Report.StateEnum.COMPLETE);
+		report.getComment().setIsBlocked(true);
+		return report;
+	}
+
+	@Transactional
+	public void autoBlockBoardReport(Report report) {
+		int numOfReports = report.getBoard().getReports().size();
+		if (numOfReports > BLOCK_COUNT) {
+			report.getBoard().setIsBlocked(true);
+		}
+	}
+
+	@Transactional
+	public void autoBlockCommentReport(Report report) {
+		int numOfReports = report.getComment().getReports().size();
+		if (numOfReports > BLOCK_COUNT) {
+			report.getComment().setIsBlocked(true);
+		}
 	}
 }
