@@ -51,7 +51,7 @@ public class BoardApiController {
 		List<BoardDTO> collect = boards.stream()
 			.map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
 				m.getId(), m.getUser().getName(), boardService.countedLike(m.getId()),
-				boardService.countedCommentByBoardId(m.getId())))
+				boardService.countedCommentByBoardId(m.getId()), m.getIsBlocked()))
 			.collect(Collectors.toList());
 
 		return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
@@ -64,7 +64,7 @@ public class BoardApiController {
 		List<BoardDTO> collect = boards.stream()
 			.map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
 				m.getId(), m.getUser().getName(), boardService.countedLike(m.getId()),
-				boardService.countedCommentByBoardId(m.getId())))
+				boardService.countedCommentByBoardId(m.getId()), m.getIsBlocked()))
 			.collect(Collectors.toList());
 
 		return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
