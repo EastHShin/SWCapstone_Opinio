@@ -14,7 +14,7 @@ export const getBoardList = () => {
   return async dispatch => {
     return await axios
       .get(
-        'http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/',
+        'http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community',
       )
       .then(function (res) {
         if (res.status == 200) {
