@@ -45,4 +45,6 @@ public class Comment {
     private String content;
     private LocalDateTime date;
     private String writer;
+    @Column(name = "is_blocked")
+    private Boolean isBlocked;
 }

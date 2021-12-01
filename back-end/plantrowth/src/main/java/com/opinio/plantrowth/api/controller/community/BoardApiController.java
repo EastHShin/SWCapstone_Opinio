@@ -58,7 +58,7 @@ public class BoardApiController {
 	}
 
 	@Transactional
-	@GetMapping("/api/community/") // 게시글 목록 조회
+	@GetMapping("/api/community") // 게시글 목록 조회
 	public ResponseEntity<BoardResult> boardList() {
 		List<Board> boards = boardService.BoardList();
 		List<BoardDTO> collect = boards.stream()

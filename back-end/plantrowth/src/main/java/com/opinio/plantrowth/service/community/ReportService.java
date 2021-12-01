@@ -79,10 +79,20 @@ public class ReportService {
 	}
 
 	@Transactional
-	public Report completeReport(Long reportId) {
+	public Report completeBoardReport(Long reportId) {
 		Report report = reportRepository.findById(reportId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 신고입니다."));
 		report.setState(Report.StateEnum.COMPLETE);
+		report.getBoard().setIsBlocked(true);
+		return report;
+	}
+
+	@Transactional
+	public Report completeCommentReport(Long reportId) {
+		Report report = reportRepository.findById(reportId)
+			.orElseThrow(() -> new IllegalArgumentException("No Found Report in Comment"));
+		report.setState(Report.StateEnum.COMPLETE);
+		report.getComment().setIsBlocked(true);
 		return report;
 	}
 }
