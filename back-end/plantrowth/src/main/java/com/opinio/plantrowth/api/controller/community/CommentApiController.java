@@ -67,14 +67,7 @@ public class CommentApiController {
         Long id = commentService.deleteComment(commentId);
         return ResponseEntity.ok().body("댓글 삭제 완료");
     }
-    // @PostMapping("/api/community/report")//댓글 신고
-    // public ResponseEntity<?> reportComment(@RequestParam("comment-id")Long commentId,
-    //                                        @RequestParam("user-id")Long userId){
-    //     Long result = reportService.CommentReport(commentId, userId);
-    //     return result!=null?
-    //             ResponseEntity.ok().body("신고성공"):
-    //             ResponseEntity.badRequest().body("신고실패");
-    // }
+
 
 
 }

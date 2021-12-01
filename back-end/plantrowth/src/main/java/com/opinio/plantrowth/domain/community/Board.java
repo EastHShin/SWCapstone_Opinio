@@ -31,27 +31,31 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Board {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "board_id")
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private User user;
-    private String title;
-    private String content;
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
-    private String filename;
-    private String noticeYn;
-    @OneToMany(fetch=FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "board")
-    @Builder.Default
-    List<Comment> comments = new ArrayList<>();
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "user_id")
+	@JsonIgnore
+	private User user;
+	private String title;
+	private String content;
+	private LocalDateTime createDate;
+	private LocalDateTime updateDate;
+	private String filename;
+	private String noticeYn;
 
-    @OneToMany(fetch=FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "board")
-    @Builder.Default
-    List<BoardLike> boardLikes = new ArrayList<>();
+	@Column(name = "is_blocked")
+	private Boolean isBlocked;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "board")
+	@Builder.Default
+	List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "board")
+	@Builder.Default
+	List<BoardLike> boardLikes = new ArrayList<>();
 
 }
