@@ -25,72 +25,74 @@ const Item = ({ item, onPress, style }) => {
   const nowYear = new Date().getFullYear();
   const boardCreateDate = new Date(item.createDate);
  
-  return (
-    <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
-      <View>
-        <Text style={styles.title}>{item.title}</Text>
-      </View>
-      <View style={{ marginBottom: Dimensions.get('window').height * 0.01 }}>
-        <Text style={styles.content}>
-          {item.content.length > 33
-            ? item.content.substring(0, 31) + '···'
-            : item.content}
-        </Text>
-      </View>
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-        }}
-      >
-        <View style={{ flexDirection: 'row' }}>
-          {nowYear == boardCreateDate.getFullYear() ? (
-            <Text style={styles.date}>
-              {Moment(item.createDate).format('MM/DD HH:mm')}
-            </Text>
-          ) : (
-            <Text style={styles.date}>
-              {Moment(item.createDate).format('YYYY/MM/DD HH:mm')}
-            </Text>
-          )}
+    return (
+      <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
+        <View>
+          <Text style={styles.title}>{item.title}</Text>
+        </View>
+        <View style={{ marginBottom: Dimensions.get('window').height * 0.01 }}>
+          <Text style={styles.content}>
+            {item.content.length > 33
+              ? item.content.substring(0, 31) + '···'
+              : item.content}
+          </Text>
+        </View>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+          }}
+        >
+          <View style={{ flexDirection: 'row' }}>
+            {nowYear == boardCreateDate.getFullYear() ? (
+              <Text style={styles.date}>
+                {Moment(item.createDate).format('MM/DD HH:mm')}
+              </Text>
+            ) : (
+              <Text style={styles.date}>
+                {Moment(item.createDate).format('YYYY/MM/DD HH:mm')}
+              </Text>
+            )}
 
-          <Text style={{ fontSize: 10, color: '#DCDCDC', fontWeight: 'bold' }}>
-            {' '}
-            |{' '}
-          </Text>
-          <Text style={styles.date}>{item.writer}</Text>
+            <Text
+              style={{ fontSize: 10, color: '#DCDCDC', fontWeight: 'bold' }}
+            >
+              {' '}
+              |{' '}
+            </Text>
+            <Text style={styles.date}>{item.writer}</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <MaterialCommunityIcons
+              name="heart-outline"
+              size={14}
+              color="#DC143C"
+            />
+            <Text
+              style={{
+                fontSize: 10,
+                color: '#DC143C',
+                marginLeft: Dimensions.get('window').width * 0.01,
+                marginRight: Dimensions.get('window').width * 0.02,
+              }}
+            >
+              {item.countedLike}
+            </Text>
+            <SimpleLineIcons name="bubble" size={14} color="#00BFFF" />
+            <Text
+              style={{
+                fontSize: 10,
+                color: '#00BFFF',
+                marginHorizontal: Dimensions.get('window').width * 0.01,
+              }}
+            >
+              {item.countedComments}
+            </Text>
+          </View>
         </View>
-        <View style={{ flexDirection: 'row' }}>
-          <MaterialCommunityIcons
-            name="heart-outline"
-            size={14}
-            color="#DC143C"
-          />
-          <Text
-            style={{
-              fontSize: 10,
-              color: '#DC143C',
-              marginLeft: Dimensions.get('window').width * 0.01,
-              marginRight: Dimensions.get('window').width * 0.02,
-            }}
-          >
-            {item.countedLike}
-          </Text>
-          <SimpleLineIcons name="bubble" size={14} color="#00BFFF" />
-          <Text
-            style={{
-              fontSize: 10,
-              color: '#00BFFF',
-              marginHorizontal: Dimensions.get('window').width * 0.01,
-            }}
-          >
-            {item.countedComments}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
 }
 
 
@@ -114,6 +116,7 @@ const CommunityMainScreen = ({ navigation }) => {
 
   useEffect(() => {
     setIsFetching(false);
+    console.log(boardList)
   }, [boardList])
 
 
@@ -126,6 +129,7 @@ const CommunityMainScreen = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
 
+    if(!item.is_blocked){
     return (
       <Item
         item={item}
@@ -137,6 +141,12 @@ const CommunityMainScreen = ({ navigation }) => {
         style={{ backgroundColor: "#FFFFFF" }}
       />
     )
+      }
+      else{
+        return (
+          <View style={{ width: Dimensions.get('window').width }}></View>
+        )
+      };
   };
 
   return (
