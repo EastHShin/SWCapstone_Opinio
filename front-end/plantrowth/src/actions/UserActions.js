@@ -515,7 +515,7 @@ export const getPointList = (userId) => {
                 console.log(res.data.records)
                 dispatch({
                     type:POINT_LIST,
-                    payload:res.data.records
+                    payload:res.data.records.reverse()
                 })
             }
         })

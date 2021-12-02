@@ -184,6 +184,7 @@ const CommunityMainScreen = ({ navigation }) => {
           <Entypo name="dots-three-vertical" size={22} color="#000000" />
         </TouchableOpacity>
       </View>
+      
       <Modal
         animationType="fade"
         transparent={true}
