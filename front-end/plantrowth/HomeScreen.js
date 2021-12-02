@@ -319,7 +319,6 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     width: screenWidth * 0.274,
-    height: screenHeight * 0.25,
     padding: 5,
     backgroundColor: '#C9E7BE',
     flexDirection: 'column',
