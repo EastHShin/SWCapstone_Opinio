@@ -16,4 +16,5 @@ public class BoardDTO {
     private Integer countedLike;
     private Integer countedComments;
     private Boolean is_blocked;
+    private Integer user_level;
 }

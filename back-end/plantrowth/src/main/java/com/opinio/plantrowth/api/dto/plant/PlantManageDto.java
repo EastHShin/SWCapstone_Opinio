@@ -26,6 +26,7 @@ public class PlantManageDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate recent_watering;
     private Boolean is_subscription;
+    private Integer point;
 
     public PlantManageDto(Plant plant) {
         plant_id = plant.getId();
@@ -40,6 +41,7 @@ public class PlantManageDto {
         remain_cycle = plant.getRemainCycle();
         recent_watering = plant.getRecentWatering();
         is_subscription = plant.getUser().getSubscription();
+        point = plant.getUser().getPoint();
     }
 
 }
