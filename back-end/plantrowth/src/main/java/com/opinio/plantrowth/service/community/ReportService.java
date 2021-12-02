@@ -31,7 +31,7 @@ public class ReportService {
 	private static final int BLOCK_COUNT = 3;
 
 	@Transactional
-	public Report boardReport(Long boardId, Long userId) {
+	public Report boardReport(Long boardId, Long userId, String reportReason) {
 		User reportingUser = userRepository.findById(userId).orElseThrow(
 			() -> new IllegalArgumentException("No Found User in Board Report")
 		);
@@ -42,6 +42,7 @@ public class ReportService {
 			.user(reportingUser)
 			.board(board)
 			.date(LocalDate.now())
+			.reason(reportReason)
 			.state(Report.StateEnum.NOTPROCESSED)
 			.tag(Report.tagEnum.BOARD)
 			.build();
@@ -50,7 +51,7 @@ public class ReportService {
 	}
 
 	@Transactional
-	public Report commentReport(Long commentId, Long userId) {
+	public Report commentReport(Long commentId, Long userId, String reportReason) {
 		User reportingUser = userRepository.findById(userId).orElseThrow(
 			() -> new IllegalArgumentException("No Found User in Comment Report")
 		);
@@ -61,6 +62,7 @@ public class ReportService {
 			.user(reportingUser)
 			.comment(comment)
 			.date(LocalDate.now())
+			.reason(reportReason)
 			.state(Report.StateEnum.NOTPROCESSED)
 			.tag(Report.tagEnum.COMMENT)
 			.build();
@@ -75,7 +77,6 @@ public class ReportService {
 	public Report viewReport(Long reportId) {
 		Report report = reportRepository.findById(reportId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 신고입니다."));
-		report.setState(Report.StateEnum.PROCESSED);
 		return report;
 	}
 
@@ -102,6 +103,8 @@ public class ReportService {
 		int numOfReports = report.getBoard().getReports().size();
 		if (numOfReports > BLOCK_COUNT) {
 			report.getBoard().setIsBlocked(true);
+			report.getBoard().getReports().stream()
+				.forEach(r -> r.setState(Report.StateEnum.AUTOCOMPLETE));
 		}
 	}
 
@@ -110,6 +113,8 @@ public class ReportService {
 		int numOfReports = report.getComment().getReports().size();
 		if (numOfReports > BLOCK_COUNT) {
 			report.getComment().setIsBlocked(true);
+			report.getComment().getReports().stream()
+				.forEach(c -> c.setState(Report.StateEnum.AUTOCOMPLETE));
 		}
 	}
 }
