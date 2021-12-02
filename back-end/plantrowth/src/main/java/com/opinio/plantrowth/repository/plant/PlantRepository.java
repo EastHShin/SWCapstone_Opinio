@@ -14,4 +14,6 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
 
 	@Query("select p.plantLevel from Plant p where p.user.id = ?1")
 	List<Integer> findPlantLevelByUserId(Long userId);
+
+	Boolean existsByUserId(Long userId);
 }

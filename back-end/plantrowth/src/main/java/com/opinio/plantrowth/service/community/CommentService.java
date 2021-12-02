@@ -23,7 +23,6 @@ public class CommentService {
 	private final CommentRepository commentRepository;
 	private final PlantRepository plantRepository;
 
-
 	@Transactional
 	public Long createComment(Comment comment) {
 
@@ -71,6 +70,10 @@ public class CommentService {
 	}
 
 	public Integer getUserLevel(Long userId) {
+		Boolean existsPlant = plantRepository.existsByUserId(userId);
+		if (!existsPlant) {
+			return 0;
+		}
 		Integer lv = plantRepository.findPlantLevelByUserId(userId).stream().mapToInt(x -> x).max().orElseThrow(
 			NoSuchElementException::new);
 		return lv;

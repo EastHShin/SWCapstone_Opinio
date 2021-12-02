@@ -134,6 +134,10 @@ public class BoardService {
 	}
 
 	public Integer getUserMaxLevel(Long userId) {
+		Boolean existsPlant = plantRepository.existsByUserId(userId);
+		if(!existsPlant){
+			return 0;
+		}
 		Integer lv = plantRepository.findPlantLevelByUserId(userId)
 			.stream()
 			.mapToInt(x -> x)
