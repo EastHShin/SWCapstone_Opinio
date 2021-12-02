@@ -14,6 +14,44 @@ app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
 
+@app.route('/check', methods=['GET', 'POST'])
+def check_image():
+    text = request.json
+    url = text['file_name']
+    print(url)
+    urllib.request.urlretrieve(url, "temp.png")
+    img_c = Image.open("temp.png")
+    rgb_img = img_c.convert('RGB')
+    rgb_img.save("temp.jpg")
+
+    plant_learner = load_learner('./plant_notplant_resnet18.pkl')
+    print('check model loaded!')
+    img = Image.open("temp.jpg")
+    pt_resize = img.resize((256, 256))
+    pt_resize.save('plant_check_test.jpg')
+
+    ck_answer = plant_learner.predict('./plant_check_test.jpg')
+    list_ck = list(ck_answer)
+
+    #value2 = list_2[1]
+    is_plant = ""
+    is_percent = 0
+    value_ck = list_ck[1]
+
+    if value_ck == 0:
+        is_plant = "NO"
+        is_percent = list_ck[2][0]
+    else:
+        is_plant = "YES"
+        is_percent = list_ck[2][1]
+
+    answer = OrderedDict()
+    answer["is_plant"] = is_plant
+    answer["is_percentage"] = float(is_percent * 100)
+
+    return (json.dumps(answer, indent="\t", ensure_ascii=False))
+
+
 # 파일 업로드 처리
 @app.route('/predict', methods=['GET', 'POST'])
 def infer_image():
@@ -25,23 +63,28 @@ def infer_image():
     rgb_img = img_c.convert('RGB')
     rgb_img.save("temp.jpg")
 
+    plant_learner = load_learner('./plant_notplant_resnet18.pkl')
     first_learner = load_learner('./plantrowth_first_resnet50_train.pkl')
-    second_learner = load_learner('./plantrowth_second_resnet50_train.pkl')
+    #second_learner = load_learner('./plantrowth_second_resnet50_train.pkl')
     print('first model loaded!')
-    print('second model loaded!')
+    #print('second model loaded!')
 
     img = Image.open("temp.jpg")
+    pt_resize = img.resize((256, 256))
     img_resize = img.resize((224, 224))
-    img_resize_2 = img.resize((512, 512))
-    img_resize.save('test.jpg')
-    img_resize_2.save('test2.jpg')
+    #img_resize_2 = img.resize((512, 512))
+    pt_resize.save('plant_check_test.jpg')
+    img_resize.save('first_test.jpg')
+    #img_resize_2.save('test2.jpg')
 
-    answer_1 = first_learner.predict('./test.jpg')
-    answer_2 = second_learner.predict('./test2.jpg')
+    ck_answer = plant_learner.predict('./plant_check_test.jpg')
+    answer_1 = first_learner.predict('./first_test.jpg')
+    #answer_2 = second_learner.predict('./test2.jpg')
+    list_ck = list(ck_answer)
     list_1 = list(answer_1)
-    list_2 = list(answer_2)
+    #list_2 = list(answer_2)
 
-    val1Mild = list_1[2][5] + list_1[2][7] + list_1[2][25] + list_1[2][31] + list_1[2][16] * 0.6 + \
+    """val1Mild = list_1[2][5] + list_1[2][7] + list_1[2][25] + list_1[2][31] + list_1[2][16] * 0.6 + \
                list_1[2][18] * 0.6 + list_1[2][28] * 0.6 + list_1[2][32] * 0.6 + list_1[2][34] * 0.6
 
     val1Severe = list_1[2][0] + list_1[2][1] + list_1[2][2] + list_1[2][8] + list_1[2][11] + list_1[2][12] + \
@@ -77,10 +120,20 @@ def infer_image():
     val2Mild = round(float(val2Mild) * 100, 8)
     val2Severe = round(float(val2Severe) * 100, 8)
     val2Complex = round(float(val2Complex) * 100, 8)
-    val2Healthy = round(float(val2Healthy) * 100, 8)
+    val2Healthy = round(float(val2Healthy) * 100, 8)"""
 
+    #value2 = list_2[1]
+    is_plant = ""
+    is_percent = 0
+    value_ck = list_ck[1]
     value = list_1[1]
-    value2 = list_2[1]
+
+    if value_ck == 0:
+        is_plant = "NO"
+        is_percent = list_ck[2][0]
+    else:
+        is_plant = "YES"
+        is_percent = list_ck[2][1]
 
     disease_name = ''
     if int(value) == 0:
@@ -124,10 +177,12 @@ def infer_image():
         disease_name = "건강한"
 
     answer = OrderedDict()
+    answer["is_plant"] = is_plant
+    answer["is_percentage"] = float(is_percent * 100)
     answer["disease_model_1"] = disease_name
-    answer["disease_model_2"] = list_2[0]
+    #answer["disease_model_2"] = list_2[0]
     answer["percent_model_1"] = float(list_1[2][value] * 100)
-    answer["percent_model_2"] = float(list_2[2][value2] * 100)
+    #answer["percent_model_2"] = float(list_2[2][value2] * 100)
     """answer["model_1_Healthy"] = val1Healthy
     answer["model_1_Mild"] = val1Mild
     answer["model_1_Severe"] = val1Severe
