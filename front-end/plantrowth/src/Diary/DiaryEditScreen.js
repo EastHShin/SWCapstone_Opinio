@@ -33,9 +33,7 @@ const DiaryEditScreen = ({ route, navigation }) => {
 
     const result = useSelector(state => state.DiaryReducer.result);
 
-    useEffect(() => {
-        console.log(imageUri);
-    }, [])
+
     useEffect(() => {
         if (result == "success" && isFocused) {
             setLoading(false);
@@ -135,7 +133,6 @@ const DiaryEditScreen = ({ route, navigation }) => {
             }
 
         }
-        console.log(JSON.stringify(Data));
 
         dispatch(editDiary(Data, selectedId));
 

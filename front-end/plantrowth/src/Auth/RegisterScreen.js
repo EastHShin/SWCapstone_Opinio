@@ -169,8 +169,6 @@ function RegisterScreen({ navigation }) {
 
     setLoading(true);
 
-    console.log(fcmToken);
-
     const user = JSON.stringify({
       user_name: userNickName,
       user_birth: userBirth,
@@ -179,8 +177,6 @@ function RegisterScreen({ navigation }) {
       fcm_access_token: fcmToken
 
     });
-
-    console.log(user);
 
     dispatch(registerUser(user));
 

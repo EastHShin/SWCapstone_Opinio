@@ -83,13 +83,6 @@ const PostEditScreen = ({ route, navigation }) => {
 
         setLoading(true);
 
-
-        // const date = new Date();
-
-        // const year = date.getFullYear();
-        // const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        // const day = ('0' + date.getDate()).slice(-2);
-
         const Data = new FormData();
 
         if (post.title != title) {
@@ -133,7 +126,6 @@ const PostEditScreen = ({ route, navigation }) => {
             }
 
         }
-        console.log(JSON.stringify(Data));
 
         dispatch(editPost(selectedId, Data));
 

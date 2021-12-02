@@ -77,20 +77,12 @@ const DiaryCreateScreen = ({ route, navigation }) => {
 
         setLoading(true);
 
-
-        // const date = new Date();
-
-        // const year = date.getFullYear();
-        // const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        // const day = ('0' + date.getDate()).slice(-2);
-
         const Data = new FormData();
 
         Data.append('title', title);
         Data.append('content', content);
         
         if (imageUri) {
-            console.log("사진 있음");
             Data.append('file_name', {
                 name: fileName,
                 type: imageType,
