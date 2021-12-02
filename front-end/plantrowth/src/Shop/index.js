@@ -99,13 +99,9 @@ ShopScreen = () => {
     }
   }, [isFocused, buyProfileSlotState, buySubscribeState]);
 
-  const buySlotHandler = choice => {
-    if (choice == 'point') {
-      setLoading(true);
-      console.log('buySlotHandler 호출');
-      dispatch(buyProfileSlot(userId));
-    } else if (choice == 'cash') {
-    }
+  const buySlotHandler = () => {
+    setLoading(true);
+    dispatch(buyProfileSlot(userId));
   };
 
   const renderBuySlotByPoint = byPoint => {
@@ -113,7 +109,7 @@ ShopScreen = () => {
       return (
         <View>
           <Text style={styles.buyResultText}>
-            50포인트를 소모하여 보유하고 계신 포인트가
+            300포인트를 소모하여 보유하고 계신 포인트가
           </Text>
           <View style={{ flexDirection: 'row' }}>
             <Text
@@ -129,11 +125,7 @@ ShopScreen = () => {
         </View>
       );
     } else if (!byPoint) {
-      return (
-        <View>
-          <Text style={styles.buyResultText}>50원을 결제하셨어요</Text>
-        </View>
-      );
+      return <Text style={styles.buyResultText}>1000원을 결제하셨어요</Text>;
     }
   };
   return (
@@ -149,44 +141,45 @@ ShopScreen = () => {
       >
         <View style={styles.sectionWrapper}>
           <View style={{ width: screenWidth * 0.8, alignItems: 'center' }}>
-            <Text style={{ fontFamily: 'NanumGothicBold' }}>Shop</Text>
-            <Text style={{ fontFamily: 'NanumGothicBold' }}>
-              이름: {shopInfo.user_name}
+            <Text
+              style={{
+                fontFamily: 'NanumGothicBold',
+                color: '#363636',
+                fontSize: 18,
+              }}
+            >
+              상점{`\n`}
             </Text>
-            <Text style={{ fontFamily: 'NanumGothicBold' }}>
-              보유 포인트: {shopInfo.point}
-            </Text>
+            <View
+              style={{
+                backgroundColor: '#e8ebed',
+                padding: 10,
+                borderRadius: 10,
+                width: screenWidth * 0.8,
+              }}
+            >
+              <Text style={{ fontFamily: 'NanumGothicBold', color: '#363636' }}>
+                어서오세요!{`\n`}
+                {shopInfo.user_name}님의 보유 포인트: {shopInfo.point}
+              </Text>
+            </View>
           </View>
           <View style={{ flex: 1, justifyContent: 'center' }}>
             <View style={styles.slotSection}>
               <View style={styles.goodsWrapper}>
-                <View
-                  style={{
-                    width: screenWidth * 0.6,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
+                <View style={styles.goodsTextWrapper}>
                   <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
                   <Text style={styles.goodsText}>{'300포인트'}</Text>
                 </View>
                 <TouchableOpacity
                   style={styles.buyButton}
-                  onPress={() => buySlotHandler('point')}
+                  onPress={() => buySlotHandler()}
                 >
                   <Ionicons name={'cash-outline'} size={30} color={'white'} />
                 </TouchableOpacity>
               </View>
               <View style={styles.goodsWrapper}>
-                <View
-                  style={{
-                    width: screenWidth * 0.6,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
+                <View style={styles.goodsTextWrapper}>
                   <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
                   <Text style={styles.goodsText}>{'1000원'}</Text>
                 </View>
@@ -200,7 +193,7 @@ ShopScreen = () => {
                   <Ionicons name={'cash-outline'} size={30} color={'white'} />
                 </TouchableOpacity>
               </View>
-              <View style={{ width: screenWidth * 0.75 }}>
+              <View style={{ width: screenWidth * 0.75, marginVertical: 10 }}>
                 <Text
                   style={{
                     fontFamily: 'NanumGothicBold',
@@ -211,7 +204,11 @@ ShopScreen = () => {
                   프로필 슬롯이란?
                 </Text>
                 <Text
-                  style={{ fontFamily: 'NanumGothicBold', color: '#363636' }}
+                  style={{
+                    fontFamily: 'NanumGothicBold',
+                    color: '#363636',
+                    fontSize: 13,
+                  }}
                 >
                   저장할 수 있는 식물 프로필의 개수를 1개 늘려줘요!
                 </Text>
@@ -219,45 +216,59 @@ ShopScreen = () => {
             </View>
             <View style={styles.slotSection}>
               <View style={styles.goodsWrapper}>
-                <View
-                  style={{
-                    width: screenWidth * 0.6,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
+                <View style={styles.goodsTextWrapper}>
                   <Text style={styles.goodsText}>
                     {'질병진단 구독 서비스 가입'}
                   </Text>
                   <Text style={styles.goodsText}>{'5900원/월'}</Text>
                 </View>
-                <TouchableOpacity
-                  style={styles.buyButton}
-                  onPress={() => {
-                    setGoods('subscribe');
-                    setPaymentModalVisibility(true);
-                  }}
-                >
-                  <Ionicons name={'cash-outline'} size={30} color={'white'} />
-                </TouchableOpacity>
-              </View>
-              <View style={{ width: screenWidth * 0.75 }}>
-                  <Text
-                    style={{
-                      fontFamily: 'NanumGothicBold',
-                      color: '#363636',
-                      marginBottom: 5,
+                {shopInfo.is_subscription ? (
+                  <View
+                    style={[styles.buyButton, { backgroundColor: '#cccccc' }]}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: 'NanumGothicBold',
+                        color: 'white',
+                        fontSize: 10,
+                      }}
+                    >
+                      구독 중
+                    </Text>
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.buyButton}
+                    onPress={() => {
+                      setGoods('subscribe');
+                      setPaymentModalVisibility(true);
                     }}
                   >
-                    질병진단 구독 서비스란?
-                  </Text>
-                  <Text
-                    style={{ fontFamily: 'NanumGothicBold', color: '#363636', fontSize: 13}}
-                  >
-                    월 일정 금액을 지불하고,{`\n`}포인트 소모 없이 질병진단 기능을 이용할 수 있어요!
-                  </Text>
-                </View>
+                    <Ionicons name={'cash-outline'} size={30} color={'white'} />
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View style={{ width: screenWidth * 0.75, marginVertical: 10 }}>
+                <Text
+                  style={{
+                    fontFamily: 'NanumGothicBold',
+                    color: '#363636',
+                    marginBottom: 5,
+                  }}
+                >
+                  질병진단 구독 서비스란?
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'NanumGothicBold',
+                    color: '#363636',
+                    fontSize: 13,
+                  }}
+                >
+                  월 일정 금액을 지불하고,{`\n`}포인트 소모 없이 질병진단 기능을
+                  이용할 수 있어요!
+                </Text>
+              </View>
             </View>
           </View>
         </View>
@@ -348,6 +359,7 @@ ShopScreen = () => {
       <Modal
         isVisible={paymentModalVisible}
         onBackButtonPress={() => setPaymentModalVisibility(false)}
+        onBackdropPress={() => setPaymentModalVisibility(false)}
       >
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
@@ -356,30 +368,66 @@ ShopScreen = () => {
             <Text style={[styles.buyResultText, { fontSize: 18 }]}>
               구매자 정보 입력
             </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={name => setName(name)}
-              underlineColorAndroid="#000"
-              placeholder="구매자명"
-              placeholderTextColor="#808080"
-              onSubmitEditing={Keyboard.dismiss}
-            />
-            <TextInput
-              style={styles.input}
-              onChangeText={number => setPhone(number)}
-              underlineColorAndroid="#000"
-              placeholder="휴대폰 번호"
-              placeholderTextColor="#808080"
-              onSubmitEditing={Keyboard.dismiss}
-            />
-            <TextInput
-              style={styles.input}
-              onChangeText={email => setEmail(email)}
-              underlineColorAndroid="#000"
-              placeholder="이메일"
-              placeholderTextColor="#808080"
-              onSubmitEditing={Keyboard.dismiss}
-            />
+            <View>
+              <Text
+                style={{
+                  fontFamily: 'NanumGothicBold',
+                  color: '#363636',
+                  fontSize: 13,
+                }}
+              >
+                구매자명
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={name => setName(name)}
+                underlineColorAndroid="#000"
+                placeholder="구매자명"
+                placeholderTextColor="#808080"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+            </View>
+
+            <View>
+              <Text
+                style={{
+                  fontFamily: 'NanumGothicBold',
+                  color: '#363636',
+                  fontSize: 13,
+                }}
+              >
+                전화번호
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={number => setPhone(number)}
+                underlineColorAndroid="#000"
+                placeholder="전화번호"
+                placeholderTextColor="#808080"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontFamily: 'NanumGothicBold',
+                  color: '#363636',
+                  fontSize: 13,
+                }}
+              >
+                이메일
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={email => setEmail(email)}
+                underlineColorAndroid="#000"
+                placeholder={shopInfo.email}
+                placeholderTextColor="#808080"
+                onSubmitEditing={Keyboard.dismiss}
+                value={shopInfo.email}
+              />
+            </View>
+
             <TouchableOpacity
               style={styles.earnModalButton}
               onPress={() => {
@@ -423,7 +471,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     width: screenWidth * 0.92,
-    height: screenHeight * 0.83,
+    flex: 1,
     backgroundColor: 'white',
     padding: 10,
     margin: 10,
@@ -439,7 +487,7 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   slotSection: {
-    width: screenWidth * 0.8,
+    width: screenWidth * 0.85,
     backgroundColor: '#e8ebed',
     borderRadius: 15,
     alignItems: 'center',
@@ -447,7 +495,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   goodsWrapper: {
-    width: screenWidth * 0.75,
+    width: screenWidth * 0.8,
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#93d07d',
@@ -482,6 +530,12 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
 
     elevation: 2,
+  },
+  goodsTextWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   goodsText: {
     fontSize: 12,
@@ -534,7 +588,6 @@ const styles = StyleSheet.create({
     color: '#222222',
     width: screenWidth * 0.6,
     marginLeft: 5,
-    borderRadius: 10,
     padding: 5,
     fontFamily: 'NanumGothic',
   },

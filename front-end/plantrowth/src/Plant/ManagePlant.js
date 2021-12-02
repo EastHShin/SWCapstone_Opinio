@@ -67,32 +67,24 @@ const ManagePlant = ({ route }) => {
 
   useEffect(() => {
     if (!deletePlantState && isFocused) {
-      dispatch(getProfile(plantId)); //plantId 추가
-      console.log('Profile in use Effect: ' + JSON.stringify(profile));
+      dispatch(getProfile(plantId));
       setLoading(false);
     }
   }, [isFocused, selectedImage]);
 
   useEffect(() => {
-    console.log(
-      'deletePlantState: ' + deletePlantState + ' isFocused: ' + isFocused,
-    );
     if (deletePlantState == 'success' && isFocused) {
-      console.log('useEffect에서 delete success');
       setLoading(false);
       dispatch(setDeletePlantState(''));
       navigation.navigate('HomeScreen');
     } else if (deletePlantState == 'failure' && isFocused) {
-      console.log('useEffect에서 delete failure');
       setLoading(false);
       dispatch(setDeletePlantState(''));
     }
   }, [deletePlantState]);
 
   useEffect(() => {
-    console.log('wateringState: ' + wateringState + ' isFocused: ' + isFocused);
     if (wateringState == 'success' && isFocused) {
-      console.log('useEffect에서 watering success');
       setTestPoint(testPoint + 10);
       setLoading(false);
       dispatch(getProfile(plantId));
@@ -100,25 +92,19 @@ const ManagePlant = ({ route }) => {
       setDoingDiagnosis(false);
       setEarnModalVisibility(true);
     } else if (wateringState == 'failure' && isFocused) {
-      console.log('useEffect에서 watering failure');
       setLoading(false);
       dispatch(setWateringState(''));
     }
   }, [wateringState]);
 
   useEffect(() => {
-    console.log(
-      'diagnosisState: ' + diagnosisState + ' isFocused: ' + isFocused,
-    );
     if (diagnosisState == 'success' && isFocused) {
-      console.log('useEffect에서 diagnosis success');
       setLoading(false);
       dispatch(setDiagnosisState(''));
       setDoingDiagnosis(true);
       setSelectedImage(false);
       setEarnModalVisibility(true);
     } else if (diagnosisState == 'failure' && isFocused) {
-      console.log('useEffect에서 diagnosis failure');
       setLoading(false);
       setSelectedImage(false);
       dispatch(setDiagnosisState(''));
@@ -135,7 +121,6 @@ const ManagePlant = ({ route }) => {
           onPress: () => {
             setLoading(true);
             setInfoModalVisibility(false);
-            console.log('deletePlantHandler 호출');
             dispatch(deletePlant(plantId));
           },
         },
@@ -151,21 +136,18 @@ const ManagePlant = ({ route }) => {
 
   const wateringHandler = () => {
     setLoading(true);
-    console.log('wateringHandler 호출');
     dispatch(waterPlant(plantId));
   };
 
   const diagnosisHandler = () => {
     setDiagnosisModalVisibility(false);
     if (selectedImage) {
-      console.log('selectedImage' + selectedImage);
       const fd = new FormData();
       fd.append('file_name', {
         name: selectedImage.assets[0].fileName,
         uri: selectedImage.assets[0].uri,
         type: selectedImage.assets[0].type,
       });
-      console.log(fd);
       setImagePath(selectedImage.assets[0].uri);
       setLoading(true);
       setDoingDiagnosis(true);
@@ -436,25 +418,15 @@ const ManagePlant = ({ route }) => {
             style={{
               width: 300,
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-end',
             }}
           >
-            <View style={styles.plantNameWrapper}>
-              <Text
-                style={{
-                  fontFamily: 'NanumGothicBold',
-                  fontSize: 14,
-                  color: '#363636',
-                }}
-              >
-                {profile.plant_name}
-              </Text>
-            </View>
             <TouchableOpacity
               style={styles.plantInfoButton}
               onPress={() => setInfoModalVisibility(true)}
               activeOpacity={1.0}
             >
+              <Text style={styles.plantNameText}>{profile.plant_name}</Text>
               <Entypo name={'magnifying-glass'} size={30} color={'white'} />
             </TouchableOpacity>
           </View>
@@ -496,7 +468,9 @@ const ManagePlant = ({ route }) => {
                   물 주기
                 </Text>
                 <Text style={{ fontSize: 12, fontFamily: 'NanumGothicBold' }}>
-                  {profile.remain_cycle}일 후
+                  {profile.remain_cycle == 0
+                    ? `오늘`
+                    : `${profile.remain_cycle}일 후`}
                 </Text>
               </View>
             </ProgressCircle>
@@ -504,29 +478,33 @@ const ManagePlant = ({ route }) => {
           <TouchableOpacity
             style={styles.buttonOutside}
             onPress={() => {
-              Alert.alert(
-                `질병진단에는 30포인트가 소모돼요`,
-                `질병진단을 계속 하시겠어요?`,
-                [
-                  {
-                    text: '아니오',
-                    onPress: () => {},
-                  },
-                  {
-                    text: '계속할게요',
-                    onPress: () => {
-                      if (testPoint >= 30) {
-                        setDiagnosisModalVisibility(true);
-                        setTestPoint(testPoint - 30);
-                      } else {
-                        alert(
-                          '갖고 계신 포인트가 모자라요!\n식물에게 물을 주거나, 식물일기를 작성하시면 포인트를 얻으실 수 있어요!\n',
-                        );
-                      }
+              if (!profile.is_subscription) {
+                Alert.alert(
+                  `질병진단에는 100포인트가 소모돼요`,
+                  `질병진단을 계속 하시겠어요?`,
+                  [
+                    {
+                      text: '아니오',
+                      onPress: () => {},
                     },
-                  },
-                ],
-              );
+                    {
+                      text: '계속할게요',
+                      onPress: () => {
+                        if (testPoint >= 100) {
+                          setDiagnosisModalVisibility(true);
+                          setTestPoint(testPoint - 100);
+                        } else {
+                          alert(
+                            '갖고 계신 포인트가 모자라요!\n식물에게 물을 주거나, 식물일기를 작성하시면 포인트를 얻으실 수 있어요!\n',
+                          );
+                        }
+                      },
+                    },
+                  ],
+                );
+              } else {
+                setDiagnosisModalVisibility(true);
+              }
             }}
           >
             <View
@@ -835,21 +813,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  plantNameWrapper: {
-    alignItems: 'center',
-    margin: 5,
-    marginLeft: 15,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    padding: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  plantNameText: {
+    fontFamily: 'NanumGothicExtraBold',
+    color: 'white',
+    marginHorizontal: 5,
   },
   expWrapper: {
     flexDirection: 'row',
@@ -900,10 +867,11 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   plantInfoButton: {
-    width: 40,
+    paddingHorizontal: 5,
     height: 40,
     paddingTop: 3,
     backgroundColor: '#93d07d',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     borderTopLeftRadius: 10,

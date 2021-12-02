@@ -47,7 +47,6 @@ const PaymentHistoryScreen = ({ navigation }) => {
     AsyncStorage.getItem('userId').then(value => {
       if (value != null) {
         setUserId(JSON.parse(value));
-        console.log('결제 내역 userId: ' + userId);
         if (isFocused) {
           dispatch(getPaymentHistory(JSON.parse(value)));
           setLoading(false);
@@ -56,11 +55,9 @@ const PaymentHistoryScreen = ({ navigation }) => {
     });
     console.log('paymentInfoList: ' + JSON.stringify(paymentInfoList));
     if (refundState == 'true' && isFocused) {
-      console.log('useEffect 환불 성공');
       dispatch(setRefundState(''));
       setLoading(false);
     } else if (refundState == 'false' && isFocused) {
-      console.log('useEffect 환불 실패');
       dispatch(setRefundState(''));
       setLoading(false);
     }
@@ -96,7 +93,6 @@ const PaymentHistoryScreen = ({ navigation }) => {
             setLoading(true);
             let amount = 0;
 
-            console.log('paymentInfo: ' + JSON.stringify(paymentInfo));
             let YYYYMMDD = String(paymentInfo.payment_date);
             let sYear = YYYYMMDD.substring(0, 4);
             let sMonth = YYYYMMDD.substring(5, 7);
@@ -110,7 +106,6 @@ const PaymentHistoryScreen = ({ navigation }) => {
             const timelapse = Math.ceil(
               (today.getTime() - paymentDate.getTime()) / (1000 * 3600 * 24),
             );
-            console.log('timelapse: ' + timelapse);
 
             if (timelapse <= 3) {
               amount = Number(paymentInfo.amount);
@@ -140,7 +135,7 @@ const PaymentHistoryScreen = ({ navigation }) => {
       return paymentInfoList
         ? paymentInfoList.map((item, index) => {
             return (
-              <View style={styles.merchantWrapper}>
+              <View key={index} style={styles.merchantWrapper}>
                 <View>
                   <Text style={styles.merchantText}>
                     결제 금액: {item.amount}원
@@ -155,6 +150,12 @@ const PaymentHistoryScreen = ({ navigation }) => {
                   <Text style={styles.merchantText}>
                     결제일: {item.payment_date}
                   </Text>
+                  {/* {item.paymentStatus == 'REFUND' ? (
+                    <View>
+                      <Text>환불일: </Text>
+                      <Text>환불금액: </Text>
+                    </View>
+                  ) : null} */}
                 </View>
                 {item.paymentType == 'SLOT' ? null : renderRefundButton(item)}
               </View>
@@ -207,6 +208,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: '#C9E7BE',
   },
   merchantWrapper: {
     padding: 10,
@@ -218,6 +220,15 @@ const styles = StyleSheet.create({
     height: screenHeight * 0.105,
     borderRadius: 15,
     margin: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
   },
   merchantText: {
     fontFamily: 'NanumGothicBold',
