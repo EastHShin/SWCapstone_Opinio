@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.api.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,12 +53,14 @@ public class PointRecordApiController {
 		private Integer remain_point;
 		private Boolean is_negative;
 		private PointSpendType pointSpendType;
+		private LocalDate date;
 
 		public PointRecordInfoDTO(PointRecord pointRecord) {
 			spent_point = pointRecord.getSpentPoint();
 			remain_point = pointRecord.getRemainPoint();
 			is_negative = pointRecord.getIsNegative();
 			pointSpendType = pointRecord.getPointSpendType();
+			date = pointRecord.getDate();
 		}
 	}
 }
