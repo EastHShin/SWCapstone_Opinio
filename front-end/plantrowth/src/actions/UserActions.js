@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME, POINT_LIST } from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -506,6 +506,30 @@ export const setCheckNicknameState = state => dispatch => {
         payload: state
     })
 }
+
+export const getPointList = (userId) => {
+    return async dispatch => {
+        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/payments/point/record/${userId}`)
+        .then(function(res){
+            if(res.status == 200){
+                console.log(res.data.records)
+                dispatch({
+                    type:POINT_LIST,
+                    payload:res.data.records
+                })
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+            dispatch({
+                type:POINT_LIST,
+                payload:[]
+            })
+        })
+    }
+}
+
+
 
 
 
