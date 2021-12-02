@@ -86,6 +86,8 @@ public class ReportService {
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 신고입니다."));
 		report.setState(Report.StateEnum.COMPLETE);
 		report.getBoard().setIsBlocked(true);
+		report.getBoard().getReports().stream()
+			.forEach(r -> r.setState(Report.StateEnum.COMPLETE));
 		return report;
 	}
 
@@ -95,6 +97,8 @@ public class ReportService {
 			.orElseThrow(() -> new IllegalArgumentException("No Found Report in Comment"));
 		report.setState(Report.StateEnum.COMPLETE);
 		report.getComment().setIsBlocked(true);
+		report.getComment().getReports().stream()
+			.forEach(r -> r.setState(Report.StateEnum.COMPLETE));
 		return report;
 	}
 
