@@ -34,6 +34,8 @@ public class Report {
 	@Column(name = "report_id")
 	private Long id;
 	private LocalDate date;
+	@Column(name = "report_reason")
+	private String reason;
 
 	@Enumerated(EnumType.STRING)
 	private StateEnum state;
@@ -42,8 +44,8 @@ public class Report {
 
 	public enum StateEnum {
 		NOTPROCESSED(0, "Not Processed"),
-		PROCESSED(1, "Processed"),
-		COMPLETE(2,"Complete");
+		COMPLETE(1,"Complete"),
+		AUTOCOMPLETE(2, "Auto Complete");
 
 		Integer stateCode;
 		String stateMessage;
