@@ -126,7 +126,8 @@ def infer_image():
     is_plant = ""
     is_percent = 0
     disease_name = "건강한"
-    value = list_1[2][0]
+    value = list_1[2][3] + list_1[2][4] + list_1[2][6] + list_1[2][10] + list_1[2][14] + list_1[2][17] + \
+            list_1[2][19] + list_1[2][22] + list_1[2][23] + list_1[2][24] + list_1[2][27] + list_1[2][37]
     value_ck = list_ck[1]
 
     if value_ck == 0:
@@ -139,39 +140,54 @@ def infer_image():
     if value < list_1[2][0]:
         value = list_1[2][0]
         disease_name = "붉은 곰팡이 병"
-    elif value < list_1[2][1] + list_1[2][11]:
+
+    if value < list_1[2][1] + list_1[2][11]:
         value = list_1[2][1] + list_1[2][11]
         disease_name = "흑균병"
-    elif value < list_1[2][2] + list_1[2][8]:
+
+    if value < list_1[2][2] + list_1[2][8]:
         value = list_1[2][2] + list_1[2][8]
         disease_name = "녹병"
-    elif value < list_1[2][5] + list_1[2][25]:
+
+    if value < list_1[2][5] + list_1[2][25]:
         value = list_1[2][5] + list_1[2][25]
         disease_name = "흰가루병"
-    elif value < list_1[2][7] + list_1[2][16] + list_1[2][18] + list_1[2][28] + list_1[2][32] + list_1[2][34]:
+
+    if value < list_1[2][7] + list_1[2][16] + list_1[2][18] + list_1[2][28] + list_1[2][32] + list_1[2][34]:
         value = list_1[2][7] + list_1[2][16] + list_1[2][18] + list_1[2][28] + list_1[2][32] + list_1[2][34]
         disease_name = "무늬병"
-    elif value < list_1[2][9] + list_1[2][13] + list_1[2][20] + list_1[2][21] + list_1[2][29] + list_1[2][30]:
+
+    if value < list_1[2][9] + list_1[2][13] + list_1[2][20] + list_1[2][21] + list_1[2][29] + list_1[2][30]:
         value = list_1[2][9] + list_1[2][13] + list_1[2][20] + list_1[2][21] + list_1[2][29] + list_1[2][30]
         disease_name = "잎마름병"
-    elif value < list_1[2][12]:
+
+    if value < list_1[2][12]:
         value = list_1[2][12]
         disease_name = "갈반병"
-    elif value < list_1[2][15]:
+
+    if value < list_1[2][15]:
         value = list_1[2][15]
         disease_name = "(감귤)녹화병"
-    elif value < list_1[2][26]:
+
+    if value < list_1[2][26]:
         value = list_1[2][26]
         disease_name = "잎가마름병"
-    elif value < list_1[2][31]:
+
+    if value < list_1[2][31]:
         value = list_1[2][31]
         disease_name = "잎곰팡이병"
-    elif value < list_1[2][33]:
+
+    if value < list_1[2][33]:
         value = list_1[2][33]
         disease_name = "잎응애"
-    elif value < list_1[2][35] + list_1[2][36]:
+
+    if value < list_1[2][35] + list_1[2][36]:
         value = list_1[2][35] + list_1[2][36]
         disease_name = "바이러스"
+
+    print(list_1)
+    print(value)
+    print(disease_name)
 
     """if int(value) == 0:
         #disease_name = "Scab"
@@ -218,7 +234,7 @@ def infer_image():
     answer["is_percentage"] = float(is_percent * 100)
     answer["disease_model_1"] = disease_name
     #answer["disease_model_2"] = list_2[0]
-    answer["percent_model_1"] = float(list_1[2][value] * 100)
+    answer["percent_model_1"] = float(value * 100)
     #answer["percent_model_2"] = float(list_2[2][value2] * 100)
     """answer["model_1_Healthy"] = val1Healthy
     answer["model_1_Mild"] = val1Mild
