@@ -30,7 +30,6 @@ import com.opinio.plantrowth.api.dto.community.board.BoardResult;
 import com.opinio.plantrowth.domain.community.Board;
 import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.service.community.BoardService;
-import com.opinio.plantrowth.service.community.ReportService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import com.opinio.plantrowth.service.user.UserService;
 
@@ -51,7 +50,8 @@ public class BoardApiController {
 		List<BoardDTO> collect = boards.stream()
 			.map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
 				m.getId(), m.getUser().getName(), boardService.countedLike(m.getId()),
-				boardService.countedCommentByBoardId(m.getId()), m.getIsBlocked()))
+				boardService.countedCommentByBoardId(m.getId()), m.getIsBlocked(),
+				boardService.getUserMaxLevel(m.getUser().getId())))
 			.collect(Collectors.toList());
 
 		return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
@@ -64,7 +64,8 @@ public class BoardApiController {
 		List<BoardDTO> collect = boards.stream()
 			.map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
 				m.getId(), m.getUser().getName(), boardService.countedLike(m.getId()),
-				boardService.countedCommentByBoardId(m.getId()), m.getIsBlocked()))
+				boardService.countedCommentByBoardId(m.getId()), m.getIsBlocked(),
+				boardService.getUserMaxLevel(m.getUser().getId())))
 			.collect(Collectors.toList());
 
 		return new ResponseEntity<BoardResult>(new BoardResult(collect), HttpStatus.OK);
@@ -142,11 +143,9 @@ public class BoardApiController {
 	}
 
 	@DeleteMapping("/api/community/{board-id}")
-	public ResponseEntity<?> deleteBoard(@PathVariable("board-id") Long id) {
-		Long result = boardService.deleteBoard(id);
-		return result != null ?
-			ResponseEntity.ok().body("게시글 삭제 완료") :
-			ResponseEntity.badRequest().build();
+	public ResponseEntity deleteBoard(@PathVariable("board-id") Long id) {
+		boardService.deleteBoard(id);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	/**

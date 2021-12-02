@@ -14,11 +14,21 @@ import lombok.Setter;
 public class CommentLookUpDTO {
     private String content;
     private LocalDateTime date;
+    private Long comment_id;
+    private Long writer_id;
+    private String writer;
+    private Integer writer_level;
+    private Boolean is_update;
     private Boolean is_blocked;
 
-    public CommentLookUpDTO(Comment comment){
+    public CommentLookUpDTO(Comment comment, Integer maxLevel){
         content = comment.getContent();
         date = comment.getDate();
+        comment_id = comment.getId();
+        writer_id = comment.getUser().getId();
+        writer = comment.getUser().getName();
+        writer_level = maxLevel;
+        is_update = comment.getIsUpdate();
         is_blocked = comment.getIsBlocked();
     }
 }

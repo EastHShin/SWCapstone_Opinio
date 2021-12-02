@@ -15,5 +15,4 @@ public class adminUserLookupDTO {
     private Integer point;
     private Integer plantNum;
     private Integer maxPlantNum;
-    private String FCMAccessToken;
 }
