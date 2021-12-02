@@ -39,10 +39,12 @@ export const getBoardList = () => {
 };
 
 export const getPost = (boardId, userId) => {
-  console.log(boardId + "유저 id" + userId);
+  console.log(boardId + '유저 id' + userId);
   return async dispatch => {
-    return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/view?board-id=${boardId}&user-id=${userId}`,
-    )
+    return await axios
+      .get(
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/view?board-id=${boardId}&user-id=${userId}`,
+      )
       .then(function (res) {
         if (res.status == 200) {
           dispatch({
@@ -65,10 +67,9 @@ export const getPost = (boardId, userId) => {
 export const setPost = () => dispatch => {
   dispatch({
     type: GET_POST,
-    payload: {}
-  })
-
-}
+    payload: {},
+  });
+};
 
 export const createPost = (userId, post) => {
   return async dispatch => {
@@ -157,7 +158,7 @@ export const createComment = (boardId, userId, comment) => {
   return async dispatch => {
     return await axios
       .post(
-        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/comments?user-id=${userId}&board-id=${boardId}`,
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/comments?board-id=${boardId}&user-id=${userId}`,
         { content: comment, date: new Date() },
         {
           headers: { 'Content-Type': `application/json` },
@@ -213,7 +214,7 @@ export const updateComment = (commentId, userId, comment) => {
 
 export const deleteComment = (commentId, userId) => {
   return async dispatch => {
-    console.log('삭제할 comment Id: '+commentId);
+    console.log('삭제할 comment Id: ' + commentId);
     return await axios
       .delete(
         `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/comments?comment-id=${commentId}&user-id=${userId}`,

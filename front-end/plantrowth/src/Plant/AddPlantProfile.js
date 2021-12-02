@@ -427,11 +427,15 @@ AddPlantProfile = ({ route }) => {
                 </View>
                 <Text style={{ fontFamily: 'NanumGothicBold' }}> Days</Text>
               </View>
-
               <TouchableOpacity
                 style={styles.ModalButton}
                 onPress={() => {
                   setDayPickerVisibility(false);
+                  console.log('alarm cycle: ' + alarmCycle);
+                  if (alarmCycle == undefined) {
+                    setAlarmCycle(7);
+                    setTextAlarmCycle(`물을 7일 마다 줘요`);
+                  }
                 }}
               >
                 <Text

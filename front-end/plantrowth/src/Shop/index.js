@@ -158,70 +158,106 @@ ShopScreen = () => {
             </Text>
           </View>
           <View style={{ flex: 1, justifyContent: 'center' }}>
-            <View style={styles.goodsWrapper}>
-              <View
-                style={{
-                  width: screenWidth * 0.6,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
-                <Text style={styles.goodsText}>{'300포인트'}</Text>
+            <View style={styles.slotSection}>
+              <View style={styles.goodsWrapper}>
+                <View
+                  style={{
+                    width: screenWidth * 0.6,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
+                  <Text style={styles.goodsText}>{'300포인트'}</Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.buyButton}
+                  onPress={() => buySlotHandler('point')}
+                >
+                  <Ionicons name={'cash-outline'} size={30} color={'white'} />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={styles.buyButton}
-                onPress={() => buySlotHandler('point')}
-              >
-                <Ionicons name={'cash-outline'} size={30} color={'white'} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.goodsWrapper}>
-              <View
-                style={{
-                  width: screenWidth * 0.6,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
-                <Text style={styles.goodsText}>{'1000원'}</Text>
+              <View style={styles.goodsWrapper}>
+                <View
+                  style={{
+                    width: screenWidth * 0.6,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={styles.goodsText}>{'프로필 슬롯 1개 구매'}</Text>
+                  <Text style={styles.goodsText}>{'1000원'}</Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.buyButton}
+                  onPress={() => {
+                    setGoods('slot');
+                    setPaymentModalVisibility(true);
+                  }}
+                >
+                  <Ionicons name={'cash-outline'} size={30} color={'white'} />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={styles.buyButton}
-                onPress={() => {
-                  setGoods('slot');
-                  setPaymentModalVisibility(true);
-                }}
-              >
-                <Ionicons name={'cash-outline'} size={30} color={'white'} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.goodsWrapper}>
-              <View
-                style={{
-                  width: screenWidth * 0.6,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Text style={styles.goodsText}>
-                  {'질병진단 구독 서비스 가입'}
+              <View style={{ width: screenWidth * 0.75 }}>
+                <Text
+                  style={{
+                    fontFamily: 'NanumGothicBold',
+                    color: '#363636',
+                    marginBottom: 5,
+                  }}
+                >
+                  프로필 슬롯이란?
                 </Text>
-                <Text style={styles.goodsText}>{'5900원/월'}</Text>
+                <Text
+                  style={{ fontFamily: 'NanumGothicBold', color: '#363636' }}
+                >
+                  저장할 수 있는 식물 프로필의 개수를 1개 늘려줘요!
+                </Text>
               </View>
-              <TouchableOpacity
-                style={styles.buyButton}
-                onPress={() => {
-                  setGoods('subscribe');
-                  setPaymentModalVisibility(true);
-                }}
-              >
-                <Ionicons name={'cash-outline'} size={30} color={'white'} />
-              </TouchableOpacity>
+            </View>
+            <View style={styles.slotSection}>
+              <View style={styles.goodsWrapper}>
+                <View
+                  style={{
+                    width: screenWidth * 0.6,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={styles.goodsText}>
+                    {'질병진단 구독 서비스 가입'}
+                  </Text>
+                  <Text style={styles.goodsText}>{'5900원/월'}</Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.buyButton}
+                  onPress={() => {
+                    setGoods('subscribe');
+                    setPaymentModalVisibility(true);
+                  }}
+                >
+                  <Ionicons name={'cash-outline'} size={30} color={'white'} />
+                </TouchableOpacity>
+              </View>
+              <View style={{ width: screenWidth * 0.75 }}>
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      color: '#363636',
+                      marginBottom: 5,
+                    }}
+                  >
+                    질병진단 구독 서비스란?
+                  </Text>
+                  <Text
+                    style={{ fontFamily: 'NanumGothicBold', color: '#363636', fontSize: 13}}
+                  >
+                    월 일정 금액을 지불하고,{`\n`}포인트 소모 없이 질병진단 기능을 이용할 수 있어요!
+                  </Text>
+                </View>
             </View>
           </View>
         </View>
@@ -401,6 +437,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 7,
+  },
+  slotSection: {
+    width: screenWidth * 0.8,
+    backgroundColor: '#e8ebed',
+    borderRadius: 15,
+    alignItems: 'center',
+    paddingBottom: 10,
+    marginBottom: 15,
   },
   goodsWrapper: {
     width: screenWidth * 0.75,
