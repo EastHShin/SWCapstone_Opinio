@@ -164,7 +164,7 @@ const PostDetailScreen = ({ route, navigation }) => {
             <View>
               <View style={styles.commentWrapper}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Entypo name={'user'} size={16} />
+                  <Feather name={'user'} size={16} />
                   <Text style={{ color: '#000000', fontWeight: 'bold' }}>
                     {item.writer}
                   </Text>
@@ -176,7 +176,7 @@ const PostDetailScreen = ({ route, navigation }) => {
                     marginTop: Dimensions.get('window').height * 0.003,
                   }}
                 >
-                  {item.content} id: {item.id}
+                  {item.content}
                 </Text>
                 <Text style={{ fontSize: 11 }}>{item.date}</Text>
                 <View
@@ -581,8 +581,8 @@ const PostDetailScreen = ({ route, navigation }) => {
             }}
             placeholderTextColor="#999999"
             underlineColorAndroid="#999999"
-            onChangeText={comment => setComment(comment)}
-            value={updating ? selectedCommentContent : ''}
+            onChangeText={editingComment => setComment(editingComment)}
+            value={updating ? selectedCommentContent : comment}
             onSubmitEditing={Keyboard.dismiss}
           />
           <TouchableOpacity

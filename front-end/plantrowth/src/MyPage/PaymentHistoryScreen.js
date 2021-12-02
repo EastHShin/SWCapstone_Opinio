@@ -138,14 +138,14 @@ const PaymentHistoryScreen = ({ navigation }) => {
               <View key={index} style={styles.merchantWrapper}>
                 <View>
                   <Text style={styles.merchantText}>
-                    결제 금액: {item.amount}원
-                  </Text>
-                  <Text style={styles.merchantText}>
                     {`결제 상품: ${
                       item.paymentType == 'SLOT'
                         ? '프로필 슬롯'
                         : '질병진단 구독'
                     }`}
+                  </Text>
+                  <Text style={styles.merchantText}>
+                    결제 금액: {item.amount}원
                   </Text>
                   <Text style={styles.merchantText}>
                     결제일: {item.payment_date}
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#93d07d',
+    backgroundColor: '#f7f8f9',
     width: screenWidth * 0.85,
     height: screenHeight * 0.105,
     borderRadius: 15,

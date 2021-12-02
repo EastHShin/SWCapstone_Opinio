@@ -21,7 +21,7 @@ export const getBoardList = () => {
       )
       .then(function (res) {
         if (res.status == 200) {
-          console.log(JSON.stringify(res));
+          console.log(JSON.stringify(res.data));
           dispatch({
             type: GET_BOARD_LIST,
             payload: res.data.data,
@@ -166,7 +166,7 @@ export const createComment = (boardId, userId, comment) => {
       )
       .then(function (res) {
         if (res.status == 200) {
-          console.log('댓글 작성' + JSON.stringify(res));
+          console.log('댓글 작성' + JSON.stringify(res.data));
           dispatch({
             type: CREATE_COMMENT,
             payload: 'success',
@@ -195,7 +195,7 @@ export const updateComment = (commentId, userId, comment) => {
       )
       .then(function (res) {
         if (res.status == 200) {
-          console.log('댓글 수정' + JSON.stringify(res));
+          console.log('댓글 수정' + JSON.stringify(res.data));
           dispatch({
             type: UPDATE_COMMENT,
             payload: 'success',
@@ -221,7 +221,7 @@ export const deleteComment = (commentId, userId) => {
       )
       .then(function (res) {
         if (res.status == 200) {
-          console.log('댓글 삭제' + JSON.stringify(res));
+          console.log('댓글 삭제' + JSON.stringify(res.data));
           dispatch({
             type: DELETE_COMMENT,
             payload: 'success',
@@ -246,7 +246,7 @@ export const like = (boardId, userId) => {
       )
       .then(function (res) {
         if (res.status == 200) {
-          console.log('좋아요' + JSON.stringify(res));
+          console.log('좋아요' + JSON.stringify(res.data));
           dispatch({
             type: LIKE,
             payload: 'success',
