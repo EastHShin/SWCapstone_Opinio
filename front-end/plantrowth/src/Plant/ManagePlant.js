@@ -36,7 +36,6 @@ const screenWidth = Dimensions.get('window').width;
 
 const ManagePlant = ({ route }) => {
   const plantId = route.params.plantId;
-  const [testPoint, setTestPoint] = useState(route.params.point);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isDiagnosisModalVisible, setDiagnosisModalVisibility] =
@@ -77,15 +76,16 @@ const ManagePlant = ({ route }) => {
       setLoading(false);
       dispatch(setDeletePlantState(''));
       navigation.navigate('HomeScreen');
+      setInfoModalVisibility(false);
     } else if (deletePlantState == 'failure' && isFocused) {
       setLoading(false);
       dispatch(setDeletePlantState(''));
+      setInfoModalVisibility(false);
     }
   }, [deletePlantState]);
 
   useEffect(() => {
     if (wateringState == 'success' && isFocused) {
-      setTestPoint(testPoint + 10);
       setLoading(false);
       dispatch(getProfile(plantId));
       dispatch(setWateringState(''));
@@ -490,9 +490,8 @@ const ManagePlant = ({ route }) => {
                     {
                       text: '계속할게요',
                       onPress: () => {
-                        if (testPoint >= 100) {
+                        if (profile.point >= 100) {
                           setDiagnosisModalVisibility(true);
-                          setTestPoint(testPoint - 100);
                         } else {
                           alert(
                             '갖고 계신 포인트가 모자라요!\n식물에게 물을 주거나, 식물일기를 작성하시면 포인트를 얻으실 수 있어요!\n',

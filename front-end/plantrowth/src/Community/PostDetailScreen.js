@@ -195,8 +195,8 @@ const PostDetailScreen = ({ route, navigation }) => {
             <TouchableOpacity
               style={[styles.likeButton, { marginRight: 10, padding: 4 }]}
               onPress={() => {
-                setSelectedCommentId(item.id);
-                setSelectedCommentWriterId(item.id);
+                setSelectedCommentId(item.comment_id);
+                setSelectedCommentWriterId(item.writer_id);
                 setSelectedCommentContent(item.content);
                 setCommentModalVisibility(true);
               }}
@@ -237,6 +237,31 @@ const PostDetailScreen = ({ route, navigation }) => {
     dispatch(like(selectedId, userId));
   };
   //좋아요 Handler
+
+  //댓글 수정 Handler
+  const updateCommentHandler = comment => {
+    console.log(selectedCommentContent);
+    console.log(comment);
+    if (selectedCommentContent==comment || comment == '') {
+      alert('수정한 내용이 없습니다.');
+    } else if (selectedCommentContent !== comment) {
+      Alert.alert('댓글 수정', '댓글을 수정하시겠습니까?', [
+        {
+          text: '취소',
+          onPress: () => {
+            return;
+          },
+        },
+        {
+          text: '확인',
+          onPress: () => {
+            sendHandler(comment);
+          },
+        },
+      ]);
+    }
+  };
+  //댓글 수정 Handler
 
   //댓글 삭제 Handler
   const deleteCommentHandler = commentId => {
@@ -582,7 +607,7 @@ const PostDetailScreen = ({ route, navigation }) => {
             placeholderTextColor="#999999"
             underlineColorAndroid="#999999"
             onChangeText={editingComment => setComment(editingComment)}
-            value={updating ? selectedCommentContent : comment}
+            defaultValue={updating ? selectedCommentContent : ''}
             onSubmitEditing={Keyboard.dismiss}
           />
           <TouchableOpacity
@@ -591,7 +616,9 @@ const PostDetailScreen = ({ route, navigation }) => {
               justifyContent: 'center',
               marginRight: 5,
             }}
-            onPress={() => sendHandler(comment)}
+            onPress={() => {
+              updating ? updateCommentHandler(comment) : sendHandler(comment);
+            }}
           >
             <FontAwesome name={'send'} size={20} color={'#93d07d'} />
           </TouchableOpacity>
