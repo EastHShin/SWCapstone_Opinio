@@ -14,7 +14,6 @@ const clearLogoutTimer = () => {
 const setLogoutTimer = (expirationTime, email) => dispatch => {
     timer = setTimeout(() => {
         dispatch(logoutUser(email));
-        console.log('로그인 만료'+email)
     }, expirationTime);
 };
 
@@ -38,10 +37,7 @@ export const registerUser = (user) => {
                
             })
             .catch(function (error) {
-                console.log(error.response.status)
-               
                 if (error.response.status == 406) {
-                    console.log('이메일 이미 존재함'); 
                     dispatch({
                         type: REGISTER_USER,
                         payload: "failure",
@@ -71,8 +67,6 @@ export const emailAuthentication = (email) => {
         return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/email', email, {
             headers: { "Content-Type": `application/json` }
         }).then(function (res) {
-            console.log(res);
-            console.log("여기 이메일 인증 성공")
             if (res.status == 200) {
                 dispatch({
                     type: SEND_EMAIL,
@@ -92,7 +86,6 @@ export const emailAuthentication = (email) => {
 
 export const codeVerification = (code) => {
     return async dispatch => {
-        console.log(code);
         return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/verify', JSON.stringify(code), {
             headers: { "Content-Type": `application/json` }
         }).then(function (res) {
@@ -288,7 +281,6 @@ export const kakaoUnlink = () => dispatch => {
 
 export const deleteUser = (userId, password) => {
     return async dispatch => {
-        console.log(userId + "    " + password);
         return await axios.delete(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`,
         {
             data:{
@@ -300,7 +292,6 @@ export const deleteUser = (userId, password) => {
                     axios.defaults.headers.common['X-AUTH-TOKEN'] = undefined
                     AsyncStorage.getItem('kakaoLogin').then((value) => {
                         clearLogoutTimer();
-
                         dispatch({
                             type: USER_DELETE,
                             payload: "success"
@@ -331,7 +322,6 @@ export const infoUser = (userId) => {
         return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/${userId}`)
             .then(function (res) {
                 if (res.status == 200) {
-                    console.log(res.data.data);
                     dispatch({
                         type: USER_INFO,
                         payload: "success",
@@ -424,7 +414,6 @@ export const getDiagnosisList = (plantId) => {
 
 export const findPassword = (user) => {
 
-    console.log(user)
     return async dispatch => {
         return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/find`, user,
             {
@@ -487,7 +476,6 @@ export const setCheckPasswordState = state => dispatch => {
 }
 
 export const checkNickname = (nickName) => {
-    console.log(nickName);
     return async dispatch => {
         return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/cu`, nickName,
             {

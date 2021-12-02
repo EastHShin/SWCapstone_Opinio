@@ -58,8 +58,8 @@ function App() {
   useEffect(() => {
     const foreground = messaging().onMessage(async remoteMessage => {
       console.log('어플 안 : ' + remoteMessage.data.plant_id);
-      console.log(remoteMessage);
-      Alert.alert('물주기 알림', '식물에게 물을 줄 시간입니다!', [
+      console.log(remoteMessage.notification.body);
+      Alert.alert('물주기 알림', remoteMessage.notification.body, [
         {
           text: '취소',
           onPress: () => console.log('취소'),

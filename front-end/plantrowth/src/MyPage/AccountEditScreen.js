@@ -133,7 +133,6 @@ const AccountEditScreen = ({ route, navigation }) => {
     }
 
     if (password) {
-      console.log(password);
       user.password = password;
     }
     user.email = userInfo.email;

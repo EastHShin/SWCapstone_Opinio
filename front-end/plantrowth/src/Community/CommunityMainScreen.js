@@ -116,7 +116,7 @@ const CommunityMainScreen = ({ navigation }) => {
 
   useEffect(() => {
     setIsFetching(false);
-    console.log(boardList)
+    console.log(boardList);
   }, [boardList])
 
 

@@ -237,7 +237,6 @@ const LoginScreen = ({ navigation }) => {
       fcm_access_token: fcmToken,
     });
 
-    console.log(user);
     dispatch(registerUser(user));
   };
 
