@@ -278,7 +278,7 @@ const PostDetailScreen = ({ route, navigation }) => {
               <Text
                 style={{ fontSize: 14, fontWeight: 'bold', color: '#000000' }}
               >
-                Lv. {post.level}
+                Lv. {post.user_level}
               </Text>
             </View>
             <View style={styles.date}>
@@ -466,7 +466,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#000000',
-    fontSize: 17,
+    fontSize: 16,
+    fontWeight: "bold",
     marginLeft: Dimensions.get('window').width * 0.05,
   },
   modalSmall: {
