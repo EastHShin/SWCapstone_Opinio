@@ -31,6 +31,7 @@ public class PlantDiary {
     private Plant plant;
 
     private String title;
+    @Column(length = 1000)
     private String content;
     private LocalDate date;
     private String filename;
