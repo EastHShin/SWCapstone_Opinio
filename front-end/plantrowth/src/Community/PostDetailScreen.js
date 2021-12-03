@@ -71,7 +71,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   const likeState = useSelector(state => state.CommunityReducer.likeResult);
 
   const nowYear = new Date().getFullYear();
- 
+
   useEffect(() => {
     if (isFocused) {
       AsyncStorage.getItem('userId').then(value => {
@@ -87,10 +87,10 @@ const PostDetailScreen = ({ route, navigation }) => {
     setCommentList(post.comments);
     console.log(post);
     setPostCreateDate(new Date(post.createDate).getFullYear());
-    if(post.updateDate){
-    setPostUpdateDate(new Date(post.updateDate).getFullYear());
+    if (post.updateDate) {
+      setPostUpdateDate(new Date(post.updateDate).getFullYear());
     }
-  }, [post])
+  }, [post]);
 
   useEffect(() => {
     if (result == 'success' && isFocused) {
@@ -253,7 +253,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   const updateCommentHandler = comment => {
     console.log(selectedCommentContent);
     console.log(comment);
-    if (selectedCommentContent==comment || comment == '') {
+    if (selectedCommentContent == comment || comment == '') {
       alert('수정한 내용이 없습니다.');
     } else if (selectedCommentContent !== comment) {
       Alert.alert('댓글 수정', '댓글을 수정하시겠습니까?', [
@@ -388,21 +388,22 @@ const PostDetailScreen = ({ route, navigation }) => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                ) : null}
+                ) : 
                 <View style={styles.modalWrapper}>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => {
-                      setIsModalVisible(false);
-                      navigation.navigate('PostEditScreen', {
-                        selectedId: selectedId,
-                      });
-                    }}
-                    style={{ flexDirection: 'row' }}
-                  >
-                    <Text style={styles.text}>신고</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => {
+                    setIsModalVisible(false);
+                    navigation.navigate('PostEditScreen', {
+                      selectedId: selectedId,
+                    });
+                  }}
+                  style={{ flexDirection: 'row' }}
+                >
+                  <Text style={styles.text}>신고</Text>
+                </TouchableOpacity>
+              </View>}
+
               </View>
             </View>
           </TouchableOpacity>
@@ -410,7 +411,7 @@ const PostDetailScreen = ({ route, navigation }) => {
         <View style={styles.postWrapper}>
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.userIcon}>
-            <FontAwesome name={'user'} size={32} color={'white'}/>
+              <FontAwesome name={'user'} size={32} color={'white'} />
             </View>
             <View style={styles.userWrapper}>
               <Text
@@ -418,28 +419,54 @@ const PostDetailScreen = ({ route, navigation }) => {
               >
                 {post.writer}
               </Text>
-              <Text
-                style={{ fontSize: 14, color: '#000000' }}
-              >
+              <Text style={{ fontSize: 14, color: '#000000' }}>
                 Lv. {post.user_level}
               </Text>
             </View>
+            {postCreateDate ? 
             <View style={styles.date}>
-              {nowYear == postCreateDate ?
-               <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.12 }}>
-               최초 게시일 : {Moment(post.createDate).format("MM/DD HH:mm")}
-             </Text>
-             :
-             <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.047 }}>
-             최초 게시일 : {Moment(post.createDate).format("YYYY/MM/DD HH:mm")}
-           </Text>
-           }
-              {post.updateDate != null ? (
-                <Text style={nowYear == postUpdateDate ? {fontSize:10, marginLeft: Dimensions.get('window').width * 0.12} : {fontSize:10, marginLeft: Dimensions.get('window').width * 0.047}}>
-                  최근 수정일 : {nowYear == postUpdateDate ? Moment(post.updateDate).format("MM/DD HH:mm") : Moment(post.updateDate).format("YYYY/MM/DD HH:mm")}
-                </Text>
-              ) : null}
-            </View>
+            {nowYear == postCreateDate ? (
+              <Text
+                style={{
+                  fontSize: 10,
+                  marginLeft: Dimensions.get('window').width * 0.12,
+                }}
+              >
+                최초 게시일 : {Moment(post.createDate).format('MM/DD HH:mm')}
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontSize: 10,
+                  marginLeft: Dimensions.get('window').width * 0.047,
+                }}
+              >
+                최초 게시일 :{' '}
+                {Moment(post.createDate).format('YYYY/MM/DD HH:mm')}
+              </Text>
+            )}
+
+            {post.updateDate != null ? (
+              <Text
+                style={
+                  nowYear == postUpdateDate
+                    ? {
+                        fontSize: 10,
+                        marginLeft: Dimensions.get('window').width * 0.12,
+                      }
+                    : {
+                        fontSize: 10,
+                        marginLeft: Dimensions.get('window').width * 0.047,
+                      }
+                }
+              >
+                최근 수정일 :{' '}
+                {nowYear == postUpdateDate
+                  ? Moment(post.updateDate).format('MM/DD HH:mm')
+                  : Moment(post.updateDate).format('YYYY/MM/DD HH:mm')}
+              </Text>
+            ) : null}
+          </View> : null}
           </View>
           <View style={styles.textWrapper}>
             <Text style={styles.title}>{post.title}</Text>
@@ -718,7 +745,7 @@ const styles = StyleSheet.create({
   modal: {
     marginTop: Dimensions.get('window').height * 0.01,
     marginLeft: Dimensions.get('window').width * 0.5,
-    height: Dimensions.get('window').height * 0.2,
+    height: Dimensions.get('window').height * 0.15,
     width: Dimensions.get('window').width * 0.47,
     backgroundColor: '#FFFFFF',
     flexDirection: 'column',
@@ -736,7 +763,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#000000',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: Dimensions.get('window').width * 0.05,
   },
   modalSmall: {
@@ -776,15 +803,15 @@ const styles = StyleSheet.create({
   },
   //상웅
   //예빈
-  userIcon:{
+  userIcon: {
     height: Dimensions.get('window').height * 0.055,
     width: Dimensions.get('window').width * 0.1,
     marginTop: Dimensions.get('window').height * 0.01,
-    marginStart:Dimensions.get('window').width*0.03,
-    backgroundColor:'#C9E7BE',
-    borderRadius:7,
-    justifyContent:'flex-end',
-    alignItems:'center'
-  }
+    marginStart: Dimensions.get('window').width * 0.03,
+    backgroundColor: '#C9E7BE',
+    borderRadius: 7,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
 });
 export default PostDetailScreen;
