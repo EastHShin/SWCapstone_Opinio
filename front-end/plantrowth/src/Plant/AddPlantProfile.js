@@ -317,6 +317,7 @@ AddPlantProfile = ({ route }) => {
                 placeholder="키우는 식물의 이름"
                 placeholderTextColor="#808080"
                 onSubmitEditing={Keyboard.dismiss}
+                maxLength={12}
               />
             </View>
           </View>

@@ -33,6 +33,8 @@ import {
   setLikeState,
   deleteComment,
   updateComment,
+  setReportState,
+  report,
 } from '../actions/CommunityActions';
 import Modal from 'react-native-modal';
 
@@ -60,6 +62,9 @@ const PostDetailScreen = ({ route, navigation }) => {
   const [updating, setUpdating] = useState(false);
   const [postCreateDate, setPostCreateDate] = useState('');
   const [postUpdateDate, setPostUpdateDate] = useState('');
+  const [reportType, setReportType] = useState(false);
+  const [isReportModalVisible, setReportModalVisibility] = useState(false);
+  const [reason, setReason] = useState('');
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -68,6 +73,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   const commentResult = useSelector(
     state => state.CommunityReducer.commentResult,
   );
+  const reportState = useSelector(state => state.CommunityReducer.reportResult);
   const likeState = useSelector(state => state.CommunityReducer.likeResult);
 
   const nowYear = new Date().getFullYear();
@@ -136,6 +142,7 @@ const PostDetailScreen = ({ route, navigation }) => {
       dispatch(getPost(selectedId, userId));
       setComment('');
       setSelectedCommentContent('');
+      setUpdating(false);
       setCommentModalVisibility(false);
       dispatch(setCommentResultState(''));
     } else if (commentResult == 'failure' && isFocused) {
@@ -160,6 +167,27 @@ const PostDetailScreen = ({ route, navigation }) => {
     }
   }, [likeState]);
   //좋아요useEffect
+
+  //신고useEffect
+  useEffect(() => {
+    if (reportState == 'board' && isFocused) {
+      setLoading(false);
+      dispatch(setReportState(''));
+      setReportModalVisibility(false);
+      alert('게시글 신고 완료');
+    } else if (reportState == 'comment' && isFocused) {
+      setLoading(false);
+      dispatch(setReportState(''));
+      setReportModalVisibility(false);
+      alert('댓글 신고 완료');
+    } else if (reportState == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setReportState(''));
+      setReportModalVisibility(false);
+      alert('신고 실패');
+    }
+  }, [reportState]);
+  //신고useEffect
 
   //댓글
   const renderComment = comment => {
@@ -191,7 +219,9 @@ const PostDetailScreen = ({ route, navigation }) => {
                 >
                   {item.content}
                 </Text>
-                <Text style={{ fontSize: 11 }}>{item.date}</Text>
+                <Text style={{ fontSize: 11 }}>
+                  {nowYear == new Date(item.date).getFullYear() ? Moment(item.date).format("MM/DD HH:mm") : Moment(item.date).format("YYYY/MM/DD HH:mm")}
+                </Text>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -295,6 +325,19 @@ const PostDetailScreen = ({ route, navigation }) => {
   };
   //댓글 삭제 Handler
 
+  //신고 Handler
+  const reportHandler = (type, reason) => {
+    if (type) {
+      setLoading(true);
+      dispatch(report(type, Number(selectedId), userId, reason));
+    }
+    else if (!type) {
+      console.log('댓글 id: ' + selectedCommentId);
+      setLoading(true);
+      dispatch(report(type, selectedCommentId, userId, reason));
+    }
+  }
+  //신고 Handler
   return (
     <SafeAreaView style={styles.body}>
       <Loader loading={loading} />
@@ -388,22 +431,22 @@ const PostDetailScreen = ({ route, navigation }) => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                ) : 
-                <View style={styles.modalWrapper}>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => {
-                    setIsModalVisible(false);
-                    navigation.navigate('PostEditScreen', {
-                      selectedId: selectedId,
-                    });
-                  }}
-                  style={{ flexDirection: 'row' }}
-                >
-                  <Text style={styles.text}>신고</Text>
-                </TouchableOpacity>
-              </View>}
-
+                ) : (
+                  <View style={styles.modalWrapper}>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => {
+                        setIsModalVisible(false);
+                        setReportType(true);
+                        setReportModalVisibility(true);
+                      }}
+                      style={{ flexDirection: 'row' }}
+                    >
+                      <Text style={styles.text}>신고</Text>
+                    </TouchableOpacity>
+                  </View>
+                )
+                }
               </View>
             </View>
           </TouchableOpacity>
@@ -631,6 +674,11 @@ const PostDetailScreen = ({ route, navigation }) => {
                 backgroundColor: 'white',
                 justifyContent: 'center',
               }}
+              onPress={() => {
+                setCommentModalVisibility(false);
+                setReportType(false);
+                setReportModalVisibility(true);
+              }}
             >
               <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
                 신고
@@ -639,11 +687,58 @@ const PostDetailScreen = ({ route, navigation }) => {
           )}
         </Modal>
         {/* 댓글 수정신고삭제 */}
+
       </ScrollView>
       {/* 댓글작성 */}
       <KeyboardAvoidingView
         style={{ padding: 5, alignItems: 'center', justifyContent: 'center' }}
       >
+        <Modal
+          isVisible={isReportModalVisible}
+          animationIn="fadeIn"
+          animationInTiming={10}
+          animationOut="fadeOut"
+          animationOutTiming={10}
+          backdropTransitionOutTiming={10}
+          backdropTransitionInTiming={10}
+          backdropOpacity={0.25}
+          onBackButtonPress={() => {
+            setReportModalVisibility(false);
+          }}
+          onBackdropPress={() => {
+            setReportModalVisibility(false);
+          }}
+          style={{ alignItems: 'center' }}
+        >
+          <View style={{ alignItems: 'center', padding: 5, backgroundColor: 'white', width: screenWidth * 0.8, height: screenHeight * 0.5, borderRadius: 15 }}>
+            <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: '#363636' }}>
+              {reportType ? `게시글 신고` : `댓글 신고`}
+            </Text>
+            <View style={{ width: screenWidth * 0.75, flex: 1, marginTop: 15 }}>
+              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 14, color: '#363636' }}>
+                신고사유
+              </Text>
+              <View style={{ flex: 1, backgroundColor: '#f7f8f9' }}>
+                <TextInput
+                  onChangeText={reason => setReason(reason)}
+                  multiline={true}
+                  placeholder="신고 사유 입력"
+                  placeholderTextColor="#808080"
+                  returnKeyType="next"
+                  blurOnSubmit={true}
+                  underlineColorAndroid="#f000"
+                  backgroundColor='#f7f8f9'
+                  maxLength={250}
+                />
+              </View>
+              <View style={{ alignItems: 'center', margin: 5 }}>
+                <TouchableOpacity style={styles.smallButton} onPress={() => reportHandler(reportType, reason)}>
+                  <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>신고</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
         <View style={styles.editScreen}>
           <TextInput
             multiline={true}
@@ -656,6 +751,7 @@ const PostDetailScreen = ({ route, navigation }) => {
             onChangeText={editingComment => setComment(editingComment)}
             defaultValue={updating ? selectedCommentContent : ''}
             onSubmitEditing={Keyboard.dismiss}
+            maxLength={250}
           />
           <TouchableOpacity
             style={{
@@ -800,6 +896,14 @@ const styles = StyleSheet.create({
     padding: 3,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  smallButton: {
+    backgroundColor: '#B22339',
+    height: Dimensions.get('window').height * 0.04,
+    width: Dimensions.get('window').width * 0.14,
+    alignItems: 'center',
+    borderRadius: 20,
+    justifyContent: 'center'
   },
   //상웅
   //예빈

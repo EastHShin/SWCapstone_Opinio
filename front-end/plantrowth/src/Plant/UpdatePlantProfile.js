@@ -141,7 +141,7 @@ UpdatePlantProfile = ({ route }) => {
               } else {
                 console.log(
                   'update할 때 not plantBirth' +
-                    route.params.profile.plant_birth,
+                  route.params.profile.plant_birth,
                 );
                 fd.append('recent_watering', route.params.profile.plant_birth);
               }
@@ -348,6 +348,7 @@ UpdatePlantProfile = ({ route }) => {
                 placeholder={route.params.profile.plant_name}
                 placeholderTextColor="#808080"
                 onSubmitEditing={Keyboard.dismiss}
+                maxLength={12}
               />
             </View>
           </View>
