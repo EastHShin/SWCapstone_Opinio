@@ -104,6 +104,30 @@ const ManagePlant = ({ route }) => {
       setDoingDiagnosis(true);
       setSelectedImage(false);
       setEarnModalVisibility(true);
+    } else if (diagnosisState == 'notPlant') {
+      setLoading(false);
+      dispatch(setDiagnosisState(''));
+      setSelectedImage(false);
+      Alert.alert(
+        `질병진단 결과`,
+        `인공지능의 판단으로는 보내주신 사진이 식물이 아닌 것으로 판단했어요.\n\n다시 사진을 찍어보시겠어요?`,
+        [
+          {
+            text: '네',
+            onPress: () => {
+              setDiagnosisModalVisibility(true);
+              return;
+            },
+          },
+          {
+            text: '아니오',
+            onPress: () => {
+              setDiagnosisModalVisibility(false);
+              return;
+            },
+          },
+        ],
+      );
     } else if (diagnosisState == 'failure' && isFocused) {
       setLoading(false);
       setSelectedImage(false);
@@ -253,6 +277,10 @@ const ManagePlant = ({ route }) => {
           }}
         >
           <View>
+            <View style={styles.diagnosisTipWrapper}>
+              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: '#f1c40f', marginBottom: 5 }}>Tip</Text>
+              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 14, color: '#363636' }}>식물의 잎을 최대한 가까이 찍어주시면 정확도가 올라갑니다</Text>
+            </View>
             <Image
               source={{ uri: selectedImage.assets[0].uri }}
               style={{ width: screenWidth * 0.55, height: screenWidth * 0.55 }}
@@ -263,6 +291,7 @@ const ManagePlant = ({ route }) => {
               style={styles.infoModalButton}
               onPress={() => {
                 setDiagnosisModalVisibility(false);
+                setSelectedImage(false);
               }}
             >
               <FontAwesome name={'close'} size={35} color={'#222222'} />
@@ -283,11 +312,15 @@ const ManagePlant = ({ route }) => {
             alignItems: 'center',
             justifyContent: 'space-between',
             backgroundColor: 'white',
-            width: screenWidth * 0.6,
+            width: screenWidth * 0.7,
             padding: 10,
             borderRadius: 10,
           }}
         >
+          <View style={styles.diagnosisTipWrapper}>
+            <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: '#f1c40f', marginBottom: 5 }}>Tip</Text>
+            <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 14, color: '#363636' }}>식물의 잎을 최대한 가까이 찍어주시면 질병진단의 정확도가 올라갑니다</Text>
+          </View>
           <View
             style={{
               alignItems: 'center',
@@ -371,9 +404,8 @@ const ManagePlant = ({ route }) => {
                   color: '#363636',
                 }}
               >
-                {`LV. ${profile.plant_level} ( ${
-                  profile.plant_exp
-                } / ${renderExp()} )`}
+                {`LV. ${profile.plant_level} ( ${profile.plant_exp
+                  } / ${renderExp()} )`}
               </Text>
             </View>
           </View>
@@ -443,8 +475,8 @@ const ManagePlant = ({ route }) => {
               percent={Math.floor(
                 (1 -
                   (profile.alarm_cycle - profile.remain_cycle) /
-                    profile.alarm_cycle) *
-                  100,
+                  profile.alarm_cycle) *
+                100,
               )}
               radius={(screenWidth * 0.29) / 2}
               borderWidth={8}
@@ -481,11 +513,11 @@ const ManagePlant = ({ route }) => {
               if (!profile.is_subscription) {
                 Alert.alert(
                   `질병진단에는 100포인트가 소모돼요`,
-                  `질병진단을 계속 하시겠어요?`,
+                  `현재 ${profile.point}포인트를 보유하고 계세요\n\n질병진단을 계속 하시겠어요?`,
                   [
                     {
                       text: '아니오',
-                      onPress: () => {},
+                      onPress: () => { return; },
                     },
                     {
                       text: '계속할게요',
@@ -893,7 +925,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imageButton: {
-    width: screenWidth * 0.5,
+    width: screenWidth * 0.6,
     height: 50,
     margin: 3,
     backgroundColor: 'white',
@@ -948,6 +980,7 @@ const styles = StyleSheet.create({
 
     elevation: 2,
   },
+  diagnosisTipWrapper: { backgroundColor: '#f7f8f9', padding: 5, borderRadius: 5, marginBottom: 5 }
 });
 
 export default ManagePlant;

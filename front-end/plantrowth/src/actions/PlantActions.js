@@ -37,7 +37,7 @@ export const addPlant = (profile, userId) => {
       })
       .catch(function (error) {
         dispatch({ type: ADD_PLANT, payload: 'failure' });
-        console.warn('에러요~~~~~~~~~~~~');
+        console.log('에러요~~~~~~~~~~~~');
         console.log(error);
       });
   };
@@ -65,7 +65,7 @@ export const updatePlant = (profile, plantId) => {
         }
       })
       .catch(function (error) {
-        console.warn('update 에러요~~~~~~~~~~~~');
+        console.log('update 에러요~~~~~~~~~~~~');
         dispatch({ type: UPDATE_PLANT, payload: 'failure' });
         console.log(error);
       });
@@ -87,7 +87,7 @@ export const deletePlant = plantId => {
         }
       })
       .catch(function (error) {
-        console.warn('delete 에러요~~~~~~~~~~~~');
+        console.log('delete 에러요~~~~~~~~~~~~');
         dispatch({ type: DELETE_PLANT, payload: 'failure' });
         console.log(error);
       });
@@ -113,7 +113,7 @@ export const waterPlant = plantId => {
         }
       })
       .catch(function (error) {
-        console.warn('watering 에러요~~~~~~~~~~~~');
+        console.log('watering 에러요~~~~~~~~~~~~');
         dispatch({ type: WATER_PLANT, payload: 'failure' });
         console.log(error);
       });
@@ -145,7 +145,10 @@ export const diagnosisPlant = (plantId, image) => {
         }
       })
       .catch(function (error) {
-        console.warn('diagnosis 에러요~~~~~~~~~~~~');
+        if (error.response.status == 425) {
+          dispatch({ type: DIAGNOSIS_PLANT, payload: 'notPlant' });
+        }
+        console.log('diagnosis 에러요~~~~~~~~~~~~');
         dispatch({ type: DIAGNOSIS_PLANT, payload: 'failure' });
         console.log(error);
       });
@@ -222,7 +225,7 @@ export const getProfile = plantId => {
         }
       })
       .catch(function (error) {
-        console.warn('get profile error: ' + error);
+        console.log('get profile error: ' + error);
       });
   };
 };
