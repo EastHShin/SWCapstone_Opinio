@@ -15,8 +15,10 @@ import {
 
 import Footer from '../component/Footer';
 import Feather from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/dist/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { getPointList } from '../actions/UserActions';
 import { useIsFocused } from '@react-navigation/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -78,6 +80,14 @@ const Item = ({ item }) => {
             }}
           >
             <Text style={styles.text}>경로 : {item.pointSpendType}</Text>
+            {
+              (()=>{
+                if(item.pointSpendType == 'WATERING') return (<Ionicons name={'water'} size={15} color={'#5d9cec'} style={{marginLeft:Dimensions.get('window').width*0.01}}/>)
+                else if(item.pointSpendType =='DIARY') return (<Entypo name={'book'} color={'#a07e63'} size={15} style={{marginLeft:Dimensions.get('window').width*0.01}}/>)
+                else if(item.pointSpendType == 'DIAGNOSIS') return (<FontAwesome name={'plus-square'} size={15} color={'#8ab833'} style={{marginLeft:Dimensions.get('window').width*0.01}}/>)
+                else if(item.pointSpendType == 'PROFILE_SLOT') return (<MaterialCommunityIcons name={'flower'} size={15} color={'#8ab833'} style={{marginLeft:Dimensions.get('window').width*0.01}}/>)
+              })()
+            }
           </View>
           <View
             style={{

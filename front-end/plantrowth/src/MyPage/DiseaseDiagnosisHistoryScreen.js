@@ -30,19 +30,19 @@ const Item = ({ item, onPress, style }) => {
         />
         <View style={styles.textWrapper}>
           <Text style={{ flexDirection: 'column' }}>
-            <Text style={styles.text}>Name :   </Text>
+            <Text style={styles.text}>Name : </Text>
             <Text style={styles.text}>
               {item.plant_name}
             </Text>
           </Text>
           <Text style={{ flexDirection: 'column' }}>
-            <Text style={styles.text}>Level  :    </Text>
+            <Text style={styles.text}>Level : </Text>
             <Text style={styles.text}>
               {item.plant_level}
             </Text>
           </Text>
           <Text style={{ flexDirection: 'column' }}>
-            <Text style={styles.text}>EXP     :    </Text>
+            <Text style={styles.text}>EXP : </Text>
             <Text style={styles.text}>
               {item.plant_exp}
             </Text>
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 15,
     color: "#000000",
-    fontWeight:'bold'
+    fontWeight:'bold',
   },
   item: {
     padding: 20,
@@ -193,9 +193,8 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     justifyContent: 'center',
-    marginLeft: Dimensions.get('window').width * 0.07
-
-
+    marginLeft: Dimensions.get('window').width * 0.07,
+    
   },
 
 
