@@ -10,6 +10,7 @@ import {
   LIKE,
   DELETE_COMMENT,
   UPDATE_COMMENT,
+  REPORT,
 } from '../actions/type';
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   result: '',
   commentResult: '',
   likeResult: '',
+  reportResult: '',
 };
 
 function CommunityReducer(state = initialState, action) {
@@ -44,6 +46,8 @@ function CommunityReducer(state = initialState, action) {
       return { ...state, commentResult: action.payload };
     case LIKE:
       return { ...state, likeResult: action.payload };
+    case REPORT:
+      return { ...state, reportResult: action.payload };
     default:
       return state;
   }

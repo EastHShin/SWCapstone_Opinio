@@ -32,6 +32,8 @@ import {
   setLikeState,
   deleteComment,
   updateComment,
+  setReportState,
+  report,
 } from '../actions/CommunityActions';
 import Modal from 'react-native-modal';
 
@@ -58,6 +60,9 @@ const PostDetailScreen = ({ route, navigation }) => {
   const [updating, setUpdating] = useState(false);
   const [postCreateDate, setPostCreateDate] = useState('');
   const [postUpdateDate, setPostUpdateDate] = useState('');
+  const [reportType, setReportType] = useState(false);
+  const [isReportModalVisible, setReportModalVisibility] = useState(false);
+  const [reason, setReason] = useState('');
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -66,10 +71,11 @@ const PostDetailScreen = ({ route, navigation }) => {
   const commentResult = useSelector(
     state => state.CommunityReducer.commentResult,
   );
+  const reportState = useSelector(state => state.CommunityReducer.reportResult);
   const likeState = useSelector(state => state.CommunityReducer.likeResult);
 
   const nowYear = new Date().getFullYear();
- 
+
   useEffect(() => {
     if (isFocused) {
       AsyncStorage.getItem('userId').then(value => {
@@ -85,8 +91,8 @@ const PostDetailScreen = ({ route, navigation }) => {
     setCommentList(post.comments);
     console.log(post);
     setPostCreateDate(new Date(post.createDate).getFullYear());
-    if(post.updateDate){
-    setPostUpdateDate(new Date(post.updateDate).getFullYear());
+    if (post.updateDate) {
+      setPostUpdateDate(new Date(post.updateDate).getFullYear());
     }
   }, [post])
 
@@ -156,6 +162,27 @@ const PostDetailScreen = ({ route, navigation }) => {
     }
   }, [likeState]);
   //좋아요useEffect
+
+  //신고useEffect
+  useEffect(() => {
+    if (reportState == 'board' && isFocused) {
+      setLoading(false);
+      dispatch(setReportState(''));
+      setReportModalVisibility(false);
+      alert('게시글 신고 완료');
+    } else if (reportState == 'comment' && isFocused) {
+      setLoading(false);
+      dispatch(setReportState(''));
+      setReportModalVisibility(false);
+      alert('댓글 신고 완료');
+    } else if (reportState == 'failure' && isFocused) {
+      setLoading(false);
+      dispatch(setReportState(''));
+      setReportModalVisibility(false);
+      alert('신고 실패');
+    }
+  }, [reportState]);
+  //신고useEffect
 
   //댓글
   const renderComment = comment => {
@@ -251,7 +278,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   const updateCommentHandler = comment => {
     console.log(selectedCommentContent);
     console.log(comment);
-    if (selectedCommentContent==comment || comment == '') {
+    if (selectedCommentContent == comment || comment == '') {
       alert('수정한 내용이 없습니다.');
     } else if (selectedCommentContent !== comment) {
       Alert.alert('댓글 수정', '댓글을 수정하시겠습니까?', [
@@ -293,6 +320,19 @@ const PostDetailScreen = ({ route, navigation }) => {
   };
   //댓글 삭제 Handler
 
+  //신고 Handler
+  const reportHandler = (type, reason) => {
+    if (type) {
+      setLoading(true);
+      dispatch(report(type, Number(selectedId), userId, reason));
+    }
+    else if (!type) {
+      console.log('댓글 id: ' + selectedCommentId);
+      setLoading(true);
+      dispatch(report(type, selectedCommentId, userId, reason));
+    }
+  }
+  //신고 Handler
   return (
     <SafeAreaView style={styles.body}>
       <Loader loading={loading} />
@@ -386,21 +426,22 @@ const PostDetailScreen = ({ route, navigation }) => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                ) : null}
-                <View style={styles.modalWrapper}>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => {
-                      setIsModalVisible(false);
-                      navigation.navigate('PostEditScreen', {
-                        selectedId: selectedId,
-                      });
-                    }}
-                    style={{ flexDirection: 'row' }}
-                  >
-                    <Text style={styles.text}>신고</Text>
-                  </TouchableOpacity>
-                </View>
+                ) : (
+                  <View style={styles.modalWrapper}>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => {
+                        setIsModalVisible(false);
+                        setReportType(true);
+                        setReportModalVisibility(true);
+                      }}
+                      style={{ flexDirection: 'row' }}
+                    >
+                      <Text style={styles.text}>신고</Text>
+                    </TouchableOpacity>
+                  </View>
+                )
+                }
               </View>
             </View>
           </TouchableOpacity>
@@ -421,16 +462,16 @@ const PostDetailScreen = ({ route, navigation }) => {
             </View>
             <View style={styles.date}>
               {nowYear == postCreateDate ?
-               <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.23 }}>
-               최초 게시일 : {Moment(post.createDate).format("MM/DD HH:mm")}
-             </Text>
-             :
-             <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.15 }}>
-             최초 게시일 : {Moment(post.createDate).format("YYYY/MM/DD HH:mm")}
-           </Text>
-           }
+                <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.23 }}>
+                  최초 게시일 : {Moment(post.createDate).format("MM/DD HH:mm")}
+                </Text>
+                :
+                <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.15 }}>
+                  최초 게시일 : {Moment(post.createDate).format("YYYY/MM/DD HH:mm")}
+                </Text>
+              }
               {post.updateDate != null ? (
-                <Text style={nowYear == postUpdateDate ? {fontSize:10, marginLeft: Dimensions.get('window').width * 0.23} : {fontSize:10, marginLeft: Dimensions.get('window').width * 0.15}}>
+                <Text style={nowYear == postUpdateDate ? { fontSize: 10, marginLeft: Dimensions.get('window').width * 0.23 } : { fontSize: 10, marginLeft: Dimensions.get('window').width * 0.15 }}>
                   최근 수정일 : {nowYear == postUpdateDate ? Moment(post.updateDate).format("MM/DD HH:mm") : Moment(post.updateDate).format("YYYY/MM/DD HH:mm")}
                 </Text>
               ) : null}
@@ -599,6 +640,11 @@ const PostDetailScreen = ({ route, navigation }) => {
                 backgroundColor: 'white',
                 justifyContent: 'center',
               }}
+              onPress={() => {
+                setCommentModalVisibility(false);
+                setReportType(false);
+                setReportModalVisibility(true);
+              }}
             >
               <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
                 신고
@@ -607,6 +653,46 @@ const PostDetailScreen = ({ route, navigation }) => {
           )}
         </Modal>
         {/* 댓글 수정신고삭제 */}
+        <Modal
+          isVisible={isReportModalVisible}
+          animationIn="fadeIn"
+          animationInTiming={10}
+          animationOut="fadeOut"
+          animationOutTiming={10}
+          backdropTransitionOutTiming={10}
+          backdropTransitionInTiming={10}
+          backdropOpacity={0.25}
+          onBackButtonPress={() => {
+            setReportModalVisibility(false);
+          }}
+          onBackdropPress={() => {
+            setReportModalVisibility(false);
+          }}
+          style={{ alignItems: 'center' }}
+        >
+          <View style={{ alignItems: 'center', backgroundColor: 'white', width: screenWidth * 0.8, height: screenHeight * 0.5, borderRadius: 15 }}>
+            <Text>
+              {reportType ? `게시글 신고` : `댓글 신고`}
+            </Text>
+            <View style={{ width: screenWidth * 0.75 }}>
+              <Text>
+                신고사유
+              </Text>
+              <TextInput
+                onChangeText={reason => setReason(reason)}
+                multiline={true}
+                placeholder="신고 사유 입력"
+                placeholderTextColor="#808080"
+                returnKeyType="next"
+                blurOnSubmit={true}
+                underlineColorAndroid="#f000"
+              />
+              <TouchableOpacity onPress={() => reportHandler(reportType, reason)}>
+                <Text>신고</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
       {/* 댓글작성 */}
       <KeyboardAvoidingView

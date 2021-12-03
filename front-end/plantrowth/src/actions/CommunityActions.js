@@ -10,6 +10,7 @@ import {
   LIKE,
   UPDATE_COMMENT,
   DELETE_COMMENT,
+  REPORT
 } from './type';
 import axios from 'axios';
 
@@ -39,8 +40,8 @@ export const getBoardList = () => {
 };
 
 export const getPost = (boardId, userId) => {
-    return async dispatch => {
-        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/view?board-id=${boardId}&user-id=${userId}`)
+  return async dispatch => {
+    return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/view?board-id=${boardId}&user-id=${userId}`)
       .then(function (res) {
         if (res.status == 200) {
           dispatch({
@@ -206,6 +207,42 @@ export const updateComment = (commentId, userId, comment) => {
   };
 };
 
+export const report = (isBoard, reportId, userId, reason) => {
+  return async dispatch => {
+    console.log('게시글 신고?: ' + isBoard);
+    console.log('신고 ID: ' + reportId);
+    console.log('userId: ' + userId);
+    console.log('신고 사유: ' + reason);
+    return await axios
+      .post(
+        isBoard
+          ? `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/board/report?board-id=${reportId}&user-id=${userId}`
+          : `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/comment/report?comment-id=${reportId}&user-id=${userId}`,
+        { reason: reason },
+        {
+          headers: { 'Content-Type': `application/json` },
+        },
+      )
+      .then(function (res) {
+        if (res.status == 200) {
+          console.log('신고 완료' + JSON.stringify(res.data));
+          dispatch({
+            type: REPORT,
+            payload: isBoard ? 'board' : 'comment'
+          });
+        }
+      })
+      .catch(function (err) {
+        console.log('신고 에러' + err);
+        dispatch({
+          type: REPORT,
+          payload: 'failure',
+        });
+      });
+  };
+};
+
+
 export const deleteComment = (commentId, userId) => {
   return async dispatch => {
     console.log('삭제할 comment Id: ' + commentId);
@@ -277,3 +314,10 @@ export const setCommentResultState = state => dispatch => {
     payload: state,
   });
 };
+
+export const setReportState = state => dispatch => {
+  dispatch({
+    type: REPORT,
+    payload: state,
+  })
+}
