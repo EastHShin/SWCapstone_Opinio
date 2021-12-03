@@ -75,8 +75,8 @@ const ManagePlant = ({ route }) => {
     if (deletePlantState == 'success' && isFocused) {
       setLoading(false);
       dispatch(setDeletePlantState(''));
-      navigation.navigate('HomeScreen');
       setInfoModalVisibility(false);
+      navigation.navigate('HomeScreen');
     } else if (deletePlantState == 'failure' && isFocused) {
       setLoading(false);
       dispatch(setDeletePlantState(''));
