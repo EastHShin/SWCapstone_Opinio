@@ -7,6 +7,9 @@ import {
   RESULT_STATE_POST,
   CREATE_COMMENT,
   RESULT_STATE_COMMENT,
+  LIKE,
+  DELETE_COMMENT,
+  UPDATE_COMMENT,
 } from '../actions/type';
 
 const initialState = {
@@ -14,6 +17,7 @@ const initialState = {
   post: {},
   result: '',
   commentResult: '',
+  likeResult: '',
 };
 
 function CommunityReducer(state = initialState, action) {
@@ -34,6 +38,12 @@ function CommunityReducer(state = initialState, action) {
       return { ...state, result: action.payload };
     case CREATE_COMMENT:
       return { ...state, commentResult: action.payload };
+    case UPDATE_COMMENT:
+      return { ...state, commentResult: action.payload };
+    case DELETE_COMMENT:
+      return { ...state, commentResult: action.payload };
+    case LIKE:
+      return { ...state, likeResult: action.payload };
     default:
       return state;
   }

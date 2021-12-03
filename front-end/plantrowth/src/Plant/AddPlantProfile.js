@@ -308,47 +308,56 @@ AddPlantProfile = ({ route }) => {
             <View style={styles.iconWrapper}>
               <FontAwesome name="pencil" size={30} color="#93d07d" />
             </View>
-            <TextInput
-              style={styles.input}
-              onChangeText={PlantName => setPlantName(PlantName)}
-              underlineColorAndroid="#000"
-              placeholder="식물 이름"
-              placeholderTextColor="#808080"
-              onSubmitEditing={Keyboard.dismiss}
-            />
+            <View>
+              <Text style={styles.infoLabel}>식물 이름</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={PlantName => setPlantName(PlantName)}
+                underlineColorAndroid="#666666"
+                placeholder="키우는 식물의 이름"
+                placeholderTextColor="#808080"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+            </View>
           </View>
           <View style={styles.section}>
             <View style={styles.iconWrapper}>
               <Icon name="md-rose" size={30} color="#93d07d" />
             </View>
-            <TextInput
-              style={styles.input}
-              onChangeText={PlantSpecies => setPlantSpecies(PlantSpecies)}
-              underlineColorAndroid="#000"
-              placeholder="식물 종"
-              placeholderTextColor="#808080"
-              onSubmitEditing={Keyboard.dismiss}
-            />
+            <View>
+              <Text style={styles.infoLabel}>식물 종</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={PlantSpecies => setPlantSpecies(PlantSpecies)}
+                underlineColorAndroid="#666666"
+                placeholder="키우는 식물의 종"
+                placeholderTextColor="#808080"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+            </View>
           </View>
           <View style={styles.section}>
             <View style={styles.iconWrapper}>
               <Icon name="md-calendar" size={30} color="#93d07d" />
             </View>
-            <TouchableOpacity
-              style={{ backgroundColor: '#fff' }}
-              onPress={() => showDatePicker('plantBirth')}
-            >
-              <TextInput
-                pointerEvents="none"
-                style={styles.input}
-                placeholder="키우기 시작한 날"
-                placeholderTextColor="#808080"
-                underlineColorAndroid="#000"
-                editable={false}
-                value={plantTextBirth}
-                onSubmitEditing={Keyboard.dismiss}
-              />
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.infoLabel}>키우기 시작한 날짜</Text>
+              <TouchableOpacity
+                style={{ backgroundColor: '#fff' }}
+                onPress={() => showDatePicker('plantBirth')}
+              >
+                <TextInput
+                  pointerEvents="none"
+                  style={styles.input}
+                  placeholder="식물을 키우기 시작한 날짜"
+                  placeholderTextColor="#808080"
+                  underlineColorAndroid="#666666"
+                  editable={false}
+                  value={plantTextBirth}
+                  onSubmitEditing={Keyboard.dismiss}
+                />
+              </TouchableOpacity>
+            </View>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
@@ -370,20 +379,23 @@ AddPlantProfile = ({ route }) => {
             <View style={styles.iconWrapper}>
               <Icon name="notifications" size={30} color="#93d07d" />
             </View>
-            <TouchableOpacity
-              style={{ backgroundColor: '#fff' }}
-              onPress={() => setDayPickerVisibility(true)}
-            >
-              <TextInput
-                style={styles.input}
-                underlineColorAndroid="#000"
-                placeholder="Water Cycle"
-                placeholderTextColor="#808080"
-                editable={false}
-                value={textAlarmCycle}
-                onSubmitEditing={Keyboard.dismiss}
-              />
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.infoLabel}>물 주기</Text>
+              <TouchableOpacity
+                style={{ backgroundColor: '#fff' }}
+                onPress={() => setDayPickerVisibility(true)}
+              >
+                <TextInput
+                  style={styles.input}
+                  underlineColorAndroid="#666666"
+                  placeholder="식물에게 물을 주는 주기"
+                  placeholderTextColor="#808080"
+                  editable={false}
+                  value={textAlarmCycle}
+                  onSubmitEditing={Keyboard.dismiss}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <Modal
             isVisible={isDayPickerVisible}
@@ -410,7 +422,6 @@ AddPlantProfile = ({ route }) => {
                   alignItems: 'center',
                 }}
               >
-                <Text> </Text>
                 <View style={{ width: 150, height: 250 }}>
                   <ScrollPicker
                     dataSource={dayArray}
@@ -427,11 +438,15 @@ AddPlantProfile = ({ route }) => {
                 </View>
                 <Text style={{ fontFamily: 'NanumGothicBold' }}> Days</Text>
               </View>
-
               <TouchableOpacity
                 style={styles.ModalButton}
                 onPress={() => {
                   setDayPickerVisibility(false);
+                  console.log('alarm cycle: ' + alarmCycle);
+                  if (alarmCycle == undefined) {
+                    setAlarmCycle(7);
+                    setTextAlarmCycle(`물을 7일 마다 줘요`);
+                  }
                 }}
               >
                 <Text
@@ -449,73 +464,90 @@ AddPlantProfile = ({ route }) => {
             <View style={styles.iconWrapper}>
               <Icon name="water" size={30} color="#93d07d" />
             </View>
-            <View style={{ alignItems: 'center', width: screenWidth * 0.6 }}>
-              <Text
-                style={{
-                  fontFamily: 'NanumGothicBold',
-                  fontSize: 12,
-                  marginBottom: 3,
-                }}
-              >
-                {'   물 주는 양'}
-              </Text>
+            <View>
+              <Text style={styles.infoLabel}>물 주는 양</Text>
               <View
                 style={{
-                  width: screenWidth * 0.6,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'space-between',
+                  backgroundColor: '#f7f8f9',
+                  borderRadius: 5,
+                  marginTop: 3,
                 }}
               >
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
-                  조금만
-                </Text>
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
-                  적당히
-                </Text>
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
-                  많이
-                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'space-between',
+                    marginTop: 5,
+                    marginRight: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      fontSize: 11,
+                      paddingLeft: 5,
+                    }}
+                  >
+                    조금만
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      fontSize: 11,
+                      paddingRight: 10,
+                    }}
+                  >
+                    적당히
+                  </Text>
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
+                    많이
+                  </Text>
+                </View>
+
+                <Slider
+                  style={{
+                    width: screenWidth * 0.6,
+                    height: 20,
+                    alignItems: 'center',
+                  }}
+                  minimumValue={1}
+                  maximumValue={3}
+                  step={1}
+                  minimumTrackTintColor="#0067a3"
+                  maximumTrackTintColor="#000000"
+                  thumbTintColor="#0067a3"
+                  value={2}
+                  renderTrackMarkComponent={true}
+                  onValueChange={value => {
+                    setWaterSupply(value);
+                  }}
+                />
               </View>
-              <Slider
-                style={{
-                  width: screenWidth * 0.66,
-                  height: 20,
-                  marginLeft: 11,
-                }}
-                minimumValue={1}
-                maximumValue={3}
-                step={1}
-                minimumTrackTintColor="#0067a3"
-                maximumTrackTintColor="#000000"
-                thumbTintColor="#0067a3"
-                value={2}
-                renderTrackMarkComponent={true}
-                onValueChange={value => {
-                  setWaterSupply(value);
-                }}
-              />
             </View>
           </View>
           <View style={styles.section}>
             <View style={styles.iconWrapper}>
               <Icon name="md-calendar" size={30} color="#93d07d" />
             </View>
-            <TouchableOpacity
-              style={{ backgroundColor: '#fff' }}
-              onPress={() => showDatePicker('watering')}
-            >
-              <TextInput
-                pointerEvents="none"
-                style={styles.input}
-                placeholder="마지막 물 준 날"
-                placeholderTextColor="#999999"
-                underlineColorAndroid="#000"
-                editable={false}
-                value={textLastWatering}
-                onSubmitEditing={Keyboard.dismiss}
-              />
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.infoLabel}>마지막으로 물 준 날짜</Text>
+              <TouchableOpacity
+                style={{ backgroundColor: '#fff' }}
+                onPress={() => showDatePicker('watering')}
+              >
+                <TextInput
+                  pointerEvents="none"
+                  style={styles.input}
+                  placeholder="식물에게 마지막으로 물을 준 날짜"
+                  placeholderTextColor="#999999"
+                  underlineColorAndroid="#666666"
+                  editable={false}
+                  value={textLastWatering}
+                  onSubmitEditing={Keyboard.dismiss}
+                />
+              </TouchableOpacity>
+            </View>
             <DateTimePickerModal
               isVisible={isWateringDatePickerVisible}
               mode="date"
@@ -602,17 +634,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    //backgroundColor: 'red',
     width: screenWidth * 0.66,
     height: screenHeight * 0.09,
+    marginTop: 5,
+    paddingTop: 5,
   },
   input: {
     color: '#222222',
     width: screenWidth * 0.6,
-    marginLeft: 5,
-    borderRadius: 10,
-    padding: 5,
+    borderRadius: 5,
     fontFamily: 'NanumGothic',
+    padding: 5,
+    marginTop: 5,
+    backgroundColor: '#f7f8f9',
   },
   photoButton: {
     width: 50,
@@ -653,6 +687,11 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
 
     elevation: 2,
+  },
+  infoLabel: {
+    fontFamily: 'NanumGothicBold',
+    fontSize: 12,
+    marginLeft: 10,
   },
 });
 

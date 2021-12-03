@@ -152,7 +152,7 @@ export const getPaymentHistory = userId => {
       )
       .then(function (response) {
         if (response.status === 200) {
-          console.warn('결제 내역: ' + JSON.stringify(response.data));
+          console.log('결제 내역: ' + JSON.stringify(response.data));
           dispatch({ type: GET_PAYMENT_HISTORY, payload: response.data });
         }
       })

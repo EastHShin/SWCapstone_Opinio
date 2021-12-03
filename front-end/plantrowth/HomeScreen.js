@@ -242,8 +242,6 @@ const styles = StyleSheet.create({
   memberInfoSectionWrapper: {
     flex: 1,
     backgroundColor: '#fff',
-    //width: screenWidth*0.4,
-    //height: screenHeight * 0.2,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 15,
@@ -261,7 +259,6 @@ const styles = StyleSheet.create({
   },
   plantListSectionWrapper: {
     backgroundColor: '#fff',
-    //width: screenWidth*0.4,
     flex: 5,
     borderRadius: 15,
     margin: 5,
@@ -280,8 +277,6 @@ const styles = StyleSheet.create({
     flex: 0.8,
     justifyContent: 'center',
     backgroundColor: '#f7f8f9',
-    //width: screenWidth*0.4,
-    //height: screenHeight * 0.2,
     padding: 10,
     marginTop: 5,
     marginBottom: 5,
@@ -298,8 +293,6 @@ const styles = StyleSheet.create({
   hotSectionWrapper: {
     flex: 3.45,
     backgroundColor: '#fff',
-    //width: screenWidth*0.4,
-    //height: screenHeight * 0.2,
     borderRadius: 15,
     padding: 10,
     margin: 5,
@@ -319,7 +312,7 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     width: screenWidth * 0.274,
-    height: screenHeight * 0.25,
+    height: screenHeight * 0.1 + screenWidth*0.274 + 13,
     padding: 5,
     backgroundColor: '#C9E7BE',
     flexDirection: 'column',

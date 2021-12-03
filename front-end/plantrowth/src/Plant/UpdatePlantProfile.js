@@ -336,53 +336,62 @@ UpdatePlantProfile = ({ route }) => {
             <View style={styles.iconWrapper}>
               <FontAwesome name="pencil" size={30} color="#93d07d" />
             </View>
-            <TextInput
-              style={styles.input}
-              onChangeText={PlantName => {
-                setPlantName(PlantName);
-                setUpdateSomething(true);
-              }}
-              underlineColorAndroid="#000"
-              placeholder={route.params.profile.plant_name}
-              placeholderTextColor="#808080"
-              onSubmitEditing={Keyboard.dismiss}
-            />
+            <View>
+              <Text style={styles.infoLabel}>식물 이름</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={PlantName => {
+                  setPlantName(PlantName);
+                  setUpdateSomething(true);
+                }}
+                underlineColorAndroid="#666666"
+                placeholder={route.params.profile.plant_name}
+                placeholderTextColor="#808080"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+            </View>
           </View>
           <View style={styles.section}>
             <View style={styles.iconWrapper}>
               <Icon name="md-rose" size={30} color="#93d07d" />
             </View>
-            <TextInput
-              style={styles.input}
-              onChangeText={PlantSpecies => {
-                setPlantSpecies(PlantSpecies);
-                setUpdateSomething(true);
-              }}
-              underlineColorAndroid="#000"
-              placeholder={route.params.profile.plant_species}
-              placeholderTextColor="#808080"
-              onSubmitEditing={Keyboard.dismiss}
-            />
+            <View>
+              <Text style={styles.infoLabel}>식물 종</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={PlantSpecies => {
+                  setPlantSpecies(PlantSpecies);
+                  setUpdateSomething(true);
+                }}
+                underlineColorAndroid="#666666"
+                placeholder={route.params.profile.plant_species}
+                placeholderTextColor="#808080"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+            </View>
           </View>
           <View style={styles.section}>
             <View style={styles.iconWrapper}>
               <Icon name="md-calendar" size={30} color="#93d07d" />
             </View>
-            <TouchableOpacity
-              style={{ backgroundColor: '#fff' }}
-              onPress={() => showDatePicker('plantBirth')}
-            >
-              <TextInput
-                pointerEvents="none"
-                style={styles.input}
-                placeholder={route.params.profile.plant_birth}
-                placeholderTextColor="#808080"
-                underlineColorAndroid="#000"
-                editable={false}
-                value={plantTextBirth}
-                onSubmitEditing={Keyboard.dismiss}
-              />
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.infoLabel}>키우기 시작한 날짜</Text>
+              <TouchableOpacity
+                style={{ backgroundColor: '#fff' }}
+                onPress={() => showDatePicker('plantBirth')}
+              >
+                <TextInput
+                  pointerEvents="none"
+                  style={styles.input}
+                  placeholder={route.params.profile.plant_birth}
+                  placeholderTextColor="#808080"
+                  underlineColorAndroid="#666666"
+                  editable={false}
+                  value={plantTextBirth}
+                  onSubmitEditing={Keyboard.dismiss}
+                />
+              </TouchableOpacity>
+            </View>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
@@ -402,20 +411,23 @@ UpdatePlantProfile = ({ route }) => {
             <View style={styles.iconWrapper}>
               <Icon name="notifications" size={30} color="#93d07d" />
             </View>
-            <TouchableOpacity
-              style={{ backgroundColor: '#fff' }}
-              onPress={() => setDayPickerVisibility(true)}
-            >
-              <TextInput
-                style={styles.input}
-                underlineColorAndroid="#000"
-                placeholder={`물을 ${route.params.profile.alarm_cycle}일마다 줘요`}
-                placeholderTextColor="#808080"
-                editable={false}
-                value={textAlarmCycle}
-                onSubmitEditing={Keyboard.dismiss}
-              />
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.infoLabel}>물 주기</Text>
+              <TouchableOpacity
+                style={{ backgroundColor: '#fff' }}
+                onPress={() => setDayPickerVisibility(true)}
+              >
+                <TextInput
+                  style={styles.input}
+                  underlineColorAndroid="#666666"
+                  placeholder={`물을 ${route.params.profile.alarm_cycle}일마다 줘요`}
+                  placeholderTextColor="#808080"
+                  editable={false}
+                  value={textAlarmCycle}
+                  onSubmitEditing={Keyboard.dismiss}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <Modal
             isVisible={isDayPickerVisible}
@@ -482,78 +494,94 @@ UpdatePlantProfile = ({ route }) => {
             <View style={styles.iconWrapper}>
               <Icon name="water" size={30} color="#93d07d" />
             </View>
-            <View style={{ alignItems: 'center', width: screenWidth * 0.6 }}>
-              <Text
-                style={{
-                  fontFamily: 'NanumGothicBold',
-                  fontSize: 12,
-                  marginBottom: 3,
-                }}
-              >
-                {'   물 주는 양'}
-              </Text>
+            <View>
+              <Text style={styles.infoLabel}>물 주는 양</Text>
               <View
                 style={{
-                  width: screenWidth * 0.6,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'space-between',
+                  backgroundColor: '#f7f8f9',
+                  borderRadius: 5,
+                  marginTop: 3,
                 }}
               >
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
-                  조금만
-                </Text>
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
-                  적당히
-                </Text>
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
-                  많이
-                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'space-between',
+                    marginTop: 10,
+                    marginRight: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      fontSize: 11,
+                      paddingLeft: 5,
+                    }}
+                  >
+                    조금만
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      fontSize: 11,
+                      paddingRight: 10,
+                    }}
+                  >
+                    적당히
+                  </Text>
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 11 }}>
+                    많이
+                  </Text>
+                </View>
+                <Slider
+                  style={{
+                    width: screenWidth * 0.6,
+                    height: 20,
+                    alignItems: 'center',
+                  }}
+                  minimumValue={1}
+                  maximumValue={3}
+                  step={1}
+                  minimumTrackTintColor="#0067a3"
+                  maximumTrackTintColor="#000000"
+                  thumbTintColor="#0067a3"
+                  value={route.params.profile.water_supply}
+                  renderTrackMarkComponent={true}
+                  onValueChange={value => {
+                    setWaterSupply(value);
+                    setUpdateSomething(true);
+                  }}
+                />
               </View>
-              <Slider
-                style={{
-                  width: screenWidth * 0.66,
-                  height: 20,
-                  marginLeft: 11,
-                }}
-                minimumValue={1}
-                maximumValue={3}
-                step={1}
-                minimumTrackTintColor="#0067a3"
-                maximumTrackTintColor="#000000"
-                thumbTintColor="#0067a3"
-                value={route.params.profile.water_supply}
-                renderTrackMarkComponent={true}
-                onValueChange={value => {
-                  setWaterSupply(value);
-                  setUpdateSomething(true);
-                }}
-              />
             </View>
           </View>
           <View style={styles.section}>
             <View style={styles.iconWrapper}>
               <Icon name="md-calendar" size={30} color="#93d07d" />
             </View>
-            <TouchableOpacity
-              style={{ backgroundColor: '#fff' }}
-              onPress={() => showDatePicker('watering')}
-            >
-              <TextInput
-                pointerEvents="none"
-                style={styles.input}
-                placeholder={
-                  route.params.profile.recent_watering
-                    ? route.params.profile.recent_watering
-                    : '마지막으로 물 준 날짜'
-                }
-                placeholderTextColor="#808080"
-                underlineColorAndroid="#000"
-                editable={false}
-                value={textLastWatering}
-                onSubmitEditing={Keyboard.dismiss}
-              />
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.infoLabel}>마지막으로 물 준 날짜</Text>
+              <TouchableOpacity
+                style={{ backgroundColor: '#fff' }}
+                onPress={() => showDatePicker('watering')}
+              >
+                <TextInput
+                  pointerEvents="none"
+                  style={styles.input}
+                  placeholder={
+                    route.params.profile.recent_watering
+                      ? route.params.profile.recent_watering
+                      : '식물에게 마지막으로 물을 준 날짜'
+                  }
+                  placeholderTextColor="#808080"
+                  underlineColorAndroid="#666666"
+                  editable={false}
+                  value={textLastWatering}
+                  onSubmitEditing={Keyboard.dismiss}
+                />
+              </TouchableOpacity>
+            </View>
             <DateTimePickerModal
               isVisible={isWateringDatePickerVisible}
               mode="date"
@@ -619,7 +647,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: screenWidth * 0.9,
-    //height: screenHeight * 0.78,
     padding: 10,
     margin: 10,
     borderRadius: 15,
@@ -638,17 +665,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    //backgroundColor: 'red',
-    width: screenWidth * 0.66,
+    width: screenWidth * 0.75,
     height: screenHeight * 0.09,
+    marginTop: 5,
+    paddingTop: 5,
   },
   input: {
     color: '#222222',
     width: screenWidth * 0.6,
-    marginLeft: 5,
-    borderRadius: 10,
-    padding: 5,
+    borderRadius: 5,
     fontFamily: 'NanumGothic',
+    padding: 5,
+    marginTop: 5,
+    backgroundColor: '#f7f8f9',
   },
   photoButton: {
     width: 50,
@@ -689,5 +718,10 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
 
     elevation: 2,
+  },
+  infoLabel: {
+    fontFamily: 'NanumGothicBold',
+    fontSize: 12,
+    marginLeft: 10,
   },
 });
