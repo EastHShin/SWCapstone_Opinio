@@ -214,7 +214,9 @@ const PostDetailScreen = ({ route, navigation }) => {
                 >
                   {item.content}
                 </Text>
-                <Text style={{ fontSize: 11 }}>{item.date}</Text>
+                <Text style={{ fontSize: 11 }}>
+                  {nowYear == new Date(item.date).getFullYear() ? Moment(item.date).format("MM/DD HH:mm") : Moment(item.date).format("YYYY/MM/DD HH:mm")}
+                </Text>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -653,6 +655,12 @@ const PostDetailScreen = ({ route, navigation }) => {
           )}
         </Modal>
         {/* 댓글 수정신고삭제 */}
+
+      </ScrollView>
+      {/* 댓글작성 */}
+      <KeyboardAvoidingView
+        style={{ padding: 5, alignItems: 'center', justifyContent: 'center' }}
+      >
         <Modal
           isVisible={isReportModalVisible}
           animationIn="fadeIn"
@@ -670,34 +678,35 @@ const PostDetailScreen = ({ route, navigation }) => {
           }}
           style={{ alignItems: 'center' }}
         >
-          <View style={{ alignItems: 'center', backgroundColor: 'white', width: screenWidth * 0.8, height: screenHeight * 0.5, borderRadius: 15 }}>
-            <Text>
+          <View style={{ alignItems: 'center', padding: 5, backgroundColor: 'white', width: screenWidth * 0.8, height: screenHeight * 0.5, borderRadius: 15 }}>
+            <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: '#363636' }}>
               {reportType ? `게시글 신고` : `댓글 신고`}
             </Text>
-            <View style={{ width: screenWidth * 0.75 }}>
-              <Text>
+            <View style={{ width: screenWidth * 0.75, flex: 1, marginTop: 15 }}>
+              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 14, color: '#363636' }}>
                 신고사유
               </Text>
-              <TextInput
-                onChangeText={reason => setReason(reason)}
-                multiline={true}
-                placeholder="신고 사유 입력"
-                placeholderTextColor="#808080"
-                returnKeyType="next"
-                blurOnSubmit={true}
-                underlineColorAndroid="#f000"
-              />
-              <TouchableOpacity onPress={() => reportHandler(reportType, reason)}>
-                <Text>신고</Text>
-              </TouchableOpacity>
+              <View style={{ flex: 1, backgroundColor: '#f7f8f9' }}>
+                <TextInput
+                  onChangeText={reason => setReason(reason)}
+                  multiline={true}
+                  placeholder="신고 사유 입력"
+                  placeholderTextColor="#808080"
+                  returnKeyType="next"
+                  blurOnSubmit={true}
+                  underlineColorAndroid="#f000"
+                  backgroundColor='#f7f8f9'
+                  maxLength={250}
+                />
+              </View>
+              <View style={{ alignItems: 'center', margin: 5 }}>
+                <TouchableOpacity style={styles.smallButton} onPress={() => reportHandler(reportType, reason)}>
+                  <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>신고</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
-      </ScrollView>
-      {/* 댓글작성 */}
-      <KeyboardAvoidingView
-        style={{ padding: 5, alignItems: 'center', justifyContent: 'center' }}
-      >
         <View style={styles.editScreen}>
           <TextInput
             multiline={true}
@@ -710,6 +719,7 @@ const PostDetailScreen = ({ route, navigation }) => {
             onChangeText={editingComment => setComment(editingComment)}
             defaultValue={updating ? selectedCommentContent : ''}
             onSubmitEditing={Keyboard.dismiss}
+            maxLength={250}
           />
           <TouchableOpacity
             style={{
@@ -854,6 +864,14 @@ const styles = StyleSheet.create({
     padding: 3,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  smallButton: {
+    backgroundColor: '#B22339',
+    height: Dimensions.get('window').height * 0.04,
+    width: Dimensions.get('window').width * 0.14,
+    alignItems: 'center',
+    borderRadius: 20,
+    justifyContent: 'center'
   },
   //상웅
 });
