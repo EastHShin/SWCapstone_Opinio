@@ -109,7 +109,6 @@ HomeScreen = () => {
 
   const [userId, setUserId] = useState('');
   const [boards, setBoards] = useState('');
-  const [boardsLength, setBoardsLength] = useState('');
   const [selectedId, setSelectedId] = useState('');
 
   const infoList = useSelector(state => state.HomeReducer.infoList);
@@ -140,11 +139,10 @@ HomeScreen = () => {
 
   useEffect(() => {
     setBoards(infoList.boards);
-    setBoardsLength(infoList.boards.length-1);
   }, [infoList])
 
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item}) => {
 
     if(!item.is_blocked){
     return (
@@ -159,17 +157,6 @@ HomeScreen = () => {
           }}
           style={{ backgroundColor: '#FFFFFF' }}
         />
-        {index != boardsLength ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              width: Dimensions.get('window').width,
-            }}
-          >
-            <View style={{ flex: 1, height: 1, backgroundColor: '#DCDCDC' }} />
-          </View>
-        ) : null}
       </View>
     );
       }
