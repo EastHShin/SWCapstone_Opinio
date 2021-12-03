@@ -1,13 +1,16 @@
 package com.opinio.plantrowth.service.community;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opinio.plantrowth.api.dto.community.board.BoardCreateRequest;
+import com.opinio.plantrowth.api.dto.community.board.BoardDTO;
 import com.opinio.plantrowth.api.dto.community.board.BoardLookUpDTO;
 import com.opinio.plantrowth.api.dto.community.comment.CommentLookUpDTO;
 import com.opinio.plantrowth.domain.community.Board;
@@ -95,7 +98,6 @@ public class BoardService {
 		return board.getId();
 	}
 
-
 	/**
 	 *  댓글 갯수 조회
 	 */
@@ -135,7 +137,7 @@ public class BoardService {
 
 	public Integer getUserMaxLevel(Long userId) {
 		Boolean existsPlant = plantRepository.existsByUserId(userId);
-		if(!existsPlant){
+		if (!existsPlant) {
 			return 0;
 		}
 		Integer lv = plantRepository.findPlantLevelByUserId(userId)
@@ -146,4 +148,17 @@ public class BoardService {
 		return lv;
 	}
 
+	public List<BoardDTO> getHotPost() {
+		List<Board> boards = BoardList();
+		List<BoardDTO> collect = boards.stream()
+			.map(m -> new BoardDTO(m.getTitle(), m.getContent(), m.getCreateDate(),
+				m.getId(), m.getUser().getName(), countedLike(m.getId()),
+				countedCommentByBoardId(m.getId()), m.getIsBlocked(),
+				getUserMaxLevel(m.getUser().getId())))
+			.sorted(Comparator.comparing(BoardDTO::getCountedLike)
+				.reversed()
+				.thenComparing(Comparator.comparing(BoardDTO::getCreateDate).reversed())).limit(10)
+			.collect(Collectors.toList());
+		return collect;
+	}
 }
