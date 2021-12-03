@@ -169,8 +169,6 @@ function RegisterScreen({ navigation }) {
 
     setLoading(true);
 
-    console.log(fcmToken);
-
     const user = JSON.stringify({
       user_name: userNickName,
       user_birth: userBirth,
@@ -179,8 +177,6 @@ function RegisterScreen({ navigation }) {
       fcm_access_token: fcmToken
 
     });
-
-    console.log(user);
 
     dispatch(registerUser(user));
 
@@ -308,7 +304,7 @@ function RegisterScreen({ navigation }) {
                 <Text style={{
                   color: '#FFFFFF',
                   paddingVertical: 10, fontSize: 10
-                }}>확인</Text>
+                }}>중복확인</Text>
               </TouchableOpacity>
             </View>
 

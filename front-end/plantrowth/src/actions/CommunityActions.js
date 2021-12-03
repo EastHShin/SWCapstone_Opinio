@@ -17,7 +17,7 @@ export const getBoardList = () => {
   return async dispatch => {
     return await axios
       .get(
-        'http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/',
+        'http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community',
       )
       .then(function (res) {
         if (res.status == 200) {
@@ -39,12 +39,8 @@ export const getBoardList = () => {
 };
 
 export const getPost = (boardId, userId) => {
-  console.log(boardId + '유저 id' + userId);
-  return async dispatch => {
-    return await axios
-      .get(
-        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/view?board-id=${boardId}&user-id=${userId}`,
-      )
+    return async dispatch => {
+        return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/community/view?board-id=${boardId}&user-id=${userId}`)
       .then(function (res) {
         if (res.status == 200) {
           dispatch({
@@ -55,7 +51,6 @@ export const getPost = (boardId, userId) => {
       })
       .catch(function (err) {
         console.log(err + '게시글 조회');
-        console.log(err.response);
         dispatch({
           type: GET_POST,
           payload: {},
@@ -91,7 +86,6 @@ export const createPost = (userId, post) => {
       })
       .catch(function (err) {
         console.log(err + '게시글 생성');
-        console.log(err);
         dispatch({
           type: SAVE_POST,
           payload: 'failure',

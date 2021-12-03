@@ -33,6 +33,7 @@ export const fetchDiary = (diaryId) => {
 		return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`)
 			.then(function (res) {
 				if (res.status == 200) {
+                    console.log(res.data.data);
 					dispatch({
 						type: FETCH_DIARY,
 						payload: res.data.data,
@@ -58,14 +59,12 @@ export const setResultState = state => dispatch => {
 
 export const saveDiary = (diary, plantId) => {
     return async dispatch => {
-        console.log(JSON.stringify(diary));
         return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${plantId}`, diary, {
 
             headers: { 'Content-Type': `multipart/form-data` }
         })
             .then(function (res) {
                 if (res.status == 200) {
-                    console.log(JSON.stringify(res))
                     dispatch({
                         type: SAVE_DIARY,
                         payload: "success"
@@ -90,8 +89,6 @@ export const saveDiary = (diary, plantId) => {
 
 export const editDiary = (diary, diaryId) => {
     return async dispatch => {
-        console.log('diary' + diary);
-        console.log('id' + diaryId);
         return await axios.put(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`, diary, {
             headers: { "Content-Type": `multipart/form-data` }
         })

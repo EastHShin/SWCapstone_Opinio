@@ -33,17 +33,6 @@ const PostEditScreen = ({ route, navigation }) => {
 
     const contentInputRef = createRef();
 
-    // useEffect(() => {
-        
-    //     if (isFocused && !originalImageUri) {
-    //       //  setImageUri('');
-    //       //  setOriginalImageUri('');
-           
-    //     }
-        
-    // }, [isFocused])
-
-
     useEffect(() => {
         if (result == 'success' && isFocused) {
             setLoading(false);
@@ -94,14 +83,6 @@ const PostEditScreen = ({ route, navigation }) => {
 
         setLoading(true);
 
-        //수정 시 날짜는 어떻게 할지 
-
-        const date = new Date();
-
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
-
         const Data = new FormData();
 
         if (post.title != title) {
@@ -112,7 +93,6 @@ const PostEditScreen = ({ route, navigation }) => {
             Data.append('content', content);
 
         }
-        Data.append('updateDate', year + '-' + month + '-' + day )
 
         if (originalImageUri) {
             if (!imageUri) {
@@ -146,7 +126,6 @@ const PostEditScreen = ({ route, navigation }) => {
             }
 
         }
-        console.log(JSON.stringify(Data));
 
         dispatch(editPost(selectedId, Data));
 

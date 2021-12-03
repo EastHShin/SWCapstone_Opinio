@@ -99,6 +99,7 @@ const LoginScreen = ({ navigation }) => {
       dispatch(kakaoLogin(kakaoLoginData));
       dispatch(kakaoRegister(''));
     } else if (kakaoRegisterState == 'failure') {
+      dispatch(kakaoRegister(''));
       setErrortext('카카오 회원가입 실패');
     }
   }, [kakaoRegisterState]);
@@ -236,7 +237,6 @@ const LoginScreen = ({ navigation }) => {
       fcm_access_token: fcmToken,
     });
 
-    console.log(user);
     dispatch(registerUser(user));
   };
 
@@ -410,13 +410,6 @@ const LoginScreen = ({ navigation }) => {
         }}
         visible={isFindPwModalVisible}
       >
-        <TouchableOpacity
-          style={styles.container}
-          activeOpacity={1}
-          onPressOut={() => {
-            setIsFindPwModalVisible(false);
-          }}
-        >
           <View style={styles.modal}>
             <View style={styles.modalSectionWrapper}>
               <View style={styles.textWrapper}>
@@ -497,7 +490,6 @@ const LoginScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </TouchableOpacity>
       </Modal>
 
       <Modal
@@ -508,14 +500,6 @@ const LoginScreen = ({ navigation }) => {
         }}
         visible={isModalVisible}
       >
-        <TouchableOpacity
-          style={styles.container}
-          activeOpacity={1}
-          onPressOut={() => {
-            kakaoRegisterFail();
-            setIsModalVisible(false);
-          }}
-        >
           <View style={styles.modal}>
             <View style={styles.modalSectionWrapper}>
               <View style={styles.textWrapper}>
@@ -623,7 +607,6 @@ const LoginScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </TouchableOpacity>
       </Modal>
     </SafeAreaView>
   );
@@ -770,8 +753,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3.0,
     elevation: 5,
-  },
-  container: {
-    flex: 1,
   },
 });

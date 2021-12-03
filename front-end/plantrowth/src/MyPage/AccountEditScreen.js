@@ -133,7 +133,6 @@ const AccountEditScreen = ({ route, navigation }) => {
     }
 
     if (password) {
-      console.log(password);
       user.password = password;
     }
     user.email = userInfo.email;
@@ -250,7 +249,7 @@ const AccountEditScreen = ({ route, navigation }) => {
                   color: '#FFFFFF',
                   fontSize: 10,
                   marginVertical:Dimensions.get('window').height*0.01
-                }}>확인</Text>
+                }}>중복확인</Text>
               </TouchableOpacity>
               </View>
               <View style={styles.lineWrapper}>
@@ -361,7 +360,7 @@ const AccountEditScreen = ({ route, navigation }) => {
             }>
             <Text style={{
               color: '#FFFFFF',
-              paddingVertical: 12, fontSize: 10, fontWeight: "bold"
+              paddingVertical: 11, fontSize: 10, fontWeight: "bold"
             }}>확인</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
