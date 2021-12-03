@@ -38,6 +38,9 @@ public class ReportService {
 		Board board = boardRepository.findById(boardId).orElseThrow(
 			() -> new IllegalArgumentException("No Found board")
 		);
+		if(reportRepository.existsByBoardIdAndUserId(boardId, userId)){
+			return null;
+		}
 		Report report = Report.builder()
 			.user(reportingUser)
 			.board(board)
@@ -58,6 +61,9 @@ public class ReportService {
 		Comment comment = commentRepository.findById(commentId).orElseThrow(
 			() -> new IllegalArgumentException("No Found Comment")
 		);
+		if(reportRepository.existsByCommentIdAndUserId(commentId, userId)){
+			return null;
+		}
 		Report report = Report.builder()
 			.user(reportingUser)
 			.comment(comment)
