@@ -52,6 +52,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [comment, setComment] = useState('');
   const [isCommentModalVisible, setCommentModalVisibility] = useState(false);
+  const [selectedComment, setSelectedComment] = useState();
   const [selectedCommentId, setSelectedCommentId] = useState();
   const [selectedCommentWriterId, setSelectedCommentWriterId] = useState();
   const [selectedCommentContent, setSelectedCommentContent] = useState('');
@@ -107,6 +108,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (updating) {
       setCommentModalVisibility(false);
+      setSelectedCommentContent(selectedComment.content);
     }
   }, [updating]);
 
@@ -129,9 +131,10 @@ const PostDetailScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (commentResult == 'success' && isFocused) {
       setLoading(false);
+      setUpdating(false);
       dispatch(getPost(selectedId, userId));
       setComment('');
-      setUpdating(false);
+      setSelectedCommentContent('');
       setCommentModalVisibility(false);
       dispatch(setCommentResultState(''));
     } else if (commentResult == 'failure' && isFocused) {
@@ -206,7 +209,7 @@ const PostDetailScreen = ({ route, navigation }) => {
               onPress={() => {
                 setSelectedCommentId(item.comment_id);
                 setSelectedCommentWriterId(item.writer_id);
-                setSelectedCommentContent(item.content);
+                setSelectedComment(item);
                 setCommentModalVisibility(true);
               }}
             >
@@ -227,7 +230,7 @@ const PostDetailScreen = ({ route, navigation }) => {
     }
     setLoading(true);
     if (updating) {
-      dispatch(updateComment(selectedId, userId, comment));
+      dispatch(updateComment(selectedCommentId, userId, comment));
     } else {
       dispatch(createComment(selectedId, userId, comment));
     }
@@ -236,8 +239,6 @@ const PostDetailScreen = ({ route, navigation }) => {
 
   //좋아요 Handler
   const likeHandler = () => {
-    console.log('게시글 userId' + post.userId);
-    console.log('내 userId' + userId);
     if (Number(post.userId) == userId) {
       alert('본인이 작성한 게시글에는 좋아요를 누를 수 없어요!');
       return;
