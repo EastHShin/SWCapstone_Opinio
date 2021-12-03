@@ -1,7 +1,9 @@
 package com.opinio.plantrowth.api.controller;
 
+import com.opinio.plantrowth.api.dto.community.board.BoardDTO;
 import com.opinio.plantrowth.domain.plant.Plant;
 import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.service.community.BoardService;
 import com.opinio.plantrowth.service.plant.PlantService;
 import com.opinio.plantrowth.service.user.UserService;
 
@@ -25,6 +27,7 @@ public class MainPageApiController {
 
 	private final UserService userService;
 	private final PlantService plantService;
+	private final BoardService boardService;
 
 	//    @PostConstruct
 	//    public void testInit(){
@@ -39,9 +42,9 @@ public class MainPageApiController {
 	public ResponseEntity<MainPageResult> getMainPage(@PathVariable("user-id") Long id) {
 		User user = userService.findUser(id);
 		List<Plant> plants = plantService.findPlants(id);
-		//List<Board> boards = boardService.findBestPost();      나중에 게시판 구현하면 수정
+		List<BoardDTO> boards = boardService.getHotPost();
 
-		return new ResponseEntity<>(new MainPageResult<MainPageDto>(new MainPageDto(user, plants)), HttpStatus.OK);
+		return new ResponseEntity<>(new MainPageResult<MainPageDto>(new MainPageDto(user, plants, boards)), HttpStatus.OK);
 	}
 
 	@Getter
@@ -58,9 +61,9 @@ public class MainPageApiController {
 		private Integer max_plant_num;
 		private Integer plant_num;
 		private List<MainPagePlantDto> plants;
-		//private List<Board> boards;
+		private List<BoardDTO> boards;
 
-		public MainPageDto(User user, List<Plant> plantList) { //List<Board> boardList
+		public MainPageDto(User user, List<Plant> plantList, List<BoardDTO> boardsList) { //List<Board> boardList
 			user_id = user.getId();
 			user_name = user.getName();
 			point = user.getPoint();
@@ -71,6 +74,8 @@ public class MainPageApiController {
 				.map(plant -> new MainPagePlantDto(plant))
 				.sorted(Comparator.comparing(MainPagePlantDto::getPlant_level).reversed())
 				.collect(Collectors.toList());
+
+			boards = boardsList;
 		}
 	}
 
@@ -90,11 +95,6 @@ public class MainPageApiController {
 			file_name = plant.getFileName();
 		}
 	}
-    /* 게시판 구현하면 풀기
-    @Getter
-    static class MainPageBoardDto{
-        private String postName;
-    }
-     */
+
 
 }

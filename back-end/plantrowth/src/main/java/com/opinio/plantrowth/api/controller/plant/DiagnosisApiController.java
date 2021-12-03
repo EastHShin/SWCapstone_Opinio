@@ -74,7 +74,7 @@ public class DiagnosisApiController {
 		JSONParser isPlantJsonParser = new JSONParser();
 		Object isPlantObj = isPlantJsonParser.parse(isPlantResult);
 		JSONObject isPlantJsonObj = (JSONObject)isPlantObj;
-		if(isPlantJsonObj.get("is_plant").equals("NO")){
+		if (isPlantJsonObj.get("is_plant").equals("NO")) {
 			return ResponseEntity.status(425).body(new DiagnosisDto(user, plant, true));
 		}
 
@@ -99,7 +99,8 @@ public class DiagnosisApiController {
         질병진단 구독이 들어온다면 포인트를 소비 할지 안할지 정하는 로직 추가해야됨 -> (21/11/28 추가) 프론트측에서 구독여부로 거름
          */
 
-		User updatedUser = userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint, PointSpendType.DIAGNOSIS);
+		User updatedUser = userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint,
+			PointSpendType.DIAGNOSIS);
 		Integer curLevel = plant.getPlantLevel();
 		plantExpService.increaseExp(plant.getId());
 		Integer updatedLevel = plant.getPlantLevel();
