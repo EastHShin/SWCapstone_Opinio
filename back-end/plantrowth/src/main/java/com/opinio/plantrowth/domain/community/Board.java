@@ -41,6 +41,7 @@ public class Board {
 	@JsonIgnore
 	private User user;
 	private String title;
+	@Column(length = 1000)
 	private String content;
 	private LocalDateTime createDate;
 	private LocalDateTime updateDate;

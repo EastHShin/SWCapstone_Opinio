@@ -39,7 +39,7 @@ public class DiagnosisApiController {
 	private final DiagnosisRecordService diagnosisRecordService;
 	private final String filePath = "diagnosis";
 	private final OkHttpClient client = new OkHttpClient();
-	private static final String RequestURL = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:5000/predict";
+	private static final String RequestURL = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:5000";
 	private final Integer decreasingPoint = 30;
 
 	@PostMapping(value = "/api/plants/diagnosis/{plant-id}")
@@ -57,12 +57,33 @@ public class DiagnosisApiController {
 		String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
 		String json = "{ \"file_name\" : \"" + uploadImageName + "\" }";
 		RequestBody requestBody = RequestBody.create(MediaType.get("application/json; charset=utf-8"), json);
-		Request request = new Request.Builder()
-			.url(RequestURL)
+		Request checkRequest = new Request.Builder()
+			.url(RequestURL + "/check")
+			.post(requestBody)
+			.build();
+		String isPlantResult = "";
+		try (Response response = client.newCall(checkRequest).execute()) {
+			if (!response.isSuccessful()) {
+				throw new IOException("Unexpected code " + response);
+			}
+			isPlantResult = response.body().string();
+			System.out.println(isPlantResult);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JSONParser isPlantJsonParser = new JSONParser();
+		Object isPlantObj = isPlantJsonParser.parse(isPlantResult);
+		JSONObject isPlantJsonObj = (JSONObject)isPlantObj;
+		if(isPlantJsonObj.get("is_plant").equals("NO")){
+			return ResponseEntity.status(425).body(new DiagnosisDto(user, plant, true));
+		}
+
+		Request predictRequest = new Request.Builder()
+			.url(RequestURL + "/predict")
 			.post(requestBody)
 			.build();
 		String diagnosisResult = "";
-		try (Response response = client.newCall(request).execute()) {
+		try (Response response = client.newCall(predictRequest).execute()) {
 			if (!response.isSuccessful())
 				throw new IOException("Unexpected code " + response);
 			diagnosisResult = response.body().string();
