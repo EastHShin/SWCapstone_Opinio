@@ -18,6 +18,7 @@ import {
 import Moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/dist/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../Loader';
@@ -408,6 +409,9 @@ const PostDetailScreen = ({ route, navigation }) => {
         </Modal>
         <View style={styles.postWrapper}>
           <View style={{ flexDirection: 'row' }}>
+            <View style={styles.userIcon}>
+            <FontAwesome name={'user'} size={32} color={'white'}/>
+            </View>
             <View style={styles.userWrapper}>
               <Text
                 style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}
@@ -415,23 +419,23 @@ const PostDetailScreen = ({ route, navigation }) => {
                 {post.writer}
               </Text>
               <Text
-                style={{ fontSize: 14, fontWeight: 'bold', color: '#000000' }}
+                style={{ fontSize: 14, color: '#000000' }}
               >
                 Lv. {post.user_level}
               </Text>
             </View>
             <View style={styles.date}>
               {nowYear == postCreateDate ?
-               <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.23 }}>
+               <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.12 }}>
                최초 게시일 : {Moment(post.createDate).format("MM/DD HH:mm")}
              </Text>
              :
-             <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.15 }}>
+             <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.047 }}>
              최초 게시일 : {Moment(post.createDate).format("YYYY/MM/DD HH:mm")}
            </Text>
            }
               {post.updateDate != null ? (
-                <Text style={nowYear == postUpdateDate ? {fontSize:10, marginLeft: Dimensions.get('window').width * 0.23} : {fontSize:10, marginLeft: Dimensions.get('window').width * 0.15}}>
+                <Text style={nowYear == postUpdateDate ? {fontSize:10, marginLeft: Dimensions.get('window').width * 0.12} : {fontSize:10, marginLeft: Dimensions.get('window').width * 0.047}}>
                   최근 수정일 : {nowYear == postUpdateDate ? Moment(post.updateDate).format("MM/DD HH:mm") : Moment(post.updateDate).format("YYYY/MM/DD HH:mm")}
                 </Text>
               ) : null}
@@ -687,7 +691,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.07,
     width: Dimensions.get('window').width * 0.35,
     marginTop: Dimensions.get('window').height * 0.01,
-    marginStart: Dimensions.get('window').width * 0.03,
+    marginLeft: Dimensions.get('window').width * 0.017,
   },
   textWrapper: {
     width: Dimensions.get('window').width * 0.9,
@@ -771,5 +775,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   //상웅
+  //예빈
+  userIcon:{
+    height: Dimensions.get('window').height * 0.055,
+    width: Dimensions.get('window').width * 0.1,
+    marginTop: Dimensions.get('window').height * 0.01,
+    marginStart:Dimensions.get('window').width*0.03,
+    backgroundColor:'#C9E7BE',
+    borderRadius:7,
+    justifyContent:'flex-end',
+    alignItems:'center'
+  }
 });
 export default PostDetailScreen;
