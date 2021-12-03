@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  Pressable,
+  FlatList,
   SafeAreaView,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,11 +17,88 @@ import Footer from './src/component/Footer';
 import Loader from './src/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getHomeInfo } from './src/actions/HomeActions';
-import { logoutUser } from './src/actions/UserActions';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Moment from 'moment';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
+
+
+const Item = ({ item, onPress, style }) => {
+  const nowYear = new Date().getFullYear();
+  const boardCreateDate = new Date(item.createDate);
+ 
+    return (
+      <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
+        <View>
+          <Text style={styles.title}>{item.title}</Text>
+        </View>
+        <View style={{ marginBottom: Dimensions.get('window').height * 0.01 }}>
+          <Text style={styles.content}>
+            {item.content.length > 33
+              ? item.content.substring(0, 31) + '···'
+              : item.content}
+          </Text>
+        </View>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+          }}
+        >
+          <View style={{ flexDirection: 'row' }}>
+            {nowYear == boardCreateDate.getFullYear() ? (
+              <Text style={styles.date}>
+                {Moment(item.createDate).format('MM/DD HH:mm')}
+              </Text>
+            ) : (
+              <Text style={styles.date}>
+                {Moment(item.createDate).format('YYYY/MM/DD HH:mm')}
+              </Text>
+            )}
+
+            <Text
+              style={{ fontSize: 10, color: '#DCDCDC', fontWeight: 'bold' }}
+            >
+              {' '}
+              |{' '}
+            </Text>
+            <Text style={styles.date}>{item.writer}</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <MaterialCommunityIcons
+              name="heart-outline"
+              size={14}
+              color="#DC143C"
+            />
+            <Text
+              style={{
+                fontSize: 10,
+                color: '#DC143C',
+                marginLeft: Dimensions.get('window').width * 0.01,
+                marginRight: Dimensions.get('window').width * 0.02,
+              }}
+            >
+              {item.countedLike}
+            </Text>
+            <SimpleLineIcons name="bubble" size={14} color="#00BFFF" />
+            <Text
+              style={{
+                fontSize: 10,
+                color: '#00BFFF',
+                marginHorizontal: Dimensions.get('window').width * 0.01,
+              }}
+            >
+              {item.countedComments}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+}
 
 HomeScreen = () => {
   const navigation = useNavigation();
@@ -30,6 +107,8 @@ HomeScreen = () => {
   const [loading, setLoading] = useState(false);
 
   const [userId, setUserId] = useState('');
+  const [boards, setBoards] = useState('');
+  const [selectedId, setSelectedId] = useState('');
 
   const infoList = useSelector(state => state.HomeReducer.infoList);
   const [name, setName] = useState('');
@@ -55,6 +134,34 @@ HomeScreen = () => {
       }
     });
   }, [isFocused]);
+
+  useEffect(() => {
+    setBoards(infoList.boards);
+  }, [infoList])
+
+
+  const renderItem = ({ item }) => {
+
+    if(!item.is_blocked){
+    return (
+      <Item
+        item={item}
+        onPress={() => {
+          setSelectedId(item.board_id);
+          navigation.navigate("PostDetailScreen", {selectedId: item.board_id}); 
+        }
+        }
+        style={{ backgroundColor: "#FFFFFF" }}
+      />
+    )
+      }
+      else{
+        return (
+          <View style={{ width: Dimensions.get('window').width }}></View>
+        )
+      };
+  };
+
 
   const renderPlantList = PlantList => {
     if (PlantList !== null && PlantList !== undefined) {
@@ -231,6 +338,12 @@ HomeScreen = () => {
           <Text style={{ color: '#666666', fontFamily: 'NanumGothicBold' }}>
             인기 게시물
           </Text>
+          <FlatList
+            data={boards}
+            renderItem={renderItem}
+            keyExtractor={item => item.board_id}
+            extraData={selectedId}
+          />
         </View>
         <Footer name={'Home'} />
       </View>

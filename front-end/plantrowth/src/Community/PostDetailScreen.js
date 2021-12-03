@@ -18,6 +18,7 @@ import {
 import Moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/dist/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loader from '../Loader';
@@ -54,6 +55,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [comment, setComment] = useState('');
   const [isCommentModalVisible, setCommentModalVisibility] = useState(false);
+  const [selectedComment, setSelectedComment] = useState();
   const [selectedCommentId, setSelectedCommentId] = useState();
   const [selectedCommentWriterId, setSelectedCommentWriterId] = useState();
   const [selectedCommentContent, setSelectedCommentContent] = useState('');
@@ -94,7 +96,7 @@ const PostDetailScreen = ({ route, navigation }) => {
     if (post.updateDate) {
       setPostUpdateDate(new Date(post.updateDate).getFullYear());
     }
-  }, [post])
+  }, [post]);
 
   useEffect(() => {
     if (result == 'success' && isFocused) {
@@ -113,6 +115,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (updating) {
       setCommentModalVisibility(false);
+      setSelectedCommentContent(selectedComment.content);
     }
   }, [updating]);
 
@@ -135,6 +138,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (commentResult == 'success' && isFocused) {
       setLoading(false);
+      setUpdating(false);
       dispatch(getPost(selectedId, userId));
       setComment('');
       setSelectedCommentContent('');
@@ -236,7 +240,7 @@ const PostDetailScreen = ({ route, navigation }) => {
               onPress={() => {
                 setSelectedCommentId(item.comment_id);
                 setSelectedCommentWriterId(item.writer_id);
-                setSelectedCommentContent(item.content);
+                setSelectedComment(item);
                 setCommentModalVisibility(true);
               }}
             >
@@ -266,8 +270,6 @@ const PostDetailScreen = ({ route, navigation }) => {
 
   //좋아요 Handler
   const likeHandler = () => {
-    console.log('게시글 userId' + post.userId);
-    console.log('내 userId' + userId);
     if (Number(post.userId) == userId) {
       alert('본인이 작성한 게시글에는 좋아요를 누를 수 없어요!');
       return;
@@ -451,34 +453,63 @@ const PostDetailScreen = ({ route, navigation }) => {
         </Modal>
         <View style={styles.postWrapper}>
           <View style={{ flexDirection: 'row' }}>
+            <View style={styles.userIcon}>
+              <FontAwesome name={'user'} size={32} color={'white'} />
+            </View>
             <View style={styles.userWrapper}>
               <Text
                 style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}
               >
                 {post.writer}
               </Text>
-              <Text
-                style={{ fontSize: 14, fontWeight: 'bold', color: '#000000' }}
-              >
+              <Text style={{ fontSize: 14, color: '#000000' }}>
                 Lv. {post.user_level}
               </Text>
             </View>
+            {postCreateDate ? 
             <View style={styles.date}>
-              {nowYear == postCreateDate ?
-                <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.23 }}>
-                  최초 게시일 : {Moment(post.createDate).format("MM/DD HH:mm")}
-                </Text>
-                :
-                <Text style={{ fontSize: 10, marginLeft: Dimensions.get('window').width * 0.15 }}>
-                  최초 게시일 : {Moment(post.createDate).format("YYYY/MM/DD HH:mm")}
-                </Text>
-              }
-              {post.updateDate != null ? (
-                <Text style={nowYear == postUpdateDate ? { fontSize: 10, marginLeft: Dimensions.get('window').width * 0.23 } : { fontSize: 10, marginLeft: Dimensions.get('window').width * 0.15 }}>
-                  최근 수정일 : {nowYear == postUpdateDate ? Moment(post.updateDate).format("MM/DD HH:mm") : Moment(post.updateDate).format("YYYY/MM/DD HH:mm")}
-                </Text>
-              ) : null}
-            </View>
+            {nowYear == postCreateDate ? (
+              <Text
+                style={{
+                  fontSize: 10,
+                  marginLeft: Dimensions.get('window').width * 0.12,
+                }}
+              >
+                최초 게시일 : {Moment(post.createDate).format('MM/DD HH:mm')}
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontSize: 10,
+                  marginLeft: Dimensions.get('window').width * 0.047,
+                }}
+              >
+                최초 게시일 :{' '}
+                {Moment(post.createDate).format('YYYY/MM/DD HH:mm')}
+              </Text>
+            )}
+
+            {post.updateDate != null ? (
+              <Text
+                style={
+                  nowYear == postUpdateDate
+                    ? {
+                        fontSize: 10,
+                        marginLeft: Dimensions.get('window').width * 0.12,
+                      }
+                    : {
+                        fontSize: 10,
+                        marginLeft: Dimensions.get('window').width * 0.047,
+                      }
+                }
+              >
+                최근 수정일 :{' '}
+                {nowYear == postUpdateDate
+                  ? Moment(post.updateDate).format('MM/DD HH:mm')
+                  : Moment(post.updateDate).format('YYYY/MM/DD HH:mm')}
+              </Text>
+            ) : null}
+          </View> : null}
           </View>
           <View style={styles.textWrapper}>
             <Text style={styles.title}>{post.title}</Text>
@@ -783,7 +814,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.07,
     width: Dimensions.get('window').width * 0.35,
     marginTop: Dimensions.get('window').height * 0.01,
-    marginStart: Dimensions.get('window').width * 0.03,
+    marginLeft: Dimensions.get('window').width * 0.017,
   },
   textWrapper: {
     width: Dimensions.get('window').width * 0.9,
@@ -810,7 +841,7 @@ const styles = StyleSheet.create({
   modal: {
     marginTop: Dimensions.get('window').height * 0.01,
     marginLeft: Dimensions.get('window').width * 0.5,
-    height: Dimensions.get('window').height * 0.2,
+    height: Dimensions.get('window').height * 0.15,
     width: Dimensions.get('window').width * 0.47,
     backgroundColor: '#FFFFFF',
     flexDirection: 'column',
@@ -828,7 +859,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#000000',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: Dimensions.get('window').width * 0.05,
   },
   modalSmall: {
@@ -875,5 +906,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   //상웅
+  //예빈
+  userIcon: {
+    height: Dimensions.get('window').height * 0.055,
+    width: Dimensions.get('window').width * 0.1,
+    marginTop: Dimensions.get('window').height * 0.01,
+    marginStart: Dimensions.get('window').width * 0.03,
+    backgroundColor: '#C9E7BE',
+    borderRadius: 7,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
 });
 export default PostDetailScreen;
