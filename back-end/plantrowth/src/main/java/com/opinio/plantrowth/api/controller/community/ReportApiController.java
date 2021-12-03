@@ -24,6 +24,9 @@ public class ReportApiController {
 	public ResponseEntity reportBoard(@RequestParam("board-id")Long boardId,
 		@RequestParam("user-id")Long userId, @RequestBody ReportDTO reportDTO){
 		Report report = reportService.boardReport(boardId, userId, reportDTO.getReason());
+		if (report == null) {
+			return ResponseEntity.notFound().build();
+		}
 		reportService.autoBlockBoardReport(report);
 
 		return new ResponseEntity(HttpStatus.OK);
@@ -33,6 +36,9 @@ public class ReportApiController {
 	public ResponseEntity reportComment(@RequestParam("comment-id")Long commentId,
 		@RequestParam("user-id")Long userId, @RequestBody ReportDTO reportDTO){
 		Report report = reportService.commentReport(commentId, userId, reportDTO.getReason());
+		if (report == null) {
+			return ResponseEntity.notFound().build();
+		}
 		reportService.autoBlockCommentReport(report);
 		return new ResponseEntity(HttpStatus.OK);
 	}
