@@ -137,6 +137,7 @@ const PostDetailScreen = ({ route, navigation }) => {
       setLoading(false);
       dispatch(getPost(selectedId, userId));
       setComment('');
+      setSelectedCommentContent('');
       setUpdating(false);
       setCommentModalVisibility(false);
       dispatch(setCommentResultState(''));
@@ -256,7 +257,7 @@ const PostDetailScreen = ({ route, navigation }) => {
     }
     setLoading(true);
     if (updating) {
-      dispatch(updateComment(selectedId, userId, comment));
+      dispatch(updateComment(selectedCommentId, userId, comment));
     } else {
       dispatch(createComment(selectedId, userId, comment));
     }
