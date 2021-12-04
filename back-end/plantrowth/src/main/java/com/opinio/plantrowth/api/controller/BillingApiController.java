@@ -38,6 +38,7 @@ public class BillingApiController {
 		String accessToken = billingService.getToken();
 		System.out.println(accessToken);
 		Integer paymentData = billingService.getPaymentData(accessToken, request.getImp_uid());
+		System.out.println("구독결제 금액 : " + paymentData);
 		billingService.subscribe(paymentData, request.getUser_id(), request.getImp_uid(), request.getMerchant_uid());
 		return new ResponseEntity(HttpStatus.OK);
 	}
@@ -48,6 +49,7 @@ public class BillingApiController {
 		IllegalAccessException {
 		String accessToken = billingService.getToken();
 		Integer paymentData = billingService.getPaymentData(accessToken, request.getImp_uid());
+		System.out.println("슬롯결제 금액 : " + paymentData);
 		User user = billingService.payForSlot(paymentData, request.getUser_id(), request.getImp_uid(),
 			request.getMerchant_uid());
 
