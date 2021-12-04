@@ -37,8 +37,8 @@ public class BillingService {
 
 	private final String IMP_KEY = "2028448220218951";
 	private final String IMP_SECRET = "64c6c5c167fffb894c40fe19650ea7b19a6ae2fa05dd33ead0b1e168fb33285d9014e7da5ccfcbb8";
-	private final Integer amountToBePaidForDiagnosis = 100;
-	private final Integer amountToBePaidForSlot = 50;
+	private final Integer amountToBePaidForDiagnosis = 5900;
+	private final Integer amountToBePaidForSlot = 1000;
 	private final Long SUBSCRIPTION_MONTH = 1L;
 
 	public String getToken() throws ParseException {
