@@ -37,8 +37,8 @@ public class BillingService {
 
 	private static final String IMP_KEY = "2028448220218951";
 	private static final String IMP_SECRET = "64c6c5c167fffb894c40fe19650ea7b19a6ae2fa05dd33ead0b1e168fb33285d9014e7da5ccfcbb8";
-	private static final Integer amountToBePaidForDiagnosis = 5900;
-	private static final Integer amountToBePaidForSlot = 1000;
+	private static final int amountToBePaidForDiagnosis = 5900;
+	private static final int amountToBePaidForSlot = 1000;
 	private static final Long SUBSCRIPTION_MONTH = 1L;
 
 	public String getToken() throws ParseException {
@@ -89,7 +89,7 @@ public class BillingService {
 	@Transactional
 	public void subscribe(Integer amount, Long userId, String impUid, String merchantUid) throws IllegalAccessException {
 		System.out.println("subscribe method : " + amount + " , " + amountToBePaidForDiagnosis);
-		if (amount == amountToBePaidForDiagnosis) {
+		if (amount.intValue() == amountToBePaidForDiagnosis) {
 			User user = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("no User found"));
 			user.setSubscription(true);
@@ -119,7 +119,7 @@ public class BillingService {
 	@Transactional
 	public User payForSlot(Integer amount, Long userId, String impUid, String merchantUid) throws IllegalAccessException {
 		System.out.println("payForSlot method : " + amount + " , " + amountToBePaidForSlot);
-		if (amount == amountToBePaidForSlot) {
+		if (amount.intValue() == amountToBePaidForSlot) {
 			User user = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("no User found"));
 			Integer maxPlantNum = user.getMaxPlantNum();
