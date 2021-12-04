@@ -30,7 +30,7 @@ public class UserApiController {
     private final UserService userService;
     private final AuthService authService;
     private final UserPointService userPointService;
-    private final Integer decreasingPoint = 50;
+    private final Integer decreasingPoint = 300;
 
 
     @GetMapping("/api/user/{user-id}")
