@@ -88,6 +88,7 @@ public class BillingService {
 
 	@Transactional
 	public void subscribe(Integer amount, Long userId, String impUid, String merchantUid) throws IllegalAccessException {
+		System.out.println("subscribe method : " + amount + " , " + amountToBePaidForDiagnosis);
 		if (amount == amountToBePaidForDiagnosis) {
 			User user = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("no User found"));
@@ -117,6 +118,7 @@ public class BillingService {
 
 	@Transactional
 	public User payForSlot(Integer amount, Long userId, String impUid, String merchantUid) throws IllegalAccessException {
+		System.out.println("payForSlot method : " + amount + " , " + amountToBePaidForSlot);
 		if (amount == amountToBePaidForSlot) {
 			User user = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("no User found"));
