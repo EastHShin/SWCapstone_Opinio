@@ -40,7 +40,7 @@ public class DiagnosisApiController {
 	private final String filePath = "diagnosis";
 	private final OkHttpClient client = new OkHttpClient();
 	private static final String RequestURL = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:5000";
-	private final Integer decreasingPoint = 30;
+	private final Integer decreasingPoint = 100;
 
 	@PostMapping(value = "/api/plants/diagnosis/{plant-id}")
 	public ResponseEntity diagnosis(@PathVariable("plant-id") Long id,
