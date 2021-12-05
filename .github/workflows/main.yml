@@ -7,15 +7,9 @@ on:
   push:
     branches:
       - main
-<<<<<<< HEAD
-#   pull_request:
-#     branches:
-#       - main
-=======
 #  pull_request:
 #    branches:
 #      - main
->>>>>>> main
   # Allows you to run this workflow manually from the Actions tab
   
 env:
