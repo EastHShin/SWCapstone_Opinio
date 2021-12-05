@@ -17,13 +17,30 @@ const SplashScreen = ({ navigation }) => {
     useEffect(() => {
         setTimeout(() => {
             setAnimating(false);
-            AsyncStorage.getItem('userId').then((value) => {
-                AsyncStorage.getItem('auth').then((value) =>{
-                    axios.defaults.headers.common['X-AUTH-TOKEN'] = value;
+            AsyncStorage.getItem('email').then((value) => {
+                if (value) {
+                  AsyncStorage.getItem('plantId').then(value => {
+                    if (!value) {
+                      navigation.reset({ routes: [{ name: 'HomeScreen' }] });
+                    } else {
+                      navigation.reset({
+                        routes: [
+                          {
+                            name: 'ManagePlantScreen',
+                            params: { plantId: JSON.parse(value) },
+                          },
+                        ],
+                      });
+                      AsyncStorage.removeItem('plantId');
+                    }
+                  });
 
-                })
-                
-                navigation.reset({ routes: [{ name: (value === null ? 'LoginScreen' : 'HomeScreen') }] });
+                  AsyncStorage.getItem('auth').then(value => {
+                    axios.defaults.headers.common['X-AUTH-TOKEN'] = value;
+                  });
+                } else {
+                  navigation.reset({ routes: [{ name: 'LoginScreen' }] });
+                }
             }
             );
         }, 5000);
@@ -44,6 +61,7 @@ const SplashScreen = ({ navigation }) => {
             />
         </SafeAreaView>
     )
+
 }
 export default SplashScreen;
 

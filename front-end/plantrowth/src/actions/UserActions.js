@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME, POINT_LIST, FIREBASE_NOTIFICATION } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME, POINT_LIST} from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -529,14 +529,6 @@ export const getPointList = (userId) => {
     }
 }
 
-export const firebaseNotification = plantId => dispatch => {
-    console.log("welcome");
-	dispatch({
-		type: FIREBASE_NOTIFICATION,
-		payload: plantId,
-	});
-
-}
 
 
 
