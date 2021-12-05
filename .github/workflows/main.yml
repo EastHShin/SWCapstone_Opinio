@@ -7,13 +7,19 @@ on:
   push:
     branches:
       - main
+<<<<<<< HEAD
 #   pull_request:
 #     branches:
 #       - main
+=======
+#  pull_request:
+#    branches:
+#      - main
+>>>>>>> main
   # Allows you to run this workflow manually from the Actions tab
   
 env:
-  S3_BUCKET_NAME: plantrowth-deploy
+  S3_BUCKET_NAME: plantrowth-build
   PROJECT_NAME: plantrowth
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -55,8 +61,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           
       - name: Upload to S3
-        run: aws deploy push --application-name plantrowth --description "upload to S3" --s3-location s3://plantrowth-deploy/plantrowth/build.zip --source .
+        run: aws deploy push --application-name plantrowth --description "upload to S3" --s3-location s3://plantrowth-build/plantrowth/build.zip --source .
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name plantrowth --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=plantrowth-deploy,bundleType=zip,key=plantrowth/build.zip
+        run: aws deploy create-deployment --application-name plantrowth --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name plantrowth-group --s3-location bucket=plantrowth-build,bundleType=zip,key=plantrowth/build.zip
 
