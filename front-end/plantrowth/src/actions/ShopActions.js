@@ -88,6 +88,7 @@ export const sendBuySlotData = (userId, imp_uid, merchant_uid) => {
 };
 
 export const sendBuySubscribeData = (userId, imp_uid, merchant_uid) => {
+  console.log(userId + "  " + imp_uid + " " + merchant_uid);
   return async dispatch => {
     console.log('결제 userId: ' + userId);
     return await axios

@@ -16,7 +16,7 @@ export function Payment({ route }) {
     console.log(response);
     if (response.imp_success == 'true') {
       console.log('결제 성공' + route.params.userId);
-      if (route.params.amount == '50') {
+      if (route.params.amount == '1000') {
         dispatch(
           sendBuySlotData(
             route.params.userId,
@@ -24,7 +24,7 @@ export function Payment({ route }) {
             response.merchant_uid,
           ),
         );
-      } else if (route.params.amount == '100') {
+      } else if (route.params.amount == '5900') {
         dispatch(
           sendBuySubscribeData(
             route.params.userId,
