@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
   },
   item: {
     padding: 3,
-    marginTop:Dimensions.get('window').height * 0.008
+    marginTop:Dimensions.get('window').height * 0.012
   },
   title: {
     fontSize: 13,

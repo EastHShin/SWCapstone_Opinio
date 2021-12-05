@@ -29,7 +29,6 @@ const SplashScreen = ({ navigation }) => {
         }, 5000);
     }, []);
 
-
     return (
         <SafeAreaView style={styles.body}>
             <Image

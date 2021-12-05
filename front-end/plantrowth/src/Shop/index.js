@@ -197,7 +197,7 @@ ShopScreen = () => {
                 <Text
                   style={{
                     fontFamily: 'NanumGothicBold',
-                    color: '#363636',
+                    color: '#93d07d',
                     marginBottom: 5,
                   }}
                 >
@@ -252,7 +252,7 @@ ShopScreen = () => {
                 <Text
                   style={{
                     fontFamily: 'NanumGothicBold',
-                    color: '#363636',
+                    color: '#93d07d',
                     marginBottom: 5,
                   }}
                 >
@@ -439,7 +439,7 @@ ShopScreen = () => {
                       phone: phone,
                       email: email,
                       name: name,
-                      amount: '50',
+                      amount: '1000',
                     });
                   } else if (goods == 'subscribe') {
                     navigation.navigate('Payment', {
@@ -447,7 +447,7 @@ ShopScreen = () => {
                       phone: phone,
                       email: email,
                       name: name,
-                      amount: '100',
+                      amount: '5900',
                     });
                   }
                 }
