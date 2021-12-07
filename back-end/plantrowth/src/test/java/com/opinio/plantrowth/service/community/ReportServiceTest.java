@@ -132,4 +132,18 @@ class ReportServiceTest {
 	}
 
 
+	@Test
+	@DisplayName("신고된 게시글 블락 처리")
+	public void boardReportManyTimes() throws Exception {
+		//given
+
+		//when
+		Mockito.when(reportRepository.findById(any())).thenReturn(Optional.of(givenBoardReport));
+		Report updatedReport = reportService.completeBoardReport(givenBoardReport.getId());
+		//then
+		Assertions.assertThat(updatedReport.getId()).isEqualTo(givenBoardReport.getId());
+		Assertions.assertThat(updatedReport.getState()).isEqualTo(Report.StateEnum.COMPLETE);
+		Assertions.assertThat(updatedReport.getBoard().getIsBlocked()).isEqualTo(true);
+	}
+
 }
