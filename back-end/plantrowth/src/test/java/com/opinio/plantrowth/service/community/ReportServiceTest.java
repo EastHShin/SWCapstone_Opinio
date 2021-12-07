@@ -42,13 +42,17 @@ class ReportServiceTest {
 	private ReportService reportService;
 
 	int BLOCK_COUNT;
+	String reportReason;
 	User user;
 	Board board;
 	Comment comment;
+	Report givenBoardReport;
+	Report givenCommentReport;
 
 	@BeforeEach
 	void setup() {
 		BLOCK_COUNT = 3;
+		reportReason = "맘에 안들어요";
 		user = User.builder()
 			.id(1L)
 			.email("xldk78@gmail.com")
@@ -71,13 +75,7 @@ class ReportServiceTest {
 			.date(LocalDateTime.now())
 			.user(user)
 			.build();
-	}
-
-	@Test
-	public void boardReport() throws Exception {
-		//given
-		String reportReason = "맘에 안들어요";
-		Report givenReport = Report.builder()
+		givenBoardReport = Report.builder()
 			.id(1L)
 			.board(board)
 			.user(user)
@@ -86,11 +84,26 @@ class ReportServiceTest {
 			.tag(Report.tagEnum.BOARD)
 			.state(Report.StateEnum.NOTPROCESSED)
 			.build();
+		givenCommentReport = Report.builder()
+			.id(1L)
+			.comment(comment)
+			.user(user)
+			.date(LocalDate.now())
+			.reason(reportReason)
+			.tag(Report.tagEnum.COMMENT)
+			.state(Report.StateEnum.NOTPROCESSED)
+			.build();
+	}
+
+	@Test
+	public void boardReport() throws Exception {
+		//given
+
 		//when
 		Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 		Mockito.when(boardRepository.findById(any())).thenReturn(Optional.of(board));
 		Mockito.when(reportRepository.existsByBoardIdAndUserId(any(), any())).thenReturn(false);
-		Mockito.when(reportRepository.save(any())).thenReturn(givenReport);
+		Mockito.when(reportRepository.save(any())).thenReturn(givenBoardReport);
 		Report report = reportService.boardReport(board.getId(), user.getId(), reportReason);
 
 		//then
@@ -103,21 +116,12 @@ class ReportServiceTest {
 	@DisplayName("댓글 신고 정상 작동")
 	public void commentReport() throws Exception {
 		//given
-		String reportReason = "맘에 안들어";
-		Report givenReport = Report.builder()
-			.id(1L)
-			.comment(comment)
-			.user(user)
-			.date(LocalDate.now())
-			.reason(reportReason)
-			.tag(Report.tagEnum.COMMENT)
-			.state(Report.StateEnum.NOTPROCESSED)
-			.build();
+
 		//when
 		Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
 		Mockito.when(commentRepository.findById(any())).thenReturn(Optional.of(comment));
 		Mockito.when(reportRepository.existsByCommentIdAndUserId(any(), any())).thenReturn(false);
-		Mockito.when(reportRepository.save(any())).thenReturn(givenReport);
+		Mockito.when(reportRepository.save(any())).thenReturn(givenCommentReport);
 
 		Report report = reportService.commentReport(1L, 1L, reportReason);
 		//then
