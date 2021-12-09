@@ -14,7 +14,7 @@ function Board() {
             <NavBar class="top" />
             <h1>게시글/댓글 관리</h1>
             <UserIcon fontSize="large"></UserIcon>
-            <Form.Group class="inline" controlId="form.Email" style={{width: "370px"}}>
+            <Form.Group className="inline" controlId="form.Email" style={{width: "370px"}}>
                 <Form.Control type="email" placeholder="아이디 번호로 검색"/>
             </Form.Group>
             <Link to="/administrator/board">

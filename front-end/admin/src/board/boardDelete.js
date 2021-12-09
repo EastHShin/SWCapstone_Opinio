@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 function AdvertisementUpdate() {
     return (
         <div className="front">
-            <NavBar class="top"/>
+            <NavBar className="top"/>
             <h2 className="warn">해당 게시글 / 댓글을 정말 삭제하시겠습니까?</h2>
             <br/>
             <Link to="/administrator/board">

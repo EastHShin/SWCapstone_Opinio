@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 function AdvertisementDelete() {
     return (
         <div className="front">
-            <NavBar class="top"/>
+            <NavBar className="top"/>
             Hello World! 3
             <br/>
             <Link to="/administrator/ad">

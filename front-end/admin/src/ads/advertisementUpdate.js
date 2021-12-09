@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 function AdvertisementUpdate() {
     return (
         <div className="front">
-            <NavBar class="top"/>
+            <NavBar className="top"/>
             Hello World! 2
             <br/>
             <Link to="/administrator/ad">

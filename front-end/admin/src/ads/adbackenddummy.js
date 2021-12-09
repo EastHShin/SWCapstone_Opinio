@@ -23,19 +23,19 @@ const Table = () => {
             <ReactBootStrap.Table striped bordered hover className="table">
                 <thead>
                 <tr className="head_font">
-                    <th class="table-light" width="140px">광고번호</th>
-                    <th class="table-primary">광고</th>
-                    <th class="table-warning" width="250px">수정 / 삭제</th>
+                    <th className="table-light" width="140px">광고번호</th>
+                    <th className="table-primary">광고</th>
+                    <th className="table-warning" width="250px">수정 / 삭제</th>
                 </tr>
                 </thead>
                 <tbody>
                 {
                     posts.user && posts.user.map((item) => (
                         <tr key={item.id} class="content_font">
-                            <td class="table-light" valign="middle">{item.id}</td>
-                            <td class="table-primary" valign="middle">{item.title}</td>
-                            <td class="table-warning" valign="middle">
-                                <Button variant="info" className="mar">Info</Button>
+                            <td className="table-light" valign="middle">{item.id}</td>
+                            <td className="table-primary" valign="middle">{item.title}</td>
+                            <td className="table-warning" valign="middle">
+                                <Button className="mar" variant="info">Info</Button>
                                 <Link to="/administrator/ad/update">
                                     <Button variant="warning" className="mar">Update</Button>
                                 </Link>
