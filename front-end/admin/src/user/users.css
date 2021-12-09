@@ -1,0 +1,39 @@
+.front {
+    background-color: #9DC183;
+    min-height: 100vh;
+    justify-content: center;
+    font-size: calc(10px + 1vmin);
+    color: white;
+}
+
+.top {
+    text-align: left;
+}
+
+.table {
+    margin-top: 20px;
+    margin-left: 3%;
+    margin-right: 3%;
+    width: 94%;
+}
+
+.longer {
+    background-color: white;
+}
+
+.mar {
+    margin-right: 5px;
+    margin-bottom: 0px;
+}
+
+.icon {
+    font-size: 24px;
+}
+
+.head_font {
+    font-size: calc(10px + 1vmin);
+}
+
+.content_font {
+    font-size: calc(10px + 0.5vmin);
+}

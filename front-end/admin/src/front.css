@@ -1,0 +1,11 @@
+.front {
+    background-color: #9DC183;
+    min-height: 100vh;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.top {
+    text-align: left;
+}
