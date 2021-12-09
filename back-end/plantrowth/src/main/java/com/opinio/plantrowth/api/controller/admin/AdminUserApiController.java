@@ -1,14 +1,17 @@
 package com.opinio.plantrowth.api.controller.admin;
 
 import com.opinio.plantrowth.api.dto.Message;
+import com.opinio.plantrowth.api.dto.admin.AdminJoinDto;
 import com.opinio.plantrowth.api.dto.admin.AdminUserLookUpDto;
 import com.opinio.plantrowth.api.dto.admin.AdminUserUpdateDto;
 import com.opinio.plantrowth.api.dto.user.UserUpdateDTO;
 import com.opinio.plantrowth.domain.user.User;
+import com.opinio.plantrowth.service.user.AuthService;
 import com.opinio.plantrowth.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +22,24 @@ import java.util.List;
 public class AdminUserApiController {
 
     private final UserService userService;
+    private final AuthService authService;
+    private String code = "plantrowth";
 
-
-
+    @PostMapping("/api/auth/admin/join")
+    public ResponseEntity adminJoin(@RequestBody AdminJoinDto dto){
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        if(dto.getCode()==code){
+            message.setMessage("잘못된 관리자 코드");
+            message.setStatus(Message.StatusEnum.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(message, headers, HttpStatus.NOT_ACCEPTABLE);
+        }
+        Long result = authService.adminJoin(dto);
+        message.setMessage("회원가입 성공");
+        message.setStatus(Message.StatusEnum.OK);
+        message.setData(result);
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
     @GetMapping("/api/admin/user/{user-id}")
     public ResponseEntity getUserInfo(@PathVariable("user-id")Long userId){
         User user = userService.findUser(userId);

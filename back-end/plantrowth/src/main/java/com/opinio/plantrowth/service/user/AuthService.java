@@ -1,5 +1,6 @@
 package com.opinio.plantrowth.service.user;
 
+import com.opinio.plantrowth.api.dto.admin.AdminJoinDto;
 import com.opinio.plantrowth.api.dto.auth.JoinDTO;
 import com.opinio.plantrowth.api.dto.auth.KakaoDTO;
 import com.opinio.plantrowth.api.dto.auth.LoginDTO;
@@ -42,6 +43,20 @@ public class AuthService implements UserDetailsService {
 				.roles(Collections.singletonList("ROLE_USER"))
 				.build())
 			.getId();
+		return userId;
+	}
+
+	@Transactional
+	public Long adminJoin(AdminJoinDto dto){
+		Long userId = userRepository.save(
+				User.builder()
+						.name(dto.getName())
+						.email(dto.getId())
+						.password(passwordEncoder.encode(dto.getPassword()))
+						.roles(Collections.singletonList("ROLE_ADMIN"))
+						.build())
+				.getId();
+
 		return userId;
 	}
 
