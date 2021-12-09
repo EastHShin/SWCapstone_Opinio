@@ -29,16 +29,16 @@ class Login extends Component {
                 </a>
                 <Container>
                     <Form>
-                        <div class="center">
+                        <div className="center">
                             <LoginIcon color="secondary" fontSize="large"></LoginIcon>
-                            <Form.Group class="inline" controlId="form.Email" style={{width: "370px"}}>
+                            <Form.Group className="inline" controlId="form.Email" style={{width: "370px"}}>
                                 <Form.Control type="email" placeholder="이메일"/>
                             </Form.Group>
                         </div>
-                        <div class="center">
+                        <div className="center">
                             <PasswordIcon color="secondary" fontSize="large"></PasswordIcon>
-                            <Form.Group class="inline" controlId="form.Password" style={{width: "370px"}}>
-                                <Form.Control type="password" placeholder="비밀번호" class="wid"/>
+                            <Form.Group className="inline" controlId="form.Password" style={{width: "370px"}}>
+                                <Form.Control class="wid" type="password" placeholder="비밀번호"/>
                             </Form.Group>
                         </div>
                         <div>
