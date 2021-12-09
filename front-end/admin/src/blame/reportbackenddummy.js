@@ -16,7 +16,7 @@ const Table = () => {
                     "X-AUTH-TOKEN": 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJza3lzYXZlcjAwQGFqb3UuYWMua3IiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjM5MDQzNzIyLCJleHAiOjE2MzkwNDU1MjJ9.rkRouaIxRfHTfHlJYZzEw8XIUOqN9AD2t6qALbvhP4o'
                 }
             });
-            console.log(data.headers)
+            console.log(data)
             setPosts({user: data})
         }
         fetchPostList()

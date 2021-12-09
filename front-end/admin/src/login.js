@@ -38,7 +38,7 @@ class Login extends Component {
                         <div className="center">
                             <PasswordIcon color="secondary" fontSize="large"></PasswordIcon>
                             <Form.Group className="inline" controlId="form.Password" style={{width: "370px"}}>
-                                <Form.Control class="wid" type="password" placeholder="비밀번호"/>
+                                <Form.Control className="wid" type="password" placeholder="비밀번호"/>
                             </Form.Group>
                         </div>
                         <div>
