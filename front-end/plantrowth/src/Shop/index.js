@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TextInput,
   Keyboard,
+  Alert,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Footer from '../component/Footer';
@@ -97,6 +98,9 @@ ShopScreen = () => {
       setLoading(false);
       dispatch(setBuySubscribeState(''));
     }
+    console.log('setName');
+    setName('');
+    setPhone('');
   }, [isFocused, buyProfileSlotState, buySubscribeState]);
 
   const buySlotHandler = () => {
@@ -427,39 +431,74 @@ ShopScreen = () => {
                 value={shopInfo.email}
               />
             </View>
-
-            <TouchableOpacity
-              style={styles.earnModalButton}
-              onPress={() => {
-                setPaymentModalVisibility(false);
-                console.log('email:'+email)
-                if ((phone != '' && name != '')) {
-                  if (goods == 'slot') {
-                    navigation.navigate('Payment', {
-                      userId: userId,
-                      phone: phone,
-                      email: email ? email : shopInfo.email,
-                      name: name,
-                      amount: '1000',
-                    });
-                  } else if (goods == 'subscribe') {
-                    navigation.navigate('Payment', {
-                      userId: userId,
-                      phone: phone,
-                      email: email ? email : shopInfo.email,
-                      name: name,
-                      amount: '5900',
-                    });
+            <View style={{width: screenWidth*0.4, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+              <TouchableOpacity
+                style={[styles.earnModalButton, {backgroundColor: '#ef5350'}]}
+                onPress={() => {
+                  setPaymentModalVisibility(false);
+                  setName('');
+                  setPhone('');
+                }}
+              >
+                <View
+                  style={{ alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white'}}>
+                    취소
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.earnModalButton}
+                onPress={() => {
+                  console.log('email:' + email);
+                  console.log('user name' + name);
+                  console.log('phone' + phone);
+                  if (phone != '' && name != '') {
+                    setPaymentModalVisibility(false);
+                    if (goods == 'slot') {
+                      navigation.navigate('Payment', {
+                        userId: userId,
+                        phone: phone,
+                        email: email ? email : shopInfo.email,
+                        name: name,
+                        amount: '1000',
+                      });
+                    } else if (goods == 'subscribe') {
+                      navigation.navigate('Payment', {
+                        userId: userId,
+                        phone: phone,
+                        email: email ? email : shopInfo.email,
+                        name: name,
+                        amount: '5900',
+                      });
+                    }
+                  } else {
+                    console.log('결제정보 미입력');
+                    Alert.alert(
+                      '결제 정보 미입력',
+                      '결제를 위한 정보를 입력해주세요!',
+                      [
+                        {
+                          text: '알겠습니다',
+                          onPress: () => {
+                            return;
+                          },
+                        },
+                      ],
+                    );
                   }
-                }
-              }}
-            >
-              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
-                  구매
-                </Text>
-              </View>
-            </TouchableOpacity>
+                }}
+              >
+                <View
+                  style={{ alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color:'white' }}>
+                    구매
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
