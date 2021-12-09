@@ -432,22 +432,23 @@ ShopScreen = () => {
               style={styles.earnModalButton}
               onPress={() => {
                 setPaymentModalVisibility(false);
-                if ((phone != '' && name != '', email != '')) {
+                console.log('email:'+email)
+                if ((phone != '' && name != '')) {
                   if (goods == 'slot') {
                     navigation.navigate('Payment', {
                       userId: userId,
                       phone: phone,
-                      email: email,
+                      email: email ? email : shopInfo.email,
                       name: name,
-                      amount: '50',
+                      amount: '1000',
                     });
                   } else if (goods == 'subscribe') {
                     navigation.navigate('Payment', {
                       userId: userId,
                       phone: phone,
-                      email: email,
+                      email: email ? email : shopInfo.email,
                       name: name,
-                      amount: '100',
+                      amount: '5900',
                     });
                   }
                 }
