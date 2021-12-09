@@ -174,12 +174,17 @@ const PointHistoryScreen = ({ navigation }) => {
         <View style={{ flex: 1, height: 1, backgroundColor: '#A9A9A9' }} />
       </View>
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
-        <FlatList
-          data={pointList}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          extraData={pointNum}
-        />
+        {pointList.length > 0 ? 
+         <FlatList
+         data={pointList}
+         renderItem={renderItem}
+         keyExtractor={(item, index) => index.toString()}
+         extraData={pointNum}
+       />:
+       <View style={{marginTop:Dimensions.get('window').height*0.4}}>
+       <Text style={{fontSize:15, color:"#000000", fontWeight:"bold"}}>포인트 내역이 존재하지 않습니다.</Text>
+     </View>}
+       
       </View>
       <Footer name={'My Page'} />
     </SafeAreaView>
