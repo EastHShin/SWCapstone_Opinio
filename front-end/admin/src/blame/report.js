@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 function Report() {
     return (
         <div className="front">
-            <NavBar class="top" />
+            <NavBar className="top" />
             <h1>유저신고</h1>
             <Link to="/administrator/board/post">
                 <Button className="mar" variant="primary">게시글 찾기</Button>

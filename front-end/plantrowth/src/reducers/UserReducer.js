@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, CODE_VERIFICATION, SEND_EMAIL, USER_DELETE, USER_EDIT, USER_INFO, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME, POINT_LIST, FIREBASE_NOTIFICATION } from "../actions/type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, CODE_VERIFICATION, SEND_EMAIL, USER_DELETE, USER_EDIT, USER_INFO, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME, POINT_LIST } from "../actions/type";
 
 const initialState = {
     kakaoRegisterState: '',
@@ -16,7 +16,6 @@ const initialState = {
     checkPasswordState: '',
     checkNicknameState: '',
     pointList : [],
-    plantId : ''
 };
 
 function UserReducer(state = initialState, action) {
@@ -51,8 +50,6 @@ function UserReducer(state = initialState, action) {
             return { ...state, checkNicknameState: action.payload };
         case POINT_LIST:
             return {...state, pointList: action.payload};
-        case FIREBASE_NOTIFICATION:
-            return {...state, plantId : action.payload};
         default:
             return state;
     }

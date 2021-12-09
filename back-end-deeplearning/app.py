@@ -8,7 +8,7 @@ import os
 import json
 
 temp = pathlib.PosixPath
-#pathlib.PosixPath = pathlib.WindowsPath
+pathlib.PosixPath = pathlib.WindowsPath
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False

@@ -1,5 +1,7 @@
 package com.opinio.plantrowth.service.user;
 
+
+import com.opinio.plantrowth.api.dto.admin.AdminUserUpdateDto;
 import com.opinio.plantrowth.api.dto.auth.*;
 import com.opinio.plantrowth.api.dto.user.UserLookUpDTO;
 import com.opinio.plantrowth.api.dto.user.UserUpdateDTO;
@@ -112,5 +114,18 @@ public class UserService {
             .orElseThrow(() -> new IllegalArgumentException("No User Found"));
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
+    }
+
+
+    @Transactional
+    public User adminUpdateUser(Long id, AdminUserUpdateDto dto)
+    {
+        User user = userRepository.getById(id);
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setMaxPlantNum(dto.getMaxPlantNum());
+        user.setPoint(dto.getPoint());
+        user.setSubscription(dto.getSubscription());
+        return user;
     }
 }

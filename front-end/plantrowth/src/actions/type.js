@@ -53,4 +53,3 @@ export const UPDATE_COMMENT = 'update_comment';
 export const DELETE_COMMENT = 'delete_comment';
 export const POINT_LIST = 'POINT_LIST';
 export const REPORT = 'report';
-export const FIREBASE_NOTIFICATION = 'FIREBASE_NOTIFICATION';
