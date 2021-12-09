@@ -45,9 +45,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew bootJar
         shell: bash
-        
-      - name: Test with Gradle
-        run: ./gradlew --info test
       
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
