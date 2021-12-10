@@ -70,8 +70,9 @@ public class BillingApiController {
 	@PostMapping("/api/payments/refund/{user-id}")
 	public ResponseEntity paymentRefund(@PathVariable("user-id") Long userId, @RequestBody RefundRequestDTO requestDTO) throws ParseException {
 		List<DiagnosisRecord> diagnosisRecords = diagnosisRecordService.getDiagnosisRecords(userId);
-		if (!diagnosisRecords.isEmpty()) {
-			return new ResponseEntity(HttpStatus.valueOf(427));
+		if (diagnosisRecords.size() != 0) {
+			System.out.println(diagnosisRecords.size());
+			return ResponseEntity.status(427).build();
 		}
 		String accessToken = billingService.getToken();
 		PaymentRecord paymentInfo = billingService.findPaymentInfo(requestDTO.getMerchant_uid());

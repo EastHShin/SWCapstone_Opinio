@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -235,7 +237,6 @@ class ReportServiceTest {
 			.state(Report.StateEnum.NOTPROCESSED)
 			.tag(Report.tagEnum.COMMENT)
 			.build();
-
 		//when
 		comment.getReports().add(givenCommentReport);
 		comment.getReports().add(secondReport);

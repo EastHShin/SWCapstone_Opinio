@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -108,6 +109,7 @@ public class BillingService {
 				.paymentType(PaymentType.SUBSCRIPTION)
 				.paymentStatus(PaymentStatus.PAYMENT)
 				.date(LocalDate.now())
+				.dateTime(LocalDateTime.now())
 				.build();
 			paymentRecordRepository.save(paymentRecord);
 
@@ -133,6 +135,7 @@ public class BillingService {
 				.paymentType(PaymentType.SLOT)
 				.paymentStatus(PaymentStatus.PAYMENT)
 				.date(LocalDate.now())
+				.dateTime(LocalDateTime.now())
 				.build();
 			paymentRecordRepository.save(paymentRecord);
 			return user;

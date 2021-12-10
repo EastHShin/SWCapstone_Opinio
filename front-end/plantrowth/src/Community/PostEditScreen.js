@@ -251,9 +251,9 @@ const PostEditScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                   activeOpacity={0.5}
                   onPress={() => {
-                    setImageUri('');
-                    setFileName('');
-                    setImageType('');
+                    setImageUri(null);
+                    setFileName(null);
+                    setImageType(null);
                   }}
                 >
                   <MaterialIcons name="cancel" size={43} color="#FF0000" />

@@ -19,6 +19,7 @@ const SplashScreen = ({ navigation }) => {
             setAnimating(false);
             AsyncStorage.getItem('email').then((value) => {
                 if (value) {
+                  console.log(value);
                   AsyncStorage.getItem('plantId').then(value => {
                     if (!value) {
                       navigation.reset({ routes: [{ name: 'HomeScreen' }] });
