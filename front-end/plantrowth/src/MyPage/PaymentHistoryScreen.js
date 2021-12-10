@@ -131,7 +131,7 @@ const PaymentHistoryScreen = ({ navigation }) => {
   };
 
   const renderMerchant = paymentInfoList => {
-    if (paymentInfoList !== null && paymentInfoList !== undefined) {
+    if (paymentInfoList !== null && paymentInfoList !== undefined && paymentInfoList.length != 0) {
       return paymentInfoList
         ? paymentInfoList.map((item, index) => {
             return (
@@ -162,6 +162,14 @@ const PaymentHistoryScreen = ({ navigation }) => {
             );
           })
         : null;
+    } else {
+      return (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <Text style={{fontFamily: 'NanumGothicBold', fontSize: 20, color: '#363636'}}>
+            결제 내역이 없습니다
+          </Text>
+        </View>
+      ) 
     }
   };
 
