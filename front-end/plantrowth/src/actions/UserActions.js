@@ -413,7 +413,7 @@ export const getDiagnosisList = (plantId) => {
 }
 
 export const findPassword = (user) => {
-
+  
     return async dispatch => {
         return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/find`, user,
             {

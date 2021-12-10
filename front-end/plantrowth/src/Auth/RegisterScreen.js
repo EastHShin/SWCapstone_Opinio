@@ -13,7 +13,6 @@ import {
   ScrollView,
   Dimensions,
   Modal,
-  Alert
 } from 'react-native'
 
 import Loader from '../Loader';
@@ -232,6 +231,19 @@ function RegisterScreen({ navigation }) {
     }
   }
 
+  const sendCheckEmail = () => {
+    var emailExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
+    if(!emailExp.test(userEmail)){
+      alert('이메일 형식을 확인해주세요!');
+      return;
+    }
+    else{
+      dispatch(emailAuthentication(userEmail));
+      setLoading(true);
+    }
+  }
+
   if (isRegistraionSuccess) {
     return (
       <SafeAreaView style={{
@@ -356,11 +368,7 @@ function RegisterScreen({ navigation }) {
               <TouchableOpacity
                 style={styles.smallButton}
                 activeOpacity={0.5}
-                onPress={() => {
-                  dispatch(emailAuthentication(userEmail))
-                  setLoading(true);
-                }
-                }>
+                onPress={sendCheckEmail}>
                 <Text style={{
                   color: '#FFFFFF',
                   paddingVertical: 10, fontSize: 10
@@ -395,7 +403,7 @@ function RegisterScreen({ navigation }) {
                         blurOnSubmit={false}
                       />
                     </View>
-                    <View style={{ flexDirection: "row" }}>
+                    <View style={{ flexDirection: "row", marginTop:Dimensions.get('window').height*0.01 }}>
                       <TouchableOpacity
                         style={styles.smallButton}
                         activeOpacity={0.5}
