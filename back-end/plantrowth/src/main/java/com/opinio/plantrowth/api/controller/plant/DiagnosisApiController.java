@@ -103,9 +103,10 @@ public class DiagnosisApiController {
         /*
         질병진단 구독이 들어온다면 포인트를 소비 할지 안할지 정하는 로직 추가해야됨 -> (21/11/28 추가) 프론트측에서 구독여부로 거름
          */
-
-		User updatedUser = userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint,
-			PointSpendType.DIAGNOSIS);
+		if (!user.getSubscription()) {
+			userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint,
+				PointSpendType.DIAGNOSIS);
+		}
 		Integer curLevel = plant.getPlantLevel();
 		plantExpService.increaseExp(plant.getId());
 		Integer updatedLevel = plant.getPlantLevel();
@@ -117,7 +118,7 @@ public class DiagnosisApiController {
 		diagnosisRecordService.saveDiagnosisRecord(updatedPlant, jsonObj.get("disease_model_1").toString(),
 			jsonObj.get("percent_model_1").toString(), uploadImageName);
 
-		return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(updatedUser, updatedPlant, true, jsonObj, isLevelUp),
+		return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(user, updatedPlant, true, jsonObj, isLevelUp),
 			HttpStatus.OK);
 	}
 
