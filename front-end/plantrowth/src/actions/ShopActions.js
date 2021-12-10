@@ -143,7 +143,7 @@ export const refund = (merchant_uid, cancel_request_amount, reason, userId) => {
           dispatch(setRefundState('diagnosis'));
         } else {
           dispatch(setRefundState('failure'));
-          console.log(error);
+          console.log('환불 error: '+error);
         }
       });
   };
