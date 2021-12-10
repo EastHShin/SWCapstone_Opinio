@@ -179,6 +179,5 @@ public class BillingService {
 		paymentRecord.setPaymentStatus(PaymentStatus.REFUND);
 		paymentRecord.setCancelAmount(refundRequestDTO.getCancel_request_amount());
 		paymentRecord.getUser().setSubscription(false);
-
 	}
 }
