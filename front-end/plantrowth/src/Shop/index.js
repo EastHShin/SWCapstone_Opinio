@@ -454,9 +454,9 @@ ShopScreen = () => {
                 value={shopInfo.email}
               />
             </View>
-            <View style={{width: screenWidth*0.4, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+            <View style={{ width: screenWidth * 0.4, flexDirection: 'row', justifyContent: 'space-evenly' }}>
               <TouchableOpacity
-                style={[styles.earnModalButton, {backgroundColor: '#ef5350'}]}
+                style={[styles.earnModalButton, { backgroundColor: '#ef5350' }]}
                 onPress={() => {
                   setPaymentModalVisibility(false);
                   setName('');
@@ -466,7 +466,7 @@ ShopScreen = () => {
                 <View
                   style={{ alignItems: 'center', justifyContent: 'center' }}
                 >
-                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white'}}>
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white' }}>
                     취소
                   </Text>
                 </View>
@@ -516,7 +516,7 @@ ShopScreen = () => {
                 <View
                   style={{ alignItems: 'center', justifyContent: 'center' }}
                 >
-                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color:'white' }}>
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white' }}>
                     구매
                   </Text>
                 </View>
@@ -531,8 +531,8 @@ ShopScreen = () => {
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
-          <View style={[styles.buyResultModalWrapper, {height: termsType == 'SLOT' ? screenHeight*0.3 : screenHeight*0.55} ]}>
-            <Text style={[styles.buyResultText, { fontSize: 18, marginBottom: 10}]}>
+          <View style={[styles.buyResultModalWrapper, { height: termsType == 'SLOT' ? screenHeight * 0.3 : screenHeight * 0.55 }]}>
+            <Text style={[styles.buyResultText, { fontSize: 18, marginBottom: 10 }]}>
               결제 약관
             </Text>
             {termsType == 'SLOT'
@@ -710,7 +710,20 @@ const styles = StyleSheet.create({
     padding: 5,
     fontFamily: 'NanumGothic',
   },
-  termsButton: { justifyContent: 'center', backgroundColor: '#EF5350', padding: 7, borderRadius: 10 },
+  termsButton: {
+    justifyContent: 'center',
+    backgroundColor: '#EF5350',
+    padding: 7, borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
 });
 
 export default ShopScreen;
