@@ -1,6 +1,7 @@
 package com.opinio.plantrowth.domain.plant;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,7 +40,7 @@ public class DiagnosisRecord {
 	private Plant plant;
 
 	@Column(name = "diagnosis_date")
-	private LocalDate diagnosisDate;
+	private LocalDateTime diagnosisDate;
 
 	@Column(name = "disease_name")
 	private String diseaseName;
@@ -49,8 +50,6 @@ public class DiagnosisRecord {
 
 	@Column(name = "image_url")
 	private String imageUrl;
-
-
 
 
 }
