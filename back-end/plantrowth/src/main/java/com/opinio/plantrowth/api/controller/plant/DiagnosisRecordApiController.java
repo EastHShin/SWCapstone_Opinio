@@ -1,6 +1,7 @@
 package com.opinio.plantrowth.api.controller.plant;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,7 @@ public class DiagnosisRecordApiController {
 	@AllArgsConstructor
 	@Data
 	static class DiagnosisInfoDTO {
-		private LocalDate diagnosis_date;
+		private LocalDateTime diagnosis_date;
 		private String disease_name;
 		private String disease_percent;
 		private String image_url;
