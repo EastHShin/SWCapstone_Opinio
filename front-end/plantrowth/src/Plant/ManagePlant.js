@@ -138,6 +138,10 @@ const ManagePlant = ({ route }) => {
     } else if (diagnosisState == 'failure' && isFocused) {
       setLoading(false);
       setSelectedImage(false);
+      Alert.alert('질병진단 실패', '네트워크 오류로 인해 질병진단을 못 했습니다\n다시 시도해주세요', [{
+        text: '알겠습니다',
+        onPress: ()=>{return}
+      }]);
       dispatch(setDiagnosisState(''));
     }
   }, [diagnosisState]);
