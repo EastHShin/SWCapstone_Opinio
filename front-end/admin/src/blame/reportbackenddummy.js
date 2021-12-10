@@ -11,13 +11,14 @@ const Table = () => {
 
     useEffect(() => {
         const fetchPostList = async () => {
-            const {data} = await axios("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/admin/community/report/all", {
+            const response = await axios.get("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/report/all", {
                 headers: {
-                    "X-AUTH-TOKEN": 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJza3lzYXZlcjAwQGFqb3UuYWMua3IiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjM5MDQzNzIyLCJleHAiOjE2MzkwNDU1MjJ9.rkRouaIxRfHTfHlJYZzEw8XIUOqN9AD2t6qALbvhP4o'
+                    "Content-Type": `application/json`,
+                    "X-AUTH-TOKEN": 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0SWQiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTYzOTEzNTQ3NCwiZXhwIjoxNjM5MTM3Mjc0fQ.szGBmHVqSwEFbVY-3t5xzqLGIzNUyPsWQ8EokbMvRbw'
                 }
             });
-            console.log(data)
-            setPosts({user: data})
+            console.log(response.headers)
+            setPosts({user: response})
         }
         fetchPostList()
     }, [setPosts])
