@@ -17,6 +17,7 @@ import Footer from './src/component/Footer';
 import Loader from './src/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getHomeInfo } from './src/actions/HomeActions';
+import { setPost } from './src/actions/CommunityActions';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -71,12 +72,12 @@ const Item = ({ item, onPress, style }) => {
           <View style={{ flexDirection: 'row' }}>
             <MaterialCommunityIcons
               name="heart-outline"
-              size={14}
+              size={12}
               color="#DC143C"
             />
             <Text
               style={{
-                fontSize: 10,
+                fontSize: 9,
                 color: '#DC143C',
                 marginLeft: Dimensions.get('window').width * 0.01,
                 marginRight: Dimensions.get('window').width * 0.02,
@@ -84,10 +85,10 @@ const Item = ({ item, onPress, style }) => {
             >
               {item.countedLike}
             </Text>
-            <SimpleLineIcons name="bubble" size={14} color="#00BFFF" />
+            <SimpleLineIcons name="bubble" size={12} color="#00BFFF" />
             <Text
               style={{
-                fontSize: 10,
+                fontSize: 9,
                 color: '#00BFFF',
                 marginHorizontal: Dimensions.get('window').width * 0.01,
               }}
@@ -123,6 +124,7 @@ HomeScreen = () => {
   }, [isLogin]);
 
   useEffect(() => {
+    dispatch(setPost());
     AsyncStorage.getItem('userId').then(value => {
       if (value != null) {
         setUserId(JSON.parse(value));
@@ -140,20 +142,23 @@ HomeScreen = () => {
   }, [infoList])
 
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
 
     if(!item.is_blocked){
     return (
-      <Item
-        item={item}
-        onPress={() => {
-          setSelectedId(item.board_id);
-          navigation.navigate("PostDetailScreen", {selectedId: item.board_id}); 
-        }
-        }
-        style={{ backgroundColor: "#FFFFFF" }}
-      />
-    )
+      <View>
+        <Item
+          item={item}
+          onPress={() => {
+            setSelectedId(item.board_id);
+            navigation.navigate('PostDetailScreen', {
+              selectedId: item.board_id,
+            });
+          }}
+          style={{ backgroundColor: '#FFFFFF' }}
+        />
+      </View>
+    );
       }
       else{
         return (
@@ -490,6 +495,21 @@ const styles = StyleSheet.create({
     height: screenHeight * 0.03,
     borderRadius: 5,
     justifyContent: 'center',
+  },
+  item: {
+    padding: 3,
+    marginTop:Dimensions.get('window').height * 0.012
+  },
+  title: {
+    fontSize: 13,
+    color: "#000000"
+  },
+  content: {
+    fontSize: 11
+  },
+  date: {
+    color: "#A9A9A9",
+    fontSize: 8,
   },
 });
 
