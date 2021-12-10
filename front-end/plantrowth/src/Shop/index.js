@@ -23,6 +23,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -42,6 +43,8 @@ ShopScreen = () => {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [termsType, setTermsType] = useState('');
+  const [isTermsModalVisible, setTermsModalVisibility] = useState(false);
 
   const point = useSelector(state => state.ShopReducer.point);
   const maxPlantNumber = useSelector(state => state.ShopReducer.maxPlantNumber);
@@ -198,15 +201,25 @@ ShopScreen = () => {
                 </TouchableOpacity>
               </View>
               <View style={{ width: screenWidth * 0.75, marginVertical: 10 }}>
-                <Text
-                  style={{
-                    fontFamily: 'NanumGothicBold',
-                    color: '#93d07d',
-                    marginBottom: 5,
-                  }}
-                >
-                  프로필 슬롯이란?
-                </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      color: '#363636',
+                    }}
+                  >
+                    프로필 슬롯이란?
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.termsButton}
+                    onPress={() => {
+                      setTermsType('SLOT');
+                      setTermsModalVisibility(true);
+                    }}
+                  >
+                    <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>결제 약관</Text>
+                  </TouchableOpacity>
+                </View>
                 <Text
                   style={{
                     fontFamily: 'NanumGothicBold',
@@ -253,15 +266,26 @@ ShopScreen = () => {
                 )}
               </View>
               <View style={{ width: screenWidth * 0.75, marginVertical: 10 }}>
-                <Text
-                  style={{
-                    fontFamily: 'NanumGothicBold',
-                    color: '#93d07d',
-                    marginBottom: 5,
-                  }}
-                >
-                  질병진단 구독 서비스란?
-                </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      color: '#363636',
+                      marginBottom: 5,
+                    }}
+                  >
+                    질병진단 구독 서비스란?
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.termsButton}
+                    onPress={() => {
+                      setTermsType('DIAGNOSIS');
+                      setTermsModalVisibility(true);
+                    }}
+                  >
+                    <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>결제 약관</Text>
+                  </TouchableOpacity>
+                </View>
                 <Text
                   style={{
                     fontFamily: 'NanumGothicBold',
@@ -363,7 +387,6 @@ ShopScreen = () => {
       <Modal
         isVisible={paymentModalVisible}
         onBackButtonPress={() => setPaymentModalVisibility(false)}
-        onBackdropPress={() => setPaymentModalVisibility(false)}
       >
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
@@ -502,7 +525,63 @@ ShopScreen = () => {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+      <Modal
+        isVisible={isTermsModalVisible}
+        onBackButtonPress={() => setTermsModalVisibility(false)}>
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <View style={[styles.buyResultModalWrapper, {height: termsType == 'SLOT' ? screenHeight*0.3 : screenHeight*0.7} ]}>
+            <Text style={[styles.buyResultText, { fontSize: 18, marginBottom: 10}]}>
+              결제 약관
+            </Text>
+            {termsType == 'SLOT'
+              ? (
+                <View >
+                  <Text style={{ color: '#363636', margin: 5, textAlign: 'justify', fontSize: 13 }}>슬롯은 구매 후 환불이 불가한 상품입니다</Text>
+                </View>
+              ) : (
+                <ScrollView>
+                  <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 16, margin: 5 }}>
+                    {`\n구독 결제 시점과 이용 기간`}
+                  </Text>
+                  <Text style={{ color: '#363636', margin: 5, textAlign: 'justify', fontSize: 13 }}>
+                    구독 결제는 한 달 단위로 결제되고, 해당 날짜가 되는 자정에 구독이 해지됩니다.
+                    예를 들어, 3월 1일 23시 59분에 결제한다면, 4월 1일 0시에 구독이. 해지됩니다.
+                  </Text>
+                  <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 16, margin: 5 }}>
+                    {'\n'}환불 정책
+                  </Text>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 12 }}>
+                    질병진단 내역에서 구독일 이후로 질병진단 실행 시:
+                  </Text>
+                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 13 }}>{`  환불 불가\n`}</Text>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 12 }}>
+                    결제일 이후 3일이 지나기 전까지:{`\n  `}
+                    결제 금액의 100% 환불{`\n\n`}
+                    결제일 이후 3일이 지난 시점에서 14일이 지나기 전까지:{`\n  `}
+                    결제 금액의 50% 환불{`\n\n`}
+                    결제일 이후 14일이 지난 시점부터:
+                  </Text>
+                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 13 }}>
+                    {`  환불 불가\n`}
+                  </Text>
+                </ScrollView>
+              )
+            }
+            <TouchableOpacity
+              style={styles.earnModalButton}
+              onPress={() => setTermsModalVisibility(false)}>
+              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
+                  닫기
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView >
   );
 };
 
@@ -631,6 +710,7 @@ const styles = StyleSheet.create({
     padding: 5,
     fontFamily: 'NanumGothic',
   },
+  termsButton: { justifyContent: 'center', backgroundColor: '#EF5350', padding: 7, borderRadius: 10 },
 });
 
 export default ShopScreen;
