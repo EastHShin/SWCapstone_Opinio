@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.opinio.plantrowth.domain.community.Board;
 import com.opinio.plantrowth.domain.community.Comment;
@@ -131,7 +132,6 @@ class ReportServiceTest {
 		Assertions.assertThat(report.getState()).isEqualTo(Report.StateEnum.NOTPROCESSED);
 	}
 
-
 	@Test
 	@DisplayName("신고된 게시글 블락 처리")
 	public void completeBoardReportTest() throws Exception {
@@ -148,16 +148,105 @@ class ReportServiceTest {
 
 	@Test
 	@DisplayName("신고된 댓글 블락 처리")
-	public void completeCommentReportTest() throws Exception{
-	    //given
+	public void completeCommentReportTest() throws Exception {
+		//given
 
-	    //when
+		//when
 		Mockito.when(reportRepository.findById(any())).thenReturn(Optional.of(givenCommentReport));
 		Report updatedReport = reportService.completeCommentReport(givenCommentReport.getId());
-	    //then
+		//then
 		Assertions.assertThat(updatedReport.getId()).isEqualTo(givenCommentReport.getId());
 		Assertions.assertThat(updatedReport.getState()).isEqualTo(Report.StateEnum.COMPLETE);
 		Assertions.assertThat(updatedReport.getComment().getIsBlocked()).isEqualTo(true);
+	}
+
+	@Test
+	@DisplayName("일정 횟수 이상의 신고 들어올 시 게시글 자동 차단")
+	public void autoBlockBoardReportTest() throws Exception {
+		//given
+		Report secondReport = Report.builder()
+			.id(2L)
+			.board(board)
+			.user(user)
+			.date(LocalDate.now())
+			.reason(reportReason)
+			.state(Report.StateEnum.NOTPROCESSED)
+			.tag(Report.tagEnum.BOARD)
+			.build();
+		Report thirdReport = Report.builder()
+			.id(3L)
+			.board(board)
+			.user(user)
+			.date(LocalDate.now())
+			.reason(reportReason)
+			.state(Report.StateEnum.NOTPROCESSED)
+			.tag(Report.tagEnum.BOARD)
+			.build();
+		Report fourthReport = Report.builder()
+			.id(4L)
+			.board(board)
+			.user(user)
+			.date(LocalDate.now())
+			.reason(reportReason)
+			.state(Report.StateEnum.NOTPROCESSED)
+			.tag(Report.tagEnum.BOARD)
+			.build();
+		//when
+		board.getReports().add(givenBoardReport);
+		board.getReports().add(secondReport);
+		board.getReports().add(thirdReport);
+		board.getReports().add(fourthReport);
+		reportService.autoBlockBoardReport(givenBoardReport);
+		//then
+		Assertions.assertThat(board.getIsBlocked()).isEqualTo(true);
+		Assertions.assertThat(secondReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
+		Assertions.assertThat(thirdReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
+		Assertions.assertThat(givenBoardReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
+	}
+
+	@Test
+	@DisplayName("일정 횟수 이상의 신고 들어올 시 댓글 자동 차단")
+	public void autoBlockCommentReportTest() throws Exception {
+		//
+		Report secondReport = Report.builder()
+			.id(2L)
+			.comment(comment)
+			.user(user)
+			.date(LocalDate.now())
+			.reason(reportReason)
+			.state(Report.StateEnum.NOTPROCESSED)
+			.tag(Report.tagEnum.COMMENT)
+			.build();
+		Report thirdReport = Report.builder()
+			.id(3L)
+			.comment(comment)
+			.user(user)
+			.date(LocalDate.now())
+			.reason(reportReason)
+			.state(Report.StateEnum.NOTPROCESSED)
+			.tag(Report.tagEnum.COMMENT)
+			.build();
+		Report fourthReport = Report.builder()
+			.id(4L)
+			.comment(comment)
+			.user(user)
+			.date(LocalDate.now())
+			.reason(reportReason)
+			.state(Report.StateEnum.NOTPROCESSED)
+			.tag(Report.tagEnum.COMMENT)
+			.build();
+
+		//when
+		comment.getReports().add(givenCommentReport);
+		comment.getReports().add(secondReport);
+		comment.getReports().add(thirdReport);
+		comment.getReports().add(fourthReport);
+		reportService.autoBlockCommentReport(givenCommentReport);
+		//then
+		Assertions.assertThat(comment.getIsBlocked()).isEqualTo(true);
+		Assertions.assertThat(secondReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
+		Assertions.assertThat(thirdReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
+		Assertions.assertThat(givenBoardReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
 	}
 
 }

@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,7 +39,11 @@ public class DiagnosisApiController {
 	private final PlantExpService plantExpService;
 	private final DiagnosisRecordService diagnosisRecordService;
 	private final String filePath = "diagnosis";
-	private final OkHttpClient client = new OkHttpClient();
+	private final OkHttpClient client = new OkHttpClient.Builder()
+		.connectTimeout(15, TimeUnit.SECONDS)
+		.writeTimeout(15, TimeUnit.SECONDS)
+		.readTimeout(15, TimeUnit.SECONDS)
+		.build();
 	private static final String RequestURL = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:5000";
 	private final Integer decreasingPoint = 100;
 

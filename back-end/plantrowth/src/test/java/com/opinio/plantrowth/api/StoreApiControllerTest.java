@@ -11,6 +11,7 @@ import com.opinio.plantrowth.service.community.CommentService;
 import com.opinio.plantrowth.service.community.ReportService;
 import com.opinio.plantrowth.service.fileUpload.FileUploadService;
 import com.opinio.plantrowth.service.payment.BillingService;
+import com.opinio.plantrowth.service.payment.PointRecordService;
 import com.opinio.plantrowth.service.plant.DiagnosisRecordService;
 import com.opinio.plantrowth.service.plant.DiaryService;
 import com.opinio.plantrowth.service.plant.PlantExpService;
@@ -80,6 +81,8 @@ class StoreApiControllerTest {
     private FindPasswordService findPasswordService;
     @MockBean
     private DiagnosisRecordService diagnosisRecordService;
+    @MockBean
+    private PointRecordService pointRecordService;
 
 
     private User user;

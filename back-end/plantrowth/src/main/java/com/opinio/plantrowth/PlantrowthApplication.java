@@ -27,7 +27,9 @@ public class PlantrowthApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com");
+				registry.addMapping("/**")
+					.allowedOrigins("*")
+					.allowedMethods("*");
 			}
 		};
 	}
