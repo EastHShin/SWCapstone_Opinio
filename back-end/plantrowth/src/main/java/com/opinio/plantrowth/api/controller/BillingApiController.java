@@ -9,8 +9,10 @@ import com.opinio.plantrowth.api.dto.subscription.BillingDTO;
 import com.opinio.plantrowth.domain.payment.PaymentRecord;
 import com.opinio.plantrowth.domain.payment.PaymentStatus;
 import com.opinio.plantrowth.domain.payment.PaymentType;
+import com.opinio.plantrowth.domain.plant.DiagnosisRecord;
 import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.service.payment.BillingService;
+import com.opinio.plantrowth.service.plant.DiagnosisRecordService;
 import com.opinio.plantrowth.service.user.UserService;
 
 import lombok.AllArgsConstructor;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BillingApiController {
 
 	private final BillingService billingService;
+	private final DiagnosisRecordService diagnosisRecordService;
 	private final UserService userService;
 
 	@PostMapping("/api/payments/complete/diagnosis")
@@ -64,12 +67,15 @@ public class BillingApiController {
 		return new ResponseEntity<paymentRecordDTO>(new paymentRecordDTO(user, paymentRecords), HttpStatus.OK);
 	}
 
-	@PostMapping("/api/payments/refund")
-	public ResponseEntity paymentRefund(@RequestBody RefundRequestDTO requestDTO) throws ParseException {
+	@PostMapping("/api/payments/refund/{user-id}")
+	public ResponseEntity paymentRefund(@PathVariable("user-id") Long userId, @RequestBody RefundRequestDTO requestDTO) throws ParseException {
+		List<DiagnosisRecord> diagnosisRecords = diagnosisRecordService.getDiagnosisRecords(userId);
+		if (!diagnosisRecords.isEmpty()) {
+			return new ResponseEntity(HttpStatus.valueOf(427));
+		}
 		String accessToken = billingService.getToken();
 		PaymentRecord paymentInfo = billingService.findPaymentInfo(requestDTO.getMerchant_uid());
 		billingService.refund(paymentInfo, requestDTO, accessToken);
-
 		return new ResponseEntity(HttpStatus.OK);
 
 	}
