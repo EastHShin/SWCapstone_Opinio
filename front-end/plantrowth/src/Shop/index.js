@@ -107,8 +107,17 @@ ShopScreen = () => {
   }, [isFocused, buyProfileSlotState, buySubscribeState]);
 
   const buySlotHandler = () => {
+    console.log(shopInfo.point);
+    if(shopInfo.point >= 300) {
     setLoading(true);
     dispatch(buyProfileSlot(userId));
+    } else {
+
+      Alert.alert('구매 실패', '포인트가 부족하여 구매가 불가능합니다.', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }])
+    }
   };
 
   const renderBuySlotByPoint = byPoint => {
@@ -537,8 +546,10 @@ ShopScreen = () => {
             </Text>
             {termsType == 'SLOT'
               ? (
-                <View >
-                  <Text style={{ color: '#363636', margin: 5, textAlign: 'justify', fontSize: 14 }}>슬롯은 구매 후 환불이 불가한 상품입니다</Text>
+                <View style={{flexDirection:'row', justifyContent: 'center'}}>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 14 }}>슬롯은 구매 후 </Text>
+                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 14 }}>환불이 불가능</Text>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 14 }}>한 상품입니다</Text>
                 </View>
               ) : (
                 <ScrollView>
