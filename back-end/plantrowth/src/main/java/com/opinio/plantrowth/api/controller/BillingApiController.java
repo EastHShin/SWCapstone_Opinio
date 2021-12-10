@@ -72,7 +72,7 @@ public class BillingApiController {
 		List<DiagnosisRecord> diagnosisRecords = diagnosisRecordService.getDiagnosisRecords(userId);
 		if (diagnosisRecords.size() != 0) {
 			System.out.println(diagnosisRecords.size());
-			return new ResponseEntity(HttpStatus.valueOf(427));
+			return ResponseEntity.status(427).build();
 		}
 		String accessToken = billingService.getToken();
 		PaymentRecord paymentInfo = billingService.findPaymentInfo(requestDTO.getMerchant_uid());
