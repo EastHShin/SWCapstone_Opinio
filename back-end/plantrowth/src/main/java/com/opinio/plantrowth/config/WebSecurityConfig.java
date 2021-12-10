@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                     UsernamePasswordAuthenticationFilter.class);
+    http.csrf().disable();
 
     http.sessionManagement()
         .maximumSessions(1) //세션 최대 허용수
