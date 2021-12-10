@@ -65,6 +65,10 @@ const PaymentHistoryScreen = ({ navigation }) => {
       dispatch(setRefundState(''));
       setLoading(false);
     } else if (refundState == 'failure' && isFocused) {
+      Alert.alert('환불 실패', '네트워크 오류로 환불을 못했습니다.', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }])
       dispatch(setRefundState(''));
       setLoading(false);
     }
@@ -80,13 +84,13 @@ const PaymentHistoryScreen = ({ navigation }) => {
           <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>
             환불 요청
           </Text>
-        </TouchableOpacity> : <View style={[styles.refundButton, {backgroundColor: '#cccccc'}]}>
+        </TouchableOpacity> : <View style={[styles.refundButton, { backgroundColor: '#cccccc' }]}>
           <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>
             환불 완료
           </Text>
         </View>
     ) : (
-      <View style={[styles.refundButton, {backgroundColor: '#cccccc'}]}>
+      <View style={[styles.refundButton, { backgroundColor: '#cccccc' }]}>
         <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>
           환불 완료
         </Text>
