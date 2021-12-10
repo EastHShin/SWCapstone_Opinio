@@ -118,11 +118,11 @@ export const sendBuySubscribeData = (userId, imp_uid, merchant_uid) => {
   };
 };
 
-export const refund = (merchant_uid, cancel_request_amount, reason) => {
+export const refund = (merchant_uid, cancel_request_amount, reason, userId) => {
   return async dispatch => {
     return await axios
       .post(
-        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/payments/refund`,
+        `http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/payments/refund/${userId}`,
         {
           merchant_uid: merchant_uid,
           cancel_request_amount: cancel_request_amount,
@@ -133,15 +133,18 @@ export const refund = (merchant_uid, cancel_request_amount, reason) => {
         },
       )
       .then(function (response) {
-        console.log('환불 response: ' + response);
+        console.log('환불 response: ' + JSON.stringify(response.data));
         if (response.status === 200) {
-          dispatch(setRefundState('true'));
+          dispatch(setRefundState('success'));
         }
       })
       .catch(function (error) {
-        console.warn('환불 에러요~');
-        dispatch(setRefundState('false'));
-        console.log(error);
+        if (error.response.status == 427) {
+          dispatch(setRefundState('diagnosis'));
+        } else {
+          dispatch(setRefundState('failure'));
+          console.log(error);
+        }
       });
   };
 };
