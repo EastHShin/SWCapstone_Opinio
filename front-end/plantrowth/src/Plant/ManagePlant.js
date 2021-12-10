@@ -140,7 +140,7 @@ const ManagePlant = ({ route }) => {
       setSelectedImage(false);
       Alert.alert('질병진단 실패', '네트워크 오류로 인해 질병진단을 못 했습니다\n다시 시도해주세요', [{
         text: '알겠습니다',
-        onPress: ()=>{return}
+        onPress: () => { return }
       }]);
       dispatch(setDiagnosisState(''));
     }
@@ -451,9 +451,8 @@ const ManagePlant = ({ route }) => {
                   color: '#363636',
                 }}
               >
-                {`LV. ${profile.plant_level} ( ${
-                  profile.plant_exp
-                } / ${renderExp()} )`}
+                {`LV. ${profile.plant_level} ( ${profile.plant_exp
+                  } / ${renderExp()} )`}
               </Text>
             </View>
           </View>
@@ -480,6 +479,9 @@ const ManagePlant = ({ route }) => {
           >
             <Icon name={'return-up-back'} size={40} color={'white'} />
           </TouchableOpacity>
+          <View style={styles.userInfoSection}>
+            <Text style={styles.userInfoText}>보유 포인트: {profile.point}  {profile.is_subscription ? `질병진단 구독 중` : ``}</Text>
+          </View>
           <TouchableOpacity
             style={[styles.backButton, { marginRight: 15, marginTop: 5 }]}
             onPress={() => navigation.navigate('ShopScreen', { point: point })}
@@ -523,8 +525,8 @@ const ManagePlant = ({ route }) => {
               percent={Math.floor(
                 (1 -
                   (profile.alarm_cycle - profile.remain_cycle) /
-                    profile.alarm_cycle) *
-                  100,
+                  profile.alarm_cycle) *
+                100,
               )}
               radius={(screenWidth * 0.29) / 2}
               borderWidth={8}
@@ -1037,6 +1039,30 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 5,
   },
+  userInfoSection: {
+    backgroundColor: '#f7f8f9',
+    margin: 12,
+    padding: 5,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 35,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  userInfoText: {
+    fontSize: 14,
+    fontFamily: 'NanumGothicBold',
+    color: '#363636'
+  }
 });
 
 export default ManagePlant;
