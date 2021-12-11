@@ -3,6 +3,7 @@ package com.opinio.plantrowth.repository.plant;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ class DiagnosisRecordRepositoryTest {
 			DiagnosisRecord diagnosisRecord = DiagnosisRecord.builder()
 				.diseaseName("백분병")
 				.diseasePercent("70" + Integer.toString(i))
-				.diagnosisDate(LocalDate.now())
+				.diagnosisDate(LocalDateTime.now())
 				.plant(plant)
 				.imageUrl("ggggg")
 				.build();

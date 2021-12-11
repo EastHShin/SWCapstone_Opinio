@@ -23,7 +23,7 @@ public class SubscribeCancelScheduler {
 	private final SubscriptionRepository subscriptionRepository;
 
 	@Transactional
-	@Scheduled(cron = "0 0 16 * * *")
+	@Scheduled(cron = "0 0 0 * * *")
 	public void subscriptionSchedule() {
 		List<Subscription> subscriptionList = subscriptionRepository.findAll();
 		subscriptionList.stream()

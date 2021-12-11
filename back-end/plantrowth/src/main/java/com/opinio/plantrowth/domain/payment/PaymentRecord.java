@@ -1,6 +1,7 @@
 package com.opinio.plantrowth.domain.payment;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,6 +55,9 @@ public class PaymentRecord {
 
 	@Column(name = "payment_date")
 	private LocalDate date;
+
+	@Column(name = "payment_date_time")
+	private LocalDateTime dateTime;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_type")

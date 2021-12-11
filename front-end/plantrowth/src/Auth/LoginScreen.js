@@ -410,86 +410,119 @@ const LoginScreen = ({ navigation }) => {
         }}
         visible={isFindPwModalVisible}
       >
-          <View style={styles.modal}>
-            <View style={styles.modalSectionWrapper}>
-              <View style={styles.textWrapper}>
-                <Text
-                  style={{
-                    marginBottom: Dimensions.get('window').height * 0.015,
-                    color: '#000000',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  비밀번호 찾기
-                </Text>
-                <Text style={{ color: '#000000' }}>
-                  이메일과 생년월일을 입력해주세요
-                </Text>
-              </View>
-              <View style={styles.section}>
-                <EntypoIcons
-                  name="email"
-                  size={20}
-                  color="#8EB695"
-                  style={styles.icon}
-                />
-                <TextInput
-                  style={styles.input}
-                  onChangeText={email => setEmail(email)}
-                  placeholder="Enter Email"
-                  underlineColorAndroid="#f000"
-                  placeholderTextColor="#808080"
-                  keyboardType="email-address"
-                  onSubmitEditing={Keyboard.dismiss}
-                  blurOnSubmit={false}
-                />
-              </View>
+        <View style={styles.modal}>
+          <View style={styles.modalSectionWrapper}>
+            <View style={styles.textWrapper}>
+              <Text
+                style={{
+                  marginBottom: Dimensions.get('window').height * 0.015,
+                  color: '#000000',
+                  fontWeight: 'bold',
+                }}
+              >
+                비밀번호 찾기
+              </Text>
+              <Text style={{ color: '#000000' }}>
+                이메일과 생년월일을 입력해주세요
+              </Text>
+            </View>
+            <View style={styles.section}>
+              <EntypoIcons
+                name="email"
+                size={20}
+                color="#8EB695"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                onChangeText={email => setEmail(email)}
+                placeholder="Enter Email"
+                underlineColorAndroid="#f000"
+                placeholderTextColor="#808080"
+                keyboardType="email-address"
+                onSubmitEditing={Keyboard.dismiss}
+                blurOnSubmit={false}
+              />
+            </View>
 
-              <View style={styles.section}>
-                <EntypoIcons
-                  name="calendar"
-                  size={20}
-                  color="#8EB695"
-                  style={styles.icon}
+            <View style={styles.section}>
+              <EntypoIcons
+                name="calendar"
+                size={20}
+                color="#8EB695"
+                style={styles.icon}
+              />
+              <TouchableOpacity onPress={showDatePicker}>
+                <TextInput
+                  pointerEvents="none"
+                  style={styles.input}
+                  underlineColorAndroid="#f000"
+                  placeholder="Date of birth"
+                  placeholderTextColor="#808080"
+                  editable={false}
+                  blurOnSubmit={false}
+                  value={userBirth}
                 />
-                <TouchableOpacity onPress={showDatePicker}>
-                  <TextInput
-                    pointerEvents="none"
-                    style={styles.input}
-                    underlineColorAndroid="#f000"
-                    placeholder="Date of birth"
-                    placeholderTextColor="#808080"
-                    editable={false}
-                    blurOnSubmit={false}
-                    value={userBirth}
-                  />
-                  <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    maximumDate={
-                      new Date(
-                        maximumDate.getFullYear(),
-                        maximumDate.getMonth(),
-                        maximumDate.getDate() - 1,
-                      )
-                    }
-                    minimumDate={new Date(1921, 0, 1)}
-                    onConfirm={handleConfirm}
-                    onCancel={() => {
-                      setDatePickerVisibility(false);
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  maximumDate={
+                    new Date(
+                      maximumDate.getFullYear(),
+                      maximumDate.getMonth(),
+                      maximumDate.getDate() - 1,
+                    )
+                  }
+                  minimumDate={new Date(1921, 0, 1)}
+                  onConfirm={handleConfirm}
+                  onCancel={() => {
+                    setDatePickerVisibility(false);
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: Dimensions.get('window').height * 0.01,
+              }}
+            >
               <TouchableOpacity
-                style={styles.button}
+                style={styles.smallButton}
                 activeOpacity={0.5}
                 onPress={findUserPassword}
               >
-                <Text style={styles.buttonText}>Find</Text>
+                <Text
+                  style={{
+                    color: '#FFFFFF',
+                    paddingVertical: 10,
+                    fontSize: 10,
+                  }}
+                >
+                  찾기
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.smallButton}
+                activeOpacity={0.5}
+                onPress={() => {
+                  setIsFindPwModalVisible(false);
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#FFFFFF',
+                    paddingVertical: 10,
+                    fontSize: 10,
+                  }}
+                >
+                  취소
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
+        </View>
       </Modal>
 
       <Modal
@@ -500,113 +533,146 @@ const LoginScreen = ({ navigation }) => {
         }}
         visible={isModalVisible}
       >
-          <View style={styles.modal}>
-            <View style={styles.modalSectionWrapper}>
-              <View style={styles.textWrapper}>
-                <Text
-                  style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}
-                >
-                  Register
-                </Text>
-              </View>
-              <View style={styles.section}>
-                <EntypoIcons
-                  name="user"
-                  size={20}
-                  color="#8EB695"
-                  style={styles.icon}
-                />
-                <TextInput
-                  style={styles.input}
-                  onChangeText={UserName => setUserName(UserName)}
-                  underlineColorAndroid="#f000"
-                  placeholder="Name"
-                  placeholderTextColor="#808080"
-                  onSubmitEditing={Keyboard.dismiss}
-                  blurOnSubmit={false}
-                />
+        <View style={styles.modal}>
+          <View style={styles.modalSectionWrapper}>
+            <View style={styles.textWrapper}>
+              <Text
+                style={{ fontSize: 15, fontWeight: 'bold', color: '#000000' }}
+              >
+                Register
+              </Text>
+            </View>
+            <View style={styles.section}>
+              <EntypoIcons
+                name="user"
+                size={20}
+                color="#8EB695"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                onChangeText={UserName => setUserName(UserName)}
+                underlineColorAndroid="#f000"
+                placeholder="Name"
+                placeholderTextColor="#808080"
+                onSubmitEditing={Keyboard.dismiss}
+                blurOnSubmit={false}
+              />
 
-                <TouchableOpacity
-                  style={styles.smallButton}
-                  activeOpacity={0.5}
-                  onPress={checkUserNickname}
-                >
-                  <Text
-                    style={{
-                      color: '#FFFFFF',
-                      paddingVertical: 10,
-                      fontSize: 10,
-                    }}
-                  >
-                    확인
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.section}>
-                <EntypoIcons
-                  name="calendar"
-                  size={20}
-                  color="#8EB695"
-                  style={styles.icon}
-                />
-                <TouchableOpacity onPress={showDatePicker}>
-                  <TextInput
-                    pointerEvents="none"
-                    style={styles.input}
-                    underlineColorAndroid="#f000"
-                    placeholder="Date of birth"
-                    placeholderTextColor="#808080"
-                    editable={false}
-                    blurOnSubmit={false}
-                    value={userBirth}
-                  />
-                  <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    maximumDate={
-                      new Date(
-                        maximumDate.getFullYear(),
-                        maximumDate.getMonth(),
-                        maximumDate.getDate() - 1,
-                      )
-                    }
-                    minimumDate={new Date(1921, 0, 1)}
-                    onConfirm={handleConfirm}
-                    onCancel={() => {
-                      setDatePickerVisibility(false);
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.section}>
-                <EntypoIcons
-                  name="key"
-                  size={20}
-                  color="#8EB695"
-                  style={styles.icon}
-                />
-                <TextInput
-                  style={styles.input}
-                  onChangeText={UserPassword => setCreatePassword(UserPassword)}
-                  underlineColorAndroid="#f000"
-                  placeholder="8~12자 영문,숫자,특수문자"
-                  placeholderTextColor="#808080"
-                  returnKeyType="next"
-                  secureTextEntry={true}
-                  onSubmitEditing={Keyboard.dismiss}
-                  blurOnSubmit={false}
-                />
-              </View>
               <TouchableOpacity
-                style={styles.button}
+                style={styles.smallButton}
+                activeOpacity={0.5}
+                onPress={checkUserNickname}
+              >
+                <Text
+                  style={{
+                    color: '#FFFFFF',
+                    paddingVertical: 10,
+                    fontSize: 10,
+                  }}
+                >
+                  확인
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.section}>
+              <EntypoIcons
+                name="calendar"
+                size={20}
+                color="#8EB695"
+                style={styles.icon}
+              />
+              <TouchableOpacity onPress={showDatePicker}>
+                <TextInput
+                  pointerEvents="none"
+                  style={styles.input}
+                  underlineColorAndroid="#f000"
+                  placeholder="Date of birth"
+                  placeholderTextColor="#808080"
+                  editable={false}
+                  blurOnSubmit={false}
+                  value={userBirth}
+                />
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  maximumDate={
+                    new Date(
+                      maximumDate.getFullYear(),
+                      maximumDate.getMonth(),
+                      maximumDate.getDate() - 1,
+                    )
+                  }
+                  minimumDate={new Date(1921, 0, 1)}
+                  onConfirm={handleConfirm}
+                  onCancel={() => {
+                    setDatePickerVisibility(false);
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.section}>
+              <EntypoIcons
+                name="key"
+                size={20}
+                color="#8EB695"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                onChangeText={UserPassword => setCreatePassword(UserPassword)}
+                underlineColorAndroid="#f000"
+                placeholder="8~12자 영문,숫자,특수문자"
+                placeholderTextColor="#808080"
+                returnKeyType="next"
+                secureTextEntry={true}
+                onSubmitEditing={Keyboard.dismiss}
+                blurOnSubmit={false}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: Dimensions.get('window').height * 0.01,
+              }}
+            >
+              <TouchableOpacity
+                style={styles.smallButton}
                 activeOpacity={0.5}
                 onPress={register}
               >
-                <Text style={styles.buttonText}>Join</Text>
+                <Text
+                  style={{
+                    color: '#FFFFFF',
+                    paddingVertical: 10,
+                    fontSize: 10,
+                  }}
+                >
+                  가입
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.smallButton}
+                activeOpacity={0.5}
+                onPress={() => {
+                  kakaoRegisterFail();
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#FFFFFF',
+                    paddingVertical: 10,
+                    fontSize: 10,
+                  }}
+                >
+                  취소
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
+        </View>
       </Modal>
     </SafeAreaView>
   );
@@ -722,7 +788,7 @@ const styles = StyleSheet.create({
   },
   modalSectionWrapper: {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('window').height * 0.46,
+    height: Dimensions.get('window').height * 0.468,
     width: Dimensions.get('window').width * 0.85,
     borderRadius: 20,
     display: 'flex',

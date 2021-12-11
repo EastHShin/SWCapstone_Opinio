@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,7 +39,11 @@ public class DiagnosisApiController {
 	private final PlantExpService plantExpService;
 	private final DiagnosisRecordService diagnosisRecordService;
 	private final String filePath = "diagnosis";
-	private final OkHttpClient client = new OkHttpClient();
+	private final OkHttpClient client = new OkHttpClient.Builder()
+		.connectTimeout(15, TimeUnit.SECONDS)
+		.writeTimeout(15, TimeUnit.SECONDS)
+		.readTimeout(15, TimeUnit.SECONDS)
+		.build();
 	private static final String RequestURL = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:5000";
 	private final Integer decreasingPoint = 100;
 
@@ -48,10 +53,9 @@ public class DiagnosisApiController {
 		if (file.isEmpty()) {
 			throw new FileIsEmptyException("파일을 업로드 하세요");
 		}
-
 		Plant plant = plantService.findOnePlant(id);
 		User user = plant.getUser();
-		if (user.getPoint() < decreasingPoint) {
+		if (user.getPoint() < decreasingPoint && !user.getSubscription()) {
 			return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(user, plant, false), HttpStatus.OK);
 		}
 		String uploadImageName = fileUploadService.uploadImage(file.get(), filePath);
@@ -96,11 +100,12 @@ public class DiagnosisApiController {
 		Object obj = jsonParser.parse(diagnosisResult);
 		JSONObject jsonObj = (JSONObject)obj;
         /*
-        질병진단 구독이 들어온다면 포인트를 소비 할지 안할지 정하는 로직 추가해야됨 -> (21/11/28 추가) 프론트측에서 구독여부로 거름
+        질병진단 구독이 들어온다면 포인트를 소비 할지 안할지 정하는 로직 추가해야됨 -> (21/11/28 추가) 프론트측에서 구독여부로 거름 -> (21/12/09 추가) 백엔드에서 처리
          */
-
-		User updatedUser = userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint,
-			PointSpendType.DIAGNOSIS);
+		if (!user.getSubscription()) {
+			userPointService.decreasePoint(plant.getUser().getId(), decreasingPoint,
+				PointSpendType.DIAGNOSIS);
+		}
 		Integer curLevel = plant.getPlantLevel();
 		plantExpService.increaseExp(plant.getId());
 		Integer updatedLevel = plant.getPlantLevel();
@@ -112,7 +117,7 @@ public class DiagnosisApiController {
 		diagnosisRecordService.saveDiagnosisRecord(updatedPlant, jsonObj.get("disease_model_1").toString(),
 			jsonObj.get("percent_model_1").toString(), uploadImageName);
 
-		return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(updatedUser, updatedPlant, true, jsonObj, isLevelUp),
+		return new ResponseEntity<DiagnosisDto>(new DiagnosisDto(user, updatedPlant, true, jsonObj, isLevelUp),
 			HttpStatus.OK);
 	}
 

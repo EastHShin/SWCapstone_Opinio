@@ -3,6 +3,7 @@ package com.opinio.plantrowth.api.controller.user;
 import java.nio.charset.Charset;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class AuthApiController {
 	private final AuthService authService;
 
 	@PostMapping("/api/auth/join")
-	public ResponseEntity join(@RequestBody JoinDTO user) {
+	public ResponseEntity join(@RequestBody @Valid JoinDTO user) {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		if(authService.existEmail(user.getEmail())){
