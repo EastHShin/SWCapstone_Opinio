@@ -2,6 +2,7 @@ package com.opinio.plantrowth.api.controller.admin;
 
 
 import com.opinio.plantrowth.api.dto.Message;
+import com.opinio.plantrowth.api.dto.admin.AdminBoardListDto;
 import com.opinio.plantrowth.api.dto.admin.AdminBoardLookUpDto;
 import com.opinio.plantrowth.api.dto.community.board.BoardLookUpDTO;
 import com.opinio.plantrowth.api.dto.community.comment.CommentLookUpDTO;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminCommunityApiController {
     private final BoardService boardService;
     private final CommentService commentService;
@@ -52,9 +55,12 @@ public class AdminCommunityApiController {
     @GetMapping("/api/admin/community")
     public ResponseEntity viewBoard(){
         List<Board> boards = boardService.BoardList();
+        List<AdminBoardListDto> collect = boards.stream()
+                .map(board -> new AdminBoardListDto(board))
+                .collect(Collectors.toList());
         Message message = new Message();
         message.setMessage("게시글 조회");
-        message.setData(boards);
+        message.setData(collect);
         message.setStatus(Message.StatusEnum.OK);
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(message, headers, HttpStatus.OK);

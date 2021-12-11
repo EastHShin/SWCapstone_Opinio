@@ -2,6 +2,7 @@ package com.opinio.plantrowth.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.opinio.plantrowth.api.dto.auth.JoinDTO;
 import com.opinio.plantrowth.api.dto.community.board.BoardCreateRequest;
 import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.config.security.JwtTokenProvider;
@@ -35,6 +36,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -42,6 +44,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -154,7 +157,12 @@ class BoardApiControllerTest {
                 .user(user2)
                 .build();
     }
-
+    @Test
+    @WithMockUser
+    public void authenticatedUser() {
+        JoinDTO dto = new JoinDTO(user1);
+        assertThat(authService.join(dto)).isNotNull();
+    }
 
     @Test
     @DisplayName("게시글 생성")
@@ -174,14 +182,13 @@ class BoardApiControllerTest {
 //        MockMultipartFile dataFile = new MockMultipartFile("data", "", "application/json", json.getBytes(StandardCharsets.UTF_8));
         //then
 
-        mockMvc.perform(multipart("/api/plants/profiles/{user-id}", 1L)
+        mockMvc.perform(multipart("/api/community/{user-id}", 1L)
 //                .file(dataFile))
 //                .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
                         .param("content", requestDto.getContent())
                         .param("title", requestDto.getTitle())
                         .param("file_delete", requestDto.getFile_delete().toString()))
-                .andExpect(status().isOk())
-                .andExpect(content().string("{\"id\":1}"));
+                .andExpect(status().isOk());
     }
 
     @Test
