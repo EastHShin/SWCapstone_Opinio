@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminCommunityApiController {
     private final BoardService boardService;
     private final CommentService commentService;

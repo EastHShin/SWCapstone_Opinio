@@ -8,6 +8,7 @@ import com.opinio.plantrowth.api.dto.user.UserUpdateDTO;
 import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.service.user.AuthService;
 import com.opinio.plantrowth.service.user.UserService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminUserApiController {
 
     private final UserService userService;
@@ -68,6 +70,17 @@ public class AdminUserApiController {
     public ResponseEntity deleteUser(@PathVariable("user-id")Long userId){
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/api/admin/user")
+    public ResponseEntity viewUser(){
+
+        Message message = new Message();
+        message.setMessage("회원리스트 조회");
+        message.setData(1);
+        message.setStatus(Message.StatusEnum.OK);
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
 }
