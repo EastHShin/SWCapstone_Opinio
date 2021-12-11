@@ -43,3 +43,7 @@
     text-align: left;
     margin-left: calc(20px + 1vmin);
 }
+
+.warn {
+    color: red;
+}

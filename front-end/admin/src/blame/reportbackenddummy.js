@@ -49,9 +49,8 @@ function Table() {
                             <td className="table-light" valign="middle">{item.report_id}</td>
                             <td className="table-primary" valign="middle">{item.reason}</td>
                             <td className="table-warning" valign="middle">
-                                <Button className="mar" variant="info">처리완료</Button>
                                 <Link to="/administrator/ad/delete">
-                                    <Button variant="danger">무시하기</Button>
+                                    <Button variant="danger">처리완료</Button>
                                 </Link>
                             </td>
                         </tr>

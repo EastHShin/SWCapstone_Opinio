@@ -10,7 +10,6 @@ import {Link} from "react-router-dom";
 function UserInfo() {
     const [posts, setPosts] = useState({data: []})
     const fetchPostList = async () => {
-        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         console.warn(localStorage.getItem("userId"))
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
@@ -47,6 +46,7 @@ function UserInfo() {
     return (
         <div className="front">
             <NavBar class="top"/>
+            <h1>유저 세부정보</h1>
             <div className="info" style={{color: "#FFFFFF"}}>
                 유저 번호:&nbsp;
                 <span>{posts.data.id}</span>

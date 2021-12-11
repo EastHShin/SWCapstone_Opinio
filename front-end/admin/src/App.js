@@ -5,13 +5,10 @@ import React from "react";
 import { Route, Link, BrowserRouter, Routes, Navigate, useNavigate } from "react-router-dom";
 import Login from "./login";
 import Front from './front.js';
-import Advertisement from "./ads/advertisement"
-import AdvertisementAdd from "./ads/advertisementAdd"
-import AdvertisementUpdate from "./ads/advertisementUpdate"
-import AdvertisementDelete from "./ads/advertisementDelete";
 import Users from "./user/users";
 import UserInfo from "./user/userInfo"
 import UserUpdate from "./user/userUpdate"
+import UserDelete from "./user/userDelete"
 import Board from "./board/userBoard"
 import Post from "./board/userPost"
 import Comment from "./board/userComment"
@@ -37,6 +34,7 @@ function App() {
                         <Route path="/administrator/user" element={<RTL value={localStorage.getItem('status')} check={<Users />}> <Users /> </RTL>} />
                         <Route path="/administrator/user/update" element={<RTL value={localStorage.getItem('status')} check={<UserUpdate />}> <UserUpdate /> </RTL>} />
                         <Route path="/administrator/user/info" element={<RTL value={localStorage.getItem('status')} check={<UserInfo />}> <UserInfo /> </RTL>} />
+                        <Route path="/administrator/user/delete" element={<RTL value={localStorage.getItem('status')} check={<UserDelete />}> <UserDelete /> </RTL>} />
                         <Route path="/administrator/report" element={<RTL value={localStorage.getItem('status')} check={<Report />}> <Report /> </RTL>} />
                         <Route path="/administrator/board" element={<RTL value={localStorage.getItem('status')} check={<Board />}> <Board /> </RTL>} />
                         <Route path="/administrator/board/post" element={<RTL value={localStorage.getItem('status')} check={<Post />}> <Post /> </RTL>} />

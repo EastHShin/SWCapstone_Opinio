@@ -1,0 +1,10 @@
+.inline2 {
+    display: inline-block;
+    margin-left: 40px;
+}
+
+.left {
+    font-size: calc(24px);
+    text-align: left;
+    margin-left: calc(20px + 1vmin);
+}

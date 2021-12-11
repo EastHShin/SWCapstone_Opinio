@@ -54,6 +54,7 @@ function Login() {
     async function log() {
         console.warn(email,password)
         let item = {email,password}
+        console.warn(item)
         return await axios.post("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login", item, {
             headers: { "Content-Type": `application/json` }
         })

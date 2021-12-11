@@ -89,7 +89,9 @@ const Table = () => {
                                     <Button onClick={() => getId(item.id)} variant="warning"
                                             className="mar">Update</Button>
                                 </Link>
+                                <Link to="/administrator/user/delete">
                                 <Button onClick={() => getId(item.id)} variant="danger">Ban</Button>
+                                </Link>
                             </td>
                         </tr>
                     ))
