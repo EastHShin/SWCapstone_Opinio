@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,15 +24,22 @@ public class AdminBoardListDto {
     private LocalDateTime updateDate;
     private String filename;
     private Boolean isBlocked;
-    private List<ReportDto> reports;
-
-    public static class ReportDto{
+    private Long writerId;
+    private String writerName;
+    private Integer countedReports;
+    private List<AdminReportDto> reports;
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public class AdminReportDto{
         private Long reportId;
         private String reason;
         private LocalDate date;
         private Enum state;
         private Enum tag;
-        public ReportDto(Report report){
+        public AdminReportDto(Report report){
             reportId = report.getId();
             reason = report.getReason();
             date = report.getDate();
@@ -47,9 +55,12 @@ public class AdminBoardListDto {
         updateDate = board.getUpdateDate();
         filename = board.getFilename();
         isBlocked = board.getIsBlocked();
+        writerId = board.getUser().getId();
+        writerName = board.getUser().getName();
+        countedReports = board.getReports().size();
         reports = board.getReports()
                 .stream()
-                .map(report -> new ReportDto(report))
+                .map(report -> new AdminReportDto(report))
                 .collect(Collectors.toList());
     }
 }
