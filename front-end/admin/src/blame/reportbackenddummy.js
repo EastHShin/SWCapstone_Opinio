@@ -21,7 +21,7 @@ function Table() {
                 .then(function (res) {
                     console.warn(res.data)
                     console.warn(token)
-                    setPosts({user: res.data})
+                    setPosts({data: res.data.data})
                     console.warn(posts)
                 })
                 .catch(function (error) {
@@ -44,10 +44,10 @@ function Table() {
                 </thead>
                 <tbody>
                 {
-                    posts.user && posts.user.map((item) => (
+                    posts.data && posts.data.map((item) => (
                         <tr key={item.id} className="content_font">
-                            <td className="table-light" valign="middle">{item.id}</td>
-                            <td className="table-primary" valign="middle">{item.title}</td>
+                            <td className="table-light" valign="middle">{item.report_id}</td>
+                            <td className="table-primary" valign="middle">{item.reason}</td>
                             <td className="table-warning" valign="middle">
                                 <Button className="mar" variant="info">처리완료</Button>
                                 <Link to="/administrator/ad/delete">
@@ -59,7 +59,6 @@ function Table() {
                 }
                 </tbody>
             </ReactBootStrap.Table>
-            <h2>Tables</h2>
         </div>
     );
 }

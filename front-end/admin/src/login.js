@@ -58,13 +58,15 @@ function Login() {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
-                console.warn(res.headers)
                 localStorage.clear()
                 localStorage.setItem("email", email)
                 localStorage.setItem("status", res.data.status)
-                localStorage.setItem("auth", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0SWQiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTYzOTIwNTkxMCwiZXhwIjoxNjM5MjA3NzEwfQ.9oHRIesyZnUmBAKoVyKOyFCEz09x20SVw60JDX_rxMM")
+                localStorage.setItem("auth", res.headers.authorization)
+                axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
+                console.warn("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
                 console.warn(localStorage.getItem("auth"))
                 console.warn(localStorage.getItem('status'))
+                console.warn("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
                 nav("/administrator/front")
             })
             .catch(function (error) {
@@ -105,7 +107,7 @@ function Login() {
                         </Form.Group>
                     </div>
                     <div>
-                            <Button variant="success" onClick={log}>Login</Button>
+                        <Button variant="success" onClick={log}>Login</Button>
                     </div>
                 </Form>
             </Container>

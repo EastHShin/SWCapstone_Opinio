@@ -2,38 +2,64 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import * as ReactBootStrap from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import UserIcon from '@material-ui/icons/Person';
 import './Board.css'
 
 import {Link} from "react-router-dom";
 
 const Table = () => {
     const [posts, setPosts] = useState({user: []})
+    const [idx, setIdx] = useState("")
+
+    const fetchPostList = async () => {
+        axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
+        const token = localStorage.getItem('auth')
+        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community"
+        const response = await axios.get(web, {
+            headers: {
+                "Content-Type": `application/json`
+            }
+        })
+            .then(function (res) {
+                console.warn(res.data)
+                console.warn(res.data.data[1].boardId)
+                console.warn(token)
+                if(idx==="")setPosts({data: res.data.data})
+                else {
+                    let flag = 0
+                    for(let i = 0; i < res.data.data.length; i++) {
+                        if(res.data.data[i].boardId == idx) {
+                            flag = 1
+                            setPosts({data: [res.data.data[i]]})
+                            console.warn(res.data.data[i])
+                        }
+                    }
+                    if(flag === 0) setPosts({data: res.data.data})
+                }
+                console.warn(posts)
+                console.warn(idx === "")
+            })
+            .catch(function (error) {
+                console.warn(error)
+                console.warn(token)
+            })
+    }
 
     useEffect(() => {
-        const fetchPostList = async () => {
-            axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
-            const token = localStorage.getItem('auth')
-            const response = await axios.get("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community", {
-                headers: {
-                    "Content-Type": `application/json`
-                }
-            })
-                .then(function (res) {
-                    console.warn(res.data.data)
-                    console.warn(token)
-                    setPosts({data: res.data.data})
-                    console.warn(posts)
-                })
-                .catch(function (error) {
-                    console.warn(error)
-                    console.warn(token)
-                })
-        }
         fetchPostList()
     }, [setPosts])
 
     return (
         <div>
+            <UserIcon fontSize="large"></UserIcon>
+            <Form.Group class="inline" controlId="form.Email" style={{width: "370px"}}>
+                <Form.Control type="email" placeholder="게시글 번호로 검색"
+                              onChange={(e) => setIdx(e.target.value)}/>
+            </Form.Group>
+            <Link to="/administrator/board">
+                <Button variant="success" onClick={fetchPostList}>검색</Button>
+            </Link>
             <ReactBootStrap.Table striped bordered hover className="table">
                 <thead>
                 <tr className="head_font">
@@ -47,7 +73,7 @@ const Table = () => {
                 {
                     posts.data && posts.data.map((item) => (
                         <tr key={item.id} class="content_font">
-                            <td className="table-light" valign="middle">{item.id}</td>
+                            <td className="table-light" valign="middle">{item.boardId}</td>
                             <td className="table-primary" valign="middle">{item.title}</td>
                             <td className="table-light" valign="middle">{item.content}</td>
                             <td className="table-warning" valign="middle">
@@ -60,7 +86,6 @@ const Table = () => {
                 }
                 </tbody>
             </ReactBootStrap.Table>
-            <h2>Tables</h2>
         </div>
     );
 }

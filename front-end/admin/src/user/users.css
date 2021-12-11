@@ -37,3 +37,9 @@
 .content_font {
     font-size: calc(10px + 0.5vmin);
 }
+
+.info {
+    font-size: calc(14px + 1vmin);
+    text-align: left;
+    margin-left: calc(20px + 1vmin);
+}
