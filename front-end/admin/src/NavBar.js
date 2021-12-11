@@ -12,7 +12,7 @@ async function logoutUser() {
         headers: {"Content-Type": `application/json`}
     })
         .then(function (res) {
-            if(res.status == 200) {
+            if(res.status === 200) {
                 console.warn(res)
                 console.warn(localStorage)
                 localStorage.clear()

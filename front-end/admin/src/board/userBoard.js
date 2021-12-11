@@ -13,7 +13,7 @@ function Board() {
         <div className="front">
             <NavBar class="top" />
             <h1>게시글/댓글 관리</h1>
-            <UserIcon fontSize="large"></UserIcon>
+            {/*<UserIcon fontSize="large"></UserIcon>
             <Form.Group className="inline" controlId="form.Email" style={{width: "370px"}}>
                 <Form.Control type="email" placeholder="아이디 번호로 검색"/>
             </Form.Group>
@@ -26,7 +26,7 @@ function Board() {
             </Link>
             <Link to="/administrator/board/comment">
                 <Button variant="info">댓글 찾기</Button>
-            </Link>
+            </Link>*/}
             <Table/>
         </div>
     );

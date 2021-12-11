@@ -6,19 +6,28 @@ import './report.css';
 
 import {Link} from "react-router-dom";
 
-const Table = () => {
+function Table() {
     const [posts, setPosts] = useState({user: []})
 
     useEffect(() => {
         const fetchPostList = async () => {
+            axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
+            const token = localStorage.getItem('auth')
             const response = await axios.get("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/report/all", {
                 headers: {
-                    "Content-Type": `application/json`,
-                    "X-AUTH-TOKEN": 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0SWQiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTYzOTEzNTQ3NCwiZXhwIjoxNjM5MTM3Mjc0fQ.szGBmHVqSwEFbVY-3t5xzqLGIzNUyPsWQ8EokbMvRbw'
+                    "Content-Type": `application/json`
                 }
-            });
-            console.log(response.headers)
-            setPosts({user: response})
+            })
+                .then(function (res) {
+                    console.warn(res.data)
+                    console.warn(token)
+                    setPosts({user: res.data})
+                    console.warn(posts)
+                })
+                .catch(function (error) {
+                    console.warn(error)
+                    console.warn(token)
+                })
         }
         fetchPostList()
     }, [setPosts])

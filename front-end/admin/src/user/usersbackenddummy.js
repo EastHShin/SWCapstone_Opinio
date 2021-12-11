@@ -14,6 +14,7 @@ const Table = () => {
             const {data} = await axios("https://jsonplaceholder.typicode.com/posts")
 
             setPosts({user: data})
+            console.warn(posts)
         }
         fetchPostList()
     }, [setPosts])

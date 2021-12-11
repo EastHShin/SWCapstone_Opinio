@@ -11,9 +11,23 @@ const Table = () => {
 
     useEffect(() => {
         const fetchPostList = async () => {
-            const {data} = await axios("https://jsonplaceholder.typicode.com/posts")
-
-            setPosts({user: data})
+            axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
+            const token = localStorage.getItem('auth')
+            const response = await axios.get("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community", {
+                headers: {
+                    "Content-Type": `application/json`
+                }
+            })
+                .then(function (res) {
+                    console.warn(res.data.data)
+                    console.warn(token)
+                    setPosts({data: res.data.data})
+                    console.warn(posts)
+                })
+                .catch(function (error) {
+                    console.warn(error)
+                    console.warn(token)
+                })
         }
         fetchPostList()
     }, [setPosts])
@@ -31,11 +45,11 @@ const Table = () => {
                 </thead>
                 <tbody>
                 {
-                    posts.user && posts.user.map((item) => (
+                    posts.data && posts.data.map((item) => (
                         <tr key={item.id} class="content_font">
                             <td className="table-light" valign="middle">{item.id}</td>
                             <td className="table-primary" valign="middle">{item.title}</td>
-                            <td className="table-light" valign="middle">{item.body}</td>
+                            <td className="table-light" valign="middle">{item.content}</td>
                             <td className="table-warning" valign="middle">
                                 <Link to="/administrator/board/delete">
                                     <Button variant="danger">Delete</Button>
