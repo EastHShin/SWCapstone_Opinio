@@ -8,7 +8,9 @@ import com.opinio.plantrowth.api.dto.user.UserUpdateDTO;
 import com.opinio.plantrowth.domain.user.User;
 import com.opinio.plantrowth.service.user.AuthService;
 import com.opinio.plantrowth.service.user.UserService;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -74,13 +77,34 @@ public class AdminUserApiController {
 
     @GetMapping("/api/admin/user")
     public ResponseEntity viewUser(){
-
+        List<User>users = userService.userList();
+        List<UserViewDto>members = users.stream()
+                .map(user -> new UserViewDto(user))
+                .collect(Collectors.toList());
         Message message = new Message();
         message.setMessage("회원리스트 조회");
-        message.setData(1);
+        message.setData(members);
         message.setStatus(Message.StatusEnum.OK);
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    @Data
+    @NoArgsConstructor
+    static class UserViewDto{
+        private Long id;
+        private String user_name;
+        private String user_email;
+        private Integer point;
+        private Integer plantNum;
+        public UserViewDto(User user){
+            id = user.getId();
+            user_name = user.getName();
+            user_email = user.getEmail();
+            point = user.getPoint();
+            plantNum = user.getPlantNum();
+        }
+
     }
 
 }
