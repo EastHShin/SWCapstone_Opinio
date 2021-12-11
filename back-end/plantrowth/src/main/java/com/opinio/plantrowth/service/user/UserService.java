@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -127,5 +128,9 @@ public class UserService {
         user.setPoint(dto.getPoint());
         user.setSubscription(dto.getSubscription());
         return user;
+    }
+
+    public List<User> userList(){
+        return userRepository.findAll();
     }
 }

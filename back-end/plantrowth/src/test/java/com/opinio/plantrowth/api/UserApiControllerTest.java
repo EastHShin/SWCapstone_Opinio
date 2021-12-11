@@ -2,6 +2,7 @@ package com.opinio.plantrowth.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.opinio.plantrowth.api.dto.auth.JoinDTO;
 import com.opinio.plantrowth.api.dto.auth.checkPasswordDTO;
 import com.opinio.plantrowth.api.dto.plant.CreatePlantRequestDto;
 import com.opinio.plantrowth.api.dto.user.UserLookUpDTO;
@@ -36,9 +37,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -114,6 +118,7 @@ public class UserApiControllerTest {
                 .point(50)
                 .build();
     }
+
     @Test
     @DisplayName("유저 정보 확인")
     void userLookUp() throws Exception{
@@ -135,17 +140,18 @@ public class UserApiControllerTest {
 
     @Test
     @DisplayName("유저 정보 삭제")
+    @WithMockUser
     public void deleteUser() throws Exception{
         user1.setId(1L);
+        Long id = authService.join(new JoinDTO(user1));
         checkPasswordDTO dto = new checkPasswordDTO("testPw");
 
         when(authService.checkPassword(user1.getId(),dto)).thenReturn(true);
-        mockMvc.perform(delete("/api/user/{user-id}", 1L)
-                .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(delete("/api/user/{user-id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(dto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.password").value(dto.getPassword()))
                 .andDo(print());
     }
 
