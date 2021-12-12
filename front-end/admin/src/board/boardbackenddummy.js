@@ -92,9 +92,11 @@ const Table = () => {
                             <td className="table-primary" valign="middle">{item.title}</td>
                             <td className="table-light" valign="middle">{item.content}</td>
                             <td className="table-warning" valign="middle">
-                                <Button variant="btn btn-secondary"
-                                        onClick={() => getId(item.boardId)}
-                                        className="mar">댓글 조회</Button>
+                                <Link to="/administrator/comment">
+                                    <Button variant="btn btn-secondary"
+                                            onClick={() => getId(item.boardId)}
+                                            className="mar">댓글 조회</Button>
+                                </Link>
                                 <Link to="/administrator/board/delete">
                                     <Button variant="danger"
                                             onClick={() => getId(item.boardId)}>게시글 삭제</Button>

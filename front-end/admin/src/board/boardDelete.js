@@ -43,7 +43,7 @@ function BoardDelete() {
     return (
         <div className="front">
             <NavBar className="top"/>
-            <h2 className="warn">해당 게시글 / 댓글을 정말 삭제하시겠습니까?</h2>
+            <h2 className="warn">해당 게시글과 댓글을 정말 삭제하시겠습니까?</h2>
             <h3 className="infor">
                 작성자 닉네임: {posts.name}
                 <br/>

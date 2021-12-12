@@ -12,6 +12,7 @@ import UserDelete from "./user/userDelete"
 import Board from "./board/userBoard"
 import Comment from "./board/userComment"
 import BoardDelete from "./board/boardDelete"
+import CommentDelete from "./board/commentDelete"
 import Report from "./blame/report"
 
 const RTL = ({check, value}) => {
@@ -36,8 +37,9 @@ function App() {
                         <Route path="/administrator/user/delete" element={<RTL value={localStorage.getItem('status')} check={<UserDelete />}> <UserDelete /> </RTL>} />
                         <Route path="/administrator/report" element={<RTL value={localStorage.getItem('status')} check={<Report />}> <Report /> </RTL>} />
                         <Route path="/administrator/board" element={<RTL value={localStorage.getItem('status')} check={<Board />}> <Board /> </RTL>} />
-                        <Route path="/administrator/board/comment" element={<RTL value={localStorage.getItem('status')} check={<Comment />}> <Comment /> </RTL>} />
+                        <Route path="/administrator/comment" element={<RTL value={localStorage.getItem('status')} check={<Comment />}> <Comment /> </RTL>} />
                         <Route path="/administrator/board/delete" element={<RTL value={localStorage.getItem('status')} check={<BoardDelete />}> <BoardDelete /> </RTL>} />
+                        <Route path="/administrator/comment/delete" element={<RTL value={localStorage.getItem('status')} check={<CommentDelete />}> <CommentDelete /> </RTL>} />
                     </Routes>
                 </BrowserRouter>
             </div>
