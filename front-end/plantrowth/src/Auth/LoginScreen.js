@@ -74,6 +74,12 @@ const LoginScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    AsyncStorage.getItem('email').then(value => {
+          console.log(value);
+    })
+  }, [])
+
+  useEffect(() => {
     if (isLogin == 'success') {
       setLoading(false);
       navigation.replace('HomeScreen');
