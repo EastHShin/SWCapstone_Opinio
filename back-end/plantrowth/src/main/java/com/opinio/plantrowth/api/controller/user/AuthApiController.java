@@ -39,12 +39,12 @@ public class AuthApiController {
 	public ResponseEntity join(@RequestBody @Valid JoinDTO user) {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
-		if(authService.existEmail(user.getEmail())){
+		if (authService.existEmail(user.getEmail())) {
 			message.setStatus(Message.StatusEnum.NOT_ACCEPTABLE);
 			message.setMessage("이미 존재하는 이메일입니다.");
 			return new ResponseEntity<>(message, headers, HttpStatus.NOT_ACCEPTABLE);
 		}
-		if(authService.existName(user.getUser_name())){
+		if (authService.existName(user.getUser_name())) {
 			message.setStatus(Message.StatusEnum.NOT_ACCEPTABLE);
 			message.setMessage("이미 존재하는 닉네임입니다.");
 			return new ResponseEntity<>(message, headers, HttpStatus.NOT_ACCEPTABLE);
@@ -86,27 +86,27 @@ public class AuthApiController {
 	}
 
 	@PostMapping("/api/auth/logout")
-	public ResponseEntity<?> logout(HttpServletResponse response){
+	public ResponseEntity<?> logout(HttpServletResponse response) {
 		response.setHeader("Authorization", null);
 		return ResponseEntity.ok().body("로그아웃 성공");
 	}
 
 	@PostMapping("/api/auth/cp/{user-id}")
 	public ResponseEntity<?> checkPassword(@PathVariable("user-id") Long id,
-		@RequestBody checkPasswordDTO dto){
+		@RequestBody checkPasswordDTO dto) {
 		boolean result = authService.checkPassword(id, dto);
-		return result == true?
-			ResponseEntity.ok().build():
+		return result == true ?
+			ResponseEntity.ok().build() :
 			ResponseEntity.badRequest().build();
 	}
+
 	@PostMapping("/api/auth/cu")
-	public ResponseEntity<?> checkUser(@RequestBody checkUserDTO dto){
+	public ResponseEntity<?> checkUser(@RequestBody checkUserDTO dto) {
 		boolean result = authService.existName(dto.getUser_name());
 
-		return !(result ==true)?
-			ResponseEntity.ok().build():
+		return !(result == true) ?
+			ResponseEntity.ok().build() :
 			ResponseEntity.badRequest().build();
 	}
-
 
 }
