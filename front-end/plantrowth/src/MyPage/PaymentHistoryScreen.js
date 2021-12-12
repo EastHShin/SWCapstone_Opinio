@@ -54,10 +54,21 @@ const PaymentHistoryScreen = ({ navigation }) => {
       }
     });
     console.log('paymentInfoList: ' + JSON.stringify(paymentInfoList));
-    if (refundState == 'true' && isFocused) {
+    if (refundState == 'success' && isFocused) {
       dispatch(setRefundState(''));
       setLoading(false);
-    } else if (refundState == 'false' && isFocused) {
+    } else if (refundState == 'diagnosis' && isFocused) {
+      Alert.alert('환불 실패', '질병진단을 실행한 경우 환불이 불가능합니다.', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }])
+      dispatch(setRefundState(''));
+      setLoading(false);
+    } else if (refundState == 'failure' && isFocused) {
+      Alert.alert('환불 실패', '네트워크 오류로 환불을 못했습니다.', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }])
       dispatch(setRefundState(''));
       setLoading(false);
     }
@@ -65,22 +76,46 @@ const PaymentHistoryScreen = ({ navigation }) => {
 
   const renderRefundButton = paymentInfo => {
     return paymentInfo.paymentStatus == 'PAYMENT' ? (
-      <TouchableOpacity
-        style={styles.refundButton}
-        onPress={() => refundHandler(paymentInfo)}
-      >
-        <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>
-          환불 요청
-        </Text>
-      </TouchableOpacity>
+      timelapseCalculator(paymentInfo.payment_date) <= 14 ?
+        <TouchableOpacity
+          style={styles.refundButton}
+          onPress={() => refundHandler(paymentInfo)}
+        >
+          <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>
+            환불 요청
+          </Text>
+        </TouchableOpacity> : <View style={[styles.refundButton, { backgroundColor: '#cccccc' }]}>
+          <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>
+            환불 완료
+          </Text>
+        </View>
     ) : (
-      <View style={styles.refundButton}>
+      <View style={[styles.refundButton, { backgroundColor: '#cccccc' }]}>
         <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>
           환불 완료
         </Text>
       </View>
     );
   };
+
+  const timelapseCalculator = (date) => {
+    let YYYYMMDD = String(date);
+
+    let sYear = YYYYMMDD.substring(0, 4);
+    let sMonth = YYYYMMDD.substring(5, 7);
+    let sDate = YYYYMMDD.substring(8, 10);
+    const paymentDate = new Date(
+      Number(sYear),
+      Number(sMonth) - 1,
+      Number(sDate),
+    );
+    const today = new Date();
+    const timelapse = Math.ceil(
+      (today.getTime() - paymentDate.getTime()) / (1000 * 3600 * 24),
+    );
+
+    return timelapse;
+  }
 
   const refundHandler = paymentInfo => {
     Alert.alert(
@@ -93,30 +128,17 @@ const PaymentHistoryScreen = ({ navigation }) => {
             setLoading(true);
             let amount = 0;
 
-            let YYYYMMDD = String(paymentInfo.payment_date);
-            let sYear = YYYYMMDD.substring(0, 4);
-            let sMonth = YYYYMMDD.substring(5, 7);
-            let sDate = YYYYMMDD.substring(8, 10);
-            const paymentDate = new Date(
-              Number(sYear),
-              Number(sMonth) - 1,
-              Number(sDate),
-            );
-            const today = new Date();
-            const timelapse = Math.ceil(
-              (today.getTime() - paymentDate.getTime()) / (1000 * 3600 * 24),
-            );
+            const timelapse = timelapseCalculator(String(paymentInfo.payment_date));
 
             if (timelapse <= 3) {
               amount = Number(paymentInfo.amount);
             } else if (timelapse <= 14) {
               amount = Number(paymentInfo.amount) / 50;
             } else {
-              alert('결제하신지 14일이 지나 환불이 불가능합니다.');
               return;
             }
             dispatch(
-              refund(paymentInfo.merchant_id, amount, '질병진단 구독 환불'),
+              refund(paymentInfo.merchant_id, amount, '질병진단 구독 환불', userId),
             );
           },
         },
@@ -131,37 +153,38 @@ const PaymentHistoryScreen = ({ navigation }) => {
   };
 
   const renderMerchant = paymentInfoList => {
-    if (paymentInfoList !== null && paymentInfoList !== undefined) {
+    if (paymentInfoList !== null && paymentInfoList !== undefined && paymentInfoList.length != 0) {
       return paymentInfoList
         ? paymentInfoList.map((item, index) => {
-            return (
-              <View key={index} style={styles.merchantWrapper}>
-                <View>
-                  <Text style={styles.merchantText}>
-                    {`결제 상품: ${
-                      item.paymentType == 'SLOT'
-                        ? '프로필 슬롯'
-                        : '질병진단 구독'
+          return (
+            <View key={index} style={styles.merchantWrapper}>
+              <View>
+                <Text style={styles.merchantText}>
+                  {`결제 상품: ${item.paymentType == 'SLOT'
+                    ? '프로필 슬롯'
+                    : '질병진단 구독'
                     }`}
-                  </Text>
-                  <Text style={styles.merchantText}>
-                    결제 금액: {item.amount}원
-                  </Text>
-                  <Text style={styles.merchantText}>
-                    결제일: {item.payment_date}
-                  </Text>
-                  {/* {item.paymentStatus == 'REFUND' ? (
-                    <View>
-                      <Text>환불일: </Text>
-                      <Text>환불금액: </Text>
-                    </View>
-                  ) : null} */}
-                </View>
-                {item.paymentType == 'SLOT' ? null : renderRefundButton(item)}
+                </Text>
+                <Text style={styles.merchantText}>
+                  결제 금액: {item.amount}원
+                </Text>
+                <Text style={styles.merchantText}>
+                  결제일: {item.payment_date}
+                </Text>
               </View>
-            );
-          })
+              {item.paymentType == 'SLOT' ? null : renderRefundButton(item)}
+            </View>
+          );
+        })
         : null;
+    } else {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 20, color: '#363636' }}>
+            결제 내역이 없습니다
+          </Text>
+        </View>
+      )
     }
   };
 

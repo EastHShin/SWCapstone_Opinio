@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TextInput,
   Keyboard,
+  Alert,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Footer from '../component/Footer';
@@ -22,6 +23,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -41,6 +43,8 @@ ShopScreen = () => {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [termsType, setTermsType] = useState('');
+  const [isTermsModalVisible, setTermsModalVisibility] = useState(false);
 
   const point = useSelector(state => state.ShopReducer.point);
   const maxPlantNumber = useSelector(state => state.ShopReducer.maxPlantNumber);
@@ -97,11 +101,23 @@ ShopScreen = () => {
       setLoading(false);
       dispatch(setBuySubscribeState(''));
     }
+    console.log('setName');
+    setName('');
+    setPhone('');
   }, [isFocused, buyProfileSlotState, buySubscribeState]);
 
   const buySlotHandler = () => {
+    console.log(shopInfo.point);
+    if(shopInfo.point >= 300) {
     setLoading(true);
     dispatch(buyProfileSlot(userId));
+    } else {
+
+      Alert.alert('구매 실패', '포인트가 부족하여 구매가 불가능합니다.', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }])
+    }
   };
 
   const renderBuySlotByPoint = byPoint => {
@@ -194,15 +210,25 @@ ShopScreen = () => {
                 </TouchableOpacity>
               </View>
               <View style={{ width: screenWidth * 0.75, marginVertical: 10 }}>
-                <Text
-                  style={{
-                    fontFamily: 'NanumGothicBold',
-                    color: '#93d07d',
-                    marginBottom: 5,
-                  }}
-                >
-                  프로필 슬롯이란?
-                </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      color: '#363636',
+                    }}
+                  >
+                    프로필 슬롯이란?
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.termsButton}
+                    onPress={() => {
+                      setTermsType('SLOT');
+                      setTermsModalVisibility(true);
+                    }}
+                  >
+                    <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>결제 약관</Text>
+                  </TouchableOpacity>
+                </View>
                 <Text
                   style={{
                     fontFamily: 'NanumGothicBold',
@@ -249,15 +275,26 @@ ShopScreen = () => {
                 )}
               </View>
               <View style={{ width: screenWidth * 0.75, marginVertical: 10 }}>
-                <Text
-                  style={{
-                    fontFamily: 'NanumGothicBold',
-                    color: '#93d07d',
-                    marginBottom: 5,
-                  }}
-                >
-                  질병진단 구독 서비스란?
-                </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: 'NanumGothicBold',
+                      color: '#363636',
+                      marginBottom: 5,
+                    }}
+                  >
+                    질병진단 구독 서비스란?
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.termsButton}
+                    onPress={() => {
+                      setTermsType('DIAGNOSIS');
+                      setTermsModalVisibility(true);
+                    }}
+                  >
+                    <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>결제 약관</Text>
+                  </TouchableOpacity>
+                </View>
                 <Text
                   style={{
                     fontFamily: 'NanumGothicBold',
@@ -359,7 +396,6 @@ ShopScreen = () => {
       <Modal
         isVisible={paymentModalVisible}
         onBackButtonPress={() => setPaymentModalVisibility(false)}
-        onBackdropPress={() => setPaymentModalVisibility(false)}
       >
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
@@ -427,42 +463,136 @@ ShopScreen = () => {
                 value={shopInfo.email}
               />
             </View>
-
+            <View style={{ width: screenWidth * 0.4, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+              <TouchableOpacity
+                style={[styles.earnModalButton, { backgroundColor: '#ef5350' }]}
+                onPress={() => {
+                  setPaymentModalVisibility(false);
+                  setName('');
+                  setPhone('');
+                }}
+              >
+                <View
+                  style={{ alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white' }}>
+                    취소
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.earnModalButton}
+                onPress={() => {
+                  console.log('email:' + email);
+                  console.log('user name' + name);
+                  console.log('phone' + phone);
+                  if (phone != '' && name != '') {
+                    setPaymentModalVisibility(false);
+                    if (goods == 'slot') {
+                      navigation.navigate('Payment', {
+                        userId: userId,
+                        phone: phone,
+                        email: email ? email : shopInfo.email,
+                        name: name,
+                        amount: '1000',
+                      });
+                    } else if (goods == 'subscribe') {
+                      navigation.navigate('Payment', {
+                        userId: userId,
+                        phone: phone,
+                        email: email ? email : shopInfo.email,
+                        name: name,
+                        amount: '5900',
+                      });
+                    }
+                  } else {
+                    console.log('결제정보 미입력');
+                    Alert.alert(
+                      '결제 정보 미입력',
+                      '결제를 위한 정보를 입력해주세요!',
+                      [
+                        {
+                          text: '알겠습니다',
+                          onPress: () => {
+                            return;
+                          },
+                        },
+                      ],
+                    );
+                  }
+                }}
+              >
+                <View
+                  style={{ alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white' }}>
+                    구매
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        isVisible={isTermsModalVisible}
+        onBackButtonPress={() => setTermsModalVisibility(false)}>
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <View style={[styles.buyResultModalWrapper, { height: termsType == 'SLOT' ? screenHeight * 0.3 : screenHeight * 0.55 }]}>
+            <Text style={[styles.buyResultText, { fontSize: 18, marginBottom: 10 }]}>
+              결제 약관
+            </Text>
+            {termsType == 'SLOT'
+              ? (
+                <View style={{flexDirection:'row', justifyContent: 'center'}}>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 14 }}>슬롯은 구매 후 </Text>
+                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 14 }}>환불이 불가능</Text>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 14 }}>한 상품입니다</Text>
+                </View>
+              ) : (
+                <ScrollView>
+                  <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 16, margin: 5 }}>
+                    {`\n구독 결제 시점과 이용 기간`}
+                  </Text>
+                  <Text style={{ color: '#363636', margin: 5, textAlign: 'justify', fontSize: 13 }}>
+                    구독 결제는 한 달 단위로 결제되고, 해당 날짜가 되는 자정에 구독이 해지됩니다.
+                    예를 들어, 3월 1일 23시 59분에 결제한다면, 4월 1일 0시에 구독이 해지됩니다.
+                  </Text>
+                  <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 16, margin: 5 }}>
+                    {'\n'}환불 정책
+                  </Text>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 13 }}>
+                    질병진단 내역에서 구독일 이후로 질병진단 실행 시:
+                  </Text>
+                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 14 }}>{`  환불 불가\n`}</Text>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 13 }}>
+                    결제일 이후 3일이 지나기 전까지:{`\n  `}
+                    결제 금액의 100% 환불{`\n\n`}
+                    결제일 이후 3일이 지난 시점에서 14일이 지나기 전까지:{`\n  `}
+                    결제 금액의 50% 환불{`\n\n`}
+                    결제일 이후 14일이 지난 시점부터:
+                  </Text>
+                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 13 }}>
+                    {`  환불 불가\n`}
+                  </Text>
+                </ScrollView>
+              )
+            }
             <TouchableOpacity
               style={styles.earnModalButton}
-              onPress={() => {
-                setPaymentModalVisibility(false);
-                if ((phone != '' && name != '', email != '')) {
-                  if (goods == 'slot') {
-                    navigation.navigate('Payment', {
-                      userId: userId,
-                      phone: phone,
-                      email: email,
-                      name: name,
-                      amount: '1000',
-                    });
-                  } else if (goods == 'subscribe') {
-                    navigation.navigate('Payment', {
-                      userId: userId,
-                      phone: phone,
-                      email: email,
-                      name: name,
-                      amount: '5900',
-                    });
-                  }
-                }
-              }}
-            >
+              onPress={() => setTermsModalVisibility(false)}>
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16 }}>
-                  구매
+                  닫기
                 </Text>
               </View>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
@@ -590,6 +720,20 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     padding: 5,
     fontFamily: 'NanumGothic',
+  },
+  termsButton: {
+    justifyContent: 'center',
+    backgroundColor: '#EF5350',
+    padding: 7, borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
   },
 });
 

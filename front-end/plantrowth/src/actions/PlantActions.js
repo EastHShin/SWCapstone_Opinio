@@ -147,10 +147,10 @@ export const diagnosisPlant = (plantId, image) => {
       .catch(function (error) {
         if (error.response.status == 425) {
           dispatch({ type: DIAGNOSIS_PLANT, payload: 'notPlant' });
+        } else {
+          dispatch({ type: DIAGNOSIS_PLANT, payload: 'failure' });
+          console.log(error);
         }
-        console.log('diagnosis 에러요~~~~~~~~~~~~');
-        dispatch({ type: DIAGNOSIS_PLANT, payload: 'failure' });
-        console.log(error);
       });
   };
 };

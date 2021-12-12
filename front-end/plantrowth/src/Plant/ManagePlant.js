@@ -65,22 +65,29 @@ const ManagePlant = ({ route }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (!deletePlantState && isFocused) {
+    console.log('deletePlantState: ' + deletePlantState);
+    if (deletePlantState != 'success' && isFocused) {
       dispatch(getProfile(plantId));
-      setLoading(false);
     }
   }, [isFocused, selectedImage]);
 
   useEffect(() => {
+    return () => cleanUp();
+  }, []);
+
+  const cleanUp = () => {
+    setLoading(false);
+    console.log('clean up');
+    console.log('deletePlantState: ' + deletePlantState);
+  };
+
+  useEffect(() => {
     if (deletePlantState == 'success' && isFocused) {
-      setLoading(false);
       dispatch(setDeletePlantState(''));
-      setInfoModalVisibility(false);
       navigation.navigate('HomeScreen');
     } else if (deletePlantState == 'failure' && isFocused) {
       setLoading(false);
       dispatch(setDeletePlantState(''));
-      setInfoModalVisibility(false);
     }
   }, [deletePlantState]);
 
@@ -131,6 +138,10 @@ const ManagePlant = ({ route }) => {
     } else if (diagnosisState == 'failure' && isFocused) {
       setLoading(false);
       setSelectedImage(false);
+      Alert.alert('질병진단 실패', '네트워크 오류로 인해 질병진단을 못 했습니다\n다시 시도해주세요', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }]);
       dispatch(setDiagnosisState(''));
     }
   }, [diagnosisState]);
@@ -144,7 +155,7 @@ const ManagePlant = ({ route }) => {
           text: '잘 가, 안녕',
           onPress: () => {
             setLoading(true);
-            setInfoModalVisibility(false);
+            //setInfoModalVisibility(false);
             dispatch(deletePlant(plantId));
           },
         },
@@ -229,6 +240,7 @@ const ManagePlant = ({ route }) => {
   };
 
   const renderEarnPoint = isDoingDiagnosis => {
+
     if (!isDoingDiagnosis)
       return (
         <View>
@@ -278,8 +290,25 @@ const ManagePlant = ({ route }) => {
         >
           <View>
             <View style={styles.diagnosisTipWrapper}>
-              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: '#f1c40f', marginBottom: 5 }}>Tip</Text>
-              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 14, color: '#363636' }}>식물의 잎을 최대한 가까이 찍어주시면 정확도가 올라갑니다</Text>
+              <Text
+                style={{
+                  fontFamily: 'NanumGothicBold',
+                  fontSize: 16,
+                  color: '#f1c40f',
+                  marginBottom: 5,
+                }}
+              >
+                Tip
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'NanumGothicBold',
+                  fontSize: 14,
+                  color: '#363636',
+                }}
+              >
+                식물의 잎을 최대한 가까이 찍어주시면 정확도가 올라갑니다
+              </Text>
             </View>
             <Image
               source={{ uri: selectedImage.assets[0].uri }}
@@ -318,8 +347,26 @@ const ManagePlant = ({ route }) => {
           }}
         >
           <View style={styles.diagnosisTipWrapper}>
-            <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: '#f1c40f', marginBottom: 5 }}>Tip</Text>
-            <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 14, color: '#363636' }}>식물의 잎을 최대한 가까이 찍어주시면 질병진단의 정확도가 올라갑니다</Text>
+            <Text
+              style={{
+                fontFamily: 'NanumGothicBold',
+                fontSize: 16,
+                color: '#f1c40f',
+                marginBottom: 5,
+              }}
+            >
+              Tip
+            </Text>
+            <Text
+              style={{
+                fontFamily: 'NanumGothicBold',
+                fontSize: 14,
+                color: '#363636',
+              }}
+            >
+              식물의 잎을 최대한 가까이 찍어주시면 질병진단의 정확도가
+              올라갑니다
+            </Text>
           </View>
           <View
             style={{
@@ -432,6 +479,9 @@ const ManagePlant = ({ route }) => {
           >
             <Icon name={'return-up-back'} size={40} color={'white'} />
           </TouchableOpacity>
+          <View style={styles.userInfoSection}>
+            <Text style={styles.userInfoText}>보유 포인트: {profile.point}  {profile.is_subscription ? `질병진단 구독 중` : ``}</Text>
+          </View>
           <TouchableOpacity
             style={[styles.backButton, { marginRight: 15, marginTop: 5 }]}
             onPress={() => navigation.navigate('ShopScreen', { point: point })}
@@ -517,7 +567,9 @@ const ManagePlant = ({ route }) => {
                   [
                     {
                       text: '아니오',
-                      onPress: () => { return; },
+                      onPress: () => {
+                        return;
+                      },
                     },
                     {
                       text: '계속할게요',
@@ -709,6 +761,7 @@ const ManagePlant = ({ route }) => {
               <TouchableOpacity
                 style={styles.infoModalButton}
                 onPress={() => {
+                  setInfoModalVisibility(false);
                   deletePlantHandler();
                 }}
               >
@@ -980,7 +1033,36 @@ const styles = StyleSheet.create({
 
     elevation: 2,
   },
-  diagnosisTipWrapper: { backgroundColor: '#f7f8f9', padding: 5, borderRadius: 5, marginBottom: 5 }
+  diagnosisTipWrapper: {
+    backgroundColor: '#f7f8f9',
+    padding: 5,
+    borderRadius: 5,
+    marginBottom: 5,
+  },
+  userInfoSection: {
+    backgroundColor: '#f7f8f9',
+    margin: 12,
+    padding: 5,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 35,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  userInfoText: {
+    fontSize: 14,
+    fontFamily: 'NanumGothicBold',
+    color: '#363636'
+  }
 });
 
 export default ManagePlant;
