@@ -14,6 +14,7 @@ import Comment from "./board/userComment"
 import BoardDelete from "./board/boardDelete"
 import CommentDelete from "./board/commentDelete"
 import Report from "./blame/report"
+import ReportConfirm from "./blame/reportConfirm"
 
 const RTL = ({check, value}) => {
     console.warn(check)
@@ -36,6 +37,7 @@ function App() {
                         <Route path="/administrator/user/info" element={<RTL value={localStorage.getItem('status')} check={<UserInfo />}> <UserInfo /> </RTL>} />
                         <Route path="/administrator/user/delete" element={<RTL value={localStorage.getItem('status')} check={<UserDelete />}> <UserDelete /> </RTL>} />
                         <Route path="/administrator/report" element={<RTL value={localStorage.getItem('status')} check={<Report />}> <Report /> </RTL>} />
+                        <Route path="/administrator/report/confirm" element={<RTL value={localStorage.getItem('status')} check={<ReportConfirm />}> <ReportConfirm /> </RTL>} />
                         <Route path="/administrator/board" element={<RTL value={localStorage.getItem('status')} check={<Board />}> <Board /> </RTL>} />
                         <Route path="/administrator/comment" element={<RTL value={localStorage.getItem('status')} check={<Comment />}> <Comment /> </RTL>} />
                         <Route path="/administrator/board/delete" element={<RTL value={localStorage.getItem('status')} check={<BoardDelete />}> <BoardDelete /> </RTL>} />
