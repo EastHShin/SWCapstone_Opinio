@@ -61,6 +61,10 @@ public class AdminReportApiController {
 		private LocalDate date;
 		private Report.StateEnum state;
 		private Report.tagEnum tag;
+		private Long user_id;
+		private String username;
+		private Long board_id;
+		private Long comment_id;
 
 		public ReportViewDTO(Report report){
 			report_id = report.getId();
@@ -68,6 +72,13 @@ public class AdminReportApiController {
 			date = report.getDate();
 			state = report.getState();
 			tag = report.getTag();
+			user_id = report.getUser().getId();
+			username = report.getUser().getName();
+			if (report.getTag().equals(Report.tagEnum.BOARD)) {
+				board_id = report.getBoard().getId();
+			} else if (report.getTag().equals(Report.tagEnum.COMMENT)) {
+				comment_id = report.getComment().getId();
+			}
 		}
 	}
 }

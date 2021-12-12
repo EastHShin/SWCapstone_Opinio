@@ -129,7 +129,7 @@ export const loginUser = (user) => {
                 if (res.status == 200) {
                     AsyncStorage.getItem('email').then(value => {
                         if (value != null) {
-                            dispatch(setLogoutTimer(3600000,value));
+                            dispatch(setLogoutTimer(1800000,value));
                         }
                       })
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
@@ -170,7 +170,7 @@ export const kakaoLogin = (data) => {
 
                     AsyncStorage.getItem('email').then(value => {
                         if (value != null) {
-                            dispatch(setLogoutTimer(3600000,value));
+                            dispatch(setLogoutTimer(1800000,value));
                         }
                       })
 
