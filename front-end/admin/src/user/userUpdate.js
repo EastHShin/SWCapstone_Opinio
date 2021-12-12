@@ -80,10 +80,10 @@ function UserUpdate() {
                 구독여부<Form.Control className={"inline2"} type="text" placeholder="구독을 원할시 True 또는 true 입력"
                                   onChange={(e) => setSubscr(e.target.value)} style={{width: "450px"}}/><br/>
                 <Link to="/administrator/user">
-                <Button variant="danger" className="mar">뒤로 가기</Button>
+                <Button variant="success" className="mar">뒤로 가기</Button>
                 </Link>
                 <Link to="/administrator/front">
-                <Button variant="success" onClick={Update}>수정</Button>
+                <Button variant="warning" onClick={Update}>수정</Button>
                 </Link>
             </div>
         </div>

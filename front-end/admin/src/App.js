@@ -10,7 +10,6 @@ import UserInfo from "./user/userInfo"
 import UserUpdate from "./user/userUpdate"
 import UserDelete from "./user/userDelete"
 import Board from "./board/userBoard"
-import Post from "./board/userPost"
 import Comment from "./board/userComment"
 import BoardDelete from "./board/boardDelete"
 import Report from "./blame/report"
@@ -37,7 +36,6 @@ function App() {
                         <Route path="/administrator/user/delete" element={<RTL value={localStorage.getItem('status')} check={<UserDelete />}> <UserDelete /> </RTL>} />
                         <Route path="/administrator/report" element={<RTL value={localStorage.getItem('status')} check={<Report />}> <Report /> </RTL>} />
                         <Route path="/administrator/board" element={<RTL value={localStorage.getItem('status')} check={<Board />}> <Board /> </RTL>} />
-                        <Route path="/administrator/board/post" element={<RTL value={localStorage.getItem('status')} check={<Post />}> <Post /> </RTL>} />
                         <Route path="/administrator/board/comment" element={<RTL value={localStorage.getItem('status')} check={<Comment />}> <Comment /> </RTL>} />
                         <Route path="/administrator/board/delete" element={<RTL value={localStorage.getItem('status')} check={<BoardDelete />}> <BoardDelete /> </RTL>} />
                     </Routes>
