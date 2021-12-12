@@ -107,8 +107,17 @@ ShopScreen = () => {
   }, [isFocused, buyProfileSlotState, buySubscribeState]);
 
   const buySlotHandler = () => {
+    console.log(shopInfo.point);
+    if(shopInfo.point >= 300) {
     setLoading(true);
     dispatch(buyProfileSlot(userId));
+    } else {
+
+      Alert.alert('구매 실패', '포인트가 부족하여 구매가 불가능합니다.', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }])
+    }
   };
 
   const renderBuySlotByPoint = byPoint => {
@@ -454,9 +463,9 @@ ShopScreen = () => {
                 value={shopInfo.email}
               />
             </View>
-            <View style={{width: screenWidth*0.4, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+            <View style={{ width: screenWidth * 0.4, flexDirection: 'row', justifyContent: 'space-evenly' }}>
               <TouchableOpacity
-                style={[styles.earnModalButton, {backgroundColor: '#ef5350'}]}
+                style={[styles.earnModalButton, { backgroundColor: '#ef5350' }]}
                 onPress={() => {
                   setPaymentModalVisibility(false);
                   setName('');
@@ -466,7 +475,7 @@ ShopScreen = () => {
                 <View
                   style={{ alignItems: 'center', justifyContent: 'center' }}
                 >
-                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white'}}>
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white' }}>
                     취소
                   </Text>
                 </View>
@@ -516,7 +525,7 @@ ShopScreen = () => {
                 <View
                   style={{ alignItems: 'center', justifyContent: 'center' }}
                 >
-                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color:'white' }}>
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white' }}>
                     구매
                   </Text>
                 </View>
@@ -531,14 +540,16 @@ ShopScreen = () => {
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
-          <View style={[styles.buyResultModalWrapper, {height: termsType == 'SLOT' ? screenHeight*0.3 : screenHeight*0.7} ]}>
-            <Text style={[styles.buyResultText, { fontSize: 18, marginBottom: 10}]}>
+          <View style={[styles.buyResultModalWrapper, { height: termsType == 'SLOT' ? screenHeight * 0.3 : screenHeight * 0.55 }]}>
+            <Text style={[styles.buyResultText, { fontSize: 18, marginBottom: 10 }]}>
               결제 약관
             </Text>
             {termsType == 'SLOT'
               ? (
-                <View >
-                  <Text style={{ color: '#363636', margin: 5, textAlign: 'justify', fontSize: 13 }}>슬롯은 구매 후 환불이 불가한 상품입니다</Text>
+                <View style={{flexDirection:'row', justifyContent: 'center'}}>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 14 }}>슬롯은 구매 후 </Text>
+                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 14 }}>환불이 불가능</Text>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 14 }}>한 상품입니다</Text>
                 </View>
               ) : (
                 <ScrollView>
@@ -547,16 +558,16 @@ ShopScreen = () => {
                   </Text>
                   <Text style={{ color: '#363636', margin: 5, textAlign: 'justify', fontSize: 13 }}>
                     구독 결제는 한 달 단위로 결제되고, 해당 날짜가 되는 자정에 구독이 해지됩니다.
-                    예를 들어, 3월 1일 23시 59분에 결제한다면, 4월 1일 0시에 구독이. 해지됩니다.
+                    예를 들어, 3월 1일 23시 59분에 결제한다면, 4월 1일 0시에 구독이 해지됩니다.
                   </Text>
                   <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 16, margin: 5 }}>
                     {'\n'}환불 정책
                   </Text>
-                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 12 }}>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 13 }}>
                     질병진단 내역에서 구독일 이후로 질병진단 실행 시:
                   </Text>
-                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 13 }}>{`  환불 불가\n`}</Text>
-                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 12 }}>
+                  <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 14 }}>{`  환불 불가\n`}</Text>
+                  <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 13 }}>
                     결제일 이후 3일이 지나기 전까지:{`\n  `}
                     결제 금액의 100% 환불{`\n\n`}
                     결제일 이후 3일이 지난 시점에서 14일이 지나기 전까지:{`\n  `}
@@ -710,7 +721,20 @@ const styles = StyleSheet.create({
     padding: 5,
     fontFamily: 'NanumGothic',
   },
-  termsButton: { justifyContent: 'center', backgroundColor: '#EF5350', padding: 7, borderRadius: 10 },
+  termsButton: {
+    justifyContent: 'center',
+    backgroundColor: '#EF5350',
+    padding: 7, borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
 });
 
 export default ShopScreen;
