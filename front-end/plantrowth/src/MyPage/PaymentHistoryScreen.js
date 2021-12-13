@@ -15,6 +15,7 @@ import {
 
 import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Modal from 'react-native-modal';
 import {
   getPaymentHistory,
   refund,
@@ -32,6 +33,8 @@ const PaymentHistoryScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState('');
+  const [isRefundModalVisible, setRefundModalVisibility] = useState(false);
+  const [selectedPaymentInfo, setSelectedPaymentInfo] = useState('');
   const paymentInfoList = useSelector(
     state => state.ShopReducer.paymentRecord.paymentInfoList,
   );
@@ -79,7 +82,10 @@ const PaymentHistoryScreen = ({ navigation }) => {
       timelapseCalculator(paymentInfo.payment_date) <= 14 ?
         <TouchableOpacity
           style={styles.refundButton}
-          onPress={() => refundHandler(paymentInfo)}
+          onPress={() => {
+            setRefundModalVisibility(true);
+            setSelectedPaymentInfo(paymentInfo);
+          }}
         >
           <Text style={{ fontFamily: 'NanumGothicBold', color: 'white' }}>
             환불 요청
@@ -202,7 +208,88 @@ const PaymentHistoryScreen = ({ navigation }) => {
         </View>
       </View>
       <Footer name={'My Page'} />
-    </SafeAreaView>
+      <Modal
+        isVisible={isRefundModalVisible}
+        onBackButtonPress={() => setRefundModalVisibility(false)}>
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <View style={styles.buyResultModalWrapper}>
+            <Text style={[styles.buyResultText, { fontSize: 18, marginBottom: 10 }]}>
+              환불 요청
+            </Text>
+            <View style={{backgroundColor: '#f7f8f9', padding: 10, borderRadius: 5}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
+                <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 14 }}>
+                  질병진단 구독을 결제한지{' '}
+                </Text>
+                <Text style={{ color: '#ef5350', fontFamily: 'NanumGothicBold', fontSize: 14 }}>
+                  {timelapseCalculator(selectedPaymentInfo.payment_date)}일
+                </Text>
+                <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 14 }}>
+                  이 지났으므로
+                </Text>
+              </View>
+              {timelapseCalculator(selectedPaymentInfo.payment_date) > 14 ?
+                (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ color: '#3ef5350', fontFamily: 'NanumGothicBold', fontSize: 14 }}>
+                      환불이 불가능
+                    </Text>
+                    <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 14 }}>
+                      합니다
+                    </Text>
+                  </View>
+                ) :
+                timelapseCalculator(selectedPaymentInfo.payment_date) > 3 ? (
+                  <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 14 }}>
+                    결제 금액의 50%인 {5900 / 2}원을 환불받습니다
+                  </Text>)
+                  : (<Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 14 }}>
+                    결제 금액의 100%인 5900원을 환불받습니다
+                  </Text>)
+              }
+            </View>
+            <View>
+              <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 12 }}>
+                * 상점 화면의 결제 약관 참조{'\n\n'}
+                * 단, 질병진단 구독을 결제하고 질병진단을 한 적이 있으면
+              </Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 5 }}>
+                <Text style={{ color: '#ef5350', fontFamily: 'NanumGothicBold', fontSize: 12 }}>
+                  환불이 불가능
+                </Text>
+                <Text style={{ color: '#363636', fontFamily: 'NanumGothicBold', fontSize: 12, }}>
+                  합니다{'\n'}
+                </Text>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: 'row', width: screenWidth * 0.5, justifyContent: 'space-evenly' }}>
+              <TouchableOpacity
+                style={[styles.earnModalButton, { backgroundColor: '#ef5350' }]}
+                onPress={() => setRefundModalVisibility(false)}>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white' }}>
+                    닫기
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.earnModalButton}
+                onPress={() => { setRefundModalVisibility(false), refundHandler(selectedPaymentInfo) }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: 'white' }}>
+                    환불
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView >
   );
 };
 
@@ -273,6 +360,47 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
 
     elevation: 2,
+  },
+  buyResultModalWrapper: {
+    width: screenWidth * 0.8,
+    height: screenHeight * 0.4,
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 30,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
+  },
+  earnModalButton: {
+    width: 50,
+    height: 35,
+    backgroundColor: '#93d07d',
+    borderRadius: 3,
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  buyResultText: {
+    fontFamily: 'NanumGothicBold',
+    fontSize: 16,
+    color: '#222222',
+    marginTop: 15,
+    textAlign: 'center',
   },
 });
 
