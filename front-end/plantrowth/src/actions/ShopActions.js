@@ -133,7 +133,7 @@ export const refund = (merchant_uid, cancel_request_amount, reason, userId) => {
         },
       )
       .then(function (response) {
-        console.log('환불 response: ' + JSON.stringify(response.data));
+        console.log('환불 response: ' + JSON.stringify(response));
         if (response.status === 200) {
           dispatch(setRefundState('success'));
         }
