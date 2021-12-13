@@ -108,7 +108,14 @@ const PostDetailScreen = ({ route, navigation }) => {
       setLoading(false);
       dispatch(setResultState(''));
       setIsModalVisible(false);
-      alert('게시글 삭제 실패!');
+      Alert.alert('게시글 삭제 실패', '다시 시도해주십시오', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
     }
   }, [result]);
 
@@ -116,6 +123,11 @@ const PostDetailScreen = ({ route, navigation }) => {
     if (updating) {
       setCommentModalVisibility(false);
       setSelectedCommentContent(selectedComment.content);
+      setComment(selectedComment.content);
+    } else {
+      setCommentModalVisibility(false);
+      setSelectedCommentContent('');
+      setComment('');
     }
   }, [updating]);
 
@@ -142,13 +154,19 @@ const PostDetailScreen = ({ route, navigation }) => {
       dispatch(getPost(selectedId, userId));
       setComment('');
       setSelectedCommentContent('');
-      setUpdating(false);
       setCommentModalVisibility(false);
       dispatch(setCommentResultState(''));
     } else if (commentResult == 'failure' && isFocused) {
       setLoading(false);
       dispatch(setCommentResultState(''));
-      alert('오류가 발생했습니다. 다시 시도해주세요.');
+      Alert.alert('오류 발생', '오류가 발생했습니다\n다시 시도해주세요', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
     }
   }, [commentResult]);
 
@@ -157,8 +175,24 @@ const PostDetailScreen = ({ route, navigation }) => {
     if (likeState == 'success' && isFocused) {
       setLoading(false);
       post.boardLike
-        ? alert('좋아요를 취소했습니다')
-        : alert('좋아요를 눌렀습니다');
+        ?
+        Alert.alert('좋아요 취소', '좋아요를 취소하였습니다', [
+          {
+            text: '확인',
+            onPress: () => {
+              return;
+            },
+          }
+        ])
+        :
+        Alert.alert('좋아요 완료', '게시글에 좋아요를 눌렀습니다', [
+          {
+            text: '확인',
+            onPress: () => {
+              return;
+            },
+          }
+        ]);
       dispatch(getPost(selectedId, userId));
       dispatch(setLikeState(''));
     } else if (likeState == 'failure' && isFocused) {
@@ -174,17 +208,38 @@ const PostDetailScreen = ({ route, navigation }) => {
       setLoading(false);
       dispatch(setReportState(''));
       setReportModalVisibility(false);
-      alert('게시글 신고 완료');
+      Alert.alert('게시글 신고 완료', '게시글을 신고하였습니다', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
     } else if (reportState == 'comment' && isFocused) {
       setLoading(false);
       dispatch(setReportState(''));
       setReportModalVisibility(false);
-      alert('댓글 신고 완료');
+      Alert.alert('댓글 신고 완료', '댓글을 신고하였습니다', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
     } else if (reportState == 'failure' && isFocused) {
       setLoading(false);
       dispatch(setReportState(''));
       setReportModalVisibility(false);
-      alert('신고 실패');
+      Alert.alert('신고 실패', '네트워크 오류로 신고를 실패하였습니다\n다시 시도해주십시오', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
     }
   }, [reportState]);
   //신고useEffect
@@ -256,7 +311,14 @@ const PostDetailScreen = ({ route, navigation }) => {
   //댓글 작성 Handler
   const sendHandler = comment => {
     if (!comment) {
-      alert('아무 내용도 입력하지 않으셨어요!');
+      Alert.alert('댓글 작성', '아무 내용도 입력하지 않으셨습니다', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
       return;
     }
     setLoading(true);
@@ -271,7 +333,14 @@ const PostDetailScreen = ({ route, navigation }) => {
   //좋아요 Handler
   const likeHandler = () => {
     if (Number(post.userId) == userId) {
-      alert('본인이 작성한 게시글에는 좋아요를 누를 수 없어요!');
+      Alert.alert('본인 게시글 좋아요', '본인이 작성한 게시글에는 좋아요를 누를 수 없습니다', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
       return;
     }
     setLoading(true);
@@ -284,7 +353,14 @@ const PostDetailScreen = ({ route, navigation }) => {
     console.log(selectedCommentContent);
     console.log(comment);
     if (selectedCommentContent == comment || comment == '') {
-      alert('수정한 내용이 없습니다.');
+      Alert.alert('댓글 수정 내용 입력', '댓글이 바뀐 내용이 없습니다', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
     } else if (selectedCommentContent !== comment) {
       Alert.alert('댓글 수정', '댓글을 수정하시겠습니까?', [
         {
@@ -466,50 +542,50 @@ const PostDetailScreen = ({ route, navigation }) => {
                 Lv. {post.user_level}
               </Text>
             </View>
-            {postCreateDate ? 
-            <View style={styles.date}>
-            {nowYear == postCreateDate ? (
-              <Text
-                style={{
-                  fontSize: 10,
-                  marginLeft: Dimensions.get('window').width * 0.12,
-                }}
-              >
-                최초 게시일 : {Moment(post.createDate).format('MM/DD HH:mm')}
-              </Text>
-            ) : (
-              <Text
-                style={{
-                  fontSize: 10,
-                  marginLeft: Dimensions.get('window').width * 0.047,
-                }}
-              >
-                최초 게시일 :{' '}
-                {Moment(post.createDate).format('YYYY/MM/DD HH:mm')}
-              </Text>
-            )}
+            {postCreateDate ?
+              <View style={styles.date}>
+                {nowYear == postCreateDate ? (
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      marginLeft: Dimensions.get('window').width * 0.12,
+                    }}
+                  >
+                    최초 게시일 : {Moment(post.createDate).format('MM/DD HH:mm')}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      marginLeft: Dimensions.get('window').width * 0.047,
+                    }}
+                  >
+                    최초 게시일 :{' '}
+                    {Moment(post.createDate).format('YYYY/MM/DD HH:mm')}
+                  </Text>
+                )}
 
-            {post.updateDate != null ? (
-              <Text
-                style={
-                  nowYear == postUpdateDate
-                    ? {
-                        fontSize: 10,
-                        marginLeft: Dimensions.get('window').width * 0.12,
-                      }
-                    : {
-                        fontSize: 10,
-                        marginLeft: Dimensions.get('window').width * 0.047,
-                      }
-                }
-              >
-                최근 수정일 :{' '}
-                {nowYear == postUpdateDate
-                  ? Moment(post.updateDate).format('MM/DD HH:mm')
-                  : Moment(post.updateDate).format('YYYY/MM/DD HH:mm')}
-              </Text>
-            ) : null}
-          </View> : null}
+                {post.updateDate != null ? (
+                  <Text
+                    style={
+                      nowYear == postUpdateDate
+                        ? {
+                          fontSize: 10,
+                          marginLeft: Dimensions.get('window').width * 0.12,
+                        }
+                        : {
+                          fontSize: 10,
+                          marginLeft: Dimensions.get('window').width * 0.047,
+                        }
+                    }
+                  >
+                    최근 수정일 :{' '}
+                    {nowYear == postUpdateDate
+                      ? Moment(post.updateDate).format('MM/DD HH:mm')
+                      : Moment(post.updateDate).format('YYYY/MM/DD HH:mm')}
+                  </Text>
+                ) : null}
+              </View> : null}
           </View>
           <View style={styles.textWrapper}>
             <Text style={styles.title}>{post.title}</Text>
@@ -751,6 +827,7 @@ const PostDetailScreen = ({ route, navigation }) => {
             onChangeText={editingComment => setComment(editingComment)}
             defaultValue={updating ? selectedCommentContent : ''}
             onSubmitEditing={Keyboard.dismiss}
+            value={(!updating) ? comment : comment}
             maxLength={250}
           />
           <TouchableOpacity

@@ -42,8 +42,8 @@ AddPlantProfile = ({ route }) => {
   const [waterSupply, setWaterSupply] = useState(2);
   const [plantImage, setPlantImage] = useState('');
 
-  const [validationPlantBirth, setValiationPlantBirth] = useState('');
-  const [validationLastWatering, setValiationLastWatering] = useState('');
+  const [validationPlantBirth, setValidationPlantBirth] = useState('');
+  const [validationLastWatering, setValidationLastWatering] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [isDayPickerVisible, setDayPickerVisibility] = useState(false);
@@ -62,7 +62,6 @@ AddPlantProfile = ({ route }) => {
     dayArray[i] = i + 1;
   }
   useEffect(() => {
-    //console.warn('이미지 등록');
   }, [plantImage]);
 
   useEffect(() => {
@@ -84,7 +83,7 @@ AddPlantProfile = ({ route }) => {
       Alert.alert('사진 업로드', '식물의 사진을 업로드 해주세요', [
         {
           text: '확인',
-          onPress: () => {return}
+          onPress: () => { return }
         },
       ]);
       return;
@@ -93,7 +92,7 @@ AddPlantProfile = ({ route }) => {
       Alert.alert('식물 이름 입력', '식물의 이름을 입력해주세요', [
         {
           text: '확인',
-          onPress: () => {return}
+          onPress: () => { return }
         },
       ]);
       return;
@@ -102,7 +101,7 @@ AddPlantProfile = ({ route }) => {
       Alert.alert('식물 종 입력', '식물의 종을 입력해주세요', [
         {
           text: '확인',
-          onPress: () => {return}
+          onPress: () => { return }
         },
       ]);
       return;
@@ -111,7 +110,7 @@ AddPlantProfile = ({ route }) => {
       Alert.alert('키우기 시작한 날짜 입력', '식물을 키우기 시작한 날을 입력해주세요', [
         {
           text: '확인',
-          onPress: () => {return}
+          onPress: () => { return }
         },
       ]);
       return;
@@ -120,7 +119,7 @@ AddPlantProfile = ({ route }) => {
       Alert.alert('물주는 주기 입력', '식물에게 물을 주는 주기를 입력해주세요', [
         {
           text: '확인',
-          onPress: () => {return}
+          onPress: () => { return }
         },
       ]);
       return;
@@ -170,7 +169,6 @@ AddPlantProfile = ({ route }) => {
       console.log('테스트전');
       console.log(fd);
       console.log('테스트후');
-      //file_name: plantImage,
       const plant = {
         plant_species: plantSpecies,
         plant_name: plantName,
@@ -216,16 +214,14 @@ AddPlantProfile = ({ route }) => {
 
   const handlePlantBirthConfirm = date => {
     setDatePickerVisibility(false);
-    //console.warn('date: '+date);
 
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
 
-    setValiationPlantBirth(date);
+    setValidationPlantBirth(date);
     setPlantBirth(year + '-' + month + '-' + day);
     setPlantTextBirth(year + '-' + month + '-' + day);
-    //console.warn('palntbirth: '+plantBirth);
   };
   const handleLastWateringConfirm = date => {
     setWateringDatePickerVisibility(false);
@@ -234,11 +230,27 @@ AddPlantProfile = ({ route }) => {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
 
-    setValiationLastWatering(date);
+    setValidationLastWatering(date);
     setLastWatering(year + '-' + month + '-' + day);
     setTextLastWatering(year + '-' + month + '-' + day);
-    //console.warn('palntbirth: '+plantBirth);
   };
+
+  const dateCalculator = (YYYYMMDD) => {
+    console.log('dateCalculator: '+YYYYMMDD);
+
+    let sYear = YYYYMMDD.substring(0, 4);
+    let sMonth = YYYYMMDD.substring(5, 7);
+    let sDate = YYYYMMDD.substring(8, 10);
+    console.log('sYear : '+sYear);
+    let date = new Date(
+      Number(sYear),
+      Number(sMonth)-1,
+      Number(sDate),
+    );
+    date.setDate(date.getDate() + 1);
+    console.log('dateCal date: '+ date);
+    return date;
+  }
 
   const photoUpload = async choice => {
     if (choice === 'take') {
@@ -246,14 +258,12 @@ AddPlantProfile = ({ route }) => {
     } else if (choice === 'pick') {
       await selectImage();
     }
-    //console.warn('after picture: ' + plantImage);
   };
 
   const takePicture = () => {
     return new Promise((resolve, reject) => {
       launchCamera({ mediaType: 'photo' }, response => {
         if (!response.didCancel) {
-          // console.warn(response);
           setPlantImage(response.assets[0].uri);
           setSelectedImage(response);
           resolve(response);
@@ -265,8 +275,6 @@ AddPlantProfile = ({ route }) => {
     return new Promise((resolve, reject) => {
       launchImageLibrary({ mediaType: 'photo' }, response => {
         if (!response.didCancel) {
-          // console.warn(response);
-          // console.warn(response.assets[0].base64);
           setPlantImage(response.assets[0].uri);
           setSelectedImage(response);
           resolve(response);
@@ -389,15 +397,16 @@ AddPlantProfile = ({ route }) => {
               mode="date"
               onConfirm={handlePlantBirthConfirm}
               onCancel={() => hideDatePicker('plantBirth')}
+              date={validationPlantBirth? validationPlantBirth: new Date()}
               minimumDate={new Date(1921, 0, 1)}
               maximumDate={
                 validationLastWatering
                   ? validationLastWatering
                   : new Date(
-                      maximumDate.getFullYear(),
-                      maximumDate.getMonth(),
-                      maximumDate.getDate() - 1,
-                    )
+                    maximumDate.getFullYear(),
+                    maximumDate.getMonth(),
+                    maximumDate.getDate() + 1,
+                  )
               }
             />
           </View>
@@ -451,7 +460,7 @@ AddPlantProfile = ({ route }) => {
                 <View style={{ width: 150, height: 250 }}>
                   <ScrollPicker
                     dataSource={dayArray}
-                    selectedIndex={6}
+                    selectedIndex={alarmCycle ? alarmCycle - 1 : 6}
                     onValueChange={selectedIndex => {
                       setAlarmCycle(selectedIndex);
                       setTextAlarmCycle(`물을 ${selectedIndex}일 마다 줘요`);
@@ -579,6 +588,7 @@ AddPlantProfile = ({ route }) => {
               mode="date"
               onConfirm={handleLastWateringConfirm}
               onCancel={() => hideDatePicker('watering')}
+              date={validationLastWatering ? validationLastWatering : new Date()}
               minimumDate={
                 validationPlantBirth
                   ? validationPlantBirth
@@ -588,7 +598,7 @@ AddPlantProfile = ({ route }) => {
                 new Date(
                   maximumDate.getFullYear(),
                   maximumDate.getMonth(),
-                  maximumDate.getDate() - 1,
+                  maximumDate.getDate() + 1,
                 )
               }
             />
@@ -641,7 +651,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: screenWidth * 0.9,
-    //height: screenHeight * 0.78,
     padding: 10,
     margin: 10,
     borderRadius: 15,

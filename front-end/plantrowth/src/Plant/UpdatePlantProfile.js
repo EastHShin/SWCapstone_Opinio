@@ -31,14 +31,10 @@ const screenWidth = Dimensions.get('window').width;
 UpdatePlantProfile = ({ route }) => {
   const [loading, setLoading] = useState(false);
 
-  //const [plantName, setPlantName] = useState(route.params.profile.plant_name);
   const [plantName, setPlantName] = useState('');
-  //const [plantSpecies, setPlantSpecies] = useState(route.params.profile.plant_species);
   const [plantSpecies, setPlantSpecies] = useState('');
-  //const [plantBirth, setPlantBirth] = useState(route.params.profile.plant_birth);
   const [plantBirth, setPlantBirth] = useState('');
   const [plantTextBirth, setPlantTextBirth] = useState('');
-  //const [alarmCycle, setAlarmCycle] = useState(route.params.profile.alarm_cycle);
   const [alarmCycle, setAlarmCycle] = useState();
   const [textAlarmCycle, setTextAlarmCycle] = useState('');
   const [lastWatering, setLastWatering] = useState(
@@ -46,12 +42,12 @@ UpdatePlantProfile = ({ route }) => {
       ? route.params.profile.recent_watering
       : '',
   );
-  //const [lastWatering, setLastWatering] = useState('');
   const [textLastWatering, setTextLastWatering] = useState('');
-  //const [waterSupply, setWaterSupply] = useState(route.params.profile.water_supply);
   const [waterSupply, setWaterSupply] = useState();
   const [plantImage, setPlantImage] = useState('');
 
+  const [validationPlantBirth, setValidationPlantBirth] = useState('');
+  const [validationLastWatering, setValidationLastWatering] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [isDayPickerVisible, setDayPickerVisibility] = useState(false);
@@ -94,7 +90,7 @@ UpdatePlantProfile = ({ route }) => {
       Alert.alert('식물 정보 수정', '아직 아무 정보도 수정하지 않으셨어요!', [
         {
           text: '확인',
-          onPress: () => {return}
+          onPress: () => { return }
         },
       ]);
       return;
@@ -192,6 +188,7 @@ UpdatePlantProfile = ({ route }) => {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
 
+    setValidationPlantBirth(date);
     setPlantBirth(year + '-' + month + '-' + day);
     setPlantTextBirth(year + '-' + month + '-' + day);
     setUpdateSomething(true);
@@ -204,10 +201,28 @@ UpdatePlantProfile = ({ route }) => {
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
 
+    setValidationLastWatering(date);
     setLastWatering(year + '-' + month + '-' + day);
     setTextLastWatering(year + '-' + month + '-' + day);
     setUpdateSomething(true);
   };
+
+  const dateCalculator = (YYYYMMDD) => {
+    console.log('dateCalculator: ' + YYYYMMDD);
+
+    let sYear = YYYYMMDD.substring(0, 4);
+    let sMonth = YYYYMMDD.substring(5, 7);
+    let sDate = YYYYMMDD.substring(8, 10);
+    console.log('sYear : ' + sYear);
+    let date = new Date(
+      Number(sYear),
+      Number(sMonth) - 1,
+      Number(sDate),
+    );
+    date.setDate(date.getDate() + 1);
+    console.log('dateCal date: ' + date);
+    return date;
+  }
 
   const photoUpload = async choice => {
     if (choice === 'take') {
@@ -221,7 +236,6 @@ UpdatePlantProfile = ({ route }) => {
     return new Promise((resolve, reject) => {
       launchCamera({ mediaType: 'photo' }, response => {
         if (!response.didCancel) {
-          // console.warn(response);
           setPlantImage(response.assets[0].uri);
           setSelectedImage(response);
           setUpdateSomething(true);
@@ -234,8 +248,6 @@ UpdatePlantProfile = ({ route }) => {
     return new Promise((resolve, reject) => {
       launchImageLibrary({ mediaType: 'photo' }, response => {
         if (!response.didCancel) {
-          // console.warn(response);
-          // console.warn(response.assets[0].base64);
           setPlantImage(response.assets[0].uri);
           setSelectedImage(response);
           setUpdateSomething(true);
@@ -374,13 +386,18 @@ UpdatePlantProfile = ({ route }) => {
               mode="date"
               onConfirm={handlePlantBirthConfirm}
               onCancel={() => hideDatePicker('plantBirth')}
+              date={validationPlantBirth ? validationPlantBirth : dateCalculator(route.params.profile.plant_birth)}
               minimumDate={new Date(1921, 0, 1)}
               maximumDate={
-                new Date(
-                  maximumDate.getFullYear(),
-                  maximumDate.getMonth(),
-                  maximumDate.getDate() - 1,
-                )
+                validationLastWatering
+                  ? validationLastWatering
+                  : route.params.profile.recent_watering
+                    ? dateCalculator(route.params.profile.recent_watering)
+                    : new Date(
+                      maximumDate.getFullYear(),
+                      maximumDate.getMonth(),
+                      maximumDate.getDate() + 1,
+                    )
               }
             />
           </View>
@@ -435,7 +452,7 @@ UpdatePlantProfile = ({ route }) => {
                 <View style={{ width: 150, height: 250 }}>
                   <ScrollPicker
                     dataSource={dayArray}
-                    selectedIndex={route.params.profile.alarm_cycle}
+                    selectedIndex={route.params.profile.alarm_cycle - 1}
                     onValueChange={selectedIndex => {
                       setAlarmCycle(selectedIndex);
                       setUpdateSomething(true);
@@ -564,13 +581,17 @@ UpdatePlantProfile = ({ route }) => {
               mode="date"
               onConfirm={handleLastWateringConfirm}
               onCancel={() => hideDatePicker('watering')}
-              //예외처리 해야함
-              minimumDate={new Date(1921, 0, 1)}
+              date={validationLastWatering ? validationLastWatering : dateCalculator(route.params.profile.recent_watering)}
+              minimumDate={
+                validationPlantBirth
+                  ? validationPlantBirth
+                  : dateCalculator(route.params.profile.plant_birth)
+              }
               maximumDate={
                 new Date(
                   maximumDate.getFullYear(),
                   maximumDate.getMonth(),
-                  maximumDate.getDate() - 1,
+                  maximumDate.getDate() + 1,
                 )
               }
             />

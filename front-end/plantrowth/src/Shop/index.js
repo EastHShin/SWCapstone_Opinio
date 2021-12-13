@@ -90,6 +90,10 @@ ShopScreen = () => {
     } else if (buyProfileSlotState == 'failure' && isFocused) {
       console.log('프로필 슬롯 구매 실패! ');
       setLoading(false);
+      Alert.alert('프로필 슬롯 구매 결제 실패', '결제가 완료되지 않았습니다\n다시 시도해주십시오', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }])
       dispatch(setBuyProfileSlotState(''));
     } else if (buySubscribeState == 'success' && isFocused) {
       console.log('질병진단 구독 성공');
@@ -99,6 +103,10 @@ ShopScreen = () => {
     } else if (buySubscribeState == 'failure' && isFocused) {
       console.log('질병진단 구독 실패');
       setLoading(false);
+      Alert.alert('질병진단 구독 결제 실패', '결제가 완료되지 않았습니다\n다시 시도해주십시오', [{
+        text: '알겠습니다',
+        onPress: () => { return }
+      }])
       dispatch(setBuySubscribeState(''));
     }
     console.log('setName');
@@ -108,9 +116,9 @@ ShopScreen = () => {
 
   const buySlotHandler = () => {
     console.log(shopInfo.point);
-    if(shopInfo.point >= 300) {
-    setLoading(true);
-    dispatch(buyProfileSlot(userId));
+    if (shopInfo.point >= 300) {
+      setLoading(true);
+      dispatch(buyProfileSlot(userId));
     } else {
 
       Alert.alert('구매 실패', '포인트가 부족하여 구매가 불가능합니다.', [{
@@ -546,7 +554,7 @@ ShopScreen = () => {
             </Text>
             {termsType == 'SLOT'
               ? (
-                <View style={{flexDirection:'row', justifyContent: 'center'}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                   <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 14 }}>슬롯은 구매 후 </Text>
                   <Text style={{ color: '#ef5350', textAlign: 'justify', fontSize: 14 }}>환불이 불가능</Text>
                   <Text style={{ color: '#363636', textAlign: 'justify', fontSize: 14 }}>한 상품입니다</Text>
