@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.opinio.plantrowth.domain.plant.DiagnosisRecord;
 
 public interface DiagnosisRecordRepository extends JpaRepository<DiagnosisRecord, Long> {
-	List<DiagnosisRecord> findAllByPlantId(Long plantId);
+	Optional<List<DiagnosisRecord>> findAllByPlantId(Long plantId);
 }
