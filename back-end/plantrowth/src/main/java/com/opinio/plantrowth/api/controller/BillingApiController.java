@@ -73,6 +73,8 @@ public class BillingApiController {
 		@RequestBody RefundRequestDTO requestDTO) throws ParseException {
 		List<DiagnosisRecord> diagnosisRecords = diagnosisRecordService.getValidDiagnosisRecords(userId,
 			requestDTO.getMerchant_uid());
+		System.out.println("diagnosis Record : " + diagnosisRecords);
+		System.out.println("diagnosis Record : " + diagnosisRecords.size());
 		if (diagnosisRecords == null) {
 			String accessToken = billingService.getToken();
 			PaymentRecord paymentInfo = billingService.findPaymentInfo(requestDTO.getMerchant_uid());
