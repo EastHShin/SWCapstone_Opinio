@@ -49,6 +49,8 @@ public class DiagnosisRecordService {
 		PaymentRecord paymentRecord = paymentRecordRepository.findByMerchantUid(merchantId).orElseThrow(
 			() -> new IllegalArgumentException("No Found Payment Record")
 		);
+		System.out.println("service layer : " + records.get());
+		System.out.println("service layer : " + records.get().size());
 		if (records.isEmpty()) {
 			return null;
 		}
