@@ -78,6 +78,7 @@ public class AdminReportApiController {
 				board_id = report.getBoard().getId();
 			} else if (report.getTag().equals(Report.tagEnum.COMMENT)) {
 				comment_id = report.getComment().getId();
+				board_id= report.getComment().getBoard().getId();
 			}
 		}
 	}
