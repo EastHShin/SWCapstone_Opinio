@@ -1,9 +1,9 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Alert } from 'react-native';
+import { AppRegistry, Alert } from 'react-native';
 import { Provider } from 'react-redux';
 
 import LoginScreen from './src/Auth/LoginScreen';
@@ -39,24 +39,30 @@ import PaymentHistoryScreen from './src/MyPage/PaymentHistoryScreen';
 
 import * as RootNavigation from './RootNavigation';
 import { navigationRef } from './RootNavigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
-function App() {
-  messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
-  });
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+  AsyncStorage.setItem('plantId', JSON.stringify(remoteMessage.data.plant_id))
+  
+});
+
+
+const  AppFirebase = () => {
 
   messaging().onNotificationOpenedApp(async remoteMessage => {
-    console.log('open!');
     console.log('open : ' + remoteMessage.data.plant_id);
-
-    RootNavigation.push('ManagePlantScreen', {
+    AsyncStorage.removeItem('plantId');
+    RootNavigation.navigate('ManagePlantScreen', {
       plantId: remoteMessage.data.plant_id,
     });
   });
 
+
   useEffect(() => {
+
     const foreground = messaging().onMessage(async remoteMessage => {
       console.log('어플 안 : ' + remoteMessage.data.plant_id);
       console.log(remoteMessage.notification.body);
@@ -68,7 +74,7 @@ function App() {
         {
           text: '확인',
           onPress: () => {
-            RootNavigation.push('ManagePlantScreen', {
+            RootNavigation.navigate('ManagePlantScreen', {
               plantId: remoteMessage.data.plant_id,
             });
           },
@@ -80,210 +86,220 @@ function App() {
   }, []);
 
   return (
+    <NavigationContainer ref={navigationRef}>
+    <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Screen
+        name="SplashScreen"
+        component={SplashScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DiaryScreen"
+        component={DiaryScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DiaryCreateScreen"
+        component={DiaryCreateScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DiaryDetailScreen"
+        component={DiaryDetailScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DiaryEditScreen"
+        component={DiaryEditScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AddProfileScreen"
+        component={AddProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ManagePlantScreen"
+        component={ManagePlantScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CommunityMainScreen"
+        component={CommunityMainScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ShopScreen"
+        component={ShopScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="MyPageScreen"
+        component={MyPageScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AccountInfoScreen"
+        component={AccountInfoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="UpdatePlantProfileScreen"
+        component={UpdatePlantProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AccountEditScreen"
+        component={AccountEditScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AccountDeleteNoticeScreen"
+        component={AccountDeleteNoticeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AccountDeleteScreen"
+        component={AccountDeleteScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DiseaseDiagnosisHistoryScreen"
+        component={DiseaseDiagnosisHistoryScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PointHistoryScreen"
+        component={PointHistoryScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DiagnosisScreen"
+        component={DiagnosisScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="PlantDiagnosisScreen"
+        component={PlantDiagnosisScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PasswordCheckScreen"
+        component={PasswordCheckScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PostCreateScreen"
+        component={PostCreateScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PostEditScreen"
+        component={PostEditScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PostDetailScreen"
+        component={PostDetailScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="Payment"
+        component={Payment}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PaymentHistoryScreen"
+        component={PaymentHistoryScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  </NavigationContainer>
+  )
+}
+
+  const App =() => {
+
+  return (
     <Provider store={Store}>
-      <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator initialRouteName="SplashScreen">
-          <Stack.Screen
-            name="SplashScreen"
-            component={SplashScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="RegisterScreen"
-            component={RegisterScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="HomeScreen"
-            component={HomeScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="DiaryScreen"
-            component={DiaryScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="DiaryCreateScreen"
-            component={DiaryCreateScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="DiaryDetailScreen"
-            component={DiaryDetailScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="DiaryEditScreen"
-            component={DiaryEditScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="AddProfileScreen"
-            component={AddProfileScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="ManagePlantScreen"
-            component={ManagePlantScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="CommunityMainScreen"
-            component={CommunityMainScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="ShopScreen"
-            component={ShopScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="MyPageScreen"
-            component={MyPageScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="AccountInfoScreen"
-            component={AccountInfoScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="UpdatePlantProfileScreen"
-            component={UpdatePlantProfileScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="AccountEditScreen"
-            component={AccountEditScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="AccountDeleteNoticeScreen"
-            component={AccountDeleteNoticeScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="AccountDeleteScreen"
-            component={AccountDeleteScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="DiseaseDiagnosisHistoryScreen"
-            component={DiseaseDiagnosisHistoryScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="PointHistoryScreen"
-            component={PointHistoryScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="DiagnosisScreen"
-            component={DiagnosisScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="PlantDiagnosisScreen"
-            component={PlantDiagnosisScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="PasswordCheckScreen"
-            component={PasswordCheckScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="PostCreateScreen"
-            component={PostCreateScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="PostEditScreen"
-            component={PostEditScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="PostDetailScreen"
-            component={PostDetailScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="Payment"
-            component={Payment}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="PaymentHistoryScreen"
-            component={PaymentHistoryScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AppFirebase />
     </Provider>
   );
 }
+
 export default App;
+
+AppRegistry.registerComponent('plantrowth', () => App);

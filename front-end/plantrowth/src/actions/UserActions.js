@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME, POINT_LIST, FIREBASE_NOTIFICATION } from "./type";
+import { REGISTER_USER, LOGIN_USER, KAKAO_REGISTER, KAKAO_UNLINK, LOGOUT_USER, SEND_EMAIL, CODE_VERIFICATION, USER_DELETE, USER_INFO, USER_EDIT, DIAGNOSIS_LIST, FIND_PASSWORD, CHECK_PASSWORD, CHECK_NICKNAME, POINT_LIST} from "./type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as KakaoLogins from "@react-native-seoul/kakao-login";
 import axios from "axios";
@@ -129,7 +129,7 @@ export const loginUser = (user) => {
                 if (res.status == 200) {
                     AsyncStorage.getItem('email').then(value => {
                         if (value != null) {
-                            dispatch(setLogoutTimer(3600000,value));
+                            dispatch(setLogoutTimer(1800000,value));
                         }
                       })
                     AsyncStorage.setItem('userId', JSON.stringify(res.data.data));
@@ -170,7 +170,7 @@ export const kakaoLogin = (data) => {
 
                     AsyncStorage.getItem('email').then(value => {
                         if (value != null) {
-                            dispatch(setLogoutTimer(3600000,value));
+                            dispatch(setLogoutTimer(1800000,value));
                         }
                       })
 
@@ -413,7 +413,7 @@ export const getDiagnosisList = (plantId) => {
 }
 
 export const findPassword = (user) => {
-
+  
     return async dispatch => {
         return await axios.post(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/user/find`, user,
             {
@@ -529,14 +529,6 @@ export const getPointList = (userId) => {
     }
 }
 
-export const firebaseNotification = plantId => dispatch => {
-    console.log("welcome");
-	dispatch({
-		type: FIREBASE_NOTIFICATION,
-		payload: plantId,
-	});
-
-}
 
 
 

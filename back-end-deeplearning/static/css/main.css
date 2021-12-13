@@ -1,0 +1,46 @@
+h1 {
+    font-weight: bold;
+}
+
+h2 {
+}
+
+.midNBlue {
+    color: midnightblue;
+}
+
+.red {
+    color: red;
+    margin-bottom: -10px;
+}
+
+.orange {
+    color: orange;
+    margin-bottom: -10px;
+}
+
+.complex {
+    color: #ffea12;
+    background-color: #282828;
+    margin-bottom: -10px;
+}
+
+.healthy {
+    color: #00d9a9;
+    margin-bottom: -10px;
+}
+
+.brown {
+    color: saddlebrown;
+    margin-bottom: -10px;
+}
+
+.parasite {
+    color: hotpink;
+    margin-bottom: -10px;
+}
+
+.virus {
+    color: indigo;
+    margin-bottom: -10px;
+}
