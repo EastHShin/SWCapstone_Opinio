@@ -161,4 +161,9 @@ public class BoardService {
 			.collect(Collectors.toList());
 		return collect;
 	}
+	@Transactional
+	public void boardBlockCancel(Long boardId){
+		Board board = boardRepository.findById(boardId).orElseThrow(()->new IllegalArgumentException());
+		board.setIsBlocked(false);
+	}
 }
