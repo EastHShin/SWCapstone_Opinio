@@ -12,7 +12,7 @@ function BoardDelete() {
     const [posts, setPosts] = useState("")
 
     async function del() {
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/" + localStorage.getItem("boardId")
+        let web = "/api/admin/community/" + localStorage.getItem("boardId")
 
         return await axios.delete(web, {
             headers: {"Content-Type": `application/json`}
@@ -25,7 +25,7 @@ function BoardDelete() {
     async function getValue() {
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/" + localStorage.getItem("boardId")
+        let web = "/api/admin/community/" + localStorage.getItem("boardId")
         const response = await axios.get(web, {
             headers: {
                 "Content-Type": `application/json`

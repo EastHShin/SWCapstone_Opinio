@@ -14,9 +14,9 @@ function ReportConfirm() {
     async function confirm() {
         let web
         if(localStorage.getItem("commentId")==-1) {
-            web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/board/report/" + localStorage.getItem("reportId")
+            web = "/api/admin/community/board/report/" + localStorage.getItem("reportId")
         } else {
-            web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/comment/report/" + localStorage.getItem("reportId")
+            web = "/api/admin/community/comment/report/" + localStorage.getItem("reportId")
         }
 
         return await axios.post(web, {
@@ -31,7 +31,7 @@ function ReportConfirm() {
     async function GetValue() {
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/report/all"
+        let web = "/api/admin/community/report/all"
         const reportResponse = await axios.get(web, {
             headers: {
                 "Content-Type": `application/json`
@@ -47,7 +47,7 @@ function ReportConfirm() {
                 }
             })
 
-        web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/" + localStorage.getItem("boardId")
+        web = "/api/admin/community/" + localStorage.getItem("boardId")
         const boardResponse = await axios.get(web, {
             headers: {
                 "Content-Type": `application/json`

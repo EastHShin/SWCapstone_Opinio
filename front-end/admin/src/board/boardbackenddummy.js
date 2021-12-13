@@ -19,7 +19,7 @@ const Table = () => {
     const fetchPostList = async () => {
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community"
+        let web = "/api/admin/community"
         const response = await axios.get(web, {
             headers: {
                 "Content-Type": `application/json`
