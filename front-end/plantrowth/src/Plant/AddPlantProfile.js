@@ -81,23 +81,48 @@ AddPlantProfile = ({ route }) => {
 
   const onPressHandler = () => {
     if (!plantImage) {
-      alert('식물의 사진을 등록해주세요');
+      Alert.alert('사진 업로드', '식물의 사진을 업로드 해주세요', [
+        {
+          text: '확인',
+          onPress: () => {return}
+        },
+      ]);
       return;
     }
     if (!plantName) {
-      alert('식물의 이름을 입력해주세요');
+      Alert.alert('식물 이름 입력', '식물의 이름을 입력해주세요', [
+        {
+          text: '확인',
+          onPress: () => {return}
+        },
+      ]);
       return;
     }
     if (!plantSpecies) {
-      alert('식물의 종을 입력해주세요');
+      Alert.alert('식물 종 입력', '식물의 종을 입력해주세요', [
+        {
+          text: '확인',
+          onPress: () => {return}
+        },
+      ]);
       return;
     }
     if (!plantBirth) {
-      alert('식물을 키우기 시작한 날을 입력해주세요');
+      Alert.alert('키우기 시작한 날짜 입력', '식물을 키우기 시작한 날을 입력해주세요', [
+        {
+          text: '확인',
+          onPress: () => {return}
+        },
+      ]);
       return;
     }
     if (!alarmCycle) {
-      alert('식물에게 물을 주는 주기를 입력해주세요');
+      Alert.alert('물주는 주기 입력', '식물에게 물을 주는 주기를 입력해주세요', [
+        {
+          text: '확인',
+          onPress: () => {return}
+        },
+      ]);
       return;
     }
     if (!lastWatering) {
