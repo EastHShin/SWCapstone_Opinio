@@ -2,6 +2,8 @@ import React, { useState, useEffect, Component } from "react";
 import NavBar from "../NavBar.js";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import './users.css';
 import './userUpdate.css';
 import axios from "axios";
@@ -18,7 +20,6 @@ function UserUpdate() {
     const [posts, setPosts] = useState("")
 
     async function Update() {
-        console.warn(name, email, point, mPlant, subcription)
         let sub
         if(subcription === "true" || subcription === "True") {
             sub = true
@@ -27,6 +28,9 @@ function UserUpdate() {
         }
         let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/user/" + localStorage.getItem("userId")
 
+        if(name==="" || email==="" || point==="" || mPlant==="") {
+            return toast.error('이름, 이메일, 포인트, 슬롯의 내용을 모두 채워야합니다.', {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        }
         return await axios.put(web, {
             headers: { "Content-Type": `application/json` },
             name: name,
@@ -36,15 +40,11 @@ function UserUpdate() {
             subscription: sub
         })
             .then(function (res) {
-                console.warn(res)
-            })
-            .catch(function (error) {
-                console.warn(error)
+                toast.warn('회원 정보가 수정되었습니다.', {position: toast.POSITION.TOP_CENTER, autoClose:2500})
             })
     }
 
     async function getValue() {
-        console.warn(localStorage.getItem("userId"))
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
         let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/user/" + localStorage.getItem("userId")
@@ -54,7 +54,6 @@ function UserUpdate() {
             }
         })
             .then(function (res) {
-                console.warn([res.data.data])
                 setPosts({name: [res.data.data.name], email:[res.data.data.email], point:[res.data.data.point],
                     mPlant:[res.data.data.maxPlantNum], subscribe:[res.data.data.subcription]})
             })

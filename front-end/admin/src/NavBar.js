@@ -2,36 +2,38 @@ import React, {useState, useEffect, Component} from "react";
 import {useNavigate} from 'react-router-dom'
 import {Link} from 'react-router-dom';
 import axios from "axios";
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import './NavBar.css';
 import './login.js'
 
-async function logoutUser() {
-    const email = localStorage.getItem('email')
-
-    return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout', email, {
-        headers: {"Content-Type": `application/json`}
-    })
-        .then(function (res) {
-            if(res.status === 200) {
-                console.warn(res)
-                console.warn(localStorage)
-                localStorage.clear()
-            }
-        })
-        .catch(function (err) {
-            console.log(err)
-        })
-    console.warn(email)
-}
-
-function logout() {
-    if(localStorage.getItem('email')) {
-        logoutUser()
-        console.warn(localStorage)
-    }
-}
-
 function NavBar() {
+    const nav = useNavigate()
+
+    async function logoutUser() {
+        const email = localStorage.getItem('email')
+
+        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout', email, {
+            headers: {"Content-Type": `application/json`}
+        })
+            .then(function (res) {
+                if(res.status === 200) {
+                    toast.success('로그아웃 완료', {position: toast.POSITION.TOP_CENTER, autoClose:1500})
+                    localStorage.clear()
+                    nav("/administrator")
+                }
+            })
+            .catch(function (err) {
+                console.log(err)
+            })
+    }
+
+    function logout() {
+        if(localStorage.getItem('email')) {
+            logoutUser()
+        }
+    }
+
     return (
         <header className="top">
             <ul>
