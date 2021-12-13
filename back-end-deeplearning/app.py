@@ -8,7 +8,6 @@ import os
 import json
 
 temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -79,7 +78,7 @@ def infer_image():
 
     disease_name = "건강한"
     value = list_1[2][3] + list_1[2][4] + list_1[2][6] + list_1[2][10] + list_1[2][14] + list_1[2][17] + \
-            list_1[2][19] + list_1[2][22] + list_1[2][23] + list_1[2][24] + list_1[2][27] + list_1[2][37]
+            list_1[2][19] + list_1[2][22] + list_1[2][23] + list_1[2][24] + list_1[2][27] + list_1[2][37] + list_1[2][15]
 
     if value < list_1[2][0]:
         value = list_1[2][0]
@@ -108,10 +107,6 @@ def infer_image():
     if value < list_1[2][12]:
         value = list_1[2][12]
         disease_name = "갈반병"
-
-    if value < list_1[2][15]:
-        value = list_1[2][15]
-        disease_name = "(감귤)녹화병"
 
     if value < list_1[2][26]:
         value = list_1[2][26]
