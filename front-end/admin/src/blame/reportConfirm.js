@@ -117,7 +117,7 @@ function ReportConfirm() {
                 </Link>
             }
             {
-                localStorage.getItem("isBlocked") == 0 &&
+                localStorage.getItem("isBlocked") == -1 &&
                 <Link to="/administrator/front">
                     <Button variant="warning" onClick={confirm}>처리 완료</Button>
                 </Link>
