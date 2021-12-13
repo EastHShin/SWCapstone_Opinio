@@ -3,15 +3,17 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect, Component } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import LoginIcon from '@material-ui/icons/AlternateEmail';
 import PasswordIcon from '@material-ui/icons/VpnKey';
 import './login.css'
 import axios from "axios";
-import {Link} from "react-router-dom";
 import logo from "./logo.png";
 
 let timer;
+toast.configure()
 
 const setLogoutTimer = (expirationTime, email) => dispatch => {
     timer = setTimeout(() => {
@@ -26,16 +28,12 @@ async function logoutUser() {
     })
         .then(function (res) {
             if(res.status == 200) {
-                console.warn(res)
-                console.warn(localStorage)
                 localStorage.clear()
-
             }
         })
         .catch(function (err) {
             console.log(err)
         })
-    console.warn(email)
 }
 
 function Login() {
@@ -43,18 +41,15 @@ function Login() {
     const [password, setPassword] = useState("")
 
     const nav = useNavigate()
+
     useEffect(() => {
         if(localStorage.getItem('status')) {
-            console.warn('----------------------------------------------')
-            console.warn(localStorage.getItem('status'))
             nav("/administrator/front")
         }
     }, [])
 
     async function log() {
-        console.warn(email,password)
         let item = {email,password}
-        console.warn(item)
         return await axios.post("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login", item, {
             headers: { "Content-Type": `application/json` }
         })
@@ -64,14 +59,13 @@ function Login() {
                 localStorage.setItem("status", res.data.status)
                 localStorage.setItem("auth", res.headers.authorization)
                 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
-                console.warn("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
                 console.warn(localStorage.getItem("auth"))
                 console.warn(localStorage.getItem('status'))
-                console.warn("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+                toast.success('로그인 완료', {position: toast.POSITION.TOP_CENTER, autoClose:1500})
                 nav("/administrator/front")
             })
             .catch(function (error) {
-                console.warn(error)
+                toast.error('아이디나 비밀번호가 틀렸습니다.', {position: toast.POSITION.TOP_CENTER, autoClose:2500})
                 nav("/administrator")
             })
     }

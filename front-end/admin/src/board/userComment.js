@@ -4,7 +4,7 @@ import * as ReactBootStrap from 'react-bootstrap';
 import NavBar from "../NavBar.js";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Table from './boardbackenddummy.js'
+import Table from './boardbackenddummy.js';
 import "./Board.css"
 import UserIcon from '@material-ui/icons/Person';
 
@@ -24,14 +24,8 @@ function Comment() {
             }
         })
             .then(function (res) {
-                console.warn(res.data.data.comments)
                 setPosts({comments: res.data.data.comments, writerId: [res.data.data.writerId],
                 writerName: [res.data.data.writerName], id: [res.data.data.id]})
-                console.warn(posts.comments)
-            })
-            .catch(function (error) {
-                console.warn(error)
-                console.warn(token)
             })
     }
 
@@ -41,7 +35,6 @@ function Comment() {
 
     function getId(val) {
         localStorage.setItem("commentId", val)
-        console.warn(localStorage.getItem("commentId"))
     }
 
     return (

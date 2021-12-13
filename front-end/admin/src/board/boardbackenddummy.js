@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import * as ReactBootStrap from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import UserIcon from '@material-ui/icons/Person';
 import './Board.css'
 
@@ -11,6 +14,7 @@ import {Link} from "react-router-dom";
 const Table = () => {
     const [posts, setPosts] = useState({user: []})
     const [idx, setIdx] = useState("")
+    const nav = useNavigate()
 
     const fetchPostList = async () => {
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
@@ -22,27 +26,26 @@ const Table = () => {
             }
         })
             .then(function (res) {
-                console.warn(res.data)
-                console.warn(res.data.data[1].boardId)
-                console.warn(token)
-                if(idx==="")setPosts({data: res.data.data})
+                if (idx === "") setPosts({data: res.data.data})
                 else {
                     let flag = 0
-                    for(let i = 0; i < res.data.data.length; i++) {
-                        if(res.data.data[i].boardId == idx) {
+                    for (let i = 0; i < res.data.data.length; i++) {
+                        if (res.data.data[i].boardId == idx) {
                             flag = 1
                             setPosts({data: [res.data.data[i]]})
-                            console.warn(res.data.data[i])
                         }
                     }
-                    if(flag === 0) setPosts({data: res.data.data})
+                    if (flag === 0) {
+                        setPosts({data: res.data.data})
+                        toast.warn('게시글 번호가 존재하지 않습니다.', {position: toast.POSITION.TOP_CENTER, autoClose: 2000})
+                    }
                 }
-                console.warn(posts)
-                console.warn(idx === "")
             })
             .catch(function (error) {
-                console.warn(error)
-                console.warn(token)
+                if (error.response.status == 403) {
+                    localStorage.clear()
+                    nav("/administrator")
+                }
             })
     }
 
@@ -52,7 +55,6 @@ const Table = () => {
 
     function getId(val) {
         localStorage.setItem("boardId", val)
-        console.warn(localStorage.getItem("boardId"))
     }
 
     return (
@@ -84,7 +86,7 @@ const Table = () => {
                             <td className="table-light" valign="middle">{item.writerId}</td>
                             <td className="table-danger" valign="middle">
                                 {item.countedReports > 0 &&
-                                <div style={{color: "#FF2800", fontSize:"24px", fontWeight:"Bold"}}>
+                                <div style={{color: "#FF2800", fontSize: "24px", fontWeight: "Bold"}}>
                                     {item.countedReports}
                                 </div>}
                                 {item.countedReports === 0 && item.countedReports}
