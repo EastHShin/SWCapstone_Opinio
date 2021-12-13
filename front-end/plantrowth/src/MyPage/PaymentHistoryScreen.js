@@ -161,7 +161,7 @@ const PaymentHistoryScreen = ({ navigation }) => {
   const renderMerchant = paymentInfoList => {
     if (paymentInfoList !== null && paymentInfoList !== undefined && paymentInfoList.length != 0) {
       return paymentInfoList
-        ? paymentInfoList.map((item, index) => {
+        ? paymentInfoList.reverse().map((item, index) => {
           return (
             <View key={index} style={styles.merchantWrapper}>
               <View>
