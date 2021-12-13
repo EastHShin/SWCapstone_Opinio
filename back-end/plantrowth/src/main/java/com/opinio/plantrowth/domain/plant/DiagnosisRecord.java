@@ -39,6 +39,10 @@ public class DiagnosisRecord {
 	@JoinColumn(name = "plant_id")
 	private Plant plant;
 
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	@Column(name = "diagnosis_date")
 	private LocalDateTime diagnosisDate;
 
