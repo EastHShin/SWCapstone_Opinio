@@ -68,17 +68,15 @@ public class AdminCommunityApiController {
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
 
     }
-    @Transactional
     @PutMapping("/api/admin/community/{board-id}")
     public ResponseEntity boardBlockCancel(@PathVariable("board-id")Long boardId){
-        Board board =boardService.findBoard(boardId);
-        board.setIsBlocked(false);
+        boardService.boardBlockCancel(boardId);
         return ResponseEntity.ok().body("BoardBlockCancelSuccess");
     }
+
     @PutMapping("/api/admin/community/comment/{comment-id}")
     public ResponseEntity commentBlockCancel(@PathVariable("comment-id")Long commentId){
-        Comment comment = commentService.findComment(commentId);
-        comment.setIsBlocked(false);
+        commentService.commentBlockCancel(commentId);
         return ResponseEntity.ok().body("CommentBlockCancelSuccess");
     }
 }

@@ -246,10 +246,8 @@ class BoardApiControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.plant_name").value(requestDto.getPlant_name()))
-                .andExpect(jsonPath("$.plant_species").value(requestDto.getPlant_species()))
-                .andExpect(jsonPath("$.water_supply").value(requestDto.getWater_supply()))
-                .andExpect(jsonPath("$.alarm_cycle").value(requestDto.getAlarm_cycle()))
+                .andExpect(jsonPath("$.plant_name").value(requestDto.getContent()))
+                .andExpect(jsonPath("$.plant_species").value(requestDto.getTitle()))
                 .andDo(print());
     }
 

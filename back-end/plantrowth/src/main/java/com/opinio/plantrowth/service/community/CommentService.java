@@ -79,4 +79,10 @@ public class CommentService {
 		return lv;
 	}
 
+	@Transactional
+	public void commentBlockCancel(Long commentId){
+		Comment comment = commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException());
+		comment.setIsBlocked(false);
+	}
+
 }
