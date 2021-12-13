@@ -31,6 +31,7 @@ public class DiagnosisRecordService {
 		String imageUrl) {
 		DiagnosisRecord diagnosisRecord = DiagnosisRecord.builder()
 			.plant(plant)
+			.user(plant.getUser())
 			.diseaseName(diseaseName)
 			.diseasePercent(diseasePercent)
 			.diagnosisDate(LocalDateTime.now())
