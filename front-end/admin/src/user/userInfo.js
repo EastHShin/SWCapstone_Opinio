@@ -10,7 +10,6 @@ import {Link} from "react-router-dom";
 function UserInfo() {
     const [posts, setPosts] = useState({data: []})
     const fetchPostList = async () => {
-        console.warn(localStorage.getItem("userId"))
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
         let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/user/" + localStorage.getItem("userId")
@@ -20,22 +19,13 @@ function UserInfo() {
             }
         })
             .then(function (res) {
-                console.warn(res.data)
-                console.warn(token)
                 setPosts({data: res.data.data})
             })
             .catch(function (error) {
-                console.warn(error)
-                console.warn(token)
+                if(error.status == 403) localStorage.clear()
             })
-            .finally(function () {
-
-            })
-        console.warn(posts)
     }
     function checkSub() {
-        console.warn(posts)
-        console.warn(posts.data.subcription)
     }
 
     useEffect(() => {

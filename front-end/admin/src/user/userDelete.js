@@ -2,6 +2,8 @@ import React, { useState, useEffect, Component } from "react";
 import axios from 'axios';
 import NavBar from "../NavBar.js";
 import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import './users.css';
 import './userUpdate.css';
 
@@ -17,10 +19,12 @@ function UserDelete() {
             headers: {"Content-Type": `application/json`},
             id: localStorage.getItem("userId")
         })
+            .then(function (res) {
+                toast.error('회원 정보가 삭제되었습니다.', {position: toast.POSITION.TOP_CENTER, autoClose:2500})
+            })
     }
 
     async function getValue() {
-        console.warn(localStorage.getItem("userId"))
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
         let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/user/" + localStorage.getItem("userId")
@@ -30,7 +34,6 @@ function UserDelete() {
             }
         })
             .then(function (res) {
-                console.warn([res.data.data])
                 setPosts({name: [res.data.data.name], email:[res.data.data.email], point:[res.data.data.point],
                     mPlant:[res.data.data.maxPlantNum], subscribe:[res.data.data.subcription]})
             })

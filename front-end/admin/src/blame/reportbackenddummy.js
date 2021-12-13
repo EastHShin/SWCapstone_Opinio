@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import * as ReactBootStrap from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -8,6 +9,7 @@ import {Link} from "react-router-dom";
 
 function Table() {
     const [posts, setPosts] = useState({user: []})
+    const nav = useNavigate()
 
     useEffect(() => {
         const fetchPostList = async () => {
@@ -19,14 +21,13 @@ function Table() {
                 }
             })
                 .then(function (res) {
-                    console.warn(res.data)
-                    console.warn(token)
                     setPosts({data: res.data.data})
-                    console.warn(posts)
                 })
                 .catch(function (error) {
-                    console.warn(error)
-                    console.warn(token)
+                    if(error.response.status == 403) {
+                        localStorage.clear()
+                        nav("/administrator")
+                    }
                 })
         }
         fetchPostList()
@@ -34,8 +35,11 @@ function Table() {
 
     function getId(report, board, comment) {
         localStorage.setItem("reportId", report)
-        localStorage.setItem("boardId", board)
-        localStorage.setItem("commentId", comment)
+        if(board!=null) localStorage.setItem("boardId", board)
+        else localStorage.setItem("boardId", -1)
+        if(comment!=null) localStorage.setItem("commentId", comment)
+        else localStorage.setItem("commentId", -1)
+        console.warn(localStorage.getItem("reportId"), localStorage.getItem("boardId"), localStorage.getItem("commentId"))
     }
 
     return (
@@ -78,7 +82,7 @@ function Table() {
                                 <td className="table-info" valign="middle">{item.comment_id}</td>
                             }
                             {
-                                item.coomment_id == null &&
+                                item.comment_id == null &&
                                 <td className="table-info" valign="middle">X</td>
                             }
                             {
@@ -91,10 +95,18 @@ function Table() {
                             }
                             <td className="table-primary" valign="middle">{item.reason}</td>
                             {
-                                item.state === "NOTPROCESSED" &&
+                                (item.state === "NOTPROCESSED" && item.tag === "BOARD") &&
                                 <td className="table-warning" valign="middle">
                                     <Link to="/administrator/report/confirm">
-                                        <Button variant="warning" onClick={() => getId(item.report_id, item.board_id, item.comment_id)}>처리완료</Button>
+                                        <Button variant="warning" onClick={() => getId(item.report_id, item.board_id, item.comment_id)}>게시글 처리</Button>
+                                    </Link>
+                                </td>
+                            }
+                            {
+                                (item.state === "NOTPROCESSED" && item.tag === "COMMENT") &&
+                                <td className="table-warning" valign="middle">
+                                    <Link to="/administrator/report/confirm">
+                                        <Button variant="warning" onClick={() => getId(item.report_id, item.board_id, item.comment_id)}>댓글 처리</Button>
                                     </Link>
                                 </td>
                             }

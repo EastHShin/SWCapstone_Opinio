@@ -17,10 +17,7 @@ import Report from "./blame/report"
 import ReportConfirm from "./blame/reportConfirm"
 
 const RTL = ({check, value}) => {
-    console.warn(check)
-    console.warn(value)
     if(localStorage.getItem('status') === 'OK') value = localStorage.getItem('status')
-    console.warn(localStorage.getItem('status'))
     return value ? check : <Navigate to="/administrator" replace />
 }
 

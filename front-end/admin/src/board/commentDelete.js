@@ -1,8 +1,10 @@
 import React, {useState, useEffect, Component} from "react";
 import axios from 'axios';
 import NavBar from "../NavBar.js";
-import './Board.css';
 import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import './Board.css';
 
 import {Link} from "react-router-dom";
 
@@ -15,6 +17,9 @@ function CommentDelete() {
         return await axios.delete(web, {
             headers: {"Content-Type": `application/json`}
         })
+            .then(function (res) {
+                toast.error('댓글이 삭제되었습니다.', {position: toast.POSITION.TOP_CENTER, autoClose:2500})
+            })
     }
 
     return (

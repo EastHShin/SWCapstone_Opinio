@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import * as ReactBootStrap from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import UserIcon from '@material-ui/icons/Person';
 import './users.css';
 
@@ -11,6 +14,7 @@ import {Link} from "react-router-dom";
 const Table = () => {
     const [posts, setPosts] = useState({user: []})
     const [idx, setIdx] = useState("")
+    const nav = useNavigate()
 
     const fetchPostList = async () => {
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
@@ -22,9 +26,6 @@ const Table = () => {
             }
         })
             .then(function (res) {
-                console.warn(res.data)
-                console.warn(res.data.data[1].id)
-                console.warn(token)
                 if(idx==="")setPosts({data: res.data.data})
                 else {
                     let flag = 0
@@ -32,17 +33,19 @@ const Table = () => {
                         if(res.data.data[i].id == idx) {
                             flag = 1
                             setPosts({data: [res.data.data[i]]})
-                            console.warn(res.data.data[i])
                         }
                     }
-                    if(flag === 0) setPosts({data: res.data.data})
+                    if(flag === 0) {
+                        setPosts({data: res.data.data})
+                        toast.warn('회원 번호가 존재하지 않습니다.', {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+                    }
                 }
-                console.warn(posts)
-                console.warn(idx === "")
             })
             .catch(function (error) {
-                console.warn(error)
-                console.warn(token)
+                if(error.response.status == 403) {
+                    localStorage.clear()
+                    nav("/administrator")
+                }
             })
     }
 
@@ -52,7 +55,6 @@ const Table = () => {
 
     function getId(val) {
         localStorage.setItem("userId", val)
-        console.warn(localStorage.getItem("userId"))
     }
 
     return (

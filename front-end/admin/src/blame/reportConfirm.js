@@ -1,8 +1,10 @@
 import React, {useState, useEffect, Component} from "react";
 import axios from 'axios';
 import NavBar from "../NavBar.js";
-import './report.css';
 import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import './report.css';
 
 import {Link} from "react-router-dom";
 
@@ -10,24 +12,23 @@ function ReportConfirm() {
     const [posts, setPosts] = useState("")
 
     async function confirm() {
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/board/report/" + localStorage.getItem("reportId")
-        console.warn(localStorage.getItem("reportId"))
+        let web
+        if(localStorage.getItem("commentId")==-1) {
+            web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/board/report/" + localStorage.getItem("reportId")
+        } else {
+            web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/comment/report/" + localStorage.getItem("reportId")
+        }
 
         return await axios.post(web, {
             headers: {"Content-Type": `application/json`},
             report_id: localStorage.getItem("reportId")
         })
             .then(function (res) {
-                console.warn(res)
+                toast.success('게시물 신고 상태를 COMPLETE로 변경했습니다.', {position: toast.POSITION.TOP_CENTER, autoClose:2500})
             })
     }
 
     async function GetValue() {
-
-        console.warn(localStorage.getItem("reportId"))
-        console.warn(localStorage.getItem("boardId"))
-        console.warn(localStorage.getItem("commentId"))
-
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
         let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/report/all"
@@ -38,7 +39,6 @@ function ReportConfirm() {
         })
             .then(function (res) {
                 for(let i = 0; i < res.data.data.length; i++) {
-                    console.warn(res.data.data[i].report_id)
                     if(res.data.data[i].report_id == localStorage.getItem("reportId")) {
                         localStorage.setItem("reportInfo:id", res.data.data[i].report_id)
                         localStorage.setItem("reportInfo:userId", res.data.data[i].user_id)
@@ -54,8 +54,6 @@ function ReportConfirm() {
             }
         })
             .then(function (res) {
-                console.warn(res.data.data)
-                console.warn(localStorage.getItem("reportInfo:id"))
                 setPosts({
                     report: localStorage.getItem("reportInfo:id"),
                     userId: localStorage.getItem("reportInfo:userId"),
