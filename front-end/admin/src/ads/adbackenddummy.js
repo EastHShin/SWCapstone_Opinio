@@ -11,9 +11,10 @@ const Table = () => {
 
     useEffect(() => {
         const fetchPostList = async () => {
-            const {data} = await axios("https://jsonplaceholder.typicode.com/posts")
+            const response = await axios("https://jsonplaceholder.typicode.com/posts")
 
-            setPosts({user: data})
+            console.log(response)
+            setPosts({user: response})
         }
         fetchPostList()
     }, [setPosts])

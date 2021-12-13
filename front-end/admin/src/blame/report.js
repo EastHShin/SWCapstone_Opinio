@@ -12,12 +12,6 @@ function Report() {
         <div className="front">
             <NavBar className="top" />
             <h1>유저신고</h1>
-            <Link to="/administrator/board/post">
-                <Button className="mar" variant="primary">게시글 찾기</Button>
-            </Link>
-            <Link to="/administrator/board/comment">
-                <Button variant="info">댓글 찾기</Button>
-            </Link>
             <Table />
         </div>
     );
