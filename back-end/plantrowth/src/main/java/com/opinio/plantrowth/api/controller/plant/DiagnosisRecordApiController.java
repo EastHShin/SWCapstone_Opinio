@@ -29,13 +29,13 @@ public class DiagnosisRecordApiController {
 	private final DiagnosisRecordService diagnosisRecordService;
 	private final PlantService plantService;
 
-	@GetMapping("/api/plants/diagnosis/record/{plant-id}")
-	public ResponseEntity<DiagnosisRecordDTO> getRecords(@PathVariable("plant-id") Long plantId) {
-		Plant plant = plantService.findOnePlant(plantId);
-		List<DiagnosisRecord> records = diagnosisRecordService.getDiagnosisRecords(plantId);
-
-		return new ResponseEntity<DiagnosisRecordDTO>(new DiagnosisRecordDTO(plant, records), HttpStatus.OK);
-	}
+	// @GetMapping("/api/plants/diagnosis/record/{plant-id}")
+	// public ResponseEntity<DiagnosisRecordDTO> getRecords(@PathVariable("plant-id") Long plantId) {
+	// 	Plant plant = plantService.findOnePlant(plantId);
+	// 	List<DiagnosisRecord> records = diagnosisRecordService.getDiagnosisRecords(plantId);
+	//
+	// 	return new ResponseEntity<DiagnosisRecordDTO>(new DiagnosisRecordDTO(plant, records), HttpStatus.OK);
+	// }
 
 	@AllArgsConstructor
 	@Data
