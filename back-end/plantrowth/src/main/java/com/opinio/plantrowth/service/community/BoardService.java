@@ -103,7 +103,11 @@ public class BoardService {
 	 */
 	public Integer countedCommentByBoardId(Long boardId) {
 		Integer countedComment = commentRepository.countByBoardId(boardId);
-		return countedComment;
+		Board board = findBoard(boardId);
+		Integer countedBlockedComment = Math.toIntExact(board.getComments().stream()
+				.filter(x -> x.getIsBlocked().equals(true)).count());
+		Integer numOfComment = countedComment - countedBlockedComment;
+		return numOfComment;
 	}
 
 	/**
