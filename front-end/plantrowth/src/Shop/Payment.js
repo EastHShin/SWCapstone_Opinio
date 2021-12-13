@@ -7,6 +7,7 @@ import Loader from '../Loader';
 import { useNavigation } from '@react-navigation/native';
 import { sendBuySlotData, sendBuySubscribeData } from '../actions/ShopActions';
 import { useDispatch } from 'react-redux';
+import { BUY_SUBSCRIBE } from '../actions/type';
 
 export function Payment({ route }) {
   const dispatch = useDispatch();
@@ -35,6 +36,12 @@ export function Payment({ route }) {
       }
       navigation.navigate('ShopScreen');
     } else {
+      if (route.params.amount == '1000') {
+        dispatch({ type: BUY_PROFILE_SLOT, payload: 'failure' });
+      }
+      else if (route.params.amount == '5900') {
+        dispatch({ type: BUY_SUBSCRIBE, payload: 'failure' });
+      }
       navigation.navigate('ShopScreen');
     }
   }
