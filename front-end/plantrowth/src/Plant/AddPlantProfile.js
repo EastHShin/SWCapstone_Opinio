@@ -324,7 +324,7 @@ AddPlantProfile = ({ route }) => {
             <View style={styles.imageWrapper}>
               {plantImage ? (
                 <Image
-                  style={{ width: 100, height: 100 }}
+                  style={{ width: screenWidth*0.3, height: screenWidth*0.3 }}
                   source={{ uri: plantImage }}
                 />
               ) : null}
@@ -405,7 +405,7 @@ AddPlantProfile = ({ route }) => {
                   : new Date(
                     maximumDate.getFullYear(),
                     maximumDate.getMonth(),
-                    maximumDate.getDate() + 1,
+                    maximumDate.getDate(),
                   )
               }
             />
@@ -598,7 +598,7 @@ AddPlantProfile = ({ route }) => {
                 new Date(
                   maximumDate.getFullYear(),
                   maximumDate.getMonth(),
-                  maximumDate.getDate() + 1,
+                  maximumDate.getDate(),
                 )
               }
             />

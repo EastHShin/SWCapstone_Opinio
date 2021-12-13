@@ -290,7 +290,7 @@ HomeScreen = () => {
               style={[styles.profileContainer, { justifyContent: 'center' }]}
               onPress={() => navigation.navigate('ShopScreen')}
             >
-              <Text style={{ fontFamily: 'NanumGothicBold' }}>
+              <Text style={{ fontFamily: 'NanumGothicBold', textAlign: 'center'}}>
                 프로필 슬롯 추가
               </Text>
             </TouchableOpacity>

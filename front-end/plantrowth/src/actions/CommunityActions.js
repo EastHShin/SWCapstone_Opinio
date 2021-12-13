@@ -233,6 +233,13 @@ export const report = (isBoard, reportId, userId, reason) => {
         }
       })
       .catch(function (err) {
+        console.log('신고 에러 status'+err.response.status)
+        if (err.response.status == 404) {
+          dispatch({
+            type: REPORT,
+            payload: 'twice'
+          })
+        }
         console.log('신고 에러' + err);
         dispatch({
           type: REPORT,
