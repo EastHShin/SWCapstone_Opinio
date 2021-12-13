@@ -16,6 +16,7 @@ import Footer from '../component/Footer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getDiagnosisList } from '../actions/UserActions';
 import { useIsFocused } from '@react-navigation/core';
+import Moment from 'moment';
 
 const Item = ({ item}) => {
 
@@ -34,7 +35,7 @@ const Item = ({ item}) => {
           color="#000000"
           style={styles.documentIcon}
         />
-        <Text style={styles.text}>{item.diagnosis_date} 질병진단 결과</Text>
+        <Text style={styles.text}>{Moment(item.diagnosis_date).format('YYYY/MM/DD HH:mm')} 질병진단 결과</Text>
       </View>
       <View
         style={{
@@ -145,6 +146,7 @@ const PlantDiagnosisScreen = ({ route, navigation }) => {
           <FlatList
             data={diagnosisRecords}
             renderItem={renderItem}
+            initialNumToRender
             keyExtractor={(item, index) => index.toString()} 
             extraData={diagnosisNum}
           />

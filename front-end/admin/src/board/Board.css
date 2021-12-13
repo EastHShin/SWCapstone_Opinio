@@ -53,3 +53,14 @@
 .notice {
     color: gold;
 }
+
+.mar {
+    margin-right: 5px;
+    margin-bottom: 0px;
+}
+
+.infor {
+    font-size: calc(14px + 1vmin);
+    text-align: left;
+    margin-left: calc(20px + 1vmin);
+}
