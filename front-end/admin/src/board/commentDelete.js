@@ -12,7 +12,7 @@ function CommentDelete() {
     const [posts, setPosts] = useState("")
 
     async function del() {
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/comments/" + localStorage.getItem("commentId")
+        let web = "/api/admin/community/comments/" + localStorage.getItem("commentId")
 
         return await axios.delete(web, {
             headers: {"Content-Type": `application/json`}

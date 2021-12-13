@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import * as ReactBootStrap from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -15,7 +15,8 @@ function Table() {
         const fetchPostList = async () => {
             axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
             const token = localStorage.getItem('auth')
-            const response = await axios.get("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/report/all", {
+            let web = "/api/admin/community/report/all"
+            const response = await axios.get(web, {
                 headers: {
                     "Content-Type": `application/json`
                 }
@@ -24,7 +25,7 @@ function Table() {
                     setPosts({data: res.data.data})
                 })
                 .catch(function (error) {
-                    if(error.response.status == 403) {
+                    if (error.response.status == 403) {
                         localStorage.clear()
                         nav("/administrator")
                     }
@@ -33,13 +34,13 @@ function Table() {
         fetchPostList()
     }, [setPosts])
 
-    function getId(report, board, comment) {
+    function getId(report, board, comment, isblocked) {
         localStorage.setItem("reportId", report)
-        if(board!=null) localStorage.setItem("boardId", board)
+        if (board != null) localStorage.setItem("boardId", board)
         else localStorage.setItem("boardId", -1)
-        if(comment!=null) localStorage.setItem("commentId", comment)
+        if (comment != null) localStorage.setItem("commentId", comment)
         else localStorage.setItem("commentId", -1)
-        console.warn(localStorage.getItem("reportId"), localStorage.getItem("boardId"), localStorage.getItem("commentId"))
+        if (isblocked === 1) localStorage.setItem("isBlocked", isblocked)
     }
 
     return (
@@ -87,18 +88,28 @@ function Table() {
                             }
                             {
                                 item.state === "NOTPROCESSED" &&
-                                <td className="table-danger" valign="middle">{item.state}</td>
+                                <td className="table-warning" valign="middle">{item.state}</td>
                             }
                             {
                                 item.state === "COMPLETE" &&
                                 <td className="table-success" valign="middle">{item.state}</td>
+                            }
+                            {
+                                (item.state === "AUTOCOMPLETE" && item.is_blocked === true) &&
+                                <td className="table-danger" valign="middle">BLOCK</td>
+                            }
+                            {
+                                (item.state === "AUTOCOMPLETE" && item.is_blocked === false) &&
+                                <td className="table-success" valign="middle">UNBLOCK</td>
                             }
                             <td className="table-primary" valign="middle">{item.reason}</td>
                             {
                                 (item.state === "NOTPROCESSED" && item.tag === "BOARD") &&
                                 <td className="table-warning" valign="middle">
                                     <Link to="/administrator/report/confirm">
-                                        <Button variant="warning" onClick={() => getId(item.report_id, item.board_id, item.comment_id)}>게시글 처리</Button>
+                                        <Button variant="warning"
+                                                onClick={() => getId(item.report_id, item.board_id, item.comment_id, 0)}>게시글
+                                            처리</Button>
                                     </Link>
                                 </td>
                             }
@@ -106,12 +117,24 @@ function Table() {
                                 (item.state === "NOTPROCESSED" && item.tag === "COMMENT") &&
                                 <td className="table-warning" valign="middle">
                                     <Link to="/administrator/report/confirm">
-                                        <Button variant="warning" onClick={() => getId(item.report_id, item.board_id, item.comment_id)}>댓글 처리</Button>
+                                        <Button variant="warning"
+                                                onClick={() => getId(item.report_id, item.board_id, item.comment_id, 0)}>댓글
+                                            처리</Button>
                                     </Link>
                                 </td>
                             }
                             {
-                                item.state === "COMPLETE" &&
+                                (item.state === "AUTOCOMPLETE" && item.is_blocked === true) &&
+                                <td className="table-warning" valign="middle">
+                                    <Link to="/administrator/report/confirm">
+                                        <Button variant="warning"
+                                                onClick={() => getId(item.report_id, item.board_id, item.comment_id, 1)}>차단 해제
+                                        </Button>
+                                    </Link>
+                                </td>
+                            }
+                            {
+                                (item.state === "COMPLETE" || (item.state === "AUTOCOMPLETE" && item.is_blocked === false)) &&
                                 <td className="table-warning" valign="middle"></td>
                             }
                         </tr>

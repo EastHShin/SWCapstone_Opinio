@@ -23,7 +23,7 @@ const setLogoutTimer = (expirationTime, email) => dispatch => {
 
 async function logoutUser() {
     const email = localStorage.getItem('email')
-    return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout', email, {
+    return await axios.post('/api/auth/logout', email, {
         headers: {"Content-Type": `application/json`}
     })
         .then(function (res) {
@@ -50,7 +50,8 @@ function Login() {
 
     async function log() {
         let item = {email,password}
-        return await axios.post("http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/login", item, {
+        let web = "/api/auth/login"
+        return await axios.post(web, item, {
             headers: { "Content-Type": `application/json` }
         })
             .then(function (res) {
