@@ -39,7 +39,7 @@ public class EmailController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@PostMapping("/api/user/find")
+	@PostMapping("/api/find/user")
 	public ResponseEntity findPassword(@RequestBody findPasswordDTO request) throws Exception {
 		User user = userService.findByEmailAndBirth(request.getEmail(), request.getUser_birth());
 		String newPassword = emailService.sendMsgForPassword(request.getEmail());
