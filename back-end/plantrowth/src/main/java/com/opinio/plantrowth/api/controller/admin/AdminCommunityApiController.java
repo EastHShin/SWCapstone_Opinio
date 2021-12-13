@@ -7,6 +7,7 @@ import com.opinio.plantrowth.api.dto.admin.AdminBoardLookUpDto;
 import com.opinio.plantrowth.api.dto.community.board.BoardLookUpDTO;
 import com.opinio.plantrowth.api.dto.community.comment.CommentLookUpDTO;
 import com.opinio.plantrowth.domain.community.Board;
+import com.opinio.plantrowth.domain.community.Comment;
 import com.opinio.plantrowth.service.community.BoardService;
 import com.opinio.plantrowth.service.community.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
@@ -65,5 +67,18 @@ public class AdminCommunityApiController {
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
 
+    }
+    @Transactional
+    @PutMapping("/api/admin/community/{board-id}")
+    public ResponseEntity boardBlockCancel(@PathVariable("board-id")Long boardId){
+        Board board =boardService.findBoard(boardId);
+        board.setIsBlocked(false);
+        return ResponseEntity.ok().body("BoardBlockCancelSuccess");
+    }
+    @PutMapping("/api/admin/community/comment/{comment-id}")
+    public ResponseEntity commentBlockCancel(@PathVariable("comment-id")Long commentId){
+        Comment comment = commentService.findComment(commentId);
+        comment.setIsBlocked(false);
+        return ResponseEntity.ok().body("CommentBlockCancelSuccess");
     }
 }
