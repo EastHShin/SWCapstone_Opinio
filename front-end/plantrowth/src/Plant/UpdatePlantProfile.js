@@ -90,37 +90,13 @@ UpdatePlantProfile = ({ route }) => {
   const onPressHandler = () => {
     console.log(updateSomething);
     const fd = new FormData();
-
-    // if (plantSpecies !== '') {
-    //   fd.append('plant_species', plantSpecies);
-    //   setUpdateSomething(true);
-    // }
-    // if (plantName !== '') {
-    //   fd.append('plant_name', plantName);
-    //   setUpdateSomething(true);
-    // }
-    // if (plantBirth !== '') {
-    //   fd.append('plant_birth', plantBirth);
-    //   setUpdateSomething(true);
-    // }
-    // if (waterSupply !== undefined) {
-    //   fd.append('water_supply', waterSupply);
-    //   setUpdateSomething(true);
-    // }
-    // if (alarmCycle !== undefined) {
-    //   fd.append('alarm_cycle', alarmCycle);
-    //   setUpdateSomething(true);
-    // }
-    // if (plantImage !== '') {
-    //   fd.append('file_name', {
-    //     name: selectedImage.assets[0].fileName,
-    //     uri: selectedImage.assets[0].uri,
-    //     type: selectedImage.assets[0].type,
-    //   });
-    //   setUpdateSomething(true);
-    // }
     if (updateSomething == false) {
-      alert('아직 아무 정보도 수정하지 않으셨어요!');
+      Alert.alert('식물 정보 수정', '아직 아무 정보도 수정하지 않으셨어요!', [
+        {
+          text: '확인',
+          onPress: () => {return}
+        },
+      ]);
       return;
     } else if (lastWatering == '') {
       Alert.alert(

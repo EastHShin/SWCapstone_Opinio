@@ -577,9 +577,12 @@ const ManagePlant = ({ route }) => {
                         if (profile.point >= 100) {
                           setDiagnosisModalVisibility(true);
                         } else {
-                          alert(
-                            '갖고 계신 포인트가 모자라요!\n식물에게 물을 주거나, 식물일기를 작성하시면 포인트를 얻으실 수 있어요!\n',
-                          );
+                          Alert.alert('포인트 부족', '갖고 계신 포인트가 모자라요!\n식물에게 물을 주거나, 식물일기를 작성하시면 포인트를 얻으실 수 있어요!\n', [
+                            {
+                              text: '확인',
+                              onPress: () => { return }
+                            },
+                          ]);
                         }
                       },
                     },
