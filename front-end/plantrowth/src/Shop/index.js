@@ -90,7 +90,7 @@ ShopScreen = () => {
     } else if (buyProfileSlotState == 'failure' && isFocused) {
       console.log('프로필 슬롯 구매 실패! ');
       setLoading(false);
-      Alert.alert('프로필 슬롯 구매 결제 실패', '네트워크 오류로 결제를 실패하였습니다\n다시 시도해주십시오', [{
+      Alert.alert('프로필 슬롯 구매 결제 실패', '결제가 완료되지 않았습니다\n다시 시도해주십시오', [{
         text: '알겠습니다',
         onPress: () => { return }
       }])
@@ -103,7 +103,7 @@ ShopScreen = () => {
     } else if (buySubscribeState == 'failure' && isFocused) {
       console.log('질병진단 구독 실패');
       setLoading(false);
-      Alert.alert('질병진단 구독 결제 실패', '네트워크 오류로 결제를 실패하였습니다\n다시 시도해주십시오', [{
+      Alert.alert('질병진단 구독 결제 실패', '결제가 완료되지 않았습니다\n다시 시도해주십시오', [{
         text: '알겠습니다',
         onPress: () => { return }
       }])

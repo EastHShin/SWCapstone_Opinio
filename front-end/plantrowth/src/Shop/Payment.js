@@ -7,7 +7,7 @@ import Loader from '../Loader';
 import { useNavigation } from '@react-navigation/native';
 import { sendBuySlotData, sendBuySubscribeData } from '../actions/ShopActions';
 import { useDispatch } from 'react-redux';
-import { BUY_SUBSCRIBE } from '../actions/type';
+import { BUY_SUBSCRIBE, BUY_PROFILE_SLOT } from '../actions/type';
 
 export function Payment({ route }) {
   const dispatch = useDispatch();
