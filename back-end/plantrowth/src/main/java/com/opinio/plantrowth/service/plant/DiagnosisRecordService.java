@@ -37,8 +37,8 @@ public class DiagnosisRecordService {
 		return diagnosisRecordRepository.save(diagnosisRecord);
 	}
 
-	public List<DiagnosisRecord> getDiagnosisRecords(Long plantId) {
-		List<DiagnosisRecord> records = diagnosisRecordRepository.findAllByPlantId(plantId);
+	public Optional<List<DiagnosisRecord>> getDiagnosisRecords(Long plantId) {
+		Optional<List<DiagnosisRecord>> records = diagnosisRecordRepository.findAllByPlantId(plantId);
 		return records;
 	}
 
