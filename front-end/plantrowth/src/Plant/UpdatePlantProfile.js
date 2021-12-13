@@ -396,7 +396,7 @@ UpdatePlantProfile = ({ route }) => {
                     : new Date(
                       maximumDate.getFullYear(),
                       maximumDate.getMonth(),
-                      maximumDate.getDate() - 1,
+                      maximumDate.getDate() + 1,
                     )
               }
             />
@@ -591,7 +591,7 @@ UpdatePlantProfile = ({ route }) => {
                 new Date(
                   maximumDate.getFullYear(),
                   maximumDate.getMonth(),
-                  maximumDate.getDate() - 1,
+                  maximumDate.getDate() + 1,
                 )
               }
             />

@@ -405,7 +405,7 @@ AddPlantProfile = ({ route }) => {
                   : new Date(
                     maximumDate.getFullYear(),
                     maximumDate.getMonth(),
-                    maximumDate.getDate() - 1,
+                    maximumDate.getDate() + 1,
                   )
               }
             />
@@ -598,7 +598,7 @@ AddPlantProfile = ({ route }) => {
                 new Date(
                   maximumDate.getFullYear(),
                   maximumDate.getMonth(),
-                  maximumDate.getDate() - 1,
+                  maximumDate.getDate() + 1,
                 )
               }
             />
