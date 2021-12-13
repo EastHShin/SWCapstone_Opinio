@@ -65,6 +65,7 @@ public class AdminReportApiController {
 		private String username;
 		private Long board_id;
 		private Long comment_id;
+		private Boolean is_blocked;
 
 		public ReportViewDTO(Report report){
 			report_id = report.getId();
@@ -76,9 +77,11 @@ public class AdminReportApiController {
 			username = report.getUser().getName();
 			if (report.getTag().equals(Report.tagEnum.BOARD)) {
 				board_id = report.getBoard().getId();
+				is_blocked = report.getBoard().getIsBlocked();
 			} else if (report.getTag().equals(Report.tagEnum.COMMENT)) {
 				comment_id = report.getComment().getId();
 				board_id= report.getComment().getBoard().getId();
+				is_blocked = report.getComment().getIsBlocked();
 			}
 		}
 	}

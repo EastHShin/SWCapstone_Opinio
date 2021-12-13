@@ -14,7 +14,7 @@ export function Payment({ route }) {
   const navigation = useNavigation();
   /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
   function callback(response) {
-    console.log(response);
+    console.log('아임포트 response: '+JSON.stringify(response));
     if (response.imp_success == 'true') {
       console.log('결제 성공' + route.params.userId);
       if (route.params.amount == '1000') {

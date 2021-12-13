@@ -176,7 +176,7 @@ class BoardApiControllerTest {
                 .build();
         when(boardService.createBoard(board3)).thenReturn(board3.getId());
         //when
-        when(plantService.join(any())).thenReturn(1L);
+        when(boardService.createBoard(any())).thenReturn(1L);
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(requestDto);
 //        MockMultipartFile dataFile = new MockMultipartFile("data", "", "application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -192,42 +192,38 @@ class BoardApiControllerTest {
     }
 
     @Test
-    @DisplayName("식물 목록 조회 테스트")
-    public void findPlants() throws Exception{
+    @DisplayName("게시판 조회 테스트")
+    public void boardList() throws Exception{
         //given
-        List<Plant> plants = new ArrayList<>();
-        plants.add(plant);
-        plants.add(plant2);
+        List<Board> boards = new ArrayList<>();
+        boards.add(board1);
+        boards.add(board2);
         //when
-        when(plantService.findPlants(1L)).thenReturn(plants);
+        when(boardService.findBoard(1L)).thenReturn(board1);
         //then
         mockMvc.perform(get("/api/plants/profiles/{user-id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(2))
-                .andExpect(jsonPath("$.data[0].plantName").value(plant.getPlantName()))
-                .andExpect(jsonPath("$.data[1].plantName").value(plant2.getPlantName()))
+                .andExpect(jsonPath("$.data[0].title").value(board1.getTitle()))
+                .andExpect(jsonPath("$.data[1].title").value(board2.getTitle()))
                 .andDo(print());
     }
 
     @Test
-    public void managePlant() throws Exception{
+    public void lookUpBoard() throws Exception{
         //given
-        plant.setId(1L);
+        board1.setId(1L);
         //when
-        when(plantService.findOnePlant(any())).thenReturn(plant);
+        when(boardService.findBoard(any())).thenReturn(board1);
         //then
 
-        mockMvc.perform(get("/api/plants/profiles/manage/{plant-id}", 1L))
+        mockMvc.perform(get("/api/community/{board-id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.plant_id").value(plant.getId()))
-                .andExpect(jsonPath("$.plant_species").value(plant.getPlantSpecies()))
-                .andExpect(jsonPath("$.plant_name").value(plant.getPlantName()))
-                .andExpect(jsonPath("$.plant_birth").value(plant.getPlantBirth().toString()))
-                .andExpect(jsonPath("$.plant_exp").value(plant.getPlantExp()))
+                .andExpect(jsonPath("$.title").value(board1.getTitle()))
+                .andExpect(jsonPath("$.content").value(board1.getContent()))
+                .andExpect(jsonPath("$.writer").value(board1.getUser().getName()))
+                .andExpect(jsonPath("$.userId").value(board1.getUser().getId()))
                 .andExpect(jsonPath("$.file_name").value(plant.getFileName()))
-                .andExpect(jsonPath("$.water_supply").value(plant.getWaterSupply()))
-                .andExpect(jsonPath("$.alarm_cycle").value(plant.getAlarmCycle()))
-                .andExpect(jsonPath("$.remain_cycle").value(plant.getRemainCycle()))
                 .andDo(print());
 
     }
@@ -235,29 +231,23 @@ class BoardApiControllerTest {
     @Test
     public void updatePlant() throws Exception{
         //given
-        plant.setId(1L);
+        board1.setId(1L);
 //        //when
-        CreatePlantRequestDto requestDto = new CreatePlantRequestDto("가시", "토로리",
-                LocalDate.now(),  5, 3, LocalDate.now());
-        plant.setPlantSpecies(requestDto.getPlant_species());
-        plant.setPlantName(requestDto.getPlant_name());
-        plant.setPlantBirth(requestDto.getPlant_birth());
-        plant.setWaterSupply(requestDto.getWater_supply());
-        plant.setAlarmCycle(requestDto.getAlarm_cycle());
+        BoardCreateRequest requestDto = new BoardCreateRequest("가시", "토로리", false);
 
-        when(plantService.update(any(), eq(requestDto))).thenReturn(1L);
-        when(plantService.findOnePlant(any())).thenReturn(plant);
+        board1.setContent(requestDto.getContent());
+        board1.setTitle(requestDto.getTitle());
+
+        when(boardService.findBoard(any())).thenReturn(board1);
 
         //then
-        mockMvc.perform(put("/api/plants/profiles/{plant-id}", plant.getId())
+        mockMvc.perform(put("/api/community/{plant-id}", plant.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.plant_name").value(requestDto.getPlant_name()))
-                .andExpect(jsonPath("$.plant_species").value(requestDto.getPlant_species()))
-                .andExpect(jsonPath("$.water_supply").value(requestDto.getWater_supply()))
-                .andExpect(jsonPath("$.alarm_cycle").value(requestDto.getAlarm_cycle()))
+                .andExpect(jsonPath("$.plant_name").value(requestDto.getContent()))
+                .andExpect(jsonPath("$.plant_species").value(requestDto.getTitle()))
                 .andDo(print());
     }
 

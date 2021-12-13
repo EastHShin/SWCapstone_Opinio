@@ -2,6 +2,7 @@ package com.opinio.plantrowth.service.plant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,9 +27,11 @@ public class DiagnosisRecordService {
 	private final PaymentRecordRepository paymentRecordRepository;
 
 	@Transactional
-	public DiagnosisRecord saveDiagnosisRecord(Plant plant, String diseaseName, String diseasePercent, String imageUrl) {
+	public DiagnosisRecord saveDiagnosisRecord(Plant plant, String diseaseName, String diseasePercent,
+		String imageUrl) {
 		DiagnosisRecord diagnosisRecord = DiagnosisRecord.builder()
 			.plant(plant)
+			.user(plant.getUser())
 			.diseaseName(diseaseName)
 			.diseasePercent(diseasePercent)
 			.diagnosisDate(LocalDateTime.now())
@@ -42,12 +45,23 @@ public class DiagnosisRecordService {
 		return records;
 	}
 
+	public List<DiagnosisRecord> getDiagnosisRecordsByUserId(Long userId) {
+		List<DiagnosisRecord> records = diagnosisRecordRepository.findAllByUserId(userId);
+		return records;
+	}
+
 	public List<DiagnosisRecord> getValidDiagnosisRecords(Long plantId, String merchantId) {
-		List<DiagnosisRecord> records = diagnosisRecordRepository.findAllByPlantId(plantId);
+		List<DiagnosisRecord> records = diagnosisRecordRepository.findAllByUserId(plantId);
 		PaymentRecord paymentRecord = paymentRecordRepository.findByMerchantUid(merchantId).orElseThrow(
 			() -> new IllegalArgumentException("No Found Payment Record")
 		);
-		return records.stream()
+		System.out.println("service layer : " + records);
+		System.out.println("service layer : " + records.size());
+		if (records.isEmpty()) {
+			return null;
+		}
+		return records
+			.stream()
 			.filter(record -> record.getDiagnosisDate().isAfter(paymentRecord.getDateTime()))
 			.collect(Collectors.toList());
 	}

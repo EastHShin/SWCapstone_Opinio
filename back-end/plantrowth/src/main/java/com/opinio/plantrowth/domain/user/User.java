@@ -17,9 +17,11 @@ import java.util.stream.Collectors;
 import com.opinio.plantrowth.domain.community.Board;
 import com.opinio.plantrowth.domain.community.BoardLike;
 import com.opinio.plantrowth.domain.community.Comment;
+import com.opinio.plantrowth.domain.community.Report;
 import com.opinio.plantrowth.domain.payment.PaymentRecord;
 import com.opinio.plantrowth.domain.payment.PointRecord;
 import com.opinio.plantrowth.domain.payment.Subscription;
+import com.opinio.plantrowth.domain.plant.DiagnosisRecord;
 import com.opinio.plantrowth.domain.plant.Plant;
 
 @AllArgsConstructor
@@ -82,6 +84,14 @@ public class User implements UserDetails {
 	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "user")
 	@Builder.Default
 	List<Subscription> subscriptions = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "user")
+	@Builder.Default
+	List<Report> reports = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "user")
+	@Builder.Default
+	List<DiagnosisRecord> diagnosisRecords = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

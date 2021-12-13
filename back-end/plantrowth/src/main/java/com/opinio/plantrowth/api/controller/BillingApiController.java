@@ -2,6 +2,7 @@ package com.opinio.plantrowth.api.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.opinio.plantrowth.api.dto.payment.RefundRequestDTO;
@@ -68,17 +69,20 @@ public class BillingApiController {
 	}
 
 	@PostMapping("/api/payments/refund/{user-id}")
-	public ResponseEntity paymentRefund(@PathVariable("user-id") Long userId, @RequestBody RefundRequestDTO requestDTO) throws ParseException {
-		List<DiagnosisRecord> diagnosisRecords = diagnosisRecordService.getDiagnosisRecords(userId);
-		if (diagnosisRecords.size() != 0) {
-			System.out.println(diagnosisRecords.size());
+	public ResponseEntity paymentRefund(@PathVariable("user-id") Long userId,
+		@RequestBody RefundRequestDTO requestDTO) throws ParseException {
+		List<DiagnosisRecord> diagnosisRecords = diagnosisRecordService.getDiagnosisRecordsByUserId(userId);
+		System.out.println("diagnosis Record : " + diagnosisRecords);
+		System.out.println("diagnosis Record : " + diagnosisRecords.size());
+
+		if (diagnosisRecords.size() > 0) {
 			return ResponseEntity.status(427).build();
 		}
+
 		String accessToken = billingService.getToken();
 		PaymentRecord paymentInfo = billingService.findPaymentInfo(requestDTO.getMerchant_uid());
 		billingService.refund(paymentInfo, requestDTO, accessToken);
 		return new ResponseEntity(HttpStatus.OK);
-
 	}
 
 	@Data

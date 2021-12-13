@@ -103,7 +103,11 @@ public class BoardService {
 	 */
 	public Integer countedCommentByBoardId(Long boardId) {
 		Integer countedComment = commentRepository.countByBoardId(boardId);
-		return countedComment;
+		Board board = findBoard(boardId);
+		Integer countedBlockedComment = Math.toIntExact(board.getComments().stream()
+				.filter(x -> x.getIsBlocked().equals(true)).count());
+		Integer numOfComment = countedComment - countedBlockedComment;
+		return numOfComment;
 	}
 
 	/**
@@ -160,5 +164,10 @@ public class BoardService {
 				.thenComparing(Comparator.comparing(BoardDTO::getCreateDate).reversed())).limit(10)
 			.collect(Collectors.toList());
 		return collect;
+	}
+	@Transactional
+	public void boardBlockCancel(Long boardId){
+		Board board = boardRepository.findById(boardId).orElseThrow(()->new IllegalArgumentException());
+		board.setIsBlocked(false);
 	}
 }
