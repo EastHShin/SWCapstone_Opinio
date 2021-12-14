@@ -260,6 +260,7 @@ const PostDetailScreen = ({ route, navigation }) => {
   const renderComment = comment => {
     if (comment) {
       return comment.map((item, index) => {
+        if(!item.is_blocked){
         return (
           <View
             key={index}
@@ -315,8 +316,10 @@ const PostDetailScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
         );
+      }
       });
     }
+  
   };
   //댓글
 
