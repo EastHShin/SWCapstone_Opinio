@@ -26,7 +26,7 @@ function UserUpdate() {
         } else {
             sub = false
         }
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/user/" + localStorage.getItem("userId")
+        let web = "/api/admin/user/" + localStorage.getItem("userId")
 
         if(name==="" || email==="" || point==="" || mPlant==="") {
             return toast.error('이름, 이메일, 포인트, 슬롯의 내용을 모두 채워야합니다.', {position: toast.POSITION.TOP_CENTER, autoClose:2000})
@@ -47,7 +47,7 @@ function UserUpdate() {
     async function getValue() {
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/user/" + localStorage.getItem("userId")
+        let web = "/api/admin/user/" + localStorage.getItem("userId")
         const response = await axios.get(web, {
             headers: {
                 "Content-Type": `application/json`

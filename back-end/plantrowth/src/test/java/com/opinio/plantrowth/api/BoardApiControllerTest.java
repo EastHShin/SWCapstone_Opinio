@@ -238,7 +238,7 @@ class BoardApiControllerTest {
         board1.setContent(requestDto.getContent());
         board1.setTitle(requestDto.getTitle());
 
-        when(plantService.findOnePlant(any())).thenReturn(plant);
+        when(boardService.findBoard(any())).thenReturn(board1);
 
         //then
         mockMvc.perform(put("/api/community/{plant-id}", plant.getId())

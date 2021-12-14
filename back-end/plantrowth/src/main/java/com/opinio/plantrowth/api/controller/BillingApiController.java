@@ -71,16 +71,9 @@ public class BillingApiController {
 	@PostMapping("/api/payments/refund/{user-id}")
 	public ResponseEntity paymentRefund(@PathVariable("user-id") Long userId,
 		@RequestBody RefundRequestDTO requestDTO) throws ParseException {
-		List<DiagnosisRecord> diagnosisRecords = diagnosisRecordService.getValidDiagnosisRecords(userId,
-			requestDTO.getMerchant_uid());
+		List<DiagnosisRecord> diagnosisRecords = diagnosisRecordService.getDiagnosisRecordsByUserId(userId);
 		System.out.println("diagnosis Record : " + diagnosisRecords);
 		System.out.println("diagnosis Record : " + diagnosisRecords.size());
-		if (diagnosisRecords == null) {
-			String accessToken = billingService.getToken();
-			PaymentRecord paymentInfo = billingService.findPaymentInfo(requestDTO.getMerchant_uid());
-			billingService.refund(paymentInfo, requestDTO, accessToken);
-			return new ResponseEntity(HttpStatus.OK);
-		}
 
 		if (diagnosisRecords.size() > 0) {
 			return ResponseEntity.status(427).build();

@@ -240,6 +240,18 @@ const PostDetailScreen = ({ route, navigation }) => {
           },
         }
       ]);
+    } else if (reportState == 'twice' && isFocused) {
+      setLoading(false);
+      dispatch(setReportState(''));
+      setReportModalVisibility(false);
+      Alert.alert('신고 실패', '동일한 게시글/댓글은 한 번만 신고할 수 있습니다', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
     }
   }, [reportState]);
   //신고useEffect
@@ -406,14 +418,26 @@ const PostDetailScreen = ({ route, navigation }) => {
 
   //신고 Handler
   const reportHandler = (type, reason) => {
-    if (type) {
-      setLoading(true);
-      dispatch(report(type, Number(selectedId), userId, reason));
-    }
-    else if (!type) {
-      console.log('댓글 id: ' + selectedCommentId);
-      setLoading(true);
-      dispatch(report(type, selectedCommentId, userId, reason));
+    console.log('reason: ' + reason)
+    if (reason == undefined || reason == '') {
+      Alert.alert('신고 실패', '신고 사유를 입력해주세요', [
+        {
+          text: '확인',
+          onPress: () => {
+            return;
+          },
+        }
+      ]);
+    } else {
+      if (type) {
+        setLoading(true);
+        dispatch(report(type, Number(selectedId), userId, reason));
+      }
+      else if (!type) {
+        console.log('댓글 id: ' + selectedCommentId);
+        setLoading(true);
+        dispatch(report(type, selectedCommentId, userId, reason));
+      }
     }
   }
   //신고 Handler

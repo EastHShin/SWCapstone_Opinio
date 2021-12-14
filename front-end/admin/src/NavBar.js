@@ -12,8 +12,9 @@ function NavBar() {
 
     async function logoutUser() {
         const email = localStorage.getItem('email')
+        let web = "/api/auth/logout"
 
-        return await axios.post('http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/auth/logout', email, {
+        return await axios.post(web, email, {
             headers: {"Content-Type": `application/json`}
         })
             .then(function (res) {

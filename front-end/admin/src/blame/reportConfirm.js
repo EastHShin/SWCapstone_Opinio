@@ -11,12 +11,29 @@ import {Link} from "react-router-dom";
 function ReportConfirm() {
     const [posts, setPosts] = useState("")
 
+    async function unblock() {
+        let web
+        console.warn(localStorage.getItem("commentId"))
+        if(localStorage.getItem("commentId")==-1) {
+            web = "/api/admin/community/" + localStorage.getItem("boardId")
+        } else {
+            web = "/api/admin/community/comment/" + localStorage.getItem("commentId")
+        }
+
+        return await axios.put(web, {
+            headers: {"Content-Type": `application/json`},
+        })
+            .then(function (res) {
+                toast.success("게시물을 차단 해제했습니다.", {position: toast.POSITION.TOP_CENTER, autoClose:2500})
+            })
+    }
+
     async function confirm() {
         let web
         if(localStorage.getItem("commentId")==-1) {
-            web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/board/report/" + localStorage.getItem("reportId")
+            web = "/api/admin/community/board/report/" + localStorage.getItem("reportId")
         } else {
-            web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/comment/report/" + localStorage.getItem("reportId")
+            web = "/api/admin/community/comment/report/" + localStorage.getItem("reportId")
         }
 
         return await axios.post(web, {
@@ -31,7 +48,7 @@ function ReportConfirm() {
     async function GetValue() {
         axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
         const token = localStorage.getItem('auth')
-        let web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/report/all"
+        let web = "/api/admin/community/report/all"
         const reportResponse = await axios.get(web, {
             headers: {
                 "Content-Type": `application/json`
@@ -47,7 +64,7 @@ function ReportConfirm() {
                 }
             })
 
-        web = "http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/admin/community/" + localStorage.getItem("boardId")
+        web = "/api/admin/community/" + localStorage.getItem("boardId")
         const boardResponse = await axios.get(web, {
             headers: {
                 "Content-Type": `application/json`
@@ -93,9 +110,18 @@ function ReportConfirm() {
             <Link to="/administrator/report">
                 <Button className="mar" variant="success">뒤로 가기</Button>
             </Link>
-            <Link to="/administrator/front">
-                <Button variant="warning" onClick={confirm}>처리 완료</Button>
-            </Link>
+            {
+                localStorage.getItem("isBlocked") == 1 &&
+                <Link to="/administrator/front">
+                    <Button variant="warning" onClick={unblock}>차단 해제</Button>
+                </Link>
+            }
+            {
+                localStorage.getItem("isBlocked") == 0 &&
+                <Link to="/administrator/front">
+                    <Button variant="warning" onClick={confirm}>처리 완료</Button>
+                </Link>
+            }
         </div>
     )
 }
