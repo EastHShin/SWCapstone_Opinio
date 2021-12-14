@@ -51,7 +51,7 @@ export function Payment({ route }) {
     //pg: 'kakaopay'
     pg: 'inicis',
     pay_method: 'card',
-    name: '프로필 슬롯',
+    name: route.params.amount == '5900' ? '질병진단 구독' : '프로필 슬롯',
     merchant_uid: `mid_${new Date().getTime()}`,
     amount: route.params.amount,
     buyer_email: route.params.email,

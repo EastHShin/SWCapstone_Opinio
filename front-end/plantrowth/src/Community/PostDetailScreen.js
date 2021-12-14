@@ -808,29 +808,35 @@ const PostDetailScreen = ({ route, navigation }) => {
           onBackButtonPress={() => {
             setReportModalVisibility(false);
           }}
-          onBackdropPress={() => {
-            setReportModalVisibility(false);
-          }}
           style={{ alignItems: 'center' }}
         >
           <View style={{ alignItems: 'center', padding: 5, backgroundColor: 'white', width: screenWidth * 0.8, height: screenHeight * 0.5, borderRadius: 15 }}>
-            <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: '#363636' }}>
-              {reportType ? `게시글 신고` : `댓글 신고`}
-            </Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', width: screenWidth*0.75, alignItems: 'center', }}>
+            <Feather name="x" size={27} color="white" />
+              <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 16, color: '#363636' }}>
+                {reportType ? `게시글 신고` : `댓글 신고`}
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => setReportModalVisibility(false)}
+              >
+                <Feather name="x" size={27} color="#000000" />
+              </TouchableOpacity>
+            </View>
             <View style={{ width: screenWidth * 0.75, flex: 1, marginTop: 15 }}>
               <Text style={{ fontFamily: 'NanumGothicBold', fontSize: 14, color: '#363636' }}>
                 신고사유
               </Text>
-              <View style={{ flex: 1, backgroundColor: '#f7f8f9' }}>
+              <View style={{ flex: 1, backgroundColor: '#F7F8F9' }}>
                 <TextInput
                   onChangeText={reason => setReason(reason)}
                   multiline={true}
                   placeholder="신고 사유 입력"
                   placeholderTextColor="#808080"
                   returnKeyType="next"
-                  blurOnSubmit={true}
+                  //blurOnSubmit={true}
                   underlineColorAndroid="#f000"
-                  backgroundColor='#f7f8f9'
+                  backgroundColor='#F7F8F9'
                   maxLength={250}
                 />
               </View>
@@ -853,7 +859,7 @@ const PostDetailScreen = ({ route, navigation }) => {
             underlineColorAndroid="#999999"
             onChangeText={editingComment => setComment(editingComment)}
             defaultValue={updating ? selectedCommentContent : ''}
-            onSubmitEditing={Keyboard.dismiss}
+            // onSubmitEditing={Keyboard.dismiss}
             value={(!updating) ? comment : comment}
             maxLength={250}
           />

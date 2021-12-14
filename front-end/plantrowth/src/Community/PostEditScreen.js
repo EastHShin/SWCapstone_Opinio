@@ -209,7 +209,7 @@ const PostEditScreen = ({ route, navigation }) => {
                 placeholderTextColor="#808080"
                 returnKeyType="next"
                 ref={contentInputRef}
-                blurOnSubmit={true}
+                // blurOnSubmit={true}
                 underlineColorAndroid="#f000"
               />
             </View>

@@ -21,87 +21,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import Moment from 'moment';
 
 
-const Item = ({ item, onPress, style }) => {
-  const nowYear = new Date().getFullYear();
-  const boardCreateDate = new Date(item.createDate);
- 
-    return (
-      <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
-        <View>
-          <Text style={styles.title}>{item.title}</Text>
-        </View>
-        <View style={{ marginBottom: Dimensions.get('window').height * 0.01 }}>
-          <Text style={styles.content}>
-            {item.content.length > 33
-              ? item.content.substring(0, 31) + '···'
-              : item.content}
-          </Text>
-        </View>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-          }}
-        >
-          <View style={{ flexDirection: 'row' }}>
-            {nowYear == boardCreateDate.getFullYear() ? (
-              <Text style={styles.date}>
-                {Moment(item.createDate).format('MM/DD HH:mm')}
-              </Text>
-            ) : (
-              <Text style={styles.date}>
-                {Moment(item.createDate).format('YYYY/MM/DD HH:mm')}
-              </Text>
-            )}
-
-            <Text
-              style={{ fontSize: 10, color: '#DCDCDC', fontWeight: 'bold' }}
-            >
-              {' '}
-              |{' '}
-            </Text>
-            <Text style={styles.date}>{item.writer}</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <MaterialCommunityIcons
-              name="heart-outline"
-              size={14}
-              color="#DC143C"
-            />
-            <Text
-              style={{
-                fontSize: 10,
-                color: '#DC143C',
-                marginLeft: Dimensions.get('window').width * 0.01,
-                marginRight: Dimensions.get('window').width * 0.02,
-              }}
-            >
-              {item.countedLike}
-            </Text>
-            <SimpleLineIcons name="bubble" size={14} color="#00BFFF" />
-            <Text
-              style={{
-                fontSize: 10,
-                color: '#00BFFF',
-                marginHorizontal: Dimensions.get('window').width * 0.01,
-              }}
-            >
-              {item.countedComments}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-}
-
-
 const CommunityMainScreen = ({ navigation }) => {
 
   const [selectedId, setSelectedId] = useState("");
   const [isFetching, setIsFetching] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
- 
+  const [content, setContent]= useState('');
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const boardList = useSelector(state => state.CommunityReducer.boardList);
@@ -124,6 +49,83 @@ const CommunityMainScreen = ({ navigation }) => {
   const refreshList = () => {
     setIsFetching(true);
     dispatch(getBoardList());
+  }
+
+  const Item = ({ item, onPress, style }) => {
+    const nowYear = new Date().getFullYear();
+    const boardCreateDate = new Date(item.createDate);
+   
+      return (
+        <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
+          <View>
+            <Text style={styles.title}>{item.title}</Text>
+          </View>
+          <View style={{ marginBottom: Dimensions.get('window').height * 0.01 }}>
+            {item.content.match(/\n/) ? <Text style={styles.content}>
+                {item.content.split("\n")[0]}
+</Text> :
+<Text style={styles.content}>
+         {item.content.length > 33 
+              ? item.content.substring(0, 25) + '···'
+              : item.content}
+            </Text>}
+          </View>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              {nowYear == boardCreateDate.getFullYear() ? (
+                <Text style={styles.date}>
+                  {Moment(item.createDate).format('MM/DD HH:mm')}
+                </Text>
+              ) : (
+                <Text style={styles.date}>
+                  {Moment(item.createDate).format('YYYY/MM/DD HH:mm')}
+                </Text>
+              )}
+  
+              <Text
+                style={{ fontSize: 10, color: '#DCDCDC', fontWeight: 'bold' }}
+              >
+                {' '}
+                |{' '}
+              </Text>
+              <Text style={styles.date}>{item.writer}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <MaterialCommunityIcons
+                name="heart-outline"
+                size={14}
+                color="#DC143C"
+              />
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: '#DC143C',
+                  marginLeft: Dimensions.get('window').width * 0.01,
+                  marginRight: Dimensions.get('window').width * 0.02,
+                }}
+              >
+                {item.countedLike}
+              </Text>
+              <SimpleLineIcons name="bubble" size={14} color="#00BFFF" />
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: '#00BFFF',
+                  marginHorizontal: Dimensions.get('window').width * 0.01,
+                }}
+              >
+                {item.countedComments}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
   }
 
 
