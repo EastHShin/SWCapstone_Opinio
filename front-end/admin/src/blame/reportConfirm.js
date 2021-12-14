@@ -13,7 +13,6 @@ function ReportConfirm() {
 
     async function unblock() {
         let web
-        console.warn(localStorage.getItem("commentId"))
         if(localStorage.getItem("commentId")==-1) {
             web = "/api/admin/community/" + localStorage.getItem("boardId")
         } else {
@@ -117,7 +116,7 @@ function ReportConfirm() {
                 </Link>
             }
             {
-                localStorage.getItem("isBlocked") == 0 &&
+                localStorage.getItem("isBlocked") == -1 &&
                 <Link to="/administrator/front">
                     <Button variant="warning" onClick={confirm}>처리 완료</Button>
                 </Link>

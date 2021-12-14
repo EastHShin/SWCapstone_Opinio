@@ -83,18 +83,26 @@ const Table = () => {
                             <td class="table-light" valign="middle">{item.id}</td>
                             <td class="table-primary" valign="middle">{item.user_name}</td>
                             <td class="table-light" valign="middle">{item.user_email}</td>
-                            <td class="table-warning" valign="middle">
-                                <Link to="/administrator/user/info">
-                                    <Button onClick={() => getId(item.id)} variant="info" className="mar">정보</Button>
-                                </Link>
-                                <Link to="/administrator/user/update">
-                                    <Button onClick={() => getId(item.id)} variant="warning"
-                                            className="mar">수정</Button>
-                                </Link>
-                                <Link to="/administrator/user/delete">
-                                <Button onClick={() => getId(item.id)} variant="danger">삭제</Button>
-                                </Link>
-                            </td>
+                            {
+                                item.user_email != localStorage.getItem("email") &&
+                                <td class="table-warning" valign="middle">
+                                    <Link to="/administrator/user/info">
+                                        <Button onClick={() => getId(item.id)} variant="info"
+                                                className="mar">정보</Button>
+                                    </Link>
+                                    <Link to="/administrator/user/update">
+                                        <Button onClick={() => getId(item.id)} variant="warning"
+                                                className="mar">수정</Button>
+                                    </Link>
+                                    <Link to="/administrator/user/delete">
+                                        <Button onClick={() => getId(item.id)} variant="danger">삭제</Button>
+                                    </Link>
+                                </td>
+                            }
+                            {
+                                item.user_email === localStorage.getItem("email") &&
+                                <td className="table-warning" valign="middle"></td>
+                            }
                         </tr>
                     ))
                 }

@@ -41,6 +41,7 @@ function Table() {
         if (comment != null) localStorage.setItem("commentId", comment)
         else localStorage.setItem("commentId", -1)
         if (isblocked === 1) localStorage.setItem("isBlocked", isblocked)
+        else localStorage.setItem("isBlocked", -1)
     }
 
     return (
