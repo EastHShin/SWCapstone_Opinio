@@ -22,7 +22,6 @@ function Table() {
                 }
             })
                 .then(function (res) {
-                    console.warn(res.data.data)
                     setPosts({data: res.data.data})
                 })
                 .catch(function (error) {

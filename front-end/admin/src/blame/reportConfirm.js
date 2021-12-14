@@ -13,7 +13,6 @@ function ReportConfirm() {
 
     async function unblock() {
         let web
-        console.warn(localStorage.getItem("commentId"))
         if(localStorage.getItem("commentId")==-1) {
             web = "/api/admin/community/" + localStorage.getItem("boardId")
         } else {

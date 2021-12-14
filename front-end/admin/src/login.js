@@ -60,8 +60,6 @@ function Login() {
                 localStorage.setItem("status", res.data.status)
                 localStorage.setItem("auth", res.headers.authorization)
                 axios.defaults.headers.common['X-AUTH-TOKEN'] = localStorage.getItem("auth")
-                console.warn(localStorage.getItem("auth"))
-                console.warn(localStorage.getItem('status'))
                 toast.success('로그인 완료', {position: toast.POSITION.TOP_CENTER, autoClose:1500})
                 nav("/administrator/front")
             })
