@@ -49,7 +49,6 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   
 });
 
-
 const  AppFirebase = () => {
 
   messaging().onNotificationOpenedApp(async remoteMessage => {

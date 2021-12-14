@@ -31,9 +31,15 @@ const Item = ({ item, onPress, style }) => {
         </Text>
       </View>
       <View>
-        <Text style={styles.content}>
-          {item.content.length > 24 ? (item.content.substring(0, 22) + "···") : item.content}
-        </Text>
+      {item.content.match(/\n/) ? (
+              <Text style={styles.content}>{item.content.split('\n')[0]}</Text>
+            ) : (
+              <Text style={styles.content}>
+                {item.content.length > 33
+                  ? item.content.substring(0, 21) + '···'
+                  : item.content}
+              </Text>
+            )}
       </View>
       <View style={{ alignItems: "flex-end" }}>
         <Text style={styles.date}>{item.date}</Text>

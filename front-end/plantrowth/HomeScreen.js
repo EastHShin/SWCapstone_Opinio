@@ -37,11 +37,15 @@ const Item = ({ item, onPress, style }) => {
           <Text style={styles.title}>{item.title}</Text>
         </View>
         <View style={{ marginBottom: Dimensions.get('window').height * 0.01 }}>
-          <Text style={styles.content}>
-            {item.content.length > 33
-              ? item.content.substring(0, 31) + '···'
-              : item.content}
-          </Text>
+        {item.content.match(/\n/) ? (
+              <Text style={styles.content}>{item.content.split('\n')[0]}</Text>
+            ) : (
+              <Text style={styles.content}>
+                {item.content.length > 33
+                  ? item.content.substring(0, 25) + '···'
+                  : item.content}
+              </Text>
+            )}
         </View>
         <View
           style={{
