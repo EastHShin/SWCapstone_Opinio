@@ -182,6 +182,11 @@ function RegisterScreen({ navigation }) {
   }
 
   const checkUserNickname = () => {
+    const str_space = /\s/;
+    if(str_space.exec(userNickName)){
+      alert('공백은 사용할 수 없습니다!');
+      return;
+    } 
     if (!userNickName) {
       alert('닉네임을 입력해주세요!');
       return;
@@ -338,7 +343,6 @@ function RegisterScreen({ navigation }) {
                   isVisible={isDatePickerVisible}
                   mode="date"
                   onConfirm={handleConfirm}
-                  minimumDate={new Date(1921, 0, 1)}
                   maximumDate={new Date(maximumDate.getFullYear(), maximumDate.getMonth(), maximumDate.getDate() - 1)}
                   onCancel={() => {
                     setDatePickerVisibility(false);

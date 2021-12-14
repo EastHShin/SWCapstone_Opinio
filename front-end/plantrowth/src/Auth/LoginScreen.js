@@ -261,10 +261,16 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const checkUserNickname = () => {
+    const str_space = /\s/;
+    if(str_space.exec(userName)){
+      alert('공백은 사용할 수 없습니다!');
+      return;
+    } 
     if (!userName) {
       alert('닉네임을 입력해주세요!');
       return;
     }
+
 
     setLoading(true);
 
@@ -473,7 +479,6 @@ const LoginScreen = ({ navigation }) => {
                       maximumDate.getDate() - 1,
                     )
                   }
-                  minimumDate={new Date(1921, 0, 1)}
                   onConfirm={handleConfirm}
                   onCancel={() => {
                     setDatePickerVisibility(false);
@@ -604,7 +609,6 @@ const LoginScreen = ({ navigation }) => {
                       maximumDate.getDate() - 1,
                     )
                   }
-                  minimumDate={new Date(1921, 0, 1)}
                   onConfirm={handleConfirm}
                   onCancel={() => {
                     setDatePickerVisibility(false);

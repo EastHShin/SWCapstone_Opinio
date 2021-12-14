@@ -33,7 +33,6 @@ export const fetchDiary = (diaryId) => {
 		return await axios.get(`http://ec2-3-35-154-116.ap-northeast-2.compute.amazonaws.com:8080/api/plants/diary/${diaryId}`)
 			.then(function (res) {
 				if (res.status == 200) {
-                    console.log(res.data.data);
 					dispatch({
 						type: FETCH_DIARY,
 						payload: res.data.data,
