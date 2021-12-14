@@ -247,7 +247,7 @@ class ReportServiceTest {
 		Assertions.assertThat(comment.getIsBlocked()).isEqualTo(true);
 		Assertions.assertThat(secondReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
 		Assertions.assertThat(thirdReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
-		Assertions.assertThat(givenBoardReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
+		Assertions.assertThat(fourthReport.getState()).isEqualTo(Report.StateEnum.AUTOCOMPLETE);
 	}
 
 }
